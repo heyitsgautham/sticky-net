@@ -1,5 +1,5 @@
 ---
-#applyTo: "**"
+applyTo: "**"
 ---
 
 # Milestone 3: Scam Detection (Hybrid Architecture)

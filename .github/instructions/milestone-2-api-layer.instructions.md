@@ -1,5 +1,5 @@
 ---
-applyTo: "**"
+#applyTo: "**"
 ---
 
 # Milestone 2: API Layer
