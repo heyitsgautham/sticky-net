@@ -13,64 +13,74 @@ An AI-powered honeypot system that detects scam messages and autonomously engage
 |-------|------------|
 | **Runtime** | Python 3.11+ |
 | **API Framework** | FastAPI |
-| **LLM Orchestration** | LangChain / LangGraph |
-| **LLM Provider** | Google Vertex AI (Gemini 3 Pro/Flash) |
+| **AI SDK** | `google-genai` (v1.51.0+) |
+| **LLM Provider** | Google Vertex AI (Gemini 3 Flash/Pro) |
 | **Database** | Firestore (conversation state & intelligence) |
 | **Containerization** | Docker |
 | **Deployment** | Google Cloud Run |
 | **Local Dev** | Docker Compose |
 
+## Testing Instructions
+For each time running any test, always run 
+.venv/bin/python -m pytest tests/ -v
+
+## Vertex AI Models
+See [docs/VERTEX_API_DOCS.md](./../docs/VERTEX_API_DOCS.md) for details on the models used.
+
 ## Architecture
 
+See [docs/ARCHITECTURE.md](./../docs/ARCHITECTURE.md) for detailed architecture documentation.
+
+### High-Level Flow
+
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Public API Endpoint                       │
-│                    (x-api-key authentication)                    │
-└─────────────────────────────────┬───────────────────────────────┘
-                                  │
-                                  ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                      Request Handler (FastAPI)                   │
-│   • Validate JSON schema                                         │
-│   • Extract message + conversationHistory                        │
-└─────────────────────────────────┬───────────────────────────────┘
-                                  │
-                                  ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                      Scam Detection Module                       │
-│   • Analyze message for fraud indicators                         │
-│   • Check urgency tactics, payment requests, phishing patterns   │
-│   • Return: scamDetected (bool) + confidence score               │
-└─────────────────────────────────┬───────────────────────────────┘
-                                  │
-                    ┌─────────────┴─────────────┐
-                    │                           │
-            [Not Scam]                    [Scam Detected]
-                    │                           │
-                    ▼                           ▼
-        ┌───────────────────┐     ┌─────────────────────────────┐
-        │   Return neutral  │     │   AI Agent Controller       │
-        │     response      │     │   (LangChain/LangGraph)     │
-        └───────────────────┘     │   • Maintain human persona   │
-                                  │   • Adaptive responses       │
-                                  │   • Extract intelligence     │
-                                  └─────────────┬───────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│              Incoming Message + Metadata + History                  │
+└────────────────────────────────┬────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                 STAGE 0: Regex Pre-Filter (~10ms)                   │
+│  • Obvious scam → Skip AI, engage immediately                       │
+│  • Obvious safe → Skip AI, return neutral                           │
+│  • Uncertain → Continue to AI                                       │
+└────────────────────────────────┬────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│           STAGE 1: AI Scam Classifier (gemini-3-flash-preview)      │
+│  • Fast semantic classification (~150ms)                            │
+│  • Context-aware (uses conversation history)                        │
+│  • Returns: is_scam, confidence, scam_type                          │
+└────────────────────────────────┬────────────────────────────────────┘
+                                 │
+              ┌──────────────────┴──────────────────┐
+              │                                     │
+      Not Scam (conf < 0.6)              Is Scam (conf ≥ 0.6)
+              │                                     │
+              ▼                                     ▼
+┌─────────────────────────┐     ┌──────────────────────────────────────┐
+│  Return neutral         │     │      STAGE 2: Engagement Policy      │
+│  Continue monitoring    │     │  • conf 0.6-0.85: CAUTIOUS (10 turns)│
+└─────────────────────────┘     │  • conf > 0.85: AGGRESSIVE (25 turns)│
+                                └───────────────┬──────────────────────┘
                                                 │
                                                 ▼
-                                  ┌─────────────────────────────┐
-                                  │   Intelligence Extractor    │
-                                  │   • Bank account patterns   │
-                                  │   • UPI ID patterns         │
-                                  │   • Phishing URL detection  │
-                                  └─────────────┬───────────────┘
+                                ┌─────────────────────────────────────┐
+                                │  STAGE 3: AI Engagement Agent       │
+                                │  (gemini-3-pro-preview)             │
+                                │  • Believable human persona         │
+                                │  • Intelligence extraction          │
+                                │  • Exit conditions enforced         │
+                                └───────────────┬─────────────────────┘
                                                 │
                                                 ▼
-                                  ┌─────────────────────────────┐
-                                  │   Response Builder          │
-                                  │   • Format JSON response    │
-                                  │   • Include metrics         │
-                                  │   • Persist to Firestore    │
-                                  └─────────────────────────────┘
+                                ┌─────────────────────────────────────┐
+                                │  STAGE 4: Intelligence Extractor    │
+                                │  • Bank account regex               │
+                                │  • UPI ID patterns                  │
+                                │  • Phishing URL detection           │
+                                └─────────────────────────────────────┘
 ```
 
 ## Project Structure
@@ -105,7 +115,7 @@ sticky-net/
 │   │   └── patterns.py                   # Fraud indicator patterns
 │   ├── agents/
 │   │   ├── __init__.py
-│   │   ├── honeypot_agent.py             # Main LangChain agent
+│   │   ├── honeypot_agent.py             # Main agent
 │   │   ├── persona.py                    # Human persona management
 │   │   └── prompts.py                    # Agent system prompts
 │   └── intelligence/
@@ -173,7 +183,7 @@ sticky-net/
 | 1 | **Project Setup** | Scaffold structure, dependencies, Docker, local dev | `milestone-1-project-setup.instructions.md` |
 | 2 | **API Layer** | FastAPI endpoints, authentication, request validation | `milestone-2-api-layer.instructions.md` |
 | 3 | **Scam Detection** | Fraud indicator analysis, confidence scoring | `milestone-3-scam-detection.instructions.md` |
-| 4 | **Agent Engagement** | LangChain agent with human persona, multi-turn | `milestone-4-agent-engagement.instructions.md` |
+| 4 | **Agent Engagement** | Agent with human persona, multi-turn | `milestone-4-agent-engagement.instructions.md` |
 | 5 | **Intelligence Extraction** | Bank/UPI/URL pattern extraction | `milestone-5-intelligence-extraction.instructions.md` |
 | 6 | **Deployment** | GCP Cloud Run deployment, CI/CD pipeline | `milestone-6-deployment.instructions.md` |
 
@@ -210,37 +220,25 @@ PORT=8080
 
 # Google Cloud
 GOOGLE_CLOUD_PROJECT=your-project-id
-VERTEX_AI_LOCATION=us-central1
+GOOGLE_CLOUD_LOCATION=global
+GOOGLE_GENAI_USE_VERTEXAI=True
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
 
 # Firestore
 FIRESTORE_COLLECTION=conversations
 
-# Agent Configuration
-LLM_MODEL=gemini-3-pro
+# AI Models (Gemini 3)
+FLASH_MODEL=gemini-3-flash-preview
+PRO_MODEL=gemini-3-pro-preview
 LLM_TEMPERATURE=0.7
-MAX_ENGAGEMENT_TURNS=50
+
+# Engagement Policy
+MAX_ENGAGEMENT_TURNS_CAUTIOUS=10
+MAX_ENGAGEMENT_TURNS_AGGRESSIVE=25
+MAX_ENGAGEMENT_DURATION_SECONDS=600
+CAUTIOUS_CONFIDENCE_THRESHOLD=0.60
+AGGRESSIVE_CONFIDENCE_THRESHOLD=0.85
 ```
-
-## Key Patterns
-
-### Intelligence Extraction Regex
-```python
-# Bank accounts: 9-18 digits, optionally formatted
-BANK_ACCOUNT_PATTERN = r'\b\d{9,18}\b|\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{0,6}\b'
-
-# UPI IDs: username@provider format
-UPI_PATTERN = r'\b[\w.-]+@[a-zA-Z]+\b'
-
-# Phishing URLs: http/https with suspicious indicators
-URL_PATTERN = r'https?://[^\s<>"{}|\\^`\[\]]+'
-```
-
-### Scam Detection Indicators
-- **Urgency**: "immediately", "today", "within 24 hours", "urgent"
-- **Authority**: "RBI", "bank", "government", "police"
-- **Threats**: "blocked", "suspended", "legal action", "arrested"
-- **Requests**: "OTP", "PIN", "password", "verify", "update KYC"
 
 ## Agent Behavior Rules
 
@@ -258,9 +256,3 @@ URL_PATTERN = r'https?://[^\s<>"{}|\\^`\[\]]+'
 - ✅ Responsible data handling only
 - ✅ Log all extracted intelligence securely
 
-## Resources
-
-- **LangChain Docs** — Use MCP: `docs-langchain` (see `.vscode/mcp.json`)
-- [FastAPI Docs](https://fastapi.tiangolo.com/)
-- [Vertex AI Docs](https://cloud.google.com/vertex-ai/docs)
-- [Firestore Docs](https://firebase.google.com/docs/firestore)

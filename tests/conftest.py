@@ -1,5 +1,13 @@
 """Pytest fixtures and configuration."""
 
+import os
+
+# Set test environment variables before importing app
+os.environ.setdefault("API_KEY", "test-api-key")
+os.environ.setdefault("GOOGLE_CLOUD_PROJECT", "test-project")
+os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
+os.environ.setdefault("DEBUG", "true")
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -16,6 +24,12 @@ def client() -> TestClient:
 def api_key() -> str:
     """Test API key."""
     return "test-api-key"
+
+
+@pytest.fixture
+def auth_headers() -> dict[str, str]:
+    """Authentication headers for API requests."""
+    return {"x-api-key": "test-api-key"}
 
 
 @pytest.fixture

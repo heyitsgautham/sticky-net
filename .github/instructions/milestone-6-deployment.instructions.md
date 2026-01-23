@@ -101,7 +101,7 @@ services:
       - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
       - VERTEX_AI_LOCATION=${VERTEX_AI_LOCATION:-us-central1}
       - FIRESTORE_COLLECTION=${FIRESTORE_COLLECTION:-conversations}
-      - LLM_MODEL=${LLM_MODEL:-gemini-2.0-flash}
+      - LLM_MODEL=${LLM_MODEL:-gemini-3-flash-preview}
       - LLM_TEMPERATURE=${LLM_TEMPERATURE:-0.7}
       - MAX_ENGAGEMENT_TURNS=${MAX_ENGAGEMENT_TURNS:-50}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
@@ -301,7 +301,7 @@ jobs:
             --set-env-vars "GOOGLE_CLOUD_PROJECT=${{ secrets.GCP_PROJECT_ID }}" \
             --set-env-vars "VERTEX_AI_LOCATION=${{ secrets.GCP_REGION }}" \
             --set-env-vars "FIRESTORE_COLLECTION=conversations" \
-            --set-env-vars "LLM_MODEL=gemini-2.0-flash" \
+            --set-env-vars "LLM_MODEL=gemini-3-flash-preview" \
             --set-env-vars "ENVIRONMENT=production" \
             --set-secrets "API_KEY=sticky-net-api-key:latest" \
             --memory 1Gi \
@@ -493,7 +493,7 @@ gcloud run deploy sticky-net \
     --set-env-vars "GOOGLE_CLOUD_PROJECT=$PROJECT_ID" \
     --set-env-vars "VERTEX_AI_LOCATION=$REGION" \
     --set-env-vars "FIRESTORE_COLLECTION=conversations" \
-    --set-env-vars "LLM_MODEL=gemini-2.0-flash" \
+    --set-env-vars "LLM_MODEL=gemini-3-flash-preview" \
     --set-env-vars "ENVIRONMENT=production" \
     --set-secrets "API_KEY=sticky-net-api-key:latest" \
     --memory 1Gi \
@@ -546,7 +546,7 @@ class Settings(BaseSettings):
     firestore_collection: str = "conversations"
 
     # LLM Configuration
-    llm_model: str = "gemini-2.0-flash"
+    llm_model: str = "gemini-3-flash-preview"
     llm_temperature: float = 0.7
     max_output_tokens: int = 256
 

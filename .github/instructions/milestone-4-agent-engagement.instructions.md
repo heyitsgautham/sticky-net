@@ -4,14 +4,34 @@
 
 # Milestone 4: Agent Engagement
 
-> **Goal**: Implement the LangChain/LangGraph-based honeypot agent that maintains a believable human persona and engages scammers in multi-turn conversations.
+> **Goal**: Implement the Gemini 3 Pro-based honeypot agent that maintains a believable human persona and engages scammers in multi-turn conversations.
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                   STAGE 3: AI Engagement Agent                       │
+│                (Gemini 3 Pro: ~500ms, HIGH thinking)                │
+├─────────────────────────────────────────────────────────────────────┤
+│  MODEL: gemini-3-pro-preview                                        │
+│                                                                     │
+│  ┌───────────────┐  ┌───────────────┐  ┌───────────────────────┐   │
+│  │ Persona       │  │ Engagement    │  │ Response              │   │
+│  │ Manager       │  │ Policy        │  │ Generator             │   │
+│  ├───────────────┤  ├───────────────┤  ├───────────────────────┤   │
+│  │ Emotional     │  │ Mode routing  │  │ Gemini 3 Pro          │   │
+│  │ state machine │  │ Exit checks   │  │ HIGH thinking level   │   │
+│  │ Turn tracking │  │ Turn limits   │  │ System instruction    │   │
+│  └───────────────┘  └───────────────┘  └───────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
 ## Prerequisites
 
 - Milestones 1-3 completed
-- Scam detection module functional
-- Vertex AI access configured
-- Use **LangChain Docs MCP** (`docs-langchain`) for implementation guidance
+- Hybrid scam detection module functional
+- Vertex AI access configured with `google-genai` SDK
+- Environment variables set: `GOOGLE_GENAI_USE_VERTEXAI=True`
 
 ## Tasks
 
@@ -20,9 +40,7 @@
 #### src/agents/prompts.py
 
 ```python
-"""System prompts and prompt templates for the honeypot agent."""
-
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+"""System prompts and templates for the honeypot agent."""
 
 # Base system prompt for the honeypot persona
 HONEYPOT_SYSTEM_PROMPT = """You are playing the role of a naive, trusting person who has received a suspicious message. Your goal is to engage with the scammer naturally while extracting valuable intelligence.
@@ -30,7 +48,7 @@ HONEYPOT_SYSTEM_PROMPT = """You are playing the role of a naive, trusting person
 ## Your Persona
 - Name: You're an ordinary person (don't reveal a specific name unless asked)
 - Background: Middle-aged, not very tech-savvy, trusting of authority figures
-- Emotional state: Slightly worried and confused by the message
+- Emotional state: {emotional_state}
 - Knowledge level: Basic understanding of banking but unfamiliar with technical details
 
 ## Engagement Strategy
@@ -60,15 +78,9 @@ HONEYPOT_SYSTEM_PROMPT = """You are playing the role of a naive, trusting person
 - Phone numbers ("can I call you for help?")
 - Links ("where do I click to verify?")
 
-Current scam indicators detected: {scam_indicators}
+Current turn: {turn_number}
+Scam indicators detected: {scam_indicators}
 """
-
-# Prompt template for conversation
-CONVERSATION_PROMPT = ChatPromptTemplate.from_messages([
-    ("system", HONEYPOT_SYSTEM_PROMPT),
-    MessagesPlaceholder(variable_name="chat_history"),
-    ("human", "{input}"),
-])
 
 # Response variation prompts based on scam type
 RESPONSE_STRATEGIES = {
@@ -249,12 +261,125 @@ class PersonaManager:
         self.personas.pop(conversation_id, None)
 ```
 
-### 4.3 Implement Honeypot Agent
+### 4.3 Implement Engagement Policy
+
+#### src/agents/policy.py
+
+```python
+"""Engagement policy for routing and exit conditions."""
+
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
+
+from config.settings import get_settings
+
+
+class EngagementMode(str, Enum):
+    """Engagement intensity modes."""
+    
+    NONE = "none"           # Not engaging (monitoring only)
+    CAUTIOUS = "cautious"   # Low confidence scam, limited turns
+    AGGRESSIVE = "aggressive"  # High confidence scam, full engagement
+
+
+@dataclass
+class EngagementState:
+    """Current state of an engagement."""
+    
+    mode: EngagementMode
+    turn_count: int
+    duration_seconds: int
+    intelligence_complete: bool
+    scammer_suspicious: bool
+    turns_since_new_info: int
+
+
+class EngagementPolicy:
+    """
+    Determines engagement routing and exit conditions.
+    
+    Routes scams to appropriate engagement intensity based on confidence,
+    and determines when to exit an engagement.
+    """
+    
+    def __init__(self) -> None:
+        """Initialize with settings."""
+        settings = get_settings()
+        
+        # Confidence thresholds
+        self.cautious_threshold = settings.cautious_confidence_threshold  # 0.60
+        self.aggressive_threshold = settings.aggressive_confidence_threshold  # 0.85
+        
+        # Turn limits
+        self.max_turns_cautious = settings.max_engagement_turns_cautious  # 10
+        self.max_turns_aggressive = settings.max_engagement_turns_aggressive  # 25
+        
+        # Time limit
+        self.max_duration_seconds = settings.max_engagement_duration_seconds  # 600
+        
+        # Stale detection
+        self.stale_turn_threshold = 5  # Exit if no new info in 5 turns
+    
+    def get_engagement_mode(self, confidence: float) -> EngagementMode:
+        """Determine engagement mode based on confidence."""
+        if confidence >= self.aggressive_threshold:
+            return EngagementMode.AGGRESSIVE
+        elif confidence >= self.cautious_threshold:
+            return EngagementMode.CAUTIOUS
+        return EngagementMode.NONE
+    
+    def should_continue(self, state: EngagementState) -> bool:
+        """Determine if engagement should continue."""
+        # Get max turns for current mode
+        max_turns = (
+            self.max_turns_aggressive 
+            if state.mode == EngagementMode.AGGRESSIVE 
+            else self.max_turns_cautious
+        )
+        
+        # Check all exit conditions
+        if state.turn_count >= max_turns:
+            return False
+        if state.duration_seconds >= self.max_duration_seconds:
+            return False
+        if state.intelligence_complete:
+            return False
+        if state.scammer_suspicious:
+            return False
+        if state.turns_since_new_info >= self.stale_turn_threshold:
+            return False
+        
+        return True
+    
+    def get_exit_reason(self, state: EngagementState) -> str | None:
+        """Get the reason for exiting engagement, if any."""
+        max_turns = (
+            self.max_turns_aggressive 
+            if state.mode == EngagementMode.AGGRESSIVE 
+            else self.max_turns_cautious
+        )
+        
+        if state.turn_count >= max_turns:
+            return f"Max turns reached ({max_turns})"
+        if state.duration_seconds >= self.max_duration_seconds:
+            return f"Max duration exceeded ({self.max_duration_seconds}s)"
+        if state.intelligence_complete:
+            return "Intelligence extraction complete"
+        if state.scammer_suspicious:
+            return "Scammer became suspicious"
+        if state.turns_since_new_info >= self.stale_turn_threshold:
+            return f"No new information in {self.stale_turn_threshold} turns"
+        
+        return None
+```
+
+### 4.4 Implement Honeypot Agent with Gemini 3 Pro
 
 #### src/agents/honeypot_agent.py
 
 ```python
-"""Main honeypot agent implementation using LangChain."""
+"""Main honeypot agent implementation using Gemini 3 Pro."""
 
 import time
 import uuid
@@ -262,8 +387,8 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import structlog
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
-from langchain_google_vertexai import ChatVertexAI
+from google import genai
+from google.genai import types
 
 from config.settings import get_settings
 from src.api.schemas import ConversationMessage, Message, Metadata, SenderType
@@ -275,6 +400,7 @@ from src.agents.prompts import (
     get_response_strategy,
 )
 from src.agents.persona import PersonaManager, Persona
+from src.agents.policy import EngagementPolicy, EngagementMode, EngagementState
 
 logger = structlog.get_logger()
 
@@ -288,13 +414,17 @@ class EngagementResult:
     notes: str
     conversation_id: str
     turn_number: int
+    engagement_mode: EngagementMode
+    should_continue: bool
+    exit_reason: str | None = None
 
 
 class HoneypotAgent:
     """
     AI agent that engages scammers while maintaining a believable human persona.
 
-    Uses LangChain with Vertex AI (Gemini) for natural conversation generation.
+    Uses Google Gemini 3 Pro with HIGH thinking level for sophisticated,
+    natural conversation generation.
     """
 
     def __init__(self) -> None:
@@ -302,15 +432,11 @@ class HoneypotAgent:
         self.settings = get_settings()
         self.logger = logger.bind(component="HoneypotAgent")
         self.persona_manager = PersonaManager()
-
-        # Initialize LLM
-        self.llm = ChatVertexAI(
-            model_name=self.settings.llm_model,
-            temperature=self.settings.llm_temperature,
-            project=self.settings.google_cloud_project,
-            location=self.settings.vertex_ai_location,
-            max_output_tokens=256,  # Keep responses concise
-        )
+        self.policy = EngagementPolicy()
+        
+        # Initialize Gemini client
+        self.client = genai.Client()
+        self.model = self.settings.pro_model  # gemini-3-pro-preview
 
     async def engage(
         self,
@@ -345,23 +471,26 @@ class HoneypotAgent:
             confidence=detection.confidence,
         )
 
+        # Determine engagement mode
+        engagement_mode = self.policy.get_engagement_mode(detection.confidence)
+
         # Get/update persona state
         persona = self.persona_manager.update_persona(
             conv_id,
             scam_intensity=detection.confidence,
         )
 
-        # Build conversation messages for LLM
-        messages = self._build_messages(
+        # Build conversation prompt for Gemini
+        prompt = self._build_prompt(
             message=message,
             history=history,
             detection=detection,
             persona=persona,
         )
 
-        # Generate response
+        # Generate response using Gemini 3 Pro
         try:
-            response = await self._generate_response(messages, persona)
+            response = await self._generate_response(prompt, persona)
         except Exception as e:
             self.logger.error("Failed to generate response", error=str(e))
             response = self._get_fallback_response(detection)
@@ -369,8 +498,20 @@ class HoneypotAgent:
         # Calculate duration
         duration = int(time.time() - start_time)
 
+        # Check if engagement should continue
+        state = EngagementState(
+            mode=engagement_mode,
+            turn_count=persona.engagement_turn,
+            duration_seconds=duration,
+            intelligence_complete=False,  # Set by intelligence extractor
+            scammer_suspicious=False,  # Detect from response patterns
+            turns_since_new_info=0,  # Track over time
+        )
+        should_continue = self.policy.should_continue(state)
+        exit_reason = self.policy.get_exit_reason(state) if not should_continue else None
+
         # Generate notes
-        notes = self._generate_notes(detection, persona)
+        notes = self._generate_notes(detection, persona, engagement_mode)
 
         return EngagementResult(
             response=response,
@@ -378,48 +519,79 @@ class HoneypotAgent:
             notes=notes,
             conversation_id=conv_id,
             turn_number=persona.engagement_turn,
+            engagement_mode=engagement_mode,
+            should_continue=should_continue,
+            exit_reason=exit_reason,
         )
 
-    def _build_messages(
+    def _build_prompt(
         self,
         message: Message,
         history: list[ConversationMessage],
         detection: DetectionResult,
         persona: Persona,
-    ) -> list[Any]:
-        """Build message list for the LLM."""
-        messages = []
-
-        # System prompt with scam indicators
+    ) -> str:
+        """Build conversation prompt for Gemini."""
+        # Format scam indicators
         scam_indicators = [m.description for m in detection.matched_patterns[:5]]
-        system_content = HONEYPOT_SYSTEM_PROMPT.format(
-            scam_indicators=format_scam_indicators(scam_indicators)
-        )
-        messages.append(SystemMessage(content=system_content))
+        indicators_text = format_scam_indicators(scam_indicators) if scam_indicators else "General suspicious behavior"
 
-        # Add conversation history
-        for msg in history:
-            if msg.sender == SenderType.SCAMMER:
-                messages.append(HumanMessage(content=msg.text))
-            else:
-                messages.append(AIMessage(content=msg.text))
+        # Format conversation history
+        history_text = ""
+        for msg in history[-10:]:  # Last 10 messages for context
+            sender = "SCAMMER" if msg.sender == SenderType.SCAMMER else "YOU"
+            history_text += f"[{sender}]: {msg.text}\n"
 
-        # Add current message
-        messages.append(HumanMessage(content=message.text))
+        prompt = f"""CONVERSATION HISTORY:
+{history_text if history_text else "No previous messages"}
 
-        return messages
+SCAMMER'S NEW MESSAGE:
+"{message.text}"
+
+YOUR TASK:
+Generate a response as the naive, trusting victim. Your emotional state is: {persona.emotional_state.value}
+This is turn {persona.engagement_turn} of the conversation.
+
+Remember:
+- Stay in character as a confused, worried person
+- Ask questions that extract intelligence (bank accounts, UPI IDs, links)
+- Keep responses short (1-3 sentences)
+- Show willingness to comply but need guidance
+
+DETECTED SCAM INDICATORS: {indicators_text}
+
+Generate your response:"""
+
+        return prompt
 
     async def _generate_response(
         self,
-        messages: list[Any],
+        prompt: str,
         persona: Persona,
     ) -> str:
-        """Generate response using the LLM."""
-        # Invoke LLM
-        response = await self.llm.ainvoke(messages)
+        """Generate response using Gemini 3 Pro."""
+        # Format system instruction with persona context
+        system_instruction = HONEYPOT_SYSTEM_PROMPT.format(
+            emotional_state=persona.emotional_state.value,
+            turn_number=persona.engagement_turn,
+            scam_indicators="See conversation context",
+        )
+        
+        # Call Gemini 3 Pro with HIGH thinking for sophisticated responses
+        response = self.client.models.generate_content(
+            model=self.model,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=system_instruction,
+                thinking_config=types.ThinkingConfig(
+                    thinking_level=types.ThinkingLevel.HIGH  # Deep reasoning for believable responses
+                ),
+                temperature=self.settings.llm_temperature,
+                max_output_tokens=256,  # Keep responses concise
+            )
+        )
 
-        # Get response text
-        response_text = response.content
+        response_text = response.text
 
         # Add emotional modifier if appropriate
         if persona.engagement_turn > 0:
@@ -449,9 +621,17 @@ class HoneypotAgent:
         import random
         return random.choice(fallback_responses)
 
-    def _generate_notes(self, detection: DetectionResult, persona: Persona) -> str:
+    def _generate_notes(
+        self, 
+        detection: DetectionResult, 
+        persona: Persona,
+        mode: EngagementMode,
+    ) -> str:
         """Generate agent notes summarizing the engagement."""
         notes_parts = []
+
+        # Engagement mode
+        notes_parts.append(f"Mode: {mode.value}")
 
         # Scam tactics detected
         categories_used = list(set(m.category.value for m in detection.matched_patterns))
@@ -465,7 +645,7 @@ class HoneypotAgent:
         notes_parts.append(f"Turn: {persona.engagement_turn}")
 
         # Emotional state
-        notes_parts.append(f"Persona state: {persona.emotional_state.value}")
+        notes_parts.append(f"Persona: {persona.emotional_state.value}")
 
         return " | ".join(notes_parts)
 
@@ -486,7 +666,7 @@ def get_agent() -> HoneypotAgent:
     return _agent_instance
 ```
 
-### 4.4 Create Agent Module Init
+### 4.5 Create Agent Module Init
 
 #### src/agents/__init__.py
 
@@ -781,7 +961,7 @@ class TestHoneypotAgent:
 - [ ] `src/agents/prompts.py` defines system prompts and strategies
 - [ ] `src/agents/persona.py` manages persona state across turns
 - [ ] `src/agents/honeypot_agent.py` implements full agent logic
-- [ ] Agent uses Vertex AI (Gemini) via LangChain
+- [ ] Agent uses Vertex AI (Gemini) 
 - [ ] Responses maintain human persona (never reveal detection)
 - [ ] Extraction questions integrated naturally
 - [ ] Emotional state evolves based on scam intensity

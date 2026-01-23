@@ -1,5 +1,5 @@
 ---
-applyTo: "**"
+# applyTo: "**"
 ---
 
 # Milestone 1: Project Setup
@@ -31,11 +31,8 @@ dependencies = [
     "uvicorn[standard]>=0.27.0",
     "pydantic>=2.5.0",
     "pydantic-settings>=2.1.0",
-    "langchain>=0.1.0",
-    "langchain-google-vertexai>=0.0.5",
-    "langgraph>=0.0.20",
+    "google-genai>=1.51.0",
     "google-cloud-firestore>=2.14.0",
-    "google-cloud-aiplatform>=1.38.0",
     "python-dotenv>=1.0.0",
     "structlog>=24.1.0",
     "httpx>=0.26.0",
@@ -79,17 +76,25 @@ DEBUG=true
 
 # Google Cloud
 GOOGLE_CLOUD_PROJECT=your-gcp-project-id
-VERTEX_AI_LOCATION=us-central1
+GOOGLE_CLOUD_LOCATION=global
+GOOGLE_GENAI_USE_VERTEXAI=True
 GOOGLE_APPLICATION_CREDENTIALS=./secrets/service-account.json
 
 # Firestore
 FIRESTORE_COLLECTION=conversations
 FIRESTORE_EMULATOR_HOST=localhost:8081
 
-# Agent Configuration
-LLM_MODEL=gemini-3-pro
+# Agent Configuration - Models
+FLASH_MODEL=gemini-3-flash-preview
+PRO_MODEL=gemini-3-pro-preview
 LLM_TEMPERATURE=0.7
-MAX_ENGAGEMENT_TURNS=50
+
+# Engagement Policy
+MAX_ENGAGEMENT_TURNS_CAUTIOUS=10
+MAX_ENGAGEMENT_TURNS_AGGRESSIVE=25
+MAX_ENGAGEMENT_DURATION_SECONDS=600
+CAUTIOUS_CONFIDENCE_THRESHOLD=0.60
+AGGRESSIVE_CONFIDENCE_THRESHOLD=0.85
 ```
 
 #### .gitignore
@@ -362,17 +367,25 @@ class Settings(BaseSettings):
 
     # Google Cloud
     google_cloud_project: str
-    vertex_ai_location: str = "us-central1"
+    google_cloud_location: str = "global"
+    google_genai_use_vertexai: bool = True
     google_application_credentials: str | None = None
 
     # Firestore
     firestore_collection: str = "conversations"
     firestore_emulator_host: str | None = None
 
-    # Agent
-    llm_model: str = "gemini-3-pro"
+    # AI Models (Gemini 3)
+    flash_model: str = "gemini-3-flash-preview"  # Fast classification
+    pro_model: str = "gemini-3-pro-preview"      # Engagement responses
     llm_temperature: float = 0.7
-    max_engagement_turns: int = 50
+
+    # Engagement Policy
+    max_engagement_turns_cautious: int = 10
+    max_engagement_turns_aggressive: int = 25
+    max_engagement_duration_seconds: int = 600
+    cautious_confidence_threshold: float = 0.60
+    aggressive_confidence_threshold: float = 0.85
 
 
 @lru_cache
