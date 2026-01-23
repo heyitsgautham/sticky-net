@@ -1,5 +1,5 @@
 ---
-applyTo: "src/agents/**"
+#applyTo: "**"
 ---
 
 # Milestone 4: Agent Engagement

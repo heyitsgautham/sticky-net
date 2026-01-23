@@ -1,5 +1,5 @@
 ---
-applyTo: "src/intelligence/**"
+#applyTo: "**"
 ---
 
 # Milestone 5: Intelligence Extraction

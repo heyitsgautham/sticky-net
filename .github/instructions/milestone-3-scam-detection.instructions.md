@@ -1,5 +1,5 @@
 ---
-applyTo: "src/detection/**"
+#applyTo: "**"
 ---
 
 # Milestone 3: Scam Detection

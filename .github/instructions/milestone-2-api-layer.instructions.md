@@ -1,5 +1,5 @@
 ---
-applyTo: "src/api/**"
+#applyTo: "**"
 ---
 
 # Milestone 2: API Layer

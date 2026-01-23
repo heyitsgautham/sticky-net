@@ -1,5 +1,5 @@
 ---
-applyTo: "Dockerfile,docker-compose.yml,.github/workflows/**"
+#applyTo: "**"
 ---
 
 # Milestone 6: Deployment
