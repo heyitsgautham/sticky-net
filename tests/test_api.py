@@ -2,7 +2,7 @@
 
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 from src.main import app
 
@@ -90,11 +90,22 @@ class TestAnalyzeEndpoint:
         )
 
         mock_extractor_instance = mock_extractor.return_value
-        mock_extractor_instance.extract = AsyncMock(
+        # extract is synchronous, not async - use MagicMock
+        mock_extractor_instance.extract = MagicMock(
             return_value=type(
                 "Result",
                 (),
-                {"bank_accounts": [], "upi_ids": [], "phishing_links": []},
+                {
+                    "bank_accounts": [],
+                    "upi_ids": [],
+                    "phishing_links": [],
+                    "phone_numbers": [],
+                    "emails": [],
+                    "beneficiary_names": [],
+                    "bank_names": [],
+                    "ifsc_codes": [],
+                    "whatsapp_numbers": [],
+                },
             )()
         )
 

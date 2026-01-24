@@ -1,5 +1,6 @@
 """Main honeypot agent implementation using Gemini 3 Pro."""
 
+import hashlib
 import os
 import random
 import time
@@ -16,10 +17,13 @@ from src.detection.detector import DetectionResult
 from src.agents.prompts import (
     HONEYPOT_SYSTEM_PROMPT,
     EXTRACTION_QUESTIONS,
+    BENEFICIARY_EXTRACTION_STRATEGIES,
+    MISSING_INTEL_PROMPTS,
     format_scam_indicators,
 )
 from src.agents.persona import PersonaManager, Persona
 from src.agents.policy import EngagementPolicy, EngagementMode, EngagementState
+from src.agents.fake_data import FakeDataGenerator, FakeCreditCard, FakeBankAccount, FakePersona
 
 # Safety settings for Gemini to allow scam roleplay (for honeypot context)
 # Using BLOCK_NONE for Gemini 3 Preview models which have stricter default filters
@@ -89,6 +93,9 @@ class HoneypotAgent:
         self.model = self.settings.pro_model  # gemini-3-pro-preview
         self.fallback_model = self.settings.fallback_pro_model  # gemini-2.5-pro
         self._last_model_used: str | None = None  # Track which model was used
+        
+        # Fake data generators per conversation (seeded by conversation_id)
+        self._fake_data_cache: dict[str, dict] = {}
 
     async def engage(
         self,
@@ -97,6 +104,9 @@ class HoneypotAgent:
         metadata: Metadata,
         detection: DetectionResult,
         conversation_id: str | None = None,
+        turn_number: int | None = None,
+        missing_intel: list[str] | None = None,
+        extracted_intel: dict | None = None,
     ) -> EngagementResult:
         """
         Engage with the scammer and generate a response.
@@ -107,6 +117,7 @@ class HoneypotAgent:
             metadata: Message metadata
             detection: Scam detection result
             conversation_id: Optional existing conversation ID
+            turn_number: Optional turn number override (calculated from history length)
 
         Returns:
             EngagementResult with the agent's response
@@ -115,12 +126,17 @@ class HoneypotAgent:
 
         # Generate or use existing conversation ID
         conv_id = conversation_id or str(uuid.uuid4())
+        
+        # Calculate the actual turn number
+        # If turn_number is provided, use it; otherwise calculate from history
+        actual_turn = turn_number if turn_number is not None else len(history) + 1
 
         self.logger.info(
             "Engaging with scammer",
             conversation_id=conv_id,
             history_length=len(history),
             confidence=detection.confidence,
+            turn=actual_turn,
         )
 
         # Determine engagement mode
@@ -131,6 +147,11 @@ class HoneypotAgent:
             conv_id,
             scam_intensity=detection.confidence,
         )
+        # Override persona's internal turn with actual calculated turn
+        persona.engagement_turn = actual_turn
+
+        # Get fake data for this conversation (consistent across turns)
+        fake_data = self._get_fake_data(conv_id)
 
         # Build conversation prompt for Gemini
         prompt = self._build_prompt(
@@ -138,11 +159,15 @@ class HoneypotAgent:
             history=history,
             detection=detection,
             persona=persona,
+            missing_intel=missing_intel or [],
+            extracted_intel=extracted_intel or {},
+            fake_data=fake_data,
         )
 
         # Generate response using Gemini 3 Pro
+        fake_data_section = self._format_fake_data_section(fake_data)
         try:
-            response = await self._generate_response(prompt, persona)
+            response = await self._generate_response(prompt, persona, fake_data_section)
         except Exception as e:
             self.logger.error("Failed to generate response", error=str(e))
             response = self._get_fallback_response(detection)
@@ -153,7 +178,7 @@ class HoneypotAgent:
         # Check if engagement should continue
         state = EngagementState(
             mode=engagement_mode,
-            turn_count=persona.engagement_turn,
+            turn_count=actual_turn,
             duration_seconds=duration,
             intelligence_complete=False,  # Set by intelligence extractor
             scammer_suspicious=False,  # Detect from response patterns
@@ -162,19 +187,99 @@ class HoneypotAgent:
         should_continue = self.policy.should_continue(state)
         exit_reason = self.policy.get_exit_reason(state) if not should_continue else None
 
-        # Generate notes
-        notes = self._generate_notes(detection, persona, engagement_mode)
+        # Generate notes with actual turn number
+        notes = self._generate_notes(detection, persona, engagement_mode, actual_turn)
 
         return EngagementResult(
             response=response,
             duration_seconds=duration,
             notes=notes,
             conversation_id=conv_id,
-            turn_number=persona.engagement_turn,
+            turn_number=actual_turn,
             engagement_mode=engagement_mode,
             should_continue=should_continue,
             exit_reason=exit_reason,
         )
+
+    def _get_fake_data(self, conversation_id: str) -> dict:
+        """
+        Get or generate fake data for a conversation.
+        
+        Uses conversation_id as seed to ensure consistent fake data
+        across multiple turns of the same conversation.
+        
+        Args:
+            conversation_id: Unique conversation identifier
+            
+        Returns:
+            Dictionary with all fake data for this conversation
+        """
+        if conversation_id in self._fake_data_cache:
+            return self._fake_data_cache[conversation_id]
+        
+        # Create deterministic seed from conversation_id
+        seed = int(hashlib.md5(conversation_id.encode()).hexdigest()[:8], 16)
+        generator = FakeDataGenerator(seed=seed)
+        
+        # Generate all fake data upfront for consistency
+        credit_card = generator.generate_credit_card()
+        bank_account = generator.generate_bank_account()
+        persona_details = generator.generate_persona_details()
+        
+        fake_data = {
+            "credit_card": credit_card,
+            "bank_account": bank_account,
+            "persona": persona_details,
+            "otp": generator.generate_otp(),
+            "aadhaar": generator.generate_aadhaar(),
+            "pan": generator.generate_pan(),
+            # Pre-formatted strings for easy use in prompts
+            "card_number_formatted": f"{credit_card.number[:4]} {credit_card.number[4:8]} {credit_card.number[8:12]} {credit_card.number[12:]}",
+            "card_number_raw": credit_card.number,
+            "card_expiry": credit_card.expiry,
+            "card_cvv": credit_card.cvv,
+            "account_number": bank_account.number,
+            "ifsc_code": bank_account.ifsc,
+            "bank_name": bank_account.bank_name,
+            "persona_name": persona_details.name,
+            "persona_age": persona_details.age,
+            "persona_address": persona_details.address,
+            "customer_id": persona_details.customer_id,
+        }
+        
+        self._fake_data_cache[conversation_id] = fake_data
+        self.logger.debug(
+            "Generated fake data for conversation",
+            conversation_id=conversation_id,
+            card_type=credit_card.card_type,
+            bank=bank_account.bank_name,
+            persona=persona_details.name,
+        )
+        
+        return fake_data
+    
+    def _format_fake_data_section(self, fake_data: dict) -> str:
+        """
+        Format fake data into a readable section for the prompt.
+        
+        Args:
+            fake_data: Dictionary of fake data from _get_fake_data
+            
+        Returns:
+            Formatted string for inclusion in system prompt
+        """
+        return f"""- Credit Card: {fake_data['card_number_formatted']} (type: {fake_data['credit_card'].card_type})
+- Card Expiry: {fake_data['card_expiry']}
+- Card CVV: {fake_data['card_cvv']}
+- Bank Account: {fake_data['account_number']}
+- IFSC Code: {fake_data['ifsc_code']} ({fake_data['bank_name']})
+- OTP/Verification Code: {fake_data['otp']}
+- Aadhaar Number: {fake_data['aadhaar']}
+- PAN Card: {fake_data['pan']}
+- Your Name: {fake_data['persona_name']}
+- Your Age: {fake_data['persona_age']}
+- Your Address: {fake_data['persona_address']}
+- Customer ID: {fake_data['customer_id']}"""
 
     def _build_prompt(
         self,
@@ -182,8 +287,11 @@ class HoneypotAgent:
         history: list[ConversationMessage],
         detection: DetectionResult,
         persona: Persona,
+        missing_intel: list[str] | None = None,
+        extracted_intel: dict | None = None,
+        fake_data: dict | None = None,
     ) -> str:
-        """Build conversation prompt for Gemini."""
+        """Build conversation prompt for Gemini with targeted extraction directives."""
         # Format scam indicators
         scam_indicators = [m.description for m in detection.matched_patterns[:5]]
         indicators_text = format_scam_indicators(scam_indicators) if scam_indicators else "General suspicious behavior"
@@ -193,6 +301,12 @@ class HoneypotAgent:
         for msg in history[-10:]:  # Last 10 messages for context
             sender = "SCAMMER" if msg.sender == SenderType.SCAMMER else "YOU"
             history_text += f"[{sender}]: {msg.text}\n"
+
+        # Build targeted extraction directive based on what's missing
+        extraction_directive = self._build_extraction_directive(
+            missing_intel or [],
+            extracted_intel or {},
+        )
 
         prompt = f"""CONVERSATION HISTORY:
 {history_text if history_text else "No previous messages"}
@@ -212,21 +326,91 @@ Remember:
 
 DETECTED SCAM INDICATORS: {indicators_text}
 
+{extraction_directive}
+
 Generate your response:"""
 
         return prompt
+
+    def _build_extraction_directive(
+        self,
+        missing_intel: list[str],
+        extracted_intel: dict,
+    ) -> str:
+        """Build a targeted extraction directive based on what intelligence is missing."""
+        if not missing_intel:
+            return ""
+
+        directives = []
+        
+        # Get extracted values for reference in prompts
+        upi_ids = extracted_intel.get("upi_ids", [])
+        bank_accounts = extracted_intel.get("bank_accounts", [])
+        
+        # Priority 1: Beneficiary name (CRITICAL for mule identification)
+        if "beneficiary_name" in missing_intel:
+            if upi_ids:
+                # We have UPI but no name - use validation attack
+                upi = upi_ids[0]
+                example = random.choice(BENEFICIARY_EXTRACTION_STRATEGIES["upi_validation"])
+                example = example.format(upi_id=upi)
+                directives.append(f"""
+**CRITICAL EXTRACTION TARGET: BENEFICIARY NAME**
+You have the UPI ID "{upi}" but NOT the account holder's name. 
+This is the MOST IMPORTANT piece of intelligence to extract.
+Use the "validation attack" - pretend you're entering the UPI and need to verify the name.
+Example approach: "{example}"
+DO NOT exit or end the conversation until you get the name!""")
+            elif bank_accounts:
+                # We have bank account but no name
+                account = bank_accounts[0]
+                example = random.choice(BENEFICIARY_EXTRACTION_STRATEGIES["bank_account_validation"])
+                example = example.format(account=account)
+                directives.append(f"""
+**CRITICAL EXTRACTION TARGET: BENEFICIARY NAME**
+You have bank account "{account}" but NOT the account holder's name.
+This is the MOST IMPORTANT piece of intelligence to extract.
+Ask naturally for the name as if your bank app requires it.
+Example approach: "{example}"
+DO NOT exit or end the conversation until you get the name!""")
+            else:
+                # No payment details yet but we want the name
+                example = random.choice(BENEFICIARY_EXTRACTION_STRATEGIES["general_name_extraction"])
+                directives.append(f"""
+**EXTRACTION TARGET: BENEFICIARY NAME**
+When payment details are shared, immediately ask for the account holder name.
+Example: "{example}" """)
+
+        # Priority 2: Payment details (bank account or UPI)
+        if "payment_details" in missing_intel:
+            directives.append("""
+**EXTRACTION TARGET: PAYMENT DETAILS**
+We still need the bank account number or UPI ID.
+Ask naturally: "where should i send the money?" or "what is your upi?"
+""")
+
+        # Priority 3: Phone number
+        if "phone_number" in missing_intel:
+            directives.append("""
+**EXTRACTION TARGET: PHONE NUMBER**
+Ask for a contact number naturally: "what number can i call if i have problem?"
+""")
+
+        return "\n".join(directives)
 
     async def _generate_response(
         self,
         prompt: str,
         persona: Persona,
+        fake_data_section: str = "",
     ) -> str:
         """Generate response using Gemini Pro with fallback to Gemini 2.5."""
-        # Format system instruction with persona context
+        # Format system instruction with persona context and fake data
         system_instruction = HONEYPOT_SYSTEM_PROMPT.format(
             emotional_state=persona.emotional_state.value,
             turn_number=persona.engagement_turn,
             scam_indicators="See conversation context",
+            fake_data_section=fake_data_section or "(No fake data available)",
         )
         
         # Try primary model (Gemini 3 Pro) first, then fallback (Gemini 2.5 Pro)
@@ -325,6 +509,7 @@ Generate your response:"""
         detection: DetectionResult, 
         persona: Persona,
         mode: EngagementMode,
+        turn_number: int,
     ) -> str:
         """Generate agent notes summarizing the engagement."""
         notes_parts = []
@@ -340,8 +525,8 @@ Generate your response:"""
         # Confidence
         notes_parts.append(f"Confidence: {detection.confidence:.0%}")
 
-        # Engagement progress
-        notes_parts.append(f"Turn: {persona.engagement_turn}")
+        # Engagement progress - use the actual turn number passed in
+        notes_parts.append(f"Turn: {turn_number}")
 
         # Emotional state
         notes_parts.append(f"Persona: {persona.emotional_state.value}")
@@ -349,8 +534,11 @@ Generate your response:"""
         return " | ".join(notes_parts)
 
     def end_conversation(self, conversation_id: str) -> None:
-        """Clean up persona when conversation ends."""
+        """Clean up persona and fake data when conversation ends."""
         self.persona_manager.clear_persona(conversation_id)
+        # Clear fake data cache for this conversation
+        if conversation_id in self._fake_data_cache:
+            del self._fake_data_cache[conversation_id]
 
 
 # Singleton instance for reuse

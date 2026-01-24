@@ -103,3 +103,67 @@ class EngagementPolicy:
             return f"No new information in {self.stale_turn_threshold} turns"
         
         return None
+
+    @staticmethod
+    def is_high_value_intelligence_complete(
+        bank_accounts: list[str],
+        phone_numbers: list[str],
+        upi_ids: list[str] | None = None,
+        beneficiary_names: list[str] | None = None,
+    ) -> bool:
+        """
+        Check if high-value intelligence has been extracted.
+        
+        High-value intelligence is considered complete when we have:
+        - (At least one bank account number OR at least one UPI ID)
+        - AND at least one phone number
+        - AND at least one beneficiary name (mule account holder name)
+        
+        The beneficiary name is CRITICAL for law enforcement to identify
+        the mule account holder. Without it, the intelligence is incomplete.
+        
+        Args:
+            bank_accounts: List of extracted bank account numbers
+            phone_numbers: List of extracted phone numbers
+            upi_ids: Optional list of extracted UPI IDs
+            beneficiary_names: Optional list of extracted beneficiary/account holder names
+            
+        Returns:
+            True if high-value intelligence is complete
+        """
+        has_bank_or_upi = bool(bank_accounts) or bool(upi_ids)
+        has_phone = bool(phone_numbers)
+        has_beneficiary = bool(beneficiary_names)
+        return has_bank_or_upi and has_phone and has_beneficiary
+    
+    @staticmethod
+    def get_missing_intelligence(
+        bank_accounts: list[str],
+        phone_numbers: list[str],
+        upi_ids: list[str] | None = None,
+        beneficiary_names: list[str] | None = None,
+    ) -> list[str]:
+        """
+        Get list of missing intelligence types for targeted extraction.
+        
+        This helps the agent know what to ask for next.
+        
+        Args:
+            bank_accounts: List of extracted bank account numbers
+            phone_numbers: List of extracted phone numbers
+            upi_ids: Optional list of extracted UPI IDs
+            beneficiary_names: Optional list of extracted beneficiary names
+            
+        Returns:
+            List of missing intelligence types
+        """
+        missing = []
+        
+        if not bank_accounts and not upi_ids:
+            missing.append("payment_details")  # Need bank account or UPI
+        if not phone_numbers:
+            missing.append("phone_number")
+        if not beneficiary_names:
+            missing.append("beneficiary_name")
+            
+        return missing

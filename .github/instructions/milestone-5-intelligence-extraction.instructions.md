@@ -1,10 +1,58 @@
 ---
-#applyTo: "**"
+applyTo: "**"
 ---
 
-# Milestone 5: Intelligence Extraction
+# Milestone 5: Intelligence Extraction (Hybrid Approach)
 
-> **Goal**: Implement entity extraction to identify bank accounts, UPI IDs, phone numbers, and phishing URLs from scammer messages.
+> **Goal**: Implement a hybrid intelligence extraction system that combines fast regex patterns with AI-powered extraction during engagement to maximize captured intelligence.
+
+## Why Hybrid Extraction?
+
+**Regex-only limitations:**
+- ❌ Misses obfuscated data ("nine eight seven six..." spelled out)
+- ❌ Cannot understand contextual references ("send to my same account")
+- ❌ Fails on non-standard formats scammers may use
+- ❌ No semantic understanding of implicit information
+
+**Hybrid approach benefits:**
+- ✅ Regex: Fast, deterministic, catches standard formats (~1ms)
+- ✅ AI: Extracts from natural language during engagement (already paying for Pro call)
+- ✅ Combined: Maximum intelligence capture with deduplication
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    HYBRID EXTRACTION PIPELINE                        │
+└─────────────────────────────────────────────────────────────────────┘
+
+                    Scammer Message
+                          │
+          ┌───────────────┴───────────────┐
+          │                               │
+          ▼                               ▼
+┌─────────────────────┐       ┌─────────────────────────────────────┐
+│   REGEX EXTRACTOR   │       │     AI EXTRACTOR (During Engage)    │
+│     (Always runs)   │       │   (Gemini 3 Pro - already called)   │
+├─────────────────────┤       ├─────────────────────────────────────┤
+│ • Standard formats  │       │ • Structured output extraction      │
+│ • 9-18 digit nums   │       │ • Obfuscated numbers               │
+│ • user@provider     │       │ • Contextual references            │
+│ • +91 phones        │       │ • Implicit information             │
+│ • http/https URLs   │       │ • Semantic validation              │
+│ ~1ms                │       │ ~0ms extra (piggybacks on engage)  │
+└─────────┬───────────┘       └───────────────┬─────────────────────┘
+          │                                   │
+          └───────────────┬───────────────────┘
+                          │
+                          ▼
+              ┌───────────────────────┐
+              │   MERGE & DEDUPLICATE │
+              │   • Union of both     │
+              │   • Normalize formats │
+              │   • Validate entities │
+              └───────────────────────┘
+```
 
 ## Prerequisites
 
@@ -35,6 +83,14 @@ class IntelligenceType(str, Enum):
     PHONE_NUMBER = "phone_number"
     URL = "url"
     EMAIL = "email"
+
+
+class ExtractionSource(str, Enum):
+    """Source of extraction."""
+
+    REGEX = "regex"
+    AI = "ai"
+    MERGED = "merged"
 
 
 @dataclass
@@ -160,15 +216,54 @@ def is_suspicious_url(url: str) -> bool:
     """Check if URL contains suspicious indicators."""
     url_lower = url.lower()
     return any(indicator in url_lower for indicator in SUSPICIOUS_URL_INDICATORS)
+
+
+# AI Extraction prompt template for structured output
+AI_EXTRACTION_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "bank_accounts": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Bank account numbers found (digits only, 9-18 chars)"
+        },
+        "upi_ids": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "UPI IDs in format username@provider"
+        },
+        "phone_numbers": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Indian phone numbers (10 digits, may have +91)"
+        },
+        "urls": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Suspicious URLs shared by scammer"
+        },
+        "emails": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Email addresses"
+        }
+    },
+    "required": ["bank_accounts", "upi_ids", "phone_numbers", "urls", "emails"]
+}
 ```
 
-### 5.2 Implement Intelligence Extractor
+### 5.2 Implement Hybrid Intelligence Extractor
 
 #### src/intelligence/extractor.py
 
 ```python
-"""Intelligence extraction from conversation messages."""
+"""Hybrid intelligence extraction from conversation messages.
 
+Combines fast regex patterns with AI-powered extraction during engagement
+for maximum intelligence capture.
+"""
+
+import json
 import re
 from dataclasses import dataclass, field
 from typing import Any
@@ -177,6 +272,7 @@ import structlog
 
 from src.intelligence.patterns import (
     IntelligenceType,
+    ExtractionSource,
     ExtractionPattern,
     get_all_patterns,
     is_suspicious_url,
@@ -197,8 +293,8 @@ class ExtractedEntity:
 
     value: str
     intel_type: IntelligenceType
-    source_text: str
-    confidence: float
+    source: ExtractionSource = ExtractionSource.REGEX
+    confidence: float = 1.0
     is_suspicious: bool = False
     context: str = ""
 
@@ -213,6 +309,7 @@ class ExtractionResult:
     phishing_links: list[str] = field(default_factory=list)
     emails: list[str] = field(default_factory=list)
     all_entities: list[ExtractedEntity] = field(default_factory=list)
+    source: ExtractionSource = ExtractionSource.REGEX
 
     @property
     def has_intelligence(self) -> bool:
@@ -235,13 +332,32 @@ class ExtractionResult:
             "emails": self.emails,
         }
 
+    def merge_with(self, other: "ExtractionResult") -> "ExtractionResult":
+        """Merge with another extraction result, deduplicating entities."""
+        return ExtractionResult(
+            bank_accounts=list(set(self.bank_accounts + other.bank_accounts)),
+            upi_ids=list(set(self.upi_ids + other.upi_ids)),
+            phone_numbers=list(set(self.phone_numbers + other.phone_numbers)),
+            phishing_links=list(set(self.phishing_links + other.phishing_links)),
+            emails=list(set(self.emails + other.emails)),
+            all_entities=self.all_entities + other.all_entities,
+            source=ExtractionSource.MERGED,
+        )
+
 
 class IntelligenceExtractor:
     """
-    Extracts actionable intelligence from conversation text.
+    Hybrid intelligence extractor combining regex and AI extraction.
 
-    Identifies bank accounts, UPI IDs, phone numbers, URLs, and emails
-    using regex patterns and validation.
+    Regex extraction:
+    - Fast (~1ms), deterministic
+    - Catches standard formats
+    - Always runs on every message
+
+    AI extraction:
+    - Piggybacks on engagement LLM call (no extra cost)
+    - Catches obfuscated data, contextual references
+    - Returns structured output alongside response
     """
 
     def __init__(self) -> None:
@@ -251,7 +367,7 @@ class IntelligenceExtractor:
 
     def extract(self, text: str) -> ExtractionResult:
         """
-        Extract all intelligence from text.
+        Extract all intelligence from text using regex patterns.
 
         Args:
             text: Text to extract from (single message or full conversation)
@@ -259,7 +375,7 @@ class IntelligenceExtractor:
         Returns:
             ExtractionResult with all extracted entities
         """
-        result = ExtractionResult()
+        result = ExtractionResult(source=ExtractionSource.REGEX)
 
         # Extract each type of intelligence
         result.bank_accounts = self._extract_bank_accounts(text)
@@ -269,7 +385,7 @@ class IntelligenceExtractor:
         result.emails = self._extract_emails(text)
 
         self.logger.info(
-            "Extraction complete",
+            "Regex extraction complete",
             bank_accounts=len(result.bank_accounts),
             upi_ids=len(result.upi_ids),
             phone_numbers=len(result.phone_numbers),
@@ -284,7 +400,7 @@ class IntelligenceExtractor:
         messages: list[dict[str, Any]],
     ) -> ExtractionResult:
         """
-        Extract intelligence from a full conversation.
+        Extract intelligence from a full conversation using regex.
 
         Args:
             messages: List of message dicts with 'text' field
@@ -295,6 +411,91 @@ class IntelligenceExtractor:
         # Combine all message texts
         full_text = " ".join(msg.get("text", "") for msg in messages)
         return self.extract(full_text)
+
+    def parse_ai_extraction(
+        self,
+        ai_extracted: dict[str, Any] | None,
+    ) -> ExtractionResult:
+        """
+        Parse AI-extracted intelligence from structured output.
+
+        Args:
+            ai_extracted: Dict from AI structured output with intelligence fields
+
+        Returns:
+            ExtractionResult from AI extraction
+        """
+        if not ai_extracted:
+            return ExtractionResult(source=ExtractionSource.AI)
+
+        result = ExtractionResult(source=ExtractionSource.AI)
+
+        # Parse and validate each field
+        raw_accounts = ai_extracted.get("bank_accounts", [])
+        for acc in raw_accounts:
+            clean = self._clean_number(str(acc))
+            if self._is_valid_bank_account(clean):
+                result.bank_accounts.append(clean)
+
+        raw_upi = ai_extracted.get("upi_ids", [])
+        for upi in raw_upi:
+            if "@" in str(upi):
+                result.upi_ids.append(str(upi).lower())
+
+        raw_phones = ai_extracted.get("phone_numbers", [])
+        for phone in raw_phones:
+            clean = self._clean_number(str(phone))
+            if self._is_valid_phone(clean):
+                result.phone_numbers.append(clean)
+
+        raw_urls = ai_extracted.get("urls", [])
+        for url in raw_urls:
+            if is_suspicious_url(str(url)):
+                result.phishing_links.append(str(url))
+
+        raw_emails = ai_extracted.get("emails", [])
+        for email in raw_emails:
+            if "@" in str(email) and "." in str(email):
+                result.emails.append(str(email).lower())
+
+        self.logger.info(
+            "AI extraction parsed",
+            bank_accounts=len(result.bank_accounts),
+            upi_ids=len(result.upi_ids),
+            phone_numbers=len(result.phone_numbers),
+            urls=len(result.phishing_links),
+            emails=len(result.emails),
+        )
+
+        return result
+
+    def merge_extractions(
+        self,
+        regex_result: ExtractionResult,
+        ai_result: ExtractionResult,
+    ) -> ExtractionResult:
+        """
+        Merge regex and AI extraction results.
+
+        Args:
+            regex_result: Result from regex extraction
+            ai_result: Result from AI extraction
+
+        Returns:
+            Merged and deduplicated ExtractionResult
+        """
+        merged = regex_result.merge_with(ai_result)
+
+        self.logger.info(
+            "Extractions merged",
+            total_bank_accounts=len(merged.bank_accounts),
+            total_upi_ids=len(merged.upi_ids),
+            total_phone_numbers=len(merged.phone_numbers),
+            total_urls=len(merged.phishing_links),
+            total_emails=len(merged.emails),
+        )
+
+        return merged
 
     def _extract_bank_accounts(self, text: str) -> list[str]:
         """Extract bank account numbers."""
@@ -434,7 +635,9 @@ from src.intelligence.extractor import (
 )
 from src.intelligence.patterns import (
     IntelligenceType,
+    ExtractionSource,
     is_suspicious_url,
+    AI_EXTRACTION_SCHEMA,
 )
 
 __all__ = [
@@ -443,11 +646,118 @@ __all__ = [
     "ExtractedEntity",
     "get_extractor",
     "IntelligenceType",
+    "ExtractionSource",
     "is_suspicious_url",
+    "AI_EXTRACTION_SCHEMA",
 ]
 ```
 
-### 5.4 Write Extraction Tests
+### 5.4 Update Honeypot Agent for Hybrid Extraction
+
+The key insight is that we're **already calling Gemini 3 Pro** during engagement. We can modify the prompt to also return extracted intelligence as structured output — **at no extra cost**.
+
+#### Update to src/agents/honeypot_agent.py
+
+Add this to the engagement prompt to enable AI extraction:
+
+```python
+# In the HoneypotAgent class, modify the engagement prompt:
+
+EXTRACTION_INSTRUCTION = """
+INTELLIGENCE EXTRACTION:
+While generating your response, also extract any actionable intelligence 
+the scammer has shared. Look for:
+
+1. Bank account numbers (9-18 digits, may be spelled out or formatted)
+2. UPI IDs (format: username@provider like xyz@ybl, abc@paytm)
+3. Phone numbers (Indian: 10 digits starting with 6-9, may have +91)
+4. Suspicious URLs (phishing links, URL shorteners, fake banking sites)
+5. Email addresses
+
+IMPORTANT: Scammers may obfuscate data:
+- "nine eight seven six five four three two one zero" = 9876543210
+- "account ending in 1234" = partial account number
+- "same UPI as before" = reference to previous message
+- Links hidden in text or using URL shorteners
+
+Return your response AND extracted intelligence in this JSON format:
+{
+    "response": "Your conversational response here",
+    "extracted_intelligence": {
+        "bank_accounts": ["1234567890123"],
+        "upi_ids": ["scammer@ybl"],
+        "phone_numbers": ["9876543210"],
+        "urls": ["http://phishing-site.tk"],
+        "emails": ["scammer@example.com"]
+    },
+    "agent_notes": "Brief analysis of scammer tactics"
+}
+"""
+
+# Updated engage method signature:
+async def engage(
+    self,
+    message: Message,
+    history: list[Message],
+    detection: ClassificationResult,
+    state: ConversationState
+) -> EngagementResult:
+    """
+    Generate engagement response with hybrid intelligence extraction.
+
+    This method:
+    1. Generates a believable human response
+    2. Extracts intelligence via AI (from the same LLM call)
+    3. Merges with regex extraction for comprehensive coverage
+    """
+    from src.intelligence import get_extractor, AI_EXTRACTION_SCHEMA
+
+    persona = self.persona_manager.get_persona(state)
+
+    # Build prompt with extraction instructions
+    prompt = self._build_prompt(message, history, persona)
+    prompt += EXTRACTION_INSTRUCTION
+
+    response = self.client.models.generate_content(
+        model=self.model,
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            thinking_config=types.ThinkingConfig(
+                thinking_level=types.ThinkingLevel.HIGH
+            ),
+            system_instruction=HONEYPOT_SYSTEM_PROMPT,
+            response_mime_type="application/json",
+            response_schema=AI_EXTRACTION_SCHEMA,  # Structured output
+        )
+    )
+
+    # Parse AI response
+    parsed = json.loads(response.text)
+    agent_response = parsed.get("response", "")
+    ai_extracted = parsed.get("extracted_intelligence", {})
+    agent_notes = parsed.get("agent_notes", "")
+
+    # Get regex extraction from full conversation
+    extractor = get_extractor()
+    full_text = " ".join([msg.text for msg in history] + [message.text])
+    regex_result = extractor.extract(full_text)
+
+    # Parse AI extraction
+    ai_result = extractor.parse_ai_extraction(ai_extracted)
+
+    # Merge both extraction sources
+    merged_intelligence = extractor.merge_extractions(regex_result, ai_result)
+
+    return EngagementResult(
+        response=agent_response,
+        persona_state=persona.emotional_state,
+        turn_number=state.turn_count,
+        extracted_intelligence=merged_intelligence,
+        agent_notes=agent_notes,
+    )
+```
+
+### 5.5 Write Extraction Tests
 
 #### tests/test_extractor.py
 
@@ -457,7 +767,7 @@ __all__ = [
 import pytest
 
 from src.intelligence.extractor import IntelligenceExtractor, ExtractionResult
-from src.intelligence.patterns import is_suspicious_url, IntelligenceType
+from src.intelligence.patterns import is_suspicious_url, IntelligenceType, ExtractionSource
 
 
 class TestIntelligenceExtractor:
@@ -650,43 +960,210 @@ class TestExtractionFromConversation:
         result = extractor.extract_from_conversation(messages)
 
         assert result.upi_ids.count("scam@ybl") == 1
+
+
+class TestAIExtraction:
+    """Tests for AI extraction parsing."""
+
+    @pytest.fixture
+    def extractor(self) -> IntelligenceExtractor:
+        """Create extractor instance."""
+        return IntelligenceExtractor()
+
+    def test_parses_ai_extracted_bank_account(self, extractor: IntelligenceExtractor):
+        """Should parse AI-extracted bank accounts."""
+        ai_data = {
+            "bank_accounts": ["123456789012", "9876543210123"],
+            "upi_ids": [],
+            "phone_numbers": [],
+            "urls": [],
+            "emails": [],
+        }
+        result = extractor.parse_ai_extraction(ai_data)
+        assert "123456789012" in result.bank_accounts
+        assert result.source == ExtractionSource.AI
+
+    def test_parses_ai_extracted_upi(self, extractor: IntelligenceExtractor):
+        """Should parse AI-extracted UPI IDs."""
+        ai_data = {
+            "bank_accounts": [],
+            "upi_ids": ["scammer@paytm", "fraud@ybl"],
+            "phone_numbers": [],
+            "urls": [],
+            "emails": [],
+        }
+        result = extractor.parse_ai_extraction(ai_data)
+        assert "scammer@paytm" in result.upi_ids
+        assert "fraud@ybl" in result.upi_ids
+
+    def test_validates_ai_extracted_phone(self, extractor: IntelligenceExtractor):
+        """Should validate AI-extracted phone numbers."""
+        ai_data = {
+            "bank_accounts": [],
+            "upi_ids": [],
+            "phone_numbers": ["9876543210", "1234567890"],  # Second is invalid
+            "urls": [],
+            "emails": [],
+        }
+        result = extractor.parse_ai_extraction(ai_data)
+        assert "9876543210" in result.phone_numbers
+        assert "1234567890" not in result.phone_numbers  # Invalid, doesn't start with 6-9
+
+    def test_handles_empty_ai_extraction(self, extractor: IntelligenceExtractor):
+        """Should handle empty/null AI extraction."""
+        result = extractor.parse_ai_extraction(None)
+        assert not result.has_intelligence
+        assert result.source == ExtractionSource.AI
+
+    def test_handles_obfuscated_number_from_ai(self, extractor: IntelligenceExtractor):
+        """Should handle cleaned numbers from AI."""
+        ai_data = {
+            "bank_accounts": ["1234 5678 9012 34"],  # AI might return formatted
+            "upi_ids": [],
+            "phone_numbers": ["+91-9876543210"],  # With country code
+            "urls": [],
+            "emails": [],
+        }
+        result = extractor.parse_ai_extraction(ai_data)
+        # Should clean and validate
+        assert any("12345678901234" in acc for acc in result.bank_accounts)
+
+
+class TestMergeExtractions:
+    """Tests for merging regex and AI extractions."""
+
+    @pytest.fixture
+    def extractor(self) -> IntelligenceExtractor:
+        """Create extractor instance."""
+        return IntelligenceExtractor()
+
+    def test_merges_unique_entities(self, extractor: IntelligenceExtractor):
+        """Should merge unique entities from both sources."""
+        regex_result = ExtractionResult(
+            bank_accounts=["111111111111"],
+            upi_ids=["regex@ybl"],
+            source=ExtractionSource.REGEX,
+        )
+        ai_result = ExtractionResult(
+            bank_accounts=["222222222222"],
+            upi_ids=["ai@paytm"],
+            source=ExtractionSource.AI,
+        )
+
+        merged = extractor.merge_extractions(regex_result, ai_result)
+
+        assert len(merged.bank_accounts) == 2
+        assert len(merged.upi_ids) == 2
+        assert merged.source == ExtractionSource.MERGED
+
+    def test_deduplicates_same_entity(self, extractor: IntelligenceExtractor):
+        """Should deduplicate same entity from both sources."""
+        regex_result = ExtractionResult(
+            upi_ids=["same@ybl"],
+            source=ExtractionSource.REGEX,
+        )
+        ai_result = ExtractionResult(
+            upi_ids=["same@ybl"],  # Same entity
+            source=ExtractionSource.AI,
+        )
+
+        merged = extractor.merge_extractions(regex_result, ai_result)
+
+        assert merged.upi_ids.count("same@ybl") == 1
+
+    def test_ai_catches_missed_by_regex(self, extractor: IntelligenceExtractor):
+        """AI should catch entities missed by regex."""
+        # Regex extraction from message
+        message = "Send to my number nine eight seven six five four three two one zero"
+        regex_result = extractor.extract(message)
+
+        # AI would extract the spelled-out number
+        ai_result = ExtractionResult(
+            phone_numbers=["9876543210"],  # AI understood the spelled-out number
+            source=ExtractionSource.AI,
+        )
+
+        merged = extractor.merge_extractions(regex_result, ai_result)
+
+        # Regex wouldn't catch it, but merged result has it from AI
+        assert "9876543210" in merged.phone_numbers
 ```
 
 ## Verification Checklist
 
 - [ ] `src/intelligence/patterns.py` defines all regex patterns
-- [ ] `src/intelligence/extractor.py` implements extraction logic
+- [ ] `src/intelligence/patterns.py` includes `ExtractionSource` enum
+- [ ] `src/intelligence/patterns.py` includes `AI_EXTRACTION_SCHEMA`
+- [ ] `src/intelligence/extractor.py` implements hybrid extraction logic
+- [ ] `IntelligenceExtractor.parse_ai_extraction()` parses AI output
+- [ ] `IntelligenceExtractor.merge_extractions()` combines sources
 - [ ] Bank accounts (9-18 digits) extracted correctly
 - [ ] UPI IDs (username@provider) extracted
 - [ ] Phone numbers (Indian format) extracted
 - [ ] Suspicious URLs flagged as phishing links
 - [ ] Email addresses extracted
 - [ ] Entities deduplicated across conversation
+- [ ] HoneypotAgent updated to use hybrid extraction
 - [ ] All tests pass: `pytest tests/test_extractor.py -v`
 
 ## Integration Example
 
 ```python
-# Usage in routes.py
+# Usage in routes.py - Hybrid approach
 from src.intelligence.extractor import get_extractor
 
 @router.post("/api/v1/analyze")
 async def analyze_message(request: AnalyzeRequest):
-    # ... detection and engagement logic ...
+    # ... detection logic ...
 
-    # Extract intelligence from full conversation
-    extractor = get_extractor()
+    if detection.is_scam:
+        # Engagement agent returns response + AI-extracted intelligence
+        engagement_result = await honeypot_agent.engage(
+            message=request.message,
+            history=request.conversation_history,
+            detection=detection,
+            state=conversation_state,
+        )
 
-    all_messages = [
-        {"text": msg.text} for msg in request.conversation_history
-    ] + [{"text": request.message.text}]
+        # engagement_result.extracted_intelligence is already merged
+        # (regex + AI extraction combined)
+        intelligence = engagement_result.extracted_intelligence
 
-    intelligence = extractor.extract_from_conversation(all_messages)
+    else:
+        # For non-scam messages, just do regex extraction
+        extractor = get_extractor()
+        all_messages = [
+            {"text": msg.text} for msg in request.conversation_history
+        ] + [{"text": request.message.text}]
+
+        intelligence = extractor.extract_from_conversation(all_messages)
 
     return AnalyzeResponse(
         # ...
         extracted_intelligence=intelligence.to_dict(),
     )
+```
+
+## Benefits of Hybrid Approach
+
+| Scenario | Regex Only | Hybrid (Regex + AI) |
+|----------|------------|---------------------|
+| "Send to 9876543210" | ✅ Captured | ✅ Captured |
+| "nine eight seven six..." | ❌ Missed | ✅ AI understands |
+| "same account as before" | ❌ Missed | ✅ AI uses context |
+| "A/C ending 1234" | ❌ Partial | ✅ AI notes partial |
+| Standard UPI formats | ✅ Captured | ✅ Captured |
+| "my paytm is xyz" | ❌ Missed | ✅ AI infers UPI |
+| URL shorteners | ✅ Flagged | ✅ Flagged |
+| Obfuscated URLs | ❌ Missed | ✅ AI detects |
+
+## Cost Impact
+
+**No additional cost!** The AI extraction piggybacks on the existing Gemini 3 Pro call for engagement. We're already paying for that call — now we get intelligence extraction "for free" by using structured output.
+
+```
+Before: Regex only           → Some intelligence missed
+After:  Regex + AI (same $)  → Maximum intelligence captured
 ```
 
 ## Next Steps

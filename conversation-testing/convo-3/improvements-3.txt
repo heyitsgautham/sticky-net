@@ -1,0 +1,15 @@
+Answer for the improvement needed based on [convo-2.txt](./convo-2.txt)
+
+You are nearly there! This final JSON output exposes one last critical classification error that you must fix before submitting.
+
+The Error: Data Misclassification
+Look at your Extracted Intelligence:
+
+JSON
+
+"Bank Accounts": "919123456789"
+The Bug: Your agent correctly extracted the number 919123456789, but it put it in the Bank Account bucket instead of the Phone Number bucket.
+
+Why this happens: A 12-digit number looks very similar to a bank account number to an AI.
+
+The Fix: Add a regex validator or a specific instruction to your extraction prompt: "If a number starts with 9, 8, 7, or 6 and is 10-12 digits long, classify it as a Phone Number, NOT a Bank Account."

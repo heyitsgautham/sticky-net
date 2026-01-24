@@ -28,16 +28,23 @@ class TestPersona:
         assert PersonaTrait.TRUSTING in persona.traits
 
     def test_emotional_state_updates_with_intensity(self):
-        """Emotional state should reflect scam intensity."""
+        """Emotional state should reflect scam intensity when scam_type provided."""
         persona = Persona()
 
-        persona.update_emotional_state(0.9)
-        assert persona.emotional_state == EmotionalState.PANICKED
-
-        persona.update_emotional_state(0.6)
+        # Without scam_type, high intensity = ANXIOUS (not PANICKED)
+        persona.update_emotional_state(0.9, scam_type=None)
         assert persona.emotional_state == EmotionalState.ANXIOUS
 
-        persona.update_emotional_state(0.3)
+        # With banking scam and high intensity = PANICKED
+        persona.update_emotional_state(0.9, scam_type="banking_fraud")
+        assert persona.emotional_state == EmotionalState.PANICKED
+
+        # With banking scam and medium intensity = ANXIOUS
+        persona.update_emotional_state(0.6, scam_type="banking_fraud")
+        assert persona.emotional_state == EmotionalState.ANXIOUS
+
+        # Without scam_type, low intensity = CALM
+        persona.update_emotional_state(0.3, scam_type=None)
         assert persona.emotional_state == EmotionalState.CALM
 
     def test_increment_turn(self):
@@ -60,14 +67,24 @@ class TestPersona:
         assert persona.extracted_info_count == 1
 
     def test_get_emotional_modifier(self):
-        """Should return correct modifiers for emotional states."""
+        """Should return varied modifiers for emotional states."""
         persona = Persona()
         
+        # CALM state returns one of several options (including empty string)
         persona.emotional_state = EmotionalState.CALM
-        assert persona.get_emotional_modifier() == ""
+        calm_options = ["", "ok so ", "let me understand ", "hmm "]
+        assert persona.get_emotional_modifier() in calm_options
         
+        # PANICKED state returns one of several worried phrases
         persona.emotional_state = EmotionalState.PANICKED
-        assert "help" in persona.get_emotional_modifier().lower()
+        panicked_options = [
+            "ok ok i am scared ",
+            "please help me understand ",
+            "my hands are shaking ",
+            "what do i do ",
+            "i dont want trouble ",
+        ]
+        assert persona.get_emotional_modifier() in panicked_options
 
 
 class TestPersonaManager:
@@ -105,13 +122,18 @@ class TestPersonaManager:
         assert new_persona.engagement_turn == 0
 
     def test_update_persona(self):
-        """Should update persona state."""
+        """Should update persona state with scam type."""
         manager = PersonaManager()
         
-        persona = manager.update_persona("conv-123", scam_intensity=0.9)
+        # Update with banking scam and high intensity
+        persona = manager.update_persona("conv-123", scam_intensity=0.9, scam_type="banking_fraud")
         
         assert persona.engagement_turn == 1
         assert persona.emotional_state == EmotionalState.PANICKED
+        
+        # Update with no scam type should be less panicked
+        persona2 = manager.update_persona("conv-456", scam_intensity=0.9, scam_type=None)
+        assert persona2.emotional_state == EmotionalState.ANXIOUS
 
     def test_get_persona_context(self):
         """Should return context dict."""
@@ -186,6 +208,86 @@ class TestEngagementPolicy:
         reason = policy.get_exit_reason(state)
         assert reason is not None
         assert "turns" in reason.lower()
+
+    def test_high_value_intelligence_complete_bank_and_phone(self):
+        """Should detect high-value intel with bank account, phone, AND beneficiary name."""
+        result = EngagementPolicy.is_high_value_intelligence_complete(
+            bank_accounts=["12345678901234"],
+            phone_numbers=["9876543210"],
+            beneficiary_names=["RAHUL KUMAR"],
+        )
+        assert result is True
+
+    def test_high_value_intelligence_complete_upi_and_phone(self):
+        """Should detect high-value intel with UPI, phone, AND beneficiary name."""
+        result = EngagementPolicy.is_high_value_intelligence_complete(
+            bank_accounts=[],
+            phone_numbers=["9876543210"],
+            upi_ids=["scammer@ybl"],
+            beneficiary_names=["RAHUL KUMAR"],
+        )
+        assert result is True
+
+    def test_high_value_intelligence_incomplete_no_phone(self):
+        """Should return False if no phone number."""
+        result = EngagementPolicy.is_high_value_intelligence_complete(
+            bank_accounts=["12345678901234"],
+            phone_numbers=[],
+            upi_ids=["scammer@ybl"],
+            beneficiary_names=["RAHUL KUMAR"],
+        )
+        assert result is False
+
+    def test_high_value_intelligence_incomplete_no_bank_or_upi(self):
+        """Should return False if no bank account or UPI."""
+        result = EngagementPolicy.is_high_value_intelligence_complete(
+            bank_accounts=[],
+            phone_numbers=["9876543210"],
+            upi_ids=[],
+            beneficiary_names=["RAHUL KUMAR"],
+        )
+        assert result is False
+
+    def test_high_value_intelligence_incomplete_empty(self):
+        """Should return False if everything is empty."""
+        result = EngagementPolicy.is_high_value_intelligence_complete(
+            bank_accounts=[],
+            phone_numbers=[],
+        )
+        assert result is False
+
+    def test_high_value_intelligence_incomplete_no_beneficiary(self):
+        """Should return False if no beneficiary name (CRITICAL - mule name required)."""
+        # Even with UPI and phone, we need the beneficiary name to identify the mule
+        result = EngagementPolicy.is_high_value_intelligence_complete(
+            bank_accounts=[],
+            phone_numbers=["9876543210"],
+            upi_ids=["scammer@ybl"],
+            beneficiary_names=[],  # Missing!
+        )
+        assert result is False
+
+    def test_get_missing_intelligence_returns_beneficiary(self):
+        """Should identify missing beneficiary name when UPI/phone present."""
+        missing = EngagementPolicy.get_missing_intelligence(
+            bank_accounts=[],
+            phone_numbers=["9876543210"],
+            upi_ids=["scammer@ybl"],
+            beneficiary_names=[],
+        )
+        assert "beneficiary_name" in missing
+        assert "payment_details" not in missing  # UPI is present
+        assert "phone_number" not in missing  # Phone is present
+
+    def test_get_missing_intelligence_complete(self):
+        """Should return empty list when all intelligence is present."""
+        missing = EngagementPolicy.get_missing_intelligence(
+            bank_accounts=["12345678901234"],
+            phone_numbers=["9876543210"],
+            upi_ids=["scammer@ybl"],
+            beneficiary_names=["RAHUL KUMAR"],
+        )
+        assert missing == []
 
 
 class TestPrompts:

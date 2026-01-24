@@ -83,62 +83,6 @@ See [docs/ARCHITECTURE.md](./../docs/ARCHITECTURE.md) for detailed architecture 
                                 └─────────────────────────────────────┘
 ```
 
-## Project Structure
-
-```
-sticky-net/
-├── .github/
-│   ├── copilot-instructions.md          # This file
-│   ├── workflows/
-│   │   └── ci.yml                        # CI/CD pipeline
-│   └── instructions/
-│       ├── milestone-1-project-setup.instructions.md
-│       ├── milestone-2-api-layer.instructions.md
-│       ├── milestone-3-scam-detection.instructions.md
-│       ├── milestone-4-agent-engagement.instructions.md
-│       ├── milestone-5-intelligence-extraction.instructions.md
-│       └── milestone-6-deployment.instructions.md
-├── docs/
-│   ├── DOCUMENTATION.md                  # API spec
-│   └── PROBLEM_STATEMENT.md              # Requirements
-├── src/
-│   ├── __init__.py
-│   ├── main.py                           # FastAPI app entry
-│   ├── api/
-│   │   ├── __init__.py
-│   │   ├── routes.py                     # API endpoints
-│   │   ├── middleware.py                 # API key auth
-│   │   └── schemas.py                    # Pydantic models
-│   ├── detection/
-│   │   ├── __init__.py
-│   │   ├── detector.py                   # Scam detection logic
-│   │   └── patterns.py                   # Fraud indicator patterns
-│   ├── agents/
-│   │   ├── __init__.py
-│   │   ├── honeypot_agent.py             # Main agent
-│   │   ├── persona.py                    # Human persona management
-│   │   └── prompts.py                    # Agent system prompts
-│   └── intelligence/
-│       ├── __init__.py
-│       └── extractor.py                  # Entity extraction
-├── config/
-│   ├── __init__.py
-│   └── settings.py                       # Configuration management
-├── tests/
-│   ├── __init__.py
-│   ├── conftest.py                       # Pytest fixtures
-│   ├── test_api.py
-│   ├── test_detection.py
-│   ├── test_agent.py
-│   └── test_extractor.py
-├── pyproject.toml                        # Python dependencies
-├── Dockerfile                            # Container config
-├── docker-compose.yml                    # Local development
-├── .env.example                          # Environment template
-├── .gitignore
-└── README.md
-```
-
 ## API Contract
 
 ### Request Format
@@ -206,40 +150,6 @@ sticky-net/
 - Never expose internal errors to API responses
 - Log errors with structured context
 
-### Testing
-- Minimum 80% coverage target
-- Use pytest with async support
-- Mock external services (Vertex AI, Firestore)
-
-## Environment Variables
-
-```bash
-# API Configuration
-API_KEY=your-secret-api-key
-PORT=8080
-
-# Google Cloud
-GOOGLE_CLOUD_PROJECT=your-project-id
-GOOGLE_CLOUD_LOCATION=global
-GOOGLE_GENAI_USE_VERTEXAI=True
-GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
-
-# Firestore
-FIRESTORE_COLLECTION=conversations
-
-# AI Models (Gemini 3)
-FLASH_MODEL=gemini-3-flash-preview
-PRO_MODEL=gemini-3-pro-preview
-LLM_TEMPERATURE=0.7
-
-# Engagement Policy
-MAX_ENGAGEMENT_TURNS_CAUTIOUS=10
-MAX_ENGAGEMENT_TURNS_AGGRESSIVE=25
-MAX_ENGAGEMENT_DURATION_SECONDS=600
-CAUTIOUS_CONFIDENCE_THRESHOLD=0.60
-AGGRESSIVE_CONFIDENCE_THRESHOLD=0.85
-```
-
 ## Agent Behavior Rules
 
 1. **Never reveal detection** — Maintain believable human persona at all times
@@ -247,12 +157,3 @@ AGGRESSIVE_CONFIDENCE_THRESHOLD=0.85
 3. **Natural extraction** — Ask clarifying questions that prompt intelligence sharing
 4. **Context awareness** — Use full `conversationHistory` for coherent responses
 5. **Safety limits** — Max engagement turns, timeout handling
-
-## Ethical Constraints
-
-- ❌ No impersonation of real individuals
-- ❌ No illegal instructions or encouragement
-- ❌ No harassment or threats
-- ✅ Responsible data handling only
-- ✅ Log all extracted intelligence securely
-

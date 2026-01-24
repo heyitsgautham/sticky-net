@@ -2,14 +2,20 @@
 
 from contextlib import asynccontextmanager
 from collections.abc import AsyncGenerator
+from pathlib import Path
 
 import structlog
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from src.api.routes import router
 from src.api.middleware import setup_middleware
 from config.settings import get_settings
+
+# Static files directory
+STATIC_DIR = Path(__file__).parent / "static"
 
 # Configure structured logging
 structlog.configure(
@@ -78,6 +84,15 @@ def create_app() -> FastAPI:
     async def health_check() -> dict[str, str]:
         """Health check endpoint."""
         return {"status": "healthy"}
+
+    @app.get("/")
+    async def serve_ui() -> FileResponse:
+        """Serve the web UI for testing."""
+        return FileResponse(STATIC_DIR / "index.html")
+
+    # Mount static files (if directory exists)
+    if STATIC_DIR.exists():
+        app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
     return app
 

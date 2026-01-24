@@ -14,12 +14,12 @@ from config.settings import get_settings
 class APIKeyMiddleware(BaseHTTPMiddleware):
     """Middleware to validate API key in request headers."""
 
-    EXEMPT_PATHS = {"/health", "/docs", "/openapi.json", "/redoc"}
+    EXEMPT_PATHS = {"/health", "/docs", "/openapi.json", "/redoc", "/", "/static", "/favicon.ico"}
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
         """Validate API key for protected endpoints."""
         # Skip auth for exempt paths
-        if request.url.path in self.EXEMPT_PATHS:
+        if request.url.path in self.EXEMPT_PATHS or request.url.path.startswith("/static"):
             return await call_next(request)
 
         # Get API key from header

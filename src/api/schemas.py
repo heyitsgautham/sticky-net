@@ -87,6 +87,7 @@ class ExtractedIntelligence(BaseModel):
 
     bankAccounts: list[str] = Field(default_factory=list)
     upiIds: list[str] = Field(default_factory=list)
+    phoneNumbers: list[str] = Field(default_factory=list)
     phishingLinks: list[str] = Field(default_factory=list)
 
 
@@ -120,6 +121,7 @@ class AnalyzeResponse(BaseModel):
                     "extractedIntelligence": {
                         "bankAccounts": ["XXXX-XXXX-XXXX"],
                         "upiIds": ["scammer@upi"],
+                        "phoneNumbers": ["9876543210"],
                         "phishingLinks": ["http://malicious-link.example"],
                     },
                     "agentNotes": "Scammer used urgency tactics and payment redirection",
