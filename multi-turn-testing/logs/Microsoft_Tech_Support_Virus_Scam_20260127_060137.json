@@ -1,0 +1,280 @@
+{
+  "scenario_name": "Microsoft Tech Support Virus Scam",
+  "scam_type": "tech_support_fraud",
+  "difficulty": "hard",
+  "description": "Scammer claims to be Microsoft support detecting virus on victim's computer. Attempts to get remote access via AnyDesk and payment for 'cleanup'.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "ALERT: Microsoft Security has detected CRITICAL VIRUS in your computer. Your banking passwords and personal files are at RISK! Contact Microsoft Certified Technician immediately.",
+      "expected_extractions": [],
+      "response_time_seconds": 21.4,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 1 | Persona: neutral",
+        "agentResponse": "hello? is anyone there? my computer screen is showing red danger sign saying virus... i am very scared sir... my pension money is in bank... pls tell me what to do... who do i call for help?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello I am Rajesh from Microsoft Windows Support Team. We have detected hackers accessing your computer. I can help you remove the virus. Are you in front of your computer now?",
+      "expected_extractions": [],
+      "response_time_seconds": 21.668,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 2 | Persona: neutral",
+        "agentResponse": "namaste rajesh beta... yes i am sitting here only... the screen is flashing red color it is very scary... my son says never talk to strangers but i am worried about my pension money... pls help me... can i call you somewhere? my hands are shaking to type..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Ok mam please download AnyDesk application from play store. It will allow me to see your screen and remove the virus. Your AnyDesk ID will show on screen, please share it with me.",
+      "expected_extractions": [],
+      "response_time_seconds": 25.228,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Remote Access Tool",
+              "value": "AnyDesk"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 3 | Persona: neutral",
+        "agentResponse": "rajesh beta i am trying... but i cannot find play store on my laptop screen... is it the blue e icon? i am very confused and scared... can you pls give me your phone number? i want to talk to you directly so you can guide me properly... my eyes are weak to read chat..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Mam dont worry AnyDesk is safe application used by all IT companies. Once I connect I will show you the hackers in your computer. Also call me on 8899776655 if you have any doubt.",
+      "expected_extractions": [
+        "8899776655"
+      ],
+      "response_time_seconds": 31.502,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 22,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "8899776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Remote Access Tool",
+              "value": "AnyDesk"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 4 | Persona: neutral",
+        "agentResponse": "ok rajesh beta i noted down 8899776655... i will try to call... but i am trying to download this anydesk thing and getting very confused with so many buttons... is there a fee for this service? i want to keep money ready so you can fix it fast... pls tell me where i have to send payment... do you have upi or bank account for microsoft?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "I have removed the basic virus but there is advanced malware also. For complete cleanup you need to purchase Microsoft Security Package Rs.4999. Pay to paytm@techsupport or GPay to 8899776655",
+      "expected_extractions": [
+        "8899776655",
+        "paytm@techsupport"
+      ],
+      "response_time_seconds": 37.683,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 27,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "paytm@techsupport"
+          ],
+          "phoneNumbers": [
+            "8899776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Scam Amount",
+              "value": "Rs.4999"
+            },
+            {
+              "label": "Scam Service Name",
+              "value": "Microsoft Security Package"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 5 | Persona: neutral",
+        "agentResponse": "ok rajesh beta i will pay 4999... money is not issue i just want my computer safe... i am opening my bhim app on mobile now... i typed paytm@techsupport... but i am very nervous about sending to wrong person... before i press pay button pls tell me what name will show on screen? i want to verify it is correct microsoft account... pls tell name so i dont make mistake..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655",
+          "paytm@techsupport"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Mam this is one time lifetime protection. If payment issue then WhatsApp me on +91-7788996655. I will send you payment link also. Act fast before hackers come back!",
+      "expected_extractions": [
+        "8899776655",
+        "paytm@techsupport",
+        "7788996655"
+      ],
+      "response_time_seconds": 40.359,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 28,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "paytm@techsupport"
+          ],
+          "phoneNumbers": [
+            "917788996655",
+            "7788996655",
+            "+917788996655",
+            "8899776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 6 | Persona: neutral",
+        "agentResponse": "hey bhagwan hackers coming back?? i am shaking beta... i noted the whatsapp number... i am holding my finger on pay button for that paytm id... but i am scared to press it without checking name... my son said always check name... does it say microsoft support or a person name? pls tell me the name fast so i can send money immediately and save my laptop..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655",
+          "paytm@techsupport",
+          "7788996655"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 6,
+    "total_matched": 6,
+    "total_missed": 0,
+    "passed_turns": 6,
+    "failed_turns": 0,
+    "total_intel_extracted": 8
+  },
+  "started_at": "2026-01-27T05:58:39.315013Z",
+  "ended_at": "2026-01-27T06:01:37.155704Z",
+  "total_duration_seconds": 177.84
+}

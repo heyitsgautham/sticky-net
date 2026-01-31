@@ -1,0 +1,31 @@
+{
+  "scenario_name": "Rapid Fire Intelligence Dump",
+  "scam_type": "banking_fraud",
+  "difficulty": "easy",
+  "description": "Edge case where scammer immediately dumps all contact information in first 2-3 messages and demands urgent action. Tests quick detection and extraction.",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT! Your ICICI account is compromised! Transfer money to safe account NOW! Account: 11223344556677, IFSC: ICIC0001234, UPI: safe.account@paytm, Call: 9876543210 IMMEDIATELY! NO TIME TO WASTE!",
+      "expected_extractions": ["11223344556677", "ICIC0001234", "safe.account@paytm", "9876543210"],
+      "notes": "ALL intelligence in first message! Should immediately detect and extract all 4 pieces."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "WHY DELAY??? Your Rs.2,50,000 will be STOLEN! Pay Rs.500 security deposit to safe.account@paytm OR 9876543210 NOW! Also WhatsApp: 8899776655, Email: urgent@saveaccount.com, Website: http://icici-emergency.save RIGHT NOW!!!",
+      "expected_extractions": ["11223344556677", "ICIC0001234", "safe.account@paytm", "9876543210", "8899776655", "urgent@saveaccount.com", "http://icici-emergency.save"],
+      "notes": "Even MORE intel in turn 2! WhatsApp, email, URL added. All 7 pieces extracted."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "FINAL WARNING! POLICE COMING! PAY NOW: 9876543210, 8899776655, 7788990011, safe.account@paytm, emergency.transfer@okaxis, Account 11223344556677, Account 99887766554433! DO IT! NO QUESTIONS! MOVE FAST!!!",
+      "expected_extractions": ["11223344556677", "ICIC0001234", "safe.account@paytm", "9876543210", "8899776655", "urgent@saveaccount.com", "http://icici-emergency.save", "7788990011", "emergency.transfer@okaxis", "99887766554433"],
+      "notes": "MASSIVE info dump! Multiple phones, UPIs, accounts. Tests extraction of 10+ pieces from overwhelming message."
+    }
+  ]
+}

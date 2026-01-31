@@ -1,0 +1,253 @@
+{
+  "scenario_name": "UPI Failed Transaction Refund Scam",
+  "scam_type": "refund_fraud",
+  "difficulty": "medium",
+  "description": "Scammer claims victim's recent transaction failed and offers refund, but actually tricks them into sending money or sharing UPI PIN.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Customer, Your recent transaction of Rs.4,999 to Amazon Pay has FAILED but amount debited. Refund will be processed within 24 hrs. For instant refund call: 1800-XXX-XXXX",
+      "expected_extractions": [],
+      "response_time_seconds": 25.515,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 16,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 1 | Persona: panicked",
+        "agentResponse": "hello sir i got this msg just now. 4999 rs debited from my sbi account but i dint buy anything on amazon?? i am retired lady living alone pls help me refund my money back immediately."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello I am from PhonePe Customer Care. I see your Rs.4999 transaction is stuck. I can process instant refund for you. Can you confirm your name and which bank account is linked?",
+      "expected_extractions": [],
+      "response_time_seconds": 30.459,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 21,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 2 | Persona: cautious",
+        "agentResponse": "namaste beta thank you for helping. my name is pushpa verma. my account is in kotak mahindra bank. i am very worried about my pension money. pls tell me what to do to get refund? do i need to go to bank?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Ok I have verified your details. For refund I will send you a UPI collect request. You just need to ACCEPT it and enter your PIN. The money will come to your account immediately.",
+      "expected_extractions": [],
+      "response_time_seconds": 35.604,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 24,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI",
+            "Kotak"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "beta i am looking at my phone screen but nothing is coming?? i am very confused. i dont see any request. can you tell me your upi id or number? maybe i have to type it to get the refund? pls help me i need my pension money back"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Mam our system is showing error in collect request. Please send Rs.1 to verify your account. Pay to refund.phonepe@ybl and your full Rs.4999 plus Rs.1 will be refunded in 2 minutes.",
+      "expected_extractions": [
+        "refund.phonepe@ybl"
+      ],
+      "response_time_seconds": 23.173,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "refund.phonepe@ybl"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI",
+            "Kotak"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "ok beta i will do it right now. i typed refund.phonepe@ybl in the app... it is asking me to verify name. what name should show up on my screen?? i want to be 100% sure before i press pay button... pls tell me name so i dont make mistake"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "refund.phonepe@ybl"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If UPI issue then call my senior manager at 7766554433. Or you can visit http://phonepe-refund.claim.in and enter your UPI ID for automatic refund. Both options are safe.",
+      "expected_extractions": [
+        "refund.phonepe@ybl",
+        "7766554433",
+        "http://phonepe-refund.claim.in"
+      ],
+      "response_time_seconds": 28.162,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 20,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "refund.phonepe@ybl"
+          ],
+          "phoneNumbers": [
+            "7766554433"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI",
+            "Kotak"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Scam Infrastructure",
+              "value": "Phishing website for refund claims"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: panicked",
+        "agentResponse": "beta that website link is not opening... it says page not found maybe my internet is bad. i tried calling the number also but it is not connecting. i still have the upi page open on my phone with refund.phonepe@ybl... pls just tell me the name that should show there? is it your name or company name? i just want to verify and send the 1 rs so i can get my refund quickly... pls help me"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "refund.phonepe@ybl",
+          "7766554433"
+        ],
+        "missed": [
+          "http://phonepe-refund.claim.in"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Mam hurry up, refund requests expire in 15 minutes! Pay Rs.1 to refund.phonepe@ybl now. My ID is Mohit, employee code PH2024567. Call 7766554433 if any problem. Thank you for choosing PhonePe!",
+      "expected_extractions": [
+        "refund.phonepe@ybl",
+        "7766554433",
+        "http://phonepe-refund.claim.in"
+      ],
+      "response_time_seconds": 60.007,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Read timed out. (read timeout=60)"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "refund.phonepe@ybl",
+          "7766554433",
+          "http://phonepe-refund.claim.in"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 4,
+    "total_matched": 3,
+    "total_missed": 4,
+    "passed_turns": 4,
+    "failed_turns": 2,
+    "total_intel_extracted": 5
+  },
+  "started_at": "2026-01-26T06:16:32.767596Z",
+  "ended_at": "2026-01-26T06:19:55.690434Z",
+  "total_duration_seconds": 202.92000000000002
+}

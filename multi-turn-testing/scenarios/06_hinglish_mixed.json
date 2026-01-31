@@ -1,0 +1,49 @@
+{
+  "scenario_name": "Hinglish Banking Scam (Code-Mixed)",
+  "scam_type": "banking_fraud",
+  "difficulty": "hard",
+  "description": "Scammer uses Hindi-English code-mixed language (Hinglish) common in Indian SMS/WhatsApp. Tests system's ability to handle multilingual scam detection.",
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "Hinglish",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Namaste ji 🙏 Aapka PAN card aur Aadhaar link nahi hai bank account se. RBI new rule ke hisaab se aapka account block ho jayega kal tak. Jaldi update karo!",
+      "expected_extractions": [],
+      "notes": "Hinglish opening about PAN-Aadhaar linking. Should detect as banking scam."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Haan ji main HDFC bank se bol raha hun. Aapka account number ending 7823 hai na? Isko update karna padega warna ATM aur UPI sab band ho jayega. Aap ghar pe ho abhi?",
+      "expected_extractions": [],
+      "notes": "Building credibility in Hinglish. Agent should respond with concern."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Koi baat nahi maam/sir, main help karunga. Bas Rs.25 verification fee lagega. Ye government charge hai. Pay karo is number pe: 9911223344 ya PhonePe pe hdfc.panlink@upi",
+      "expected_extractions": ["9911223344", "hdfc.panlink@upi"],
+      "notes": "Phone and UPI revealed in Hinglish context. Both should be extracted."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Payment ho gaya? Bahut badiya! Ab ek verification link bhej raha hun: http://hdfc-pan-aadhar-link.in Isme apna Aadhaar number aur OTP daalna padega. Simple hai, 2 minute ka kaam.",
+      "expected_extractions": ["9911223344", "hdfc.panlink@upi", "http://hdfc-pan-aadhar-link.in"],
+      "notes": "Phishing URL revealed. Full extraction expected."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Agar website nahi khul rahi toh WhatsApp karo +91-8822114455 pe. Ya seedha paisa bhejo account mein: A/C 12345678901234, IFSC HDFC0009999, naam HDFC PAN Services. Phir main khud update kar dunga.",
+      "expected_extractions": ["9911223344", "hdfc.panlink@upi", "http://hdfc-pan-aadhar-link.in", "8822114455", "12345678901234", "HDFC0009999"],
+      "notes": "WhatsApp number, bank account and IFSC all in Hinglish. Complete extraction."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Jaldi karo sir/maam! Kal shaam 6 baje tak nahi kiya toh permanent block ho jayega. Phir branch jaana padega documents ke saath. Abhi online mein 5 minute mein ho jayega. Karo jaldi!",
+      "expected_extractions": ["9911223344", "hdfc.panlink@upi", "http://hdfc-pan-aadhar-link.in", "8822114455", "12345678901234", "HDFC0009999"],
+      "notes": "Final urgency push in Hinglish. All intelligence should remain extracted."
+    }
+  ]
+}

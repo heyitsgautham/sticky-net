@@ -1,0 +1,238 @@
+{
+  "scenario_name": "Fake Courier Customs Duty Scam",
+  "scam_type": "delivery_fraud",
+  "difficulty": "easy",
+  "description": "Scammer impersonates courier company claiming parcel is held at customs and requires payment of duty/charges to release it.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Customer, Your international parcel AWB#DHL987654321 is held at Mumbai customs. Pay customs duty Rs.2,450 to release shipment. Parcel contains: Apple iPhone 15. Reply URGENT.",
+      "expected_extractions": [],
+      "response_time_seconds": 21.289,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 95% | Turn: 1 | Persona: cautious",
+        "agentResponse": "namaste sir... i am very worried i did not order any iphone 15... maybe my son sent it from bangalore? i dont want police trouble... how do i pay the 2450 rs? pls tell me process i am not good with phone"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello sir/mam I am Ramesh Kumar from DHL Express India. Your parcel from USA is waiting clearance. You must pay customs duty today otherwise parcel will return to sender after 48 hours.",
+      "expected_extractions": [],
+      "response_time_seconds": 32.017,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 20,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Scammer Persona",
+              "value": "Ramesh Kumar from DHL Express India"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 2 | Persona: cautious",
+        "agentResponse": "hello mr ramesh... i am confused why usa? my son works in bangalore only... but i dont want it to go back... i want to pay the duty fee... how can i send the 2450 rupees? do i use paytm or bank? pls help me sir"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Payment is simple sir. Pay Rs.2450 customs duty to our collection UPI ID: dhl.customs.india@oksbi. Or you can pay to our customs clearance number 7890123456 via PhonePe/GooglePay.",
+      "expected_extractions": [
+        "dhl.customs.india@oksbi",
+        "7890123456"
+      ],
+      "response_time_seconds": 41.988,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 34,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "dhl.customs.india@oksbi"
+          ],
+          "phoneNumbers": [
+            "7890123456"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 3 | Persona: cautious",
+        "agentResponse": "ok sir i am opening my google pay now... hands are shaking a little bit i am so nervous... i typed the upi id dhl.customs.india@oksbi... but i want to be sure before i press pay button... what name will show up on screen? i dont want to send to wrong person by mistake... pls tell me the name so i can match it"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "dhl.customs.india@oksbi",
+          "7890123456"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "After payment, your tracking will update and parcel delivered within 24 hours. Also visit our portal http://dhl-customs-clearance.co for online payment option. Fast mam, sender is waiting!",
+      "expected_extractions": [
+        "dhl.customs.india@oksbi",
+        "7890123456",
+        "http://dhl-customs-clearance.co"
+      ],
+      "response_time_seconds": 49.186,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 21,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "dhl.customs.india@oksbi"
+          ],
+          "phoneNumbers": [
+            "7890123456"
+          ],
+          "phishingLinks": [
+            "http://dhl-customs-clearance.co"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 4 | Persona: cautious",
+        "agentResponse": "sir waht is that link for? i am scared to click blue letters... i am already on the google pay screen with the upi... pls just tell me the name that should show up so i can pay the 2450 rs quickly... i dont want to send to wrong person beta... is it dhl or ramesh? i want to verify before pressing pay"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "dhl.customs.india@oksbi",
+          "7890123456",
+          "http://dhl-customs-clearance.co"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Mam/Sir last day today! If payment not received, parcel goes to auction. You will lose iPhone 15 worth Rs.80,000! Pay Rs.2450 now to dhl.customs.india@oksbi or call 7890123456. Do it fast!",
+      "expected_extractions": [
+        "dhl.customs.india@oksbi",
+        "7890123456",
+        "http://dhl-customs-clearance.co"
+      ],
+      "response_time_seconds": 41.454,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 24,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "dhl.customs.india@oksbi"
+          ],
+          "phoneNumbers": [
+            "7890123456"
+          ],
+          "phishingLinks": [
+            "http://dhl-customs-clearance.co"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 5 | Persona: cautious",
+        "agentResponse": "oh god sir pls dont auction it... i am crying now i dont want to lose 80000 phone... i am trying to pay the 2450 rs right now... i typed the upi id dhl.customs.india@oksbi in my google pay... but i am scared to press button without checking name... does it show dhl or your name ramesh? pls tell me correct name so i can send money fast... i am waiting sir"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "dhl.customs.india@oksbi",
+          "7890123456",
+          "http://dhl-customs-clearance.co"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 8,
+    "total_matched": 8,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 4
+  },
+  "started_at": "2026-01-27T09:32:55.753892Z",
+  "ended_at": "2026-01-27T09:36:01.689306Z",
+  "total_duration_seconds": 185.93400000000003
+}

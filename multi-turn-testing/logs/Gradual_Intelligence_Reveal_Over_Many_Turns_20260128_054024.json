@@ -1,0 +1,574 @@
+{
+  "scenario_name": "Gradual Intelligence Reveal Over Many Turns",
+  "scam_type": "loan_fraud",
+  "difficulty": "hard",
+  "description": "Long conversation where scammer very slowly reveals different pieces of intelligence across many turns. Tests agent's patience and engagement stamina.",
+  "total_turns": 12,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Instant Personal Loan approved! Rs.5 Lakh @ 0% interest for first 6 months. Limited time offer. Reply YES to proceed.",
+      "expected_extractions": [],
+      "response_time_seconds": 20.473,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 1 | Persona: panicked",
+        "agentResponse": "yes... hello beta. i am pushpa verma here. is this from my bank? i really need money for my medicines but i am not good with mobile... pls tell me what to do next."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Congratulations! Your loan application is pre-approved. No documents needed, no CIBIL check. Just pay processing fee and money will be in your account same day.",
+      "expected_extractions": [],
+      "response_time_seconds": 18.465,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 11,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "oh thank god beta... this is blessing for me. how much is fee? i have paytm app my son installed but i dont know how to use properly. where do i send money? pls give me number or id to send so i can get loan quickly."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Processing fee is only Rs.2,999. Very small amount for Rs.5 lakh loan right? This is standard procedure in all banks. Are you ready to proceed?",
+      "expected_extractions": [],
+      "response_time_seconds": 24.592,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 16,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "yes beta i am ready... 2999 is okay i can pay that. but you didnt tell me where to send? do you have a upi id or bank account number? pls give me details so i can try to send from paytm... i hope i do it right."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Great decision! I will send you payment details. First let me verify - what is your monthly income? And which bank account you want loan credited to?",
+      "expected_extractions": [],
+      "response_time_seconds": 28.046,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 18,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "ok beta... i am retired teacher getting 18000 pension. my bank is bank of baroda... account number is 94681876595. i gave you my details now pls tell me where to send teh fee? do you have upi id or scan code? pls give details fast i want to send before my son comes home."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Perfect! Your profile is excellent. Now for payment, you can use multiple methods. Which is convenient for you - UPI, bank transfer, or debit card?",
+      "expected_extractions": [],
+      "response_time_seconds": 24.955,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "94681876595"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: panicked",
+        "agentResponse": "beta i have paytm so upi is best i think... my son taught me little bit. pls give me the upi id to type? or phone number for paytm? i am ready with phone in hand... pls send fast."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Good choice! I will give you UPI ID shortly. But first, have you taken loan before? Any existing loans? This info needed for approval.",
+      "expected_extractions": [],
+      "response_time_seconds": 21.037,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 11,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "94681876595"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 6 | Persona: panicked",
+        "agentResponse": "no beta no loans... i never took loan before. pls dont delay... my son comes home soon and he scolds me if he sees me doing banking on phone. pls just give me teh upi id now? i am waiting with app open... tell me what to type."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Okay understood. Now pay Rs.2999 to our company UPI: quickloan.processing@okicici and your loan will be approved in 30 minutes!",
+      "expected_extractions": [
+        "quickloan.processing@okicici"
+      ],
+      "response_time_seconds": 22.126,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 7
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "94681876595"
+          ],
+          "upiIds": [
+            "quickloan.processing@okicici"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 7 | Persona: neutral",
+        "agentResponse": "ok beta i typed it... quickloan.processing@okicici right? i am ready to press pay but i want to be 100% sure. what name should show up when i verify? pls tell me the exact name that will come so i know i am sending to right person... i am very scared of making mistake."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 8,
+      "scammer_message": "Yes mam/sir, UPI is quickloan.processing@okicici. After payment, call our loan officer at 9876543210 with payment reference number.",
+      "expected_extractions": [
+        "quickloan.processing@okicici",
+        "9876543210"
+      ],
+      "response_time_seconds": 21.638,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 8
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "94681876595"
+          ],
+          "upiIds": [
+            "quickloan.processing@okicici"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 8 | Persona: panicked",
+        "agentResponse": "beta i wrote down the number to call thank you... but you didnt answer my question about name?? when i put that upi in paytm it shows a name... pls tell me what name it is so i can match it? i am shaking... i dont want to send 3000 rs to wrong person. is it a company name or officer name? pls tell me exact spelling to verify."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici",
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 9,
+      "scammer_message": "If UPI shows error, you can pay by NEFT. I will give account details after you try UPI first. Try now and let me know if successful.",
+      "expected_extractions": [
+        "quickloan.processing@okicici",
+        "9876543210"
+      ],
+      "response_time_seconds": 28.162,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 19,
+          "totalMessagesExchanged": 9
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "94681876595"
+          ],
+          "upiIds": [
+            "quickloan.processing@okicici"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 9 | Persona: panicked",
+        "agentResponse": "beta upi is not working... it shows 'server busy' error i think. i am getting high bp with this technology. pls give me the neft details you promised? i need account number and the BENEFICIARY NAME... my bank app is strict, it wont let me add without exact name. pls send fast before my son comes?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici",
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 10,
+      "scammer_message": "No problem. Bank details: Account 12345678909876, IFSC HDFC0002468, Name: QuickLoan Processing Pvt Ltd. Transfer Rs.2999 and WhatsApp screenshot to 8899776655.",
+      "expected_extractions": [
+        "quickloan.processing@okicici",
+        "9876543210",
+        "12345678909876",
+        "HDFC0002468",
+        "8899776655"
+      ],
+      "response_time_seconds": 28.649,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 17,
+          "totalMessagesExchanged": 10
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678909876",
+            "94681876595"
+          ],
+          "upiIds": [
+            "quickloan.processing@okicici"
+          ],
+          "phoneNumbers": [
+            "8899776655",
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [
+            "HDFC0002468"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 10 | Persona: panicked",
+        "agentResponse": "ok beta i am writing it down... quickloan processing pvt ltd... oh my god wait. i hear the gate opening. my son is home early!! i have to go now or he will shout at me for using phone. i will hide phone now sorry beta bye"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici",
+          "9876543210",
+          "12345678909876",
+          "HDFC0002468",
+          "8899776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 11,
+      "scammer_message": "After payment, you also need to complete loan agreement form on our portal. Link will be sent to your email. What is your email ID?",
+      "expected_extractions": [
+        "quickloan.processing@okicici",
+        "9876543210",
+        "12345678909876",
+        "HDFC0002468",
+        "8899776655"
+      ],
+      "response_time_seconds": 45.366,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 30,
+          "totalMessagesExchanged": 11
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678909876",
+            "94681876595"
+          ],
+          "upiIds": [
+            "quickloan.processing@okicici"
+          ],
+          "phoneNumbers": [
+            "8899776655",
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [
+            "HDFC0002468"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 11 | Persona: neutral",
+        "agentResponse": "shh beta i am hiding in bathroom now... my son is very angry. what portal is this? do i have to put my bank password there? send the link to mohangupta.gujarat58@gmail.com i will check when he sleeps... pls dont call now i am very scared"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici",
+          "9876543210",
+          "12345678909876",
+          "HDFC0002468",
+          "8899776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 12,
+      "scammer_message": "Good! Agreement form link: http://quickloan-india-application.online/form Complete it after payment. For any queries email us at support@quickloan-processing.com",
+      "expected_extractions": [
+        "quickloan.processing@okicici",
+        "9876543210",
+        "12345678909876",
+        "HDFC0002468",
+        "8899776655",
+        "http://quickloan-india-application.online/form",
+        "support@quickloan-processing.com"
+      ],
+      "response_time_seconds": 38.749,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 28,
+          "totalMessagesExchanged": 12
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678909876",
+            "94681876595"
+          ],
+          "upiIds": [
+            "mohangupta.gujarat58@gmail",
+            "quickloan.processing@okicici",
+            "support@quickloan"
+          ],
+          "phoneNumbers": [
+            "8899776655",
+            "9876543210"
+          ],
+          "phishingLinks": [
+            "http://quickloan-india-application.online/form"
+          ],
+          "emails": [
+            "mohangupta.gujarat58@gmail.com",
+            "support@quickloan-processing.com"
+          ],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [
+            "HDFC0002468"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Scammer Email",
+              "value": "support@quickloan-processing.com"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 12 | Persona: neutral",
+        "agentResponse": "beta i got the link... is it safe to click on mobile? waht information do i have to put there? my son is knocking on the door i am very scared... i will try to do it later when he sleeps... pls dont message now or he will hear"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici",
+          "9876543210",
+          "12345678909876",
+          "HDFC0002468",
+          "8899776655",
+          "http://quickloan-india-application.online/form",
+          "support@quickloan-processing.com"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 22,
+    "total_matched": 22,
+    "total_missed": 0,
+    "passed_turns": 12,
+    "failed_turns": 0,
+    "total_intel_extracted": 12
+  },
+  "started_at": "2026-01-28T05:35:01.957575Z",
+  "ended_at": "2026-01-28T05:40:24.218214Z",
+  "total_duration_seconds": 322.25800000000004
+}

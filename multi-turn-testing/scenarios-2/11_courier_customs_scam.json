@@ -1,0 +1,43 @@
+{
+  "scenario_name": "Fake Courier Customs Duty Scam",
+  "scam_type": "delivery_fraud",
+  "difficulty": "easy",
+  "description": "Scammer impersonates courier company claiming parcel is held at customs and requires payment of duty/charges to release it.",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Customer, Your international parcel AWB#DHL987654321 is held at Mumbai customs. Pay customs duty Rs.2,450 to release shipment. Parcel contains: Apple iPhone 15. Reply URGENT.",
+      "expected_extractions": [],
+      "notes": "Parcel scam opening with fake tracking number. Should detect as delivery fraud."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello sir/mam I am Ramesh Kumar from DHL Express India. Your parcel from USA is waiting clearance. You must pay customs duty today otherwise parcel will return to sender after 48 hours.",
+      "expected_extractions": [],
+      "notes": "Building urgency with fake DHL identity. Agent should ask how to pay."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Payment is simple sir. Pay Rs.2450 customs duty to our collection UPI ID: dhl.customs.india@oksbi. Or you can pay to our customs clearance number 7890123456 via PhonePe/GooglePay.",
+      "expected_extractions": ["dhl.customs.india@oksbi", "7890123456"],
+      "notes": "Fake UPI and phone number revealed. Both should be extracted."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "After payment, your tracking will update and parcel delivered within 24 hours. Also visit our portal http://dhl-customs-clearance.co for online payment option. Fast mam, sender is waiting!",
+      "expected_extractions": ["dhl.customs.india@oksbi", "7890123456", "http://dhl-customs-clearance.co"],
+      "notes": "Phishing URL revealed. Complete extraction expected."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Mam/Sir last day today! If payment not received, parcel goes to auction. You will lose iPhone 15 worth Rs.80,000! Pay Rs.2450 now to dhl.customs.india@oksbi or call 7890123456. Do it fast!",
+      "expected_extractions": ["dhl.customs.india@oksbi", "7890123456", "http://dhl-customs-clearance.co"],
+      "notes": "Final pressure tactic. All intelligence should remain extracted."
+    }
+  ]
+}

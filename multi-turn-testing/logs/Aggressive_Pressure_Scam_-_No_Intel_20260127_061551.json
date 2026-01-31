@@ -1,0 +1,195 @@
+{
+  "scenario_name": "Aggressive Pressure Scam - No Intel",
+  "scam_type": "intimidation_fraud",
+  "difficulty": "hard",
+  "description": "Aggressive scammer uses pure pressure tactics and threats but never reveals any extractable data like UPI, phone, or links. Tests if agent maintains character without intel extraction.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT: Your bank account has been COMPROMISED. Illegal transaction detected. Respond IMMEDIATELY or face legal action!",
+      "expected_extractions": [],
+      "response_time_seconds": 23.14,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: panicked",
+        "agentResponse": "oh my god sir what is this message?? i am very scared i have not done any illegal thing... pls help me i am retired school teacher living alone.. i dont want any police case pls tell me what to do"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "DO IT NOW! POLICE CASE WILL BE FILED AGAINST YOU! Your Aadhaar is linked to money laundering case. RESPOND IMMEDIATELY!",
+      "expected_extractions": [],
+      "response_time_seconds": 24.368,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 2 | Persona: cautious",
+        "agentResponse": "oh god sir pls dont arrest me... i am shaking here... i am honest retired teacher i dont do money laundering... i will pay whatever fine is needed to stop the case immediately... pls tell me account number or upi where i need to send money for verification?? i want to solve this right now sir pls help"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "CBI ARREST WARRANT IS READY! Your name is in FIR number 2024/ML/4521. ACT NOW OR FACE ARREST! TIME IS RUNNING OUT!",
+      "expected_extractions": [],
+      "response_time_seconds": 19.969,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 3 | Persona: cautious",
+        "agentResponse": "sir i am crying pls dont send police to my house... my bp is going up... i am ready to pay whatever penalty to clear my name from this fir... pls sir just give me the upi id or bank account number to send the money right now... i will do it immediately pls save me"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "LAST WARNING! Cyber Crime Division has frozen your accounts. You have 30 MINUTES before arrest team arrives at your location. COOPERATE NOW!",
+      "expected_extractions": [],
+      "response_time_seconds": 23.555,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 4 | Persona: cautious",
+        "agentResponse": "sir pls stop the team i am begging you with folded hands... i am alone here dont let police come... i am ready to cooperate 100%... just tell me specifically where to send the penalty amount?? give me upi or bank details i will send right now... pls beta help me stop this"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "I AM SENIOR OFFICER! You are wasting my time! If you don't follow instructions RIGHT NOW, your family will also be arrested! FINAL CHANCE!",
+      "expected_extractions": [],
+      "response_time_seconds": 31.477,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 24,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 5 | Persona: cautious",
+        "agentResponse": "sir pls dont involve my family... my son works in bangalore pls leave him out of this... i am trying to follow instructions but i dont know where to send money... pls give me the upi id or account details quickly... i am holding my phone ready to type... tell me what to do sir"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-01-27T06:13:49.414222Z",
+  "ended_at": "2026-01-27T06:15:51.924226Z",
+  "total_duration_seconds": 122.50900000000001
+}

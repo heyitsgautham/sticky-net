@@ -39,7 +39,6 @@ ENV/
 
 # Secrets
 secrets/
-*.json
 !package.json
 
 # Testing

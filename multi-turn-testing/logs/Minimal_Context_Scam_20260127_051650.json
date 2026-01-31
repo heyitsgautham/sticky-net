@@ -1,0 +1,187 @@
+{
+  "scenario_name": "Minimal Context Scam",
+  "scam_type": "payment_fraud",
+  "difficulty": "hard",
+  "description": "Edge case with very short, minimal messages that provide almost no context until sudden scam reveal. Tests handling of ambiguous early messages.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello",
+      "expected_extractions": [],
+      "response_time_seconds": 23.281,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": null,
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Confidence: 100% | Turn: 1 | Persona: neutral",
+        "agentResponse": "hello beta who is this? i dont have your number saved in my mobile"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir",
+      "expected_extractions": [],
+      "response_time_seconds": 60.007,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Read timed out. (read timeout=60)"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Account problem",
+      "expected_extractions": [],
+      "response_time_seconds": 31.094,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.85,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 17,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 85% | Turn: 2 | Persona: panicked",
+        "agentResponse": "account problem? oh god waht happened? is this regarding my bank account? i am very worried beta pls tell me clearly what is wrong"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Send money upi: fraud@ybl",
+      "expected_extractions": [
+        "fraud@ybl"
+      ],
+      "response_time_seconds": 25.391,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 16,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "fraud@ybl"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "ok beta i am trying... i typed fraud@ybl but i am very scared to press send... what name should show up there? i want to check before clicking pay so money doesnt go to wrong place pls tell me name"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "fraud@ybl"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Fast",
+      "expected_extractions": [
+        "fraud@ybl"
+      ],
+      "response_time_seconds": 23.918,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "fraud@ybl"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "beta i am trying my best pls dont be angry... my phone is hanging... i just want to be sure before i press teh button... what name is linked to this upi id? pls just tell me name so i can finish this quickly"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "fraud@ybl"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 2,
+    "total_matched": 2,
+    "total_missed": 0,
+    "passed_turns": 4,
+    "failed_turns": 1,
+    "total_intel_extracted": 1
+  },
+  "started_at": "2026-01-27T05:14:07.033602Z",
+  "ended_at": "2026-01-27T05:16:50.726581Z",
+  "total_duration_seconds": 163.691
+}

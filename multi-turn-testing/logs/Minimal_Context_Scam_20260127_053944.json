@@ -1,0 +1,103 @@
+{
+  "scenario_name": "Minimal Context Scam",
+  "scam_type": "payment_fraud",
+  "difficulty": "hard",
+  "description": "Edge case with very short, minimal messages that provide almost no context until sudden scam reveal. Tests handling of ambiguous early messages.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello",
+      "expected_extractions": [],
+      "response_time_seconds": 0.002,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/analyze (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/analyze (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Account problem",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/analyze (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Send money upi: fraud@ybl",
+      "expected_extractions": [
+        "fraud@ybl"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/analyze (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "fraud@ybl"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Fast",
+      "expected_extractions": [
+        "fraud@ybl"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/analyze (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "fraud@ybl"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 2,
+    "passed_turns": 0,
+    "failed_turns": 5,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-01-27T05:39:44.860075Z",
+  "ended_at": "2026-01-27T05:39:44.865302Z",
+  "total_duration_seconds": 0.006
+}

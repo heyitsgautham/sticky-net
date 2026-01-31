@@ -1,0 +1,130 @@
+{
+  "scenario_name": "UPI Failed Transaction Refund Scam",
+  "scam_type": "refund_fraud",
+  "difficulty": "medium",
+  "description": "Scammer claims victim's recent transaction failed and offers refund, but actually tricks them into sending money or sharing UPI PIN.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Customer, Your recent transaction of Rs.4,999 to Amazon Pay has FAILED but amount debited. Refund will be processed within 24 hrs. For instant refund call: 1800-XXX-XXXX",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/analyze (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello I am from PhonePe Customer Care. I see your Rs.4999 transaction is stuck. I can process instant refund for you. Can you confirm your name and which bank account is linked?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/analyze (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Ok I have verified your details. For refund I will send you a UPI collect request. You just need to ACCEPT it and enter your PIN. The money will come to your account immediately.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/analyze (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Mam our system is showing error in collect request. Please send Rs.1 to verify your account. Pay to refund.phonepe@ybl and your full Rs.4999 plus Rs.1 will be refunded in 2 minutes.",
+      "expected_extractions": [
+        "refund.phonepe@ybl"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/analyze (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "refund.phonepe@ybl"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If UPI issue then call my senior manager at 7766554433. Or you can visit http://phonepe-refund.claim.in and enter your UPI ID for automatic refund. Both options are safe.",
+      "expected_extractions": [
+        "refund.phonepe@ybl",
+        "7766554433",
+        "http://phonepe-refund.claim.in"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/analyze (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "refund.phonepe@ybl",
+          "7766554433",
+          "http://phonepe-refund.claim.in"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Mam hurry up, refund requests expire in 15 minutes! Pay Rs.1 to refund.phonepe@ybl now. My ID is Mohit, employee code PH2024567. Call 7766554433 if any problem. Thank you for choosing PhonePe!",
+      "expected_extractions": [
+        "refund.phonepe@ybl",
+        "7766554433",
+        "http://phonepe-refund.claim.in"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/analyze (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [Errno 61] Connection refused\"))"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "refund.phonepe@ybl",
+          "7766554433",
+          "http://phonepe-refund.claim.in"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 7,
+    "passed_turns": 0,
+    "failed_turns": 6,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-01-27T05:39:44.844556Z",
+  "ended_at": "2026-01-27T05:39:44.849237Z",
+  "total_duration_seconds": 0.006
+}

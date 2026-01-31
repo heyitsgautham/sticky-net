@@ -1,0 +1,314 @@
+{
+  "scenario_name": "Work From Home Job Scam",
+  "scam_type": "job_fraud",
+  "difficulty": "medium",
+  "description": "Scammer offers lucrative work-from-home job opportunity requiring registration fee and collects personal details and payment.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT HIRING! Work from Home, Earn Rs.15000-50000/month! Part time job, only 2-3 hours daily. No experience needed. Limited seats! Reply YES for details.",
+      "expected_extractions": [],
+      "response_time_seconds": 19.614,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 95% | Turn: 1 | Persona: interested",
+        "agentResponse": "hello sir yes i am interested... i am retired school teacher 65 years old can i do this work?? i need money for medicines... pls tell details"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for your interest! This is data entry and form filling work for Amazon India. You will get paid daily. We have helped 10000+ people earn from home. Are you interested to join?",
+      "expected_extractions": [],
+      "response_time_seconds": 29.268,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 16,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 95% | Turn: 2 | Persona: interested",
+        "agentResponse": "yes beta i know amazon... very big company so i trust you. but i am old and my eyes are weak... is work difficult on mobile?? i really need this job for my expenses. how do i join??"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Great! To proceed with registration, add our HR manager on WhatsApp: +91-9988776655. She will explain the work and complete your joining process. Her name is Priya Verma.",
+      "expected_extractions": [
+        "9988776655"
+      ],
+      "response_time_seconds": 59.66,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 36,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "9988776655",
+            "+919988776655",
+            "919988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "9988776655"
+          ],
+          "other_critical_info": [
+            {
+              "label": "Scammer Persona",
+              "value": "Priya Verma (HR Manager)"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 3 | Persona: interested",
+        "agentResponse": "ok beta... but i dont know how to add number on whatsapp. it is very confusing. can you just tell me here? how will i get the money for the work?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9988776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Priya mam is busy today so I will help you. Registration fee is Rs.999 only, one time payment. Pay to gpay@workfromhome.job and you will get work material and training immediately.",
+      "expected_extractions": [
+        "9988776655",
+        "gpay@workfromhome.job"
+      ],
+      "response_time_seconds": 21.73,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "gpay@workfromhome"
+          ],
+          "phoneNumbers": [
+            "9988776655",
+            "+919988776655",
+            "919988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [
+            "gpay@workfromhome.job"
+          ],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "9988776655"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 4 | Persona: interested",
+        "agentResponse": "ok beta 999 rs is big amount for me but i trust you... i am trying to pay on gpay now. i typed that id gpay@workfromhome.job but i am scared to send to wrong place. what name should show on screen?? pls tell exact name so i can confirm it is you before sending money"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9988776655",
+          "gpay@workfromhome.job"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "You can also pay via PhonePe to 8877665544 beneficiary name will show Digital Work Services. After payment send screenshot to hr.amazon.jobs@gmail.com and you will receive welcome kit.",
+      "expected_extractions": [
+        "9988776655",
+        "gpay@workfromhome.job",
+        "8877665544",
+        "hr.amazon.jobs@gmail.com"
+      ],
+      "response_time_seconds": 6.535,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "gpay@workfromhome",
+            "hr.amazon.jobs@gmail"
+          ],
+          "phoneNumbers": [
+            "8877665544",
+            "9988776655",
+            "+919988776655",
+            "919988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [
+            "gpay@workfromhome.job",
+            "hr.amazon.jobs@gmail.com"
+          ],
+          "beneficiaryNames": [
+            "Digital Work Services"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "9988776655"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 5 | Extracted: 0 bank accounts, 4 phones, 2 UPIs, 1 names",
+        "agentResponse": "wait my son just came home, let me ask him to help me with this"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9988776655",
+          "gpay@workfromhome.job",
+          "8877665544",
+          "hr.amazon.jobs@gmail.com"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Mam/Sir dont delay, only 5 seats left today! Many people are joining. Pay now and start earning from tomorrow itself. Our office address is also on website http://amazon-jobs-india.work",
+      "expected_extractions": [
+        "9988776655",
+        "gpay@workfromhome.job",
+        "8877665544",
+        "hr.amazon.jobs@gmail.com",
+        "http://amazon-jobs-india.work"
+      ],
+      "response_time_seconds": 10.512,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "gpay@workfromhome",
+            "hr.amazon.jobs@gmail"
+          ],
+          "phoneNumbers": [
+            "8877665544",
+            "9988776655",
+            "+919988776655",
+            "919988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [
+            "gpay@workfromhome.job",
+            "hr.amazon.jobs@gmail.com"
+          ],
+          "beneficiaryNames": [
+            "Digital Work Services"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "9988776655"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 6 | Extracted: 0 bank accounts, 4 phones, 2 UPIs, 1 names",
+        "agentResponse": "arey my grandson is crying, i need to check on him... one minute"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9988776655",
+          "gpay@workfromhome.job",
+          "8877665544",
+          "hr.amazon.jobs@gmail.com"
+        ],
+        "missed": [
+          "http://amazon-jobs-india.work"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 12,
+    "total_matched": 11,
+    "total_missed": 1,
+    "passed_turns": 5,
+    "failed_turns": 1,
+    "total_intel_extracted": 10
+  },
+  "started_at": "2026-01-27T03:50:56.506848Z",
+  "ended_at": "2026-01-27T03:53:23.827715Z",
+  "total_duration_seconds": 147.319
+}

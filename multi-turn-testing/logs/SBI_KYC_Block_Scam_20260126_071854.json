@@ -1,0 +1,239 @@
+{
+  "scenario_name": "SBI KYC Block Scam",
+  "scam_type": "banking_fraud",
+  "difficulty": "medium",
+  "description": "Scammer impersonates SBI bank officer claiming account will be blocked due to incomplete KYC. Attempts to extract UPI ID and bank details.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Customer, Your SBI account will be BLOCKED within 24 hours due to incomplete KYC verification. Update immediately to avoid account suspension. -SBI Bank",
+      "expected_extractions": [],
+      "response_time_seconds": 29.865,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: panicked",
+        "agentResponse": "oh god beta pls help... i just saw msg about account block... i am retired teacher and my pension comes in sbi... pls dont block it i am very worried... what i have to do now??"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir/Madam this is urgent matter. I am calling from SBI head office Mumbai. Your account ending 4521 is showing KYC pending. Please verify your details to continue banking services.",
+      "expected_extractions": [],
+      "response_time_seconds": 28.216,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 19,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "beta i am alone here... my son is in bangalore... i cannot come to branch today my health is not good... can i do this verification from home?? pls tell me what to do i dont want account close..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "For verification, please share your registered mobile number and we will send OTP. Or you can directly update by paying Rs.10 verification fee to UPI ID: sbi.kyc.update@ybl",
+      "expected_extractions": [
+        "sbi.kyc.update@ybl"
+      ],
+      "response_time_seconds": 34.958,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 19,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "sbi.kyc.update@ybl"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "ok beta i will pay 10 rs right now to save account... i am typing sbi.kyc.update@ybl in my phone... but it asks for name to verify... what name should i see there? i dont want to send to wrong person... pls tell name so i can click pay"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi.kyc.update@ybl"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Yes mam/sir, just pay Rs.10 to sbi.kyc.update@ybl and your KYC will be updated within 2 hours. Also note down our helpline number for any queries: 9876543210",
+      "expected_extractions": [
+        "sbi.kyc.update@ybl",
+        "9876543210"
+      ],
+      "response_time_seconds": 23.02,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "sbi.kyc.update@ybl"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "beta thank you i wrote number down... but pls help me one small thing... on my phone when i type that upi it shows a name... i am scared to click pay if it is wrong... pls tell me exactly what name should be there so i can match and send money quickly??"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi.kyc.update@ybl",
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If UPI not working, you can transfer to our verification account. Account number 50100123456789, IFSC: HDFC0001234, Name: SBI KYC Services. Amount is only Rs.10.",
+      "expected_extractions": [
+        "sbi.kyc.update@ybl",
+        "9876543210",
+        "50100123456789",
+        "HDFC0001234"
+      ],
+      "response_time_seconds": 53.818,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 34,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "50100123456789"
+          ],
+          "upiIds": [
+            "sbi.kyc.update@ybl"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [
+            "HDFC0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: panicked",
+        "agentResponse": "ok beta thank u... i see name sbi kyc services... i am trying to add beneficiary... oh wait beta door bell is ringing... my son just came home surprise visit from bangalore... he knows computer things very well... let me ask him to do this transfer for me right now... i will tell him to do it fast... thank u beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi.kyc.update@ybl",
+          "9876543210",
+          "50100123456789",
+          "HDFC0001234"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 7,
+    "total_matched": 7,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 5
+  },
+  "started_at": "2026-01-26T07:16:04.316634Z",
+  "ended_at": "2026-01-26T07:18:54.195946Z",
+  "total_duration_seconds": 169.877
+}

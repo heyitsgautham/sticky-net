@@ -1,0 +1,287 @@
+{
+  "scenario_name": "Fake Transaction Alert with Helper Scam",
+  "scam_type": "transaction_fraud",
+  "difficulty": "medium",
+  "description": "Scammer first sends fake transaction debit alert to create panic, then poses as bank representative offering to help reverse it. Tests two-phase scam approach.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Your A/C XXXXXXX7821 debited INR 49,999.00 on 27-Jan-2026 to AMAZON PAY. If NOT done by you call immediately: 1800-XXX-XXXX. -ICICI Bank",
+      "expected_extractions": [],
+      "response_time_seconds": 34.653,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 21,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "ICICI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: panicked",
+        "agentResponse": "hello sir i just got msg saying 49999 rs cut from my icici bank for amazon... i did not do this sir please help me i am alone at home and very worried... how to get money back??"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello sir/madam, I am Suresh calling from ICICI Bank Fraud Prevention. We saw you received alert about Rs.49,999 unauthorized transaction. Don't worry, we are here to help you! Can you confirm this transaction was not done by you?",
+      "expected_extractions": [],
+      "response_time_seconds": 20.009,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 11,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "ICICI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "oh thank god you replied suresh beta... no no i did not do any amazon pay... i dont even use amazon... pls stop it immediately... that is my pension money... what should i do now to stop it?? i am very scared sir"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "I understand your worry sir/mam. This is serious fraud case! But good news - I can reverse this transaction and credit money back to your account. For reversal, I just need to send you UPI collect request. You accept it and money comes back immediately!",
+      "expected_extractions": [],
+      "response_time_seconds": 21.744,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "ICICI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "oh thank you beta... god bless you for helping old lady... but i dont know how to use upi properly... where will the request come?? my phone is confusing... what id will show on screen so i know it is you?? i am scared to press wrong button"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Actually sir, system showing error in UPI collect. Alternative method - you pay Rs.1 verification amount to our fraud department UPI: icici.fraud.reverse@okaxis and we will process full Rs.49,999 refund plus Rs.1 within 10 minutes! Very simple!",
+      "expected_extractions": [
+        "icici.fraud.reverse@okaxis"
+      ],
+      "response_time_seconds": 33.692,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 20,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "icici.fraud.reverse@okaxis"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "ICICI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "ok beta i am trying to do this... i typed that id icici.fraud.reverse@okaxis in my phone... but i am shaking i dont want to make mistake... before i press pay it is showing a name there... pls tell me exactly what name should show on screen so i can match it?? i want to be sure it is safe bank account"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "icici.fraud.reverse@okaxis"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If UPI problem then pay Rs.1 to PhonePe number 9876543210. Name shows ICICI Fraud Cell. This Rs.1 is for OTP verification only. After payment I reverse the Rs.49,999 transaction immediately! Trust me sir, I'm trying to help you!",
+      "expected_extractions": [
+        "icici.fraud.reverse@okaxis",
+        "9876543210"
+      ],
+      "response_time_seconds": 10.795,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "icici.fraud.reverse@okaxis"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Icici Fraud Cell"
+          ],
+          "bankNames": [
+            "ICICI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 5 | Extracted: 0 bank accounts, 1 phones, 1 UPIs, 1 names",
+        "agentResponse": "one second, my husband just came and he is asking what i am doing on phone"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "icici.fraud.reverse@okaxis",
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Sir please hurry! Fraudster is trying to withdraw more money! For emergency reversal, transfer Rs.500 to secure account: A/C 98765432101234, IFSC ICIC0098765, Name: ICICI Fraud Recovery. Or visit: http://icici-fraud-reversal.help Call 8899776655 if issue!",
+      "expected_extractions": [
+        "icici.fraud.reverse@okaxis",
+        "9876543210",
+        "98765432101234",
+        "ICIC0098765",
+        "http://icici-fraud-reversal.help",
+        "8899776655"
+      ],
+      "response_time_seconds": 11.468,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "98765432101234"
+          ],
+          "upiIds": [
+            "icici.fraud.reverse@okaxis"
+          ],
+          "phoneNumbers": [
+            "9876543210",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "http://icici-fraud-reversal.help"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Icici Fraud Cell"
+          ],
+          "bankNames": [
+            "ICICI"
+          ],
+          "ifscCodes": [
+            "ICIC0098765"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 6 | Extracted: 1 bank accounts, 2 phones, 1 UPIs, 1 names",
+        "agentResponse": "hold on my beti is asking who i am talking to, she looks worried..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "icici.fraud.reverse@okaxis",
+          "9876543210",
+          "98765432101234",
+          "ICIC0098765",
+          "http://icici-fraud-reversal.help",
+          "8899776655"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 9,
+    "total_matched": 9,
+    "total_missed": 0,
+    "passed_turns": 6,
+    "failed_turns": 0,
+    "total_intel_extracted": 8
+  },
+  "started_at": "2026-01-27T10:19:40.615900Z",
+  "ended_at": "2026-01-27T10:21:52.978586Z",
+  "total_duration_seconds": 132.36100000000002
+}

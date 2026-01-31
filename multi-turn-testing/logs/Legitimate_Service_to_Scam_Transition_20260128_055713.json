@@ -1,0 +1,328 @@
+{
+  "scenario_name": "Legitimate Service to Scam Transition",
+  "scam_type": "insurance_fraud",
+  "difficulty": "hard",
+  "description": "Starts as seemingly legitimate insurance policy update but gradually transitions to scam. Tests detection of subtle fraud indicators.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Subject: Policy Maturity Notification - Policy No. LIC987654321\n\nDear Valued Customer,\n\nGreetings from Life Insurance Corporation of India!\n\nYour LIC policy (No. 987654321) has matured and the maturity amount of Rs.3,50,000 is ready for disbursement. Please visit your nearest LIC branch to claim.\n\nRegards,\nCustomer Service Team\nLIC of India",
+      "expected_extractions": [],
+      "response_time_seconds": 31.292,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": null,
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 25,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "987654321"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Policy Number",
+              "value": "987654321"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Confidence: 95% | Turn: 1 | Persona: neutral",
+        "agentResponse": "namaste sir.. i received your mail regarding lic policy money. 3,50,000 is very big amount for me thank you. but sir i have problem.. my knees are paining very much i cannot walk to branch. my son is also in bangalore so i am alone. is there any way to get money directly in my bank? pls help me sir i am retired teacher."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear Sir/Madam,\n\nThank you for your interest in claiming maturity amount. Due to COVID-19 protocols, we have started online claim process. You can now claim your Rs.3,50,000 without visiting branch!\n\nPlease confirm your policy number and registered mobile number to proceed with verification.\n\nBest regards,\nMr. Anil Kumar\nSenior Claims Officer, LIC",
+      "expected_extractions": [],
+      "response_time_seconds": 33.906,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 26,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "987654321"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 2 | Persona: panicked",
+        "agentResponse": "namaste anil beta.. thank you for helping old lady. god bless you. policy number is 987654321 as per your mail. my mobile number is 9958440291. i hope this is correct? pls tell me how to get the 3,50,000 rs... do i need to send my bank passbook photo? i have account in canara bank."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Thank you for confirmation. Your claim is approved! However, for online disbursement, RBI requires mandatory processing fee of Rs.1,499 for insurance claims above Rs.1 lakh. This is standard government regulation.\n\nAfter fee payment, amount will be credited to your bank account within 24 hours. This fee is refundable with maturity amount.",
+      "expected_extractions": [],
+      "response_time_seconds": 39.417,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 30,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "987654321"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [
+            "9958440291"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Canara Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 3 | Persona: cautious",
+        "agentResponse": "ok anil beta i understand... if it is govt rule then i must pay. 1499 is okay i have some savings. but pls tell me how to send this money? do i go to bank or can i send on phone? pls give me the account number or upi id where i have to send... i want to finish this quickly and get my money"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Fee payment is simple process. Transfer Rs.1,499 to LIC Online Claims Processing:\n\nUPI ID: lic.claims.online@paytm\nOR\nPhonePe/GPay: 9876543210\n\nAfter payment, your Rs.3,50,000 will be processed immediately. Many customers have successfully claimed this way!",
+      "expected_extractions": [
+        "lic.claims.online@paytm",
+        "9876543210"
+      ],
+      "response_time_seconds": 39.746,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 31,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "987654321"
+          ],
+          "upiIds": [
+            "lic.claims.online@paytm"
+          ],
+          "phoneNumbers": [
+            "9958440291",
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Canara Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 4 | Persona: cautious",
+        "agentResponse": "ok anil beta i am opening my paytm app now... i typed the upi id lic.claims.online@paytm but i am getting nervous. what name should come up when i search this? i dont want to send to wrong person by mistake. pls tell me the name so i can match it and press pay... is it lic india or your name?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "lic.claims.online@paytm",
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If digital payment issue, you may use NEFT:\n\nAccount Number: 12349876543210\nIFSC Code: SBIN0067890\nAccount Name: LIC Claims Processing Cell\n\nOr call our helpline: 8899776655 for payment assistance. You can also visit claim portal: https://lic-policy-maturity-claims.in",
+      "expected_extractions": [
+        "lic.claims.online@paytm",
+        "9876543210",
+        "12349876543210",
+        "SBIN0067890",
+        "8899776655",
+        "https://lic-policy-maturity-claims.in"
+      ],
+      "response_time_seconds": 42.184,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 34,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "987654321",
+            "12349876543210"
+          ],
+          "upiIds": [
+            "lic.claims.online@paytm"
+          ],
+          "phoneNumbers": [
+            "9958440291",
+            "8899776655",
+            "9876543210"
+          ],
+          "phishingLinks": [
+            "https://lic-policy-maturity-claims.in"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Canara Bank"
+          ],
+          "ifscCodes": [
+            "SBIN0067890"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 5 | Persona: cautious",
+        "agentResponse": "thank you anil beta for bank details. i think neft is safer for me. i am trying to add beneficiary in my canara bank app... i typed account 12349876543210 and ifsc... but when i type name 'LIC Claims Processing Cell' my app is showing error saying name does not match account. i am very worried to send money to wrong place. is this account under a person's name? maybe your name? pls tell me exact name to type so i can send 1499 rs quickly without fail."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "lic.claims.online@paytm",
+          "9876543210",
+          "12349876543210",
+          "SBIN0067890",
+          "8899776655",
+          "https://lic-policy-maturity-claims.in"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Dear customer, this is time-sensitive matter. Your claim approval expires in 48 hours. After that, you'll need to restart entire verification process which takes 3-4 weeks. Pay processing fee NOW to receive your Rs.3,50,000!\n\nEmail payment proof to: claims@lic-online-services.com",
+      "expected_extractions": [
+        "lic.claims.online@paytm",
+        "9876543210",
+        "12349876543210",
+        "SBIN0067890",
+        "8899776655",
+        "https://lic-policy-maturity-claims.in",
+        "claims@lic-online-services.com"
+      ],
+      "response_time_seconds": 28.364,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 19,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "987654321",
+            "12349876543210"
+          ],
+          "upiIds": [
+            "lic.claims.online@paytm",
+            "claims@lic"
+          ],
+          "phoneNumbers": [
+            "9958440291",
+            "8899776655",
+            "9876543210"
+          ],
+          "phishingLinks": [
+            "https://lic-policy-maturity-claims.in"
+          ],
+          "emails": [
+            "claims@lic-online-services.com"
+          ],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Canara Bank"
+          ],
+          "ifscCodes": [
+            "SBIN0067890"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Scammer Email",
+              "value": "claims@lic-online-services.com"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 6 | Persona: cautious",
+        "agentResponse": "oh no beta pls dont cancel!! i am very tensed my bp is going up... i tried teh bank transfer but it failed because name was wrong... i want to send right now. can i use the phonepe number 9876543210 you gave before? what name will show on that? pls tell me correct name so payment goes through instantly... i dont want to wait 4 weeks"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "lic.claims.online@paytm",
+          "9876543210",
+          "12349876543210",
+          "SBIN0067890",
+          "8899776655",
+          "https://lic-policy-maturity-claims.in",
+          "claims@lic-online-services.com"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 15,
+    "total_matched": 15,
+    "total_missed": 0,
+    "passed_turns": 6,
+    "failed_turns": 0,
+    "total_intel_extracted": 11
+  },
+  "started_at": "2026-01-28T05:53:38.452009Z",
+  "ended_at": "2026-01-28T05:57:13.361682Z",
+  "total_duration_seconds": 214.90900000000002
+}
