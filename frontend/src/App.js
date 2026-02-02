@@ -5,7 +5,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   Bug, Shield, Brain, Zap, Database, Drama, Terminal,
   MapPin, Smartphone, ChevronDown, Github, Menu, X,
-  Play, Pause, Circle, RotateCcw
+  Play, Pause, Circle, RotateCcw, Settings, MessageSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -767,9 +767,59 @@ const TechStackSection = () => {
   const cards = [
     {
       title: "The Brain",
-      subtitle: "Gemini 3 Flash (Classification)\nGemini 2.5 Pro (Reasoning)",
-      purpose: "Detect & Respond",
-      description: "Lightning-fast scam detection and persona generation in under 200ms.",
+      subtitle: (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-gradient-to-r from-cyber-cyan to-blue-400 animate-pulse" />
+            <span className="font-heading text-lg md:text-xl font-bold bg-gradient-to-r from-cyber-cyan to-blue-300 bg-clip-text text-transparent">
+              Gemini 3 Flash
+            </span>
+            <span className="text-xs text-gray-500 font-mono px-2 py-0.5 rounded bg-gray-800/50 border border-gray-700">Lightning Triage</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 animate-pulse" style={{animationDelay: '0.3s'}} />
+            <span className="font-heading text-lg md:text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-300 bg-clip-text text-transparent">
+              Gemini 2.5 Pro
+            </span>
+            <span className="text-xs text-gray-500 font-mono px-2 py-0.5 rounded bg-gray-800/50 border border-gray-700">Strategic Response</span>
+          </div>
+          <div className="mt-3 pt-2 border-t border-white/10">
+            <span className="text-cyber-cyan font-semibold text-sm">Detect & Respond</span>
+          </div>
+          <div className="space-y-3 text-base leading-relaxed mt-3">
+            <div className="flex items-start gap-3">
+              <Zap className="w-5 h-5 text-cyber-cyan mt-0.5 flex-shrink-0" />
+              <span><span className="font-semibold text-white">Flash-speed triage:</span> <span className="text-gray-400">97.2% accuracy in 150ms</span></span>
+            </div>
+            <div className="flex items-start gap-3">
+              <Brain className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+              <span><span className="font-semibold text-white">Deep reasoning:</span> <span className="text-gray-400">Persona-perfect response generation</span></span>
+            </div>
+            <div className="flex items-start gap-3">
+              <Settings className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+              <span><span className="font-semibold text-white">Hybrid intelligence:</span> <span className="text-gray-400">Regex pre-filter + AI classifier</span></span>
+            </div>
+            <div className="flex items-start gap-3">
+              <MessageSquare className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+              <span><span className="font-semibold text-white">Context-aware:</span> <span className="text-gray-400">Full conversation history analysis</span></span>
+            </div>
+            <div className="flex items-start gap-3">
+              <Shield className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+              <span><span className="font-semibold text-white">Adaptive responses:</span> <span className="text-gray-400">Real-time strategy adjustment</span></span>
+            </div>
+            <div className="flex items-start gap-3">
+              <Zap className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
+              <span><span className="font-semibold text-white">Multi-turn engagement:</span> <span className="text-gray-400">Extended conversation tactics</span></span>
+            </div>
+            <div className="flex items-start gap-3">
+              <Terminal className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+              <span><span className="font-semibold text-white">Exit strategy:</span> <span className="text-gray-400">Graceful disengagement protocols</span></span>
+            </div>
+          </div>
+        </div>
+      ),
+      purpose: null,
+      description: null,
       icon: Brain,
       className: "md:col-span-2 md:row-span-2",
       iconColor: "text-cyber-cyan",
@@ -1118,18 +1168,12 @@ const LiveDemoSection = ({ onLiveDemo }) => {
           </div>
 
           <p className="text-gray-500 text-sm text-center">
-            Built to waste scammers&apos; time, not yours. © 2024
+            Built to waste scammers&apos; time, not yours. © 2026
           </p>
 
           <div className="flex items-center gap-6">
             <a href="https://github.com/codedbykishore/sticky-net" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors">
               <Github className="w-5 h-5" />
-            </a>
-            <a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">
-              Privacy
-            </a>
-            <a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">
-              Terms
             </a>
           </div>
         </div>

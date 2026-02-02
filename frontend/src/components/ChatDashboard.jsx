@@ -37,6 +37,52 @@ const generateId = () => `conv-${Date.now()}-${Math.random().toString(36).substr
 const sampleConversations = [
     {
         id: 'sample-1',
+        title: "Bank Fraud - Full Attack Chain",
+        preview: "Account suspended, need payment...",
+        isSample: true,
+        createdAt: new Date().toISOString(),
+        messages: [
+            { sender: "scammer", text: "Hello sir, I am Rajesh Kumar from State Bank of India, Customer Care Division. Your account has been temporarily suspended due to suspicious activity.", timestamp: "10:15 AM" },
+            { sender: "agent", text: "oh no! suspended? but sir i just got my pension yesterday only. what happened? is my money safe?", timestamp: "10:16 AM" },
+            { sender: "scammer", text: "Don't worry sir, your money is safe. But we need to verify your identity immediately to reactivate the account. There is a pending fine of ₹5,000 that must be paid within 2 hours.", timestamp: "10:17 AM" },
+            { sender: "agent", text: "₹5000?! that is too much sir. why fine? i did not do anything wrong. can you please explain what happened?", timestamp: "10:19 AM" },
+            { sender: "scammer", text: "Sir, as per RBI guidelines, suspicious login detected from unknown location. Fine must be paid to unlock. You can transfer to our recovery account: Account Number 1234567890123, IFSC Code SBIN0001234, Bank Name State Bank of India, Account Holder Name Rajesh Kumar", timestamp: "10:21 AM" },
+            { sender: "agent", text: "sir i do not know how to do bank transfer. my grandson helps me with phone. can i pay some other way? maybe tomorrow when he comes?", timestamp: "10:23 AM" },
+            { sender: "scammer", text: "Sir tomorrow will be too late, account will be permanently blocked! No problem, I can help you. Do you have Google Pay or PhonePe? Much easier than bank transfer.", timestamp: "10:24 AM" },
+            { sender: "agent", text: "yes sir i have google pay. my grandson installed it. you tell me what to do step by step", timestamp: "10:26 AM" },
+            { sender: "scammer", text: "Perfect sir! Just open Google Pay and send ₹5000 to this UPI ID: rajesh.sbi.recovery@oksbi - This is our official State Bank recovery UPI. Also you can send to my GPay number 9876543210 directly.", timestamp: "10:28 AM" },
+            { sender: "agent", text: "ok sir sending now... it is asking for confirmation. should i press yes?", timestamp: "10:30 AM" },
+            { sender: "scammer", text: "Yes yes sir press confirm! After payment I will send you verification link to check your account status immediately. Link: http://sbi-verify-account.com/check?token=xyz123", timestamp: "10:31 AM" },
+            { sender: "agent", text: "thank you so much sir! you are very helpful. when will my account be activated?", timestamp: "10:33 AM" },
+        ],
+        extractedIntel: {
+            bankAccounts: ["1234567890123"],
+            ifscCodes: ["SBIN0001234"],
+            bankNames: ["State Bank of India"],
+            beneficiaryNames: ["Rajesh Kumar"],
+            upiIds: ["rajesh.sbi.recovery@oksbi"],
+            phoneNumbers: ["9876543210"],
+            phishingLinks: ["http://sbi-verify-account.com/check?token=xyz123"],
+            emails: [],
+            whatsappNumbers: [],
+        },
+        extractionOrder: [
+            { type: 'bank', value: '1234567890123' },
+            { type: 'ifsc', value: 'SBIN0001234' },
+            { type: 'bankName', value: 'State Bank of India' },
+            { type: 'name', value: 'Rajesh Kumar' },
+            { type: 'upi', value: 'rajesh.sbi.recovery@oksbi' },
+            { type: 'phone', value: '9876543210' },
+            { type: 'link', value: 'http://sbi-verify-account.com/check?token=xyz123' },
+        ],
+        metrics: {
+            scamDetected: true,
+            confidence: 0.98,
+            messagesExchanged: 12,
+        }
+    },
+    {
+        id: 'sample-2',
         title: "KYC Fraud Attempt",
         preview: "Your account will be blocked...",
         isSample: true,
@@ -52,7 +98,16 @@ const sampleConversations = [
             phishingLinks: ["bit.ly/sbi-kyc-update"],
             bankAccounts: [],
             phoneNumbers: [],
+            emails: [],
+            beneficiaryNames: [],
+            ifscCodes: [],
+            whatsappNumbers: [],
+            bankNames: [],
         },
+        extractionOrder: [
+            { type: 'link', value: 'bit.ly/sbi-kyc-update' },
+            { type: 'upi', value: 'sbi.kyc.update@ybl' },
+        ],
         metrics: {
             scamDetected: true,
             confidence: 0.97,
@@ -60,7 +115,7 @@ const sampleConversations = [
         }
     },
     {
-        id: 'sample-2',
+        id: 'sample-3',
         title: "Lottery Scam",
         preview: "Congratulations! You won ₹50 Lakhs...",
         isSample: true,
@@ -77,37 +132,22 @@ const sampleConversations = [
             phishingLinks: [],
             bankAccounts: [],
             phoneNumbers: ["9876543210"],
+            emails: [],
+            beneficiaryNames: [],
+            ifscCodes: [],
+            whatsappNumbers: [],
+            bankNames: [],
         },
+        extractionOrder: [
+            { type: 'phone', value: '9876543210' },
+            { type: 'upi', value: 'jio.winner2024@axl' },
+        ],
         metrics: {
             scamDetected: true,
             confidence: 0.99,
             messagesExchanged: 5,
         }
     },
-    {
-        id: 'sample-3',
-        title: "Tech Support Scam",
-        preview: "Your computer has virus...",
-        isSample: true,
-        createdAt: new Date().toISOString(),
-        messages: [
-            { sender: "scammer", text: "ALERT: Your computer has been infected with dangerous virus! Call Microsoft Support immediately: 1800-XXX-XXXX. Your bank details may be compromised!", timestamp: "11:00 AM" },
-            { sender: "agent", text: "oh my god! virus! but sir main toh sirf whatsapp use karti hun phone pe. mere paas computer nahi hai", timestamp: "11:02 AM" },
-            { sender: "scammer", text: "Madam phone virus is even more dangerous! We need to secure your phone. Download this app: malware-link.com/secure-app", timestamp: "11:04 AM" },
-            { sender: "agent", text: "app kaise download karte hain? mera beta karta hai sab. abhi woh office mein hai. raat ko aayega", timestamp: "11:07 AM" },
-        ],
-        extractedIntel: {
-            upiIds: [],
-            phishingLinks: ["malware-link.com/secure-app"],
-            bankAccounts: [],
-            phoneNumbers: [],
-        },
-        metrics: {
-            scamDetected: true,
-            confidence: 0.94,
-            messagesExchanged: 4,
-        }
-    }
 ];
 
 // ============ SPIDER WEB BACKGROUND ============
@@ -241,6 +281,11 @@ const IntelTag = React.memo(({ type, value }) => {
             label: "WhatsApp",
             color: "bg-pink-500/20 text-pink-400 border-pink-500/30" 
         },
+        bankName: { 
+            icon: Building2, 
+            label: "Bank Name",
+            color: "bg-teal-500/20 text-teal-400 border-teal-500/30" 
+        },
     };
 
     const config = typeConfig[type] || typeConfig.upi;
@@ -320,6 +365,7 @@ const ChatDashboard = () => {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [loadingConversationId, setLoadingConversationId] = useState(null);
     const [channel, setChannel] = useState("SMS");
     const [locale, setLocale] = useState("IN");
     const [metrics, setMetrics] = useState({
@@ -336,13 +382,21 @@ const ChatDashboard = () => {
         beneficiaryNames: [],
         ifscCodes: [],
         whatsappNumbers: [],
+        bankNames: [],
     });
+    const [extractionOrder, setExtractionOrder] = useState([]);
     const [agentNotes, setAgentNotes] = useState("");
     const [connectionStatus, setConnectionStatus] = useState('unknown'); // 'connected', 'disconnected', 'unknown'
 
     const messagesEndRef = useRef(null);
     const messagesContainerRef = useRef(null);
     const inputRef = useRef(null);
+    const currentConversationIdRef = useRef(currentConversationId);
+
+    // Keep ref in sync with state
+    useEffect(() => {
+        currentConversationIdRef.current = currentConversationId;
+    }, [currentConversationId]);
 
     // Load saved conversations on mount
     useEffect(() => {
@@ -368,6 +422,7 @@ const ChatDashboard = () => {
             createdAt: new Date().toISOString(),
             messages,
             extractedIntel,
+            extractionOrder,
             metrics,
             agentNotes,
         };
@@ -384,7 +439,7 @@ const ChatDashboard = () => {
             saveConversations(updated);
             return updated;
         });
-    }, [currentConversationId, messages, extractedIntel, metrics, agentNotes]);
+    }, [currentConversationId, messages, extractedIntel, extractionOrder, metrics, agentNotes]);
 
     // Auto-save when messages change
     useEffect(() => {
@@ -422,7 +477,12 @@ const ChatDashboard = () => {
             bankAccounts: [],
             phoneNumbers: [],
             emails: [],
+            beneficiaryNames: [],
+            ifscCodes: [],
+            whatsappNumbers: [],
+            bankNames: [],
         });
+        setExtractionOrder(conversation.extractionOrder || []);
         setAgentNotes(conversation.agentNotes || "");
     };
 
@@ -452,7 +512,12 @@ const ChatDashboard = () => {
             bankAccounts: [],
             phoneNumbers: [],
             emails: [],
+            beneficiaryNames: [],
+            ifscCodes: [],
+            whatsappNumbers: [],
+            bankNames: [],
         });
+        setExtractionOrder([]);
         setAgentNotes("");
         inputRef.current?.focus();
     };
@@ -460,10 +525,14 @@ const ChatDashboard = () => {
     const handleSend = async () => {
         if (!inputValue.trim() || isLoading) return;
 
+        // Store the active conversation ID before sending
+        let activeConvId = currentConversationId;
+
         // If viewing a sample, create a new conversation first
-        const activeConversation = allConversations.find(c => c.id === currentConversationId);
-        if (activeConversation?.isSample || !currentConversationId) {
+        const activeConversation = allConversations.find(c => c.id === activeConvId);
+        if (activeConversation?.isSample || !activeConvId) {
             const newId = generateId();
+            activeConvId = newId;
             setCurrentConversationId(newId);
             setMessages([]);
             setMetrics({
@@ -477,7 +546,12 @@ const ChatDashboard = () => {
                 bankAccounts: [],
                 phoneNumbers: [],
                 emails: [],
+                beneficiaryNames: [],
+                ifscCodes: [],
+                whatsappNumbers: [],
+                bankNames: [],
             });
+            setExtractionOrder([]);
             setAgentNotes("");
         }
 
@@ -494,6 +568,7 @@ const ChatDashboard = () => {
         setMessages(prev => [...prev, newMessage]);
         setInputValue("");
         setIsLoading(true);
+        setLoadingConversationId(activeConvId);
 
         try {
             // Build conversation history for API
@@ -531,41 +606,164 @@ const ChatDashboard = () => {
             setConnectionStatus('connected');
 
             if (data.status === "success") {
-                // Add agent response
-                if (data.agentResponse) {
-                    const agentTimestamp = new Date().toISOString();
-                    setMessages(prev => [...prev, {
-                        sender: "agent",
-                        text: data.agentResponse,
-                        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                        isoTimestamp: agentTimestamp,
-                    }]);
-                }
+                // Prepare the agent response message
+                const agentMessage = data.agentResponse ? {
+                    sender: "agent",
+                    text: data.agentResponse,
+                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    isoTimestamp: new Date().toISOString(),
+                } : null;
 
-                // Update metrics
-                setMetrics(prev => ({
-                    scamDetected: data.scamDetected,
-                    confidence: data.confidence || prev.confidence,
-                    messagesExchanged: prev.messagesExchanged + (data.agentResponse ? 2 : 1),
-                }));
+                // Always update the conversation that sent the message, even if not currently active
+                if (currentConversationIdRef.current === activeConvId) {
+                    // User is still viewing the same conversation - update directly
+                    if (agentMessage) {
+                        setMessages(prev => [...prev, agentMessage]);
+                    }
 
-                // Update intel from response
-                if (data.extractedIntelligence) {
-                    const intel = data.extractedIntelligence;
-                    setExtractedIntel(prev => ({
-                        upiIds: [...new Set([...prev.upiIds, ...(intel.upiIds || [])])],
-                        phishingLinks: [...new Set([...prev.phishingLinks, ...(intel.phishingLinks || [])])],
-                        bankAccounts: [...new Set([...prev.bankAccounts, ...(intel.bankAccounts || [])])],
-                        phoneNumbers: [...new Set([...prev.phoneNumbers, ...(intel.phoneNumbers || [])])],
-                        emails: [...new Set([...(prev.emails || []), ...(intel.emails || [])])],
-                        beneficiaryNames: [...new Set([...(prev.beneficiaryNames || []), ...(intel.beneficiaryNames || [])])],
-                        ifscCodes: [...new Set([...(prev.ifscCodes || []), ...(intel.ifscCodes || [])])],
-                        whatsappNumbers: [...new Set([...(prev.whatsappNumbers || []), ...(intel.whatsappNumbers || [])])],
+                    // Update metrics
+                    setMetrics(prev => ({
+                        scamDetected: data.scamDetected,
+                        confidence: data.confidence || prev.confidence,
+                        messagesExchanged: prev.messagesExchanged + (data.agentResponse ? 2 : 1),
                     }));
-                }
 
-                if (data.agentNotes) {
-                    setAgentNotes(data.agentNotes);
+                    // Update intel from response and track extraction order
+                    if (data.extractedIntelligence) {
+                        const intel = data.extractedIntelligence;
+                        const newExtractions = [];
+                        
+                        setExtractedIntel(prev => {
+                            const updated = {
+                                upiIds: [...prev.upiIds],
+                                phishingLinks: [...prev.phishingLinks],
+                                bankAccounts: [...prev.bankAccounts],
+                                phoneNumbers: [...prev.phoneNumbers],
+                                emails: [...prev.emails],
+                                beneficiaryNames: [...prev.beneficiaryNames],
+                                ifscCodes: [...prev.ifscCodes],
+                                whatsappNumbers: [...prev.whatsappNumbers],
+                                bankNames: [...(prev.bankNames || [])],
+                            };
+
+                            // Track new items and their order
+                            (intel.bankAccounts || []).forEach(item => {
+                                if (!updated.bankAccounts.includes(item)) {
+                                    updated.bankAccounts.push(item);
+                                    newExtractions.push({ type: 'bank', value: item });
+                                }
+                            });
+                            (intel.ifscCodes || []).forEach(item => {
+                                if (!updated.ifscCodes.includes(item)) {
+                                    updated.ifscCodes.push(item);
+                                    newExtractions.push({ type: 'ifsc', value: item });
+                                }
+                            });
+                            (intel.bankNames || []).forEach(item => {
+                                if (!updated.bankNames.includes(item)) {
+                                    updated.bankNames.push(item);
+                                    newExtractions.push({ type: 'bankName', value: item });
+                                }
+                            });
+                            (intel.beneficiaryNames || []).forEach(item => {
+                                if (!updated.beneficiaryNames.includes(item)) {
+                                    updated.beneficiaryNames.push(item);
+                                    newExtractions.push({ type: 'name', value: item });
+                                }
+                            });
+                            (intel.upiIds || []).forEach(item => {
+                                if (!updated.upiIds.includes(item)) {
+                                    updated.upiIds.push(item);
+                                    newExtractions.push({ type: 'upi', value: item });
+                                }
+                            });
+                            (intel.phoneNumbers || []).forEach(item => {
+                                if (!updated.phoneNumbers.includes(item)) {
+                                    updated.phoneNumbers.push(item);
+                                    newExtractions.push({ type: 'phone', value: item });
+                                }
+                            });
+                            (intel.whatsappNumbers || []).forEach(item => {
+                                if (!updated.whatsappNumbers.includes(item)) {
+                                    updated.whatsappNumbers.push(item);
+                                    newExtractions.push({ type: 'whatsapp', value: item });
+                                }
+                            });
+                            (intel.phishingLinks || []).forEach(item => {
+                                if (!updated.phishingLinks.includes(item)) {
+                                    updated.phishingLinks.push(item);
+                                    newExtractions.push({ type: 'link', value: item });
+                                }
+                            });
+                            (intel.emails || []).forEach(item => {
+                                if (!updated.emails.includes(item)) {
+                                    updated.emails.push(item);
+                                    newExtractions.push({ type: 'email', value: item });
+                                }
+                            });
+
+                            return updated;
+                        });
+
+                        // Update extraction order
+                        if (newExtractions.length > 0) {
+                            setExtractionOrder(prev => [...prev, ...newExtractions]);
+                        }
+                    }
+
+                    if (data.agentNotes) {
+                        setAgentNotes(data.agentNotes);
+                    }
+                } else {
+                    // User switched to a different conversation - update saved conversations in background
+                    setSavedConversations(prev => {
+                        const convIndex = prev.findIndex(c => c.id === activeConvId);
+                        if (convIndex >= 0 && agentMessage) {
+                            const updated = [...prev];
+                            const conv = updated[convIndex];
+                            
+                            // Add agent message to the conversation
+                            updated[convIndex] = {
+                                ...conv,
+                                messages: [...conv.messages, agentMessage],
+                                metrics: {
+                                    scamDetected: data.scamDetected,
+                                    confidence: data.confidence || conv.metrics?.confidence,
+                                    messagesExchanged: (conv.messages?.length || 0) + 1,
+                                },
+                            };
+                            
+                            // Update intelligence if provided
+                            if (data.extractedIntelligence) {
+                                const intel = data.extractedIntelligence;
+                                const currentIntel = conv.extractedIntel || {
+                                    upiIds: [], phishingLinks: [], bankAccounts: [], 
+                                    phoneNumbers: [], emails: [], beneficiaryNames: [],
+                                    ifscCodes: [], whatsappNumbers: [], bankNames: []
+                                };
+                                
+                                updated[convIndex].extractedIntel = {
+                                    upiIds: [...new Set([...currentIntel.upiIds, ...(intel.upiIds || [])])],
+                                    phishingLinks: [...new Set([...currentIntel.phishingLinks, ...(intel.phishingLinks || [])])],
+                                    bankAccounts: [...new Set([...currentIntel.bankAccounts, ...(intel.bankAccounts || [])])],
+                                    phoneNumbers: [...new Set([...currentIntel.phoneNumbers, ...(intel.phoneNumbers || [])])],
+                                    emails: [...new Set([...currentIntel.emails, ...(intel.emails || [])])],
+                                    beneficiaryNames: [...new Set([...currentIntel.beneficiaryNames, ...(intel.beneficiaryNames || [])])],
+                                    ifscCodes: [...new Set([...currentIntel.ifscCodes, ...(intel.ifscCodes || [])])],
+                                    whatsappNumbers: [...new Set([...currentIntel.whatsappNumbers, ...(intel.whatsappNumbers || [])])],
+                                    bankNames: [...new Set([...currentIntel.bankNames, ...(intel.bankNames || [])])],
+                                };
+                            }
+                            
+                            if (data.agentNotes) {
+                                updated[convIndex].agentNotes = data.agentNotes;
+                            }
+                            
+                            saveConversations(updated);
+                            return updated;
+                        }
+                        return prev;
+                    });
                 }
             }
         } catch (error) {
@@ -577,6 +775,7 @@ const ChatDashboard = () => {
         }
 
         setIsLoading(false);
+        setLoadingConversationId(null);
     };
 
     const handleReset = () => {
@@ -590,7 +789,8 @@ const ChatDashboard = () => {
         extractedIntel.emails?.length > 0 ||
         extractedIntel.beneficiaryNames?.length > 0 ||
         extractedIntel.ifscCodes?.length > 0 ||
-        extractedIntel.whatsappNumbers?.length > 0;
+        extractedIntel.whatsappNumbers?.length > 0 ||
+        extractedIntel.bankNames?.length > 0;
 
     // Combine samples and saved conversations
     const allConversations = [...sampleConversations, ...savedConversations];
@@ -710,15 +910,17 @@ const ChatDashboard = () => {
                                         </Badge>
                                     )}
                                 </div>
-                                <Button
-                                    size="sm"
-                                    variant="destructive"
-                                    onClick={handleReset}
-                                    className="bg-cyber-red/20 text-cyber-red border border-cyber-red/30 hover:bg-cyber-red/30"
-                                >
-                                    <RotateCcw className="w-4 h-4 mr-2" />
-                                    Reset
-                                </Button>
+                                {!isViewingSample && (
+                                    <Button
+                                        size="sm"
+                                        variant="destructive"
+                                        onClick={handleReset}
+                                        className="bg-cyber-red/20 text-cyber-red border border-cyber-red/30 hover:bg-cyber-red/30"
+                                    >
+                                        <RotateCcw className="w-4 h-4 mr-2" />
+                                        Reset
+                                    </Button>
+                                )}
                             </div>
 
                             {/* Messages Area */}
@@ -753,7 +955,7 @@ const ChatDashboard = () => {
                                         ))}
                                     </>
                                 )}
-                                {isLoading && (
+                                {isLoading && loadingConversationId === currentConversationId && (
                                     <div className="flex justify-end mb-4">
                                         <div className="bg-cyber-cyan/20 border border-cyber-cyan/30 rounded-2xl rounded-br-sm px-4 py-3">
                                             <div className="flex gap-1">
@@ -917,29 +1119,8 @@ const ChatDashboard = () => {
                                     </div>
                                 ) : (
                                     <>
-                                        {extractedIntel.upiIds.map((upi, idx) => (
-                                            <IntelTag key={`upi-${idx}`} type="upi" value={upi} />
-                                        ))}
-                                        {extractedIntel.phishingLinks.map((link, idx) => (
-                                            <IntelTag key={`link-${idx}`} type="link" value={link} />
-                                        ))}
-                                        {extractedIntel.bankAccounts.map((acc, idx) => (
-                                            <IntelTag key={`bank-${idx}`} type="bank" value={acc} />
-                                        ))}
-                                        {extractedIntel.phoneNumbers?.map((phone, idx) => (
-                                            <IntelTag key={`phone-${idx}`} type="phone" value={phone} />
-                                        ))}
-                                        {extractedIntel.emails?.map((email, idx) => (
-                                            <IntelTag key={`email-${idx}`} type="email" value={email} />
-                                        ))}
-                                        {extractedIntel.beneficiaryNames?.map((name, idx) => (
-                                            <IntelTag key={`name-${idx}`} type="name" value={name} />
-                                        ))}
-                                        {extractedIntel.ifscCodes?.map((ifsc, idx) => (
-                                            <IntelTag key={`ifsc-${idx}`} type="ifsc" value={ifsc} />
-                                        ))}
-                                        {extractedIntel.whatsappNumbers?.map((wa, idx) => (
-                                            <IntelTag key={`whatsapp-${idx}`} type="whatsapp" value={wa} />
+                                        {extractionOrder.map((item, idx) => (
+                                            <IntelTag key={`extracted-${idx}`} type={item.type} value={item.value} />
                                         ))}
                                     </>
                                 )}
