@@ -482,7 +482,23 @@ const ChatDashboard = () => {
             whatsappNumbers: [],
             bankNames: [],
         });
-        setExtractionOrder(conversation.extractionOrder || []);
+        
+        // Rebuild extractionOrder if it's missing but extractedIntel exists
+        let order = conversation.extractionOrder || [];
+        if (order.length === 0 && conversation.extractedIntel) {
+            const intel = conversation.extractedIntel;
+            order = [];
+            (intel.bankAccounts || []).forEach(item => order.push({ type: 'bank', value: item }));
+            (intel.ifscCodes || []).forEach(item => order.push({ type: 'ifsc', value: item }));
+            (intel.bankNames || []).forEach(item => order.push({ type: 'bankName', value: item }));
+            (intel.beneficiaryNames || []).forEach(item => order.push({ type: 'name', value: item }));
+            (intel.upiIds || []).forEach(item => order.push({ type: 'upi', value: item }));
+            (intel.phoneNumbers || []).forEach(item => order.push({ type: 'phone', value: item }));
+            (intel.whatsappNumbers || []).forEach(item => order.push({ type: 'whatsapp', value: item }));
+            (intel.phishingLinks || []).forEach(item => order.push({ type: 'link', value: item }));
+            (intel.emails || []).forEach(item => order.push({ type: 'email', value: item }));
+        }
+        setExtractionOrder(order);
         setAgentNotes(conversation.agentNotes || "");
     };
 

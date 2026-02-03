@@ -687,6 +687,12 @@
         function updateIntelligence(intelligence) {
             const content = document.getElementById('intelligenceContent');
             
+            // DEBUG: Log received intelligence
+            console.log('updateIntelligence called with:', intelligence);
+            console.log('Intelligence type:', typeof intelligence);
+            console.log('Has bankAccounts?', intelligence?.bankAccounts);
+            console.log('Has upiIds?', intelligence?.upiIds);
+            
             // Check if any intelligence exists
             const hasIntel = intelligence && (
                 intelligence.bankAccounts?.length ||
@@ -885,6 +891,12 @@
                 
                 const data = await response.json();
                 
+                // DEBUG: Log entire API response
+                console.log('=== API RESPONSE ===');
+                console.log('Full response:', data);
+                console.log('extractedIntelligence:', data.extractedIntelligence);
+                console.log('====================');
+                
                 // Add scammer message to history
                 conversationHistory.push({
                     sender: 'scammer',
@@ -903,8 +915,11 @@
                 }
                 
                 // Update UI
+                console.log('Calling updateMetrics...');
                 updateMetrics(data);
+                console.log('Calling updateIntelligence...');
                 updateIntelligence(data.extractedIntelligence);
+                console.log('UI update complete');
                 
             } catch (error) {
                 hideThinking();
