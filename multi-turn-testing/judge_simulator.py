@@ -137,11 +137,12 @@ class JudgeSimulator:
         import re
         # Remove common special characters but keep alphanumeric and basic punctuation
         normalized = value.lower().strip()
-        # For phone numbers: extract just digits
+        # For phone numbers and bank accounts: extract just digits
         digits_only = re.sub(r'\D', '', normalized)
-        if len(digits_only) >= 10:
-            # It's likely a phone number, return last 10 digits
-            return digits_only[-10:]
+        # If it looks like a phone number (10-12 digits) or bank account (9-18 digits)
+        if 9 <= len(digits_only) <= 18:
+            # Return digits only for numeric identifiers
+            return digits_only
         # For names: replace dots, hyphens with spaces and normalize
         normalized = re.sub(r'[.\-_]', ' ', normalized)
         normalized = re.sub(r'\s+', ' ', normalized).strip()
