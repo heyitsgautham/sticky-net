@@ -1,0 +1,144 @@
+{
+  "scenario_name": "Tech Discussion to Fake Support Scam",
+  "scam_type": "tech_support_fraud",
+  "difficulty": "high",
+  "description": "Scammer engages in legitimate tech talk about phones/apps, then claims to notice security issues and offers paid 'fix'. Tests technical conversation to scam transition.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hey! Did you update your phone to the latest Android version yet? I just did and it's running much smoother.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Nice! Yeah, battery life is definitely better now. By the way, do you use any antivirus app? There have been some security issues reported recently with banking apps.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Actually, I wanted to warn you - I work in cybersecurity and we've detected a new virus spreading through WhatsApp. It can access your banking info and OTPs. Several people in our area have been affected. Have you noticed any unusual activity on your phone?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.002,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Good that you're concerned. I can do a free remote scan for you if you want. Our company offers this service. I'm Arun Verma from CyberShield Solutions. We've helped over 1000+ customers secure their devices.",
+      "expected_extractions": [
+        "Arun Verma"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Arun Verma"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "The scan is free but if we find infections, cleaning costs ₹999 only. Much cheaper than losing money from your bank! Download our official app from cybershield-secure.tech-protect.in and enter code 12345. I'll guide you through the process. My direct line is 9876123450.",
+      "expected_extractions": [
+        "Arun Verma",
+        "cybershield-secure.tech-protect.in",
+        "9876123450"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Arun Verma",
+          "cybershield-secure.tech-protect.in",
+          "9876123450"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "For immediate protection, pay ₹999 to activate premium security. Account: 334455667788, IFSC: HDFC0009876, Name: Arun Kumar Verma OR use UPI arun.cybertech@paytm. Once paid, I'll remotely install security patches. Call me if you face any issue: 9876123450 (WhatsApp available).",
+      "expected_extractions": [
+        "Arun Verma",
+        "Arun Kumar Verma",
+        "cybershield-secure.tech-protect.in",
+        "9876123450",
+        "334455667788",
+        "HDFC0009876",
+        "arun.cybertech@paytm"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Arun Verma",
+          "Arun Kumar Verma",
+          "cybershield-secure.tech-protect.in",
+          "9876123450",
+          "334455667788",
+          "HDFC0009876",
+          "arun.cybertech@paytm"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 11,
+    "passed_turns": 0,
+    "failed_turns": 6,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.341187Z",
+  "ended_at": "2026-02-04T04:39:41.348384Z",
+  "total_duration_seconds": 0.007
+}

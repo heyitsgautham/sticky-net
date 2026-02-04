@@ -286,6 +286,11 @@ const IntelTag = React.memo(({ type, value }) => {
             label: "Bank Name",
             color: "bg-teal-500/20 text-teal-400 border-teal-500/30" 
         },
+        other: { 
+            icon: AlertTriangle, 
+            label: "Other",
+            color: "bg-amber-500/20 text-amber-400 border-amber-500/30" 
+        },
     };
 
     const config = typeConfig[type] || typeConfig.upi;
@@ -392,11 +397,16 @@ const ChatDashboard = () => {
     const messagesContainerRef = useRef(null);
     const inputRef = useRef(null);
     const currentConversationIdRef = useRef(currentConversationId);
+    const extractedIntelRef = useRef(extractedIntel); // Ref to track current extractedIntel for synchronous access
 
-    // Keep ref in sync with state
+    // Keep refs in sync with state
     useEffect(() => {
         currentConversationIdRef.current = currentConversationId;
     }, [currentConversationId]);
+
+    useEffect(() => {
+        extractedIntelRef.current = extractedIntel;
+    }, [extractedIntel]);
 
     // Load saved conversations on mount
     useEffect(() => {
@@ -522,7 +532,7 @@ const ChatDashboard = () => {
             confidence: null,
             messagesExchanged: 0,
         });
-        setExtractedIntel({
+        const emptyIntel = {
             upiIds: [],
             phishingLinks: [],
             bankAccounts: [],
@@ -532,7 +542,9 @@ const ChatDashboard = () => {
             ifscCodes: [],
             whatsappNumbers: [],
             bankNames: [],
-        });
+        };
+        setExtractedIntel(emptyIntel);
+        extractedIntelRef.current = emptyIntel; // Sync ref immediately
         setExtractionOrder([]);
         setAgentNotes("");
         inputRef.current?.focus();
@@ -556,7 +568,7 @@ const ChatDashboard = () => {
                 confidence: null,
                 messagesExchanged: 0,
             });
-            setExtractedIntel({
+            const emptyIntel = {
                 upiIds: [],
                 phishingLinks: [],
                 bankAccounts: [],
@@ -566,7 +578,9 @@ const ChatDashboard = () => {
                 ifscCodes: [],
                 whatsappNumbers: [],
                 bankNames: [],
-            });
+            };
+            setExtractedIntel(emptyIntel);
+            extractedIntelRef.current = emptyIntel; // Sync ref immediately
             setExtractionOrder([]);
             setAgentNotes("");
         }
@@ -647,83 +661,91 @@ const ChatDashboard = () => {
                     // Update intel from response and track extraction order
                     if (data.extractedIntelligence) {
                         const intel = data.extractedIntelligence;
-                        const newExtractions = [];
                         
-                        setExtractedIntel(prev => {
-                            const updated = {
-                                upiIds: [...prev.upiIds],
-                                phishingLinks: [...prev.phishingLinks],
-                                bankAccounts: [...prev.bankAccounts],
-                                phoneNumbers: [...prev.phoneNumbers],
-                                emails: [...prev.emails],
-                                beneficiaryNames: [...prev.beneficiaryNames],
-                                ifscCodes: [...prev.ifscCodes],
-                                whatsappNumbers: [...prev.whatsappNumbers],
-                                bankNames: [...(prev.bankNames || [])],
-                            };
+                        // Use the ref to get current state synchronously for comparison
+                        const prev = extractedIntelRef.current;
+                        const newExtractions = [];
+                        const updated = {
+                            upiIds: [...prev.upiIds],
+                            phishingLinks: [...prev.phishingLinks],
+                            bankAccounts: [...prev.bankAccounts],
+                            phoneNumbers: [...prev.phoneNumbers],
+                            emails: [...prev.emails],
+                            beneficiaryNames: [...prev.beneficiaryNames],
+                            ifscCodes: [...prev.ifscCodes],
+                            whatsappNumbers: [...prev.whatsappNumbers],
+                            bankNames: [...(prev.bankNames || [])],
+                        };
 
-                            // Track new items and their order
-                            (intel.bankAccounts || []).forEach(item => {
-                                if (!updated.bankAccounts.includes(item)) {
-                                    updated.bankAccounts.push(item);
-                                    newExtractions.push({ type: 'bank', value: item });
-                                }
-                            });
-                            (intel.ifscCodes || []).forEach(item => {
-                                if (!updated.ifscCodes.includes(item)) {
-                                    updated.ifscCodes.push(item);
-                                    newExtractions.push({ type: 'ifsc', value: item });
-                                }
-                            });
-                            (intel.bankNames || []).forEach(item => {
-                                if (!updated.bankNames.includes(item)) {
-                                    updated.bankNames.push(item);
-                                    newExtractions.push({ type: 'bankName', value: item });
-                                }
-                            });
-                            (intel.beneficiaryNames || []).forEach(item => {
-                                if (!updated.beneficiaryNames.includes(item)) {
-                                    updated.beneficiaryNames.push(item);
-                                    newExtractions.push({ type: 'name', value: item });
-                                }
-                            });
-                            (intel.upiIds || []).forEach(item => {
-                                if (!updated.upiIds.includes(item)) {
-                                    updated.upiIds.push(item);
-                                    newExtractions.push({ type: 'upi', value: item });
-                                }
-                            });
-                            (intel.phoneNumbers || []).forEach(item => {
-                                if (!updated.phoneNumbers.includes(item)) {
-                                    updated.phoneNumbers.push(item);
-                                    newExtractions.push({ type: 'phone', value: item });
-                                }
-                            });
-                            (intel.whatsappNumbers || []).forEach(item => {
-                                if (!updated.whatsappNumbers.includes(item)) {
-                                    updated.whatsappNumbers.push(item);
-                                    newExtractions.push({ type: 'whatsapp', value: item });
-                                }
-                            });
-                            (intel.phishingLinks || []).forEach(item => {
-                                if (!updated.phishingLinks.includes(item)) {
-                                    updated.phishingLinks.push(item);
-                                    newExtractions.push({ type: 'link', value: item });
-                                }
-                            });
-                            (intel.emails || []).forEach(item => {
-                                if (!updated.emails.includes(item)) {
-                                    updated.emails.push(item);
-                                    newExtractions.push({ type: 'email', value: item });
-                                }
-                            });
-
-                            return updated;
+                        // Track new items and their order
+                        (intel.bankAccounts || []).forEach(item => {
+                            if (!updated.bankAccounts.includes(item)) {
+                                updated.bankAccounts.push(item);
+                                newExtractions.push({ type: 'bank', value: item });
+                            }
+                        });
+                        (intel.ifscCodes || []).forEach(item => {
+                            if (!updated.ifscCodes.includes(item)) {
+                                updated.ifscCodes.push(item);
+                                newExtractions.push({ type: 'ifsc', value: item });
+                            }
+                        });
+                        (intel.bankNames || []).forEach(item => {
+                            if (!updated.bankNames.includes(item)) {
+                                updated.bankNames.push(item);
+                                newExtractions.push({ type: 'bankName', value: item });
+                            }
+                        });
+                        (intel.beneficiaryNames || []).forEach(item => {
+                            if (!updated.beneficiaryNames.includes(item)) {
+                                updated.beneficiaryNames.push(item);
+                                newExtractions.push({ type: 'name', value: item });
+                            }
+                        });
+                        (intel.upiIds || []).forEach(item => {
+                            if (!updated.upiIds.includes(item)) {
+                                updated.upiIds.push(item);
+                                newExtractions.push({ type: 'upi', value: item });
+                            }
+                        });
+                        (intel.phoneNumbers || []).forEach(item => {
+                            if (!updated.phoneNumbers.includes(item)) {
+                                updated.phoneNumbers.push(item);
+                                newExtractions.push({ type: 'phone', value: item });
+                            }
+                        });
+                        (intel.whatsappNumbers || []).forEach(item => {
+                            if (!updated.whatsappNumbers.includes(item)) {
+                                updated.whatsappNumbers.push(item);
+                                newExtractions.push({ type: 'whatsapp', value: item });
+                            }
+                        });
+                        (intel.phishingLinks || []).forEach(item => {
+                            if (!updated.phishingLinks.includes(item)) {
+                                updated.phishingLinks.push(item);
+                                newExtractions.push({ type: 'link', value: item });
+                            }
+                        });
+                        (intel.emails || []).forEach(item => {
+                            if (!updated.emails.includes(item)) {
+                                updated.emails.push(item);
+                                newExtractions.push({ type: 'email', value: item });
+                            }
+                        });
+                        // Handle other_critical_info - each item has label and value
+                        (intel.other_critical_info || []).forEach(item => {
+                            const displayValue = `${item.label}: ${item.value}`;
+                            // Use a simple dedup based on value
+                            if (!newExtractions.some(e => e.type === 'other' && e.value === displayValue)) {
+                                newExtractions.push({ type: 'other', value: displayValue });
+                            }
                         });
 
-                        // Update extraction order
+                        // Update both states together - React will batch these
+                        setExtractedIntel(updated);
+                        extractedIntelRef.current = updated; // Sync ref immediately for next API call
                         if (newExtractions.length > 0) {
-                            setExtractionOrder(prev => [...prev, ...newExtractions]);
+                            setExtractionOrder(prevOrder => [...prevOrder, ...newExtractions]);
                         }
                     }
 
@@ -1129,7 +1151,7 @@ const ChatDashboard = () => {
                                 Extracted Intelligence
                             </h3>
                             <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin space-y-2 pr-2">
-                                {!hasIntel ? (
+                                {extractionOrder.length === 0 ? (
                                     <div className="h-full flex items-center justify-center text-gray-600 text-sm font-mono">
                                         No intelligence extracted yet.
                                     </div>

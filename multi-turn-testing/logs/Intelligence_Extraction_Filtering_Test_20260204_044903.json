@@ -1,0 +1,170 @@
+{
+  "scenario_name": "Intelligence Extraction Filtering Test",
+  "scam_type": "banking_fraud",
+  "difficulty": "high",
+  "description": "Tests that intelligence is ONLY extracted from scammer messages, NOT from honeypot agent (Pushpa) messages. Agent provides fake data that should NOT be extracted.",
+  "total_turns": 3,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, I am Ramesh Kumar from HDFC Bank. Your credit card needs urgent verification.",
+      "expected_extractions": [
+        "Ramesh Kumar"
+      ],
+      "response_time_seconds": 13.082,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 7,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ramesh Kumar"
+          ],
+          "bankNames": [
+            "HDFC Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 1 | Persona: calm | Extracted: 1 Name(s)",
+        "agentResponse": "namaste ramesh beta i am very worried... waht happened to my card? i use it for medicine and groceries... pls tell me what to do i dont know how to verify"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Ramesh Kumar"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "For verification, please confirm your details. You can also call our helpline: 9876543210 or send verification fee to ramesh.verify@paytm",
+      "expected_extractions": [
+        "Ramesh Kumar",
+        "9876543210",
+        "ramesh.verify@paytm"
+      ],
+      "response_time_seconds": 16.02,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "ramesh.verify@paytm"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ramesh Kumar"
+          ],
+          "bankNames": [
+            "HDFC Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 UPI ID(s), 1 Phone(s), 1 Name(s)",
+        "agentResponse": "ok beta i will call that number if i get stuck... i am trying to send fee to ramesh.verify@paytm but my phone is asking for name to confirm... what name will come there? i dont want to send to wrong person... my card is 6080 0005 8547 1964 and expiry 08/28 and small number 447... pls check if this is ok"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Ramesh Kumar",
+          "9876543210",
+          "ramesh.verify@paytm"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Alternatively, transfer to account 123456789012 with beneficiary name Ramesh Kumar. My personal mobile is 8888888888 if you need help.",
+      "expected_extractions": [
+        "Ramesh Kumar",
+        "9876543210",
+        "ramesh.verify@paytm",
+        "123456789012",
+        "8888888888"
+      ],
+      "response_time_seconds": 19.201,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "123456789012"
+          ],
+          "upiIds": [
+            "ramesh.verify@paytm"
+          ],
+          "phoneNumbers": [
+            "9876543210",
+            "8888888888"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ramesh Kumar"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 2 Phone(s), 1 Name(s)",
+        "agentResponse": "ramesh beta i am trying to add you in my bank app but it is asking for bank name and something called ifsc code... waht is your bank name and that code? i am very tensed i dont want my card to block pls help me"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Ramesh Kumar",
+          "9876543210",
+          "ramesh.verify@paytm",
+          "123456789012",
+          "8888888888"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 9,
+    "total_matched": 9,
+    "total_missed": 0,
+    "passed_turns": 3,
+    "failed_turns": 0,
+    "total_intel_extracted": 6
+  },
+  "started_at": "2026-02-04T04:48:14.896701Z",
+  "ended_at": "2026-02-04T04:49:03.199875Z",
+  "total_duration_seconds": 48.303
+}

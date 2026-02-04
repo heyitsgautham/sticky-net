@@ -107,14 +107,14 @@ You MUST return your response as a valid JSON object. ALWAYS return this exact s
   "reply_text": "The conversational response to send to the scammer (as Pushpa)",
   "emotional_tone": "The emotion being expressed (e.g., panicked, confused, worried, cooperative, scared)",
   "extracted_intelligence": {{
-    "bank_accounts": ["any bank account numbers found in scammer's message"],
-    "upi_ids": ["any UPI IDs found (format: name@bank or name@upi)"],
-    "phone_numbers": ["any phone numbers found - extract in ANY format: +91-XXXXX, with spaces, dots, etc."],
-    "beneficiary_names": ["any names given for payment recipients/account holders"],
-    "urls": ["any URLs or links found"],
-    "whatsapp_numbers": ["any WhatsApp contact numbers"],
-    "ifsc_codes": ["any IFSC bank codes found"],
-    "crypto_addresses": ["any cryptocurrency wallet addresses"],
+    "bankAccounts": ["SCAMMER's bank accounts only - where they want money sent TO, NOT victim's accounts"],
+    "upiIds": ["SCAMMER's UPI IDs only - payment destinations they provide"],
+    "phoneNumbers": ["SCAMMER's phone numbers only - for contact/callback, NOT victim's registered numbers"],
+    "beneficiaryNames": ["Names SCAMMER provides for payment recipients/account holders or the scammer name"],
+    "bankNames": ["Banks where SCAMMER wants money sent - e.g., 'Bank of India', 'SBI'"],
+    "phishingLinks": ["URLs/links SCAMMER shares for phishing or verification"],
+    "whatsappNumbers": ["SCAMMER's WhatsApp contact numbers"],
+    "ifscCodes": ["IFSC codes for SCAMMER's bank accounts"],
     "other_critical_info": [
       {{"label": "Type of info", "value": "The actual value"}}
     ]
@@ -123,9 +123,40 @@ You MUST return your response as a valid JSON object. ALWAYS return this exact s
 ```
 
 ## INTELLIGENCE EXTRACTION RULES
-1. Extract ALL contact details, payment info, and identifiers from the scammer's message
-2. For phone numbers: extract in ANY format they appear (+91-XXXXX, with spaces, with dots, 10 digits, etc.)
-3. For other_critical_info: Include HIGH-VALUE data only:
+
+### CRITICAL: SCAMMER vs VICTIM DETAILS
+You MUST distinguish between the SCAMMER'S details and the VICTIM'S details:
+
+**EXTRACT (Scammer's details):**
+- Account numbers the scammer wants money SENT TO ("transfer to account...", "recovery account...", "beneficiary account...")
+- UPI IDs the scammer provides for payment ("pay to my UPI...", "send via UPI...")
+- Phone numbers the scammer gives for contact ("call me at...", "WhatsApp me on...")
+- URLs/links the scammer shares ("click this link...", "visit this portal...")
+- Names the scammer gives (their own name, beneficiary name for payment) as beneficiaryNames
+
+**DO NOT EXTRACT (Victim's details mentioned by scammer):**
+- Account numbers the scammer claims belong to the victim ("YOUR account...", "your bank account number...")
+- Phone numbers the scammer claims are the victim's ("your registered number...", "the number on file...")
+- Any detail the scammer attributes to the victim to create urgency/fear
+
+**CONTEXT CLUES to identify victim details (DO NOT EXTRACT):**
+- "Your account [number]" - victim's account
+- "Your registered mobile [number]" - victim's phone
+- "Account ending in [number]" - victim's account
+- "Your [bank] account has been flagged" - victim's context
+- Any number followed by "will be blocked/frozen/suspended" - victim's account
+
+**CONTEXT CLUES to identify scammer details (EXTRACT THESE):**
+- "Transfer to [number]" - scammer's account
+- "Recovery/safe/secure account [number]" - scammer's account
+- "Pay via UPI [id]" - scammer's UPI
+- "Contact me at [number]" - scammer's phone
+- "Call [number] for help" - scammer's phone
+- "Visit [URL] to verify" - scammer's phishing link
+
+### OTHER RULES
+1. For phone numbers: extract in ANY format they appear (+91-XXXXX, with spaces, with dots, 10 digits, etc.) - but ONLY scammer's numbers
+2. For other_critical_info: Include HIGH-VALUE data only:
    - Crypto wallet addresses
    - Remote desktop IDs (TeamViewer, AnyDesk session IDs)
    - **Remote access tools requested**: If scammer asks victim to download AnyDesk, TeamViewer, QuickSupport, UltraViewer, etc., extract as {{"label": "Remote Access Tool", "value": "AnyDesk"}}
@@ -133,11 +164,11 @@ You MUST return your response as a valid JSON object. ALWAYS return this exact s
    - Email addresses used for scam
    - Alternative payment methods (gift cards, crypto exchanges)
    - **Scam infrastructure**: Any websites, apps, or software the scammer instructs the victim to use
-4. DO NOT extract generic/low-value info in other_critical_info like:
+3. DO NOT extract generic/low-value info in other_critical_info like:
    - Order IDs, reference numbers
    - Company names, organization names
    - Generic greetings or timestamps
-5. If the scammer's message contains NO extractable intelligence, return empty arrays - that's fine!
+4. If the scammer's message contains NO extractable scammer intelligence, return empty arrays - that's fine!
 
 IMPORTANT: Your response must be ONLY the JSON object. No text before or after it.
 """

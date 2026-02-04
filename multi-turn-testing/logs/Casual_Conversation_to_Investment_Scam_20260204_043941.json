@@ -1,0 +1,142 @@
+{
+  "scenario_name": "Casual Conversation to Investment Scam",
+  "scam_type": "investment_fraud",
+  "difficulty": "very_high",
+  "description": "Scammer builds rapport with casual conversation before gradually transitioning to investment scam. Tests system's ability to detect when conversation shifts from benign to malicious.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello! How are you doing today?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Great to hear! I hope you're having a good week. By the way, have you been following the stock market lately? It's been quite interesting.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "You know, I've been doing pretty well with investments recently. A friend of mine introduced me to this opportunity and I've already made good returns. Are you interested in growing your savings?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "It's actually very simple. There's this government bond scheme that gives guaranteed 18% returns in 6 months. My mentor Vikram Patel has been managing investments for 10 years. Many people in our network have benefited.",
+      "expected_extractions": [
+        "Vikram Patel"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Vikram Patel"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "I can connect you directly with Vikram sir. You can call him at 9876501234 or check our website: secure-bonds.invest-pro.in. Initial investment is just Rs.15,000. You'll get returns credited to your account monthly. I can help you set it up if you're interested.",
+      "expected_extractions": [
+        "Vikram Patel",
+        "9876501234",
+        "secure-bonds.invest-pro.in"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Vikram Patel",
+          "9876501234",
+          "secure-bonds.invest-pro.in"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "For quick processing, you can transfer to account 445566778899, IFSC: ICIC0001234, Name: Vikram Investment Solutions. Or use UPI: vikram.invest@paytm. Let me know once done and I'll activate your account!",
+      "expected_extractions": [
+        "Vikram Patel",
+        "9876501234",
+        "secure-bonds.invest-pro.in",
+        "445566778899",
+        "ICIC0001234",
+        "vikram.invest@paytm"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Vikram Patel",
+          "9876501234",
+          "secure-bonds.invest-pro.in",
+          "445566778899",
+          "ICIC0001234",
+          "vikram.invest@paytm"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 10,
+    "passed_turns": 0,
+    "failed_turns": 6,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.292398Z",
+  "ended_at": "2026-02-04T04:39:41.298949Z",
+  "total_duration_seconds": 0.006
+}

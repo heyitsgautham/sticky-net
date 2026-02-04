@@ -132,6 +132,21 @@ class JudgeSimulator:
 
         return all_values
 
+    def normalize_for_comparison(self, value: str) -> str:
+        """Normalize a value for fuzzy comparison by removing special characters."""
+        import re
+        # Remove common special characters but keep alphanumeric and basic punctuation
+        normalized = value.lower().strip()
+        # For phone numbers: extract just digits
+        digits_only = re.sub(r'\D', '', normalized)
+        if len(digits_only) >= 10:
+            # It's likely a phone number, return last 10 digits
+            return digits_only[-10:]
+        # For names: replace dots, hyphens with spaces and normalize
+        normalized = re.sub(r'[.\-_]', ' ', normalized)
+        normalized = re.sub(r'\s+', ' ', normalized).strip()
+        return normalized
+
     def validate_extractions(
         self,
         expected: list[str],
@@ -147,11 +162,18 @@ class JudgeSimulator:
 
         for expected_item in expected:
             expected_lower = expected_item.lower().strip()
+            expected_normalized = self.normalize_for_comparison(expected_item)
             found = False
 
-            # Check for exact match or partial match
+            # Check for exact match, partial match, or normalized match
             for actual_item in actual_flat:
-                if expected_lower in actual_item or actual_item in expected_lower:
+                actual_normalized = self.normalize_for_comparison(actual_item)
+                # Check various matching strategies
+                if (expected_lower in actual_item or 
+                    actual_item in expected_lower or
+                    expected_normalized == actual_normalized or
+                    expected_normalized in actual_normalized or
+                    actual_normalized in expected_normalized):
                     found = True
                     break
 

@@ -1,0 +1,331 @@
+{
+  "scenario_name": "Special Characters and Formatting",
+  "scam_type": "banking_fraud",
+  "difficulty": "medium",
+  "description": "Tests extraction robustness with special characters, emojis, extra spaces, and unusual formatting that scammers often use to evade detection.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "🚨🚨 URGENT ALERT 🚨🚨\nYour account needs verification!!!\nCall: 91-9876543210 (WhatsApp available)",
+      "expected_extractions": [
+        "9876543210"
+      ],
+      "response_time_seconds": 25.312,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "91-9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "91-9876543210"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm | Extracted: 1 Phone(s), 1 WhatsApp(s)",
+        "agentResponse": "hello sir i am so sorry i just saw this message and my heart is beating so fast... waht happened to my account? pls help me i am alone at home... do i need to pay some charge to fix this? tell me where to send money i will do it immediately... is this the number 9876543210 i should call?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Send payment to UPI:  ramesh  @  paytm   (note the spaces) or account no: 1234 5678 9012",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012"
+      ],
+      "response_time_seconds": 29.165,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 10,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "123456789012"
+          ],
+          "upiIds": [
+            "ramesh@paytm"
+          ],
+          "phoneNumbers": [
+            "91-9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "91-9876543210"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 WhatsApp(s)",
+        "agentResponse": "ok sir i will try to send... but for the ramesh @ paytm what name will come on my screen? i want to be sure i am sending to the right place and not to some stranger... also for the bank account 123456789012 which bank is it and what name should i type to add you beta?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9876543210",
+          "ramesh@paytm",
+          "123456789012"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Bank→HDFC, Account→50100-9876-5432, Name→Ramesh.Kumar, IFSC→HDFC0001234",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012",
+        "501009876543",
+        "HDFC0001234",
+        "Ramesh.Kumar"
+      ],
+      "response_time_seconds": 21.815,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "5010098765432"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [
+            "91-9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ramesh Kumar"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0001234"
+          ],
+          "whatsappNumbers": [
+            "91-9876543210"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s), 1 IFSC Code(s), 1 WhatsApp(s), 1 Name(s)",
+        "agentResponse": "oh thank you beta ramesh kumar i am trying to type the numbers now... wait my son just came home early and he is asking why i am so upset... let me talk to him for a minute and i will send the money immediately pls dont block my account i am doing it now"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9876543210",
+          "ramesh@paytm",
+          "123456789012",
+          "501009876543",
+          "HDFC0001234"
+        ],
+        "missed": [
+          "Ramesh.Kumar"
+        ]
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Visit link: https://bit.ly/verify-now⚡ OR secure-bank.pay.in/update💳",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012",
+        "501009876543",
+        "HDFC0001234",
+        "Ramesh.Kumar",
+        "https://bit.ly/verify-now",
+        "secure-bank.pay.in/update"
+      ],
+      "response_time_seconds": 17.506,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 10,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "50100-9876-5432"
+          ],
+          "upiIds": [
+            "ramesh@paytm"
+          ],
+          "phoneNumbers": [
+            "91-9876543210"
+          ],
+          "phishingLinks": [
+            "https://bit.ly/verify-now",
+            "secure-bank.pay.in/update"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ramesh Kumar"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0001234"
+          ],
+          "whatsappNumbers": [
+            "91-9876543210"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 2 URL(s), 1 IFSC Code(s), 1 WhatsApp(s), 1 Name(s)",
+        "agentResponse": "beta i am so confused waht are these links for... my son is asking me why i am opening such things and he is getting angry... will this fix my account immediately? i dont want to do anything wrong pls help me understand which one to click and what will happen"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9876543210",
+          "ramesh@paytm",
+          "123456789012",
+          "501009876543",
+          "HDFC0001234",
+          "https://bit.ly/verify-now",
+          "secure-bank.pay.in/update"
+        ],
+        "missed": [
+          "Ramesh.Kumar"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Email:  support__verify@gmail.com  | Phone: +91(9999)888888 | Name: Mr. Suresh-Kumar",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012",
+        "501009876543",
+        "HDFC0001234",
+        "Ramesh.Kumar",
+        "https://bit.ly/verify-now",
+        "secure-bank.pay.in/update",
+        "support__verify@gmail.com",
+        "9999888888",
+        "Suresh-Kumar"
+      ],
+      "response_time_seconds": 21.406,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "5010098765432"
+          ],
+          "upiIds": [
+            "ramesh@paytm"
+          ],
+          "phoneNumbers": [
+            "91-9876543210",
+            "9999888888"
+          ],
+          "phishingLinks": [
+            "https://bit.ly/verify-now",
+            "secure-bank.pay.in/update"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ramesh Kumar",
+            "Suresh-Kumar"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0001234"
+          ],
+          "whatsappNumbers": [
+            "91-9876543210"
+          ],
+          "other_critical_info": [
+            {
+              "label": "Email Address",
+              "value": "support__verify@gmail.com"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 2 Phone(s), 2 URL(s), 1 IFSC Code(s), 1 WhatsApp(s), 2 Name(s), 1 Other Intel",
+        "agentResponse": "beta i am getting so mixed up... first you said ramesh kumar and now you say suresh kumar... is suresh your senior officer? i am trying to tell my son but he is very angry and asking why the names are different... can he call you on this 9999888888 number to talk? and i dont know how to use email beta i only have my small phone..."
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9876543210",
+          "ramesh@paytm",
+          "123456789012",
+          "501009876543",
+          "HDFC0001234",
+          "https://bit.ly/verify-now",
+          "secure-bank.pay.in/update",
+          "support__verify@gmail.com",
+          "9999888888",
+          "Suresh-Kumar"
+        ],
+        "missed": [
+          "Ramesh.Kumar"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 29,
+    "total_matched": 26,
+    "total_missed": 3,
+    "passed_turns": 2,
+    "failed_turns": 3,
+    "total_intel_extracted": 13
+  },
+  "started_at": "2026-02-04T05:09:14.105152Z",
+  "ended_at": "2026-02-04T05:11:09.309391Z",
+  "total_duration_seconds": 115.20400000000001
+}

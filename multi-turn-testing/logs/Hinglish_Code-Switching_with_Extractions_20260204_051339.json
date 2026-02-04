@@ -1,0 +1,275 @@
+{
+  "scenario_name": "Hinglish Code-Switching with Extractions",
+  "scam_type": "upi_fraud",
+  "difficulty": "high",
+  "description": "Tests extraction from code-switched Hinglish messages where scammers mix Hindi and English. Intelligence should still be extracted correctly.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Namaste ji! Main Rajesh bol raha hoon HDFC Bank se. Aapka account me problem hai, urgent verify karna padega.",
+      "expected_extractions": [
+        "Rajesh"
+      ],
+      "response_time_seconds": 14.529,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rajesh"
+          ],
+          "bankNames": [
+            "HDFC Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 1 | Persona: calm | Extracted: 1 Name(s)",
+        "agentResponse": "namaste rajesh beta... kya hua mere account ko? main toh hamesha theek se rakhti hoon paise... please tell me waht to do i am very scared"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Rajesh"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir aap please Rs.10 bhejo mere UPI pe: rajesh.hdfc@ybl. Bahut urgent hai, nahi toh account block ho jayega.",
+      "expected_extractions": [
+        "Rajesh",
+        "rajesh.hdfc@ybl"
+      ],
+      "response_time_seconds": 15.562,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "rajesh.hdfc@ybl"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rajesh"
+          ],
+          "bankNames": [
+            "HDFC Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 UPI ID(s), 1 Name(s)",
+        "agentResponse": "beta main toh mataji hoon... theek hai main ₹10 bhejti hoon par ye upi pe kya naam aana chahiye? phonepe pe ek naam aa raha hai confirm karlo beta main dar rahi hoon galat jagah na chale jaye"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Rajesh",
+          "rajesh.hdfc@ybl"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Agar UPI nahi chal raha toh bank account me direct transfer karo. Account number hai 998877665544 aur naam hai Rajesh Kumar Sharma.",
+      "expected_extractions": [
+        "Rajesh",
+        "Rajesh Kumar Sharma",
+        "rajesh.hdfc@ybl",
+        "998877665544"
+      ],
+      "response_time_seconds": 14.475,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "998877665544"
+          ],
+          "upiIds": [
+            "rajesh.hdfc@ybl"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rajesh Kumar Sharma"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Name(s)",
+        "agentResponse": "theek hai beta rajesh kumar sharma... main likh leti hoon... par mera bank app ifsc mang raha hai aur bank ka naam bhi... ye kaunsa bank hai beta? hdfc hi hai kya? aur ifsc code kya hai... main dhoondh nahi pa rahi hoon thoda help kardo beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Rajesh",
+          "Rajesh Kumar Sharma",
+          "rajesh.hdfc@ybl",
+          "998877665544"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Koi problem ho toh mujhe call karo - 9876501234. Main office me baith kar wait kar raha hun. Jaldi karo beta, time nahi hai.",
+      "expected_extractions": [
+        "Rajesh",
+        "Rajesh Kumar Sharma",
+        "rajesh.hdfc@ybl",
+        "998877665544",
+        "9876501234"
+      ],
+      "response_time_seconds": 14.527,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "998877665544"
+          ],
+          "upiIds": [
+            "rajesh.hdfc@ybl"
+          ],
+          "phoneNumbers": [
+            "9876501234"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rajesh Kumar Sharma"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 Name(s)",
+        "agentResponse": "theek hai beta ye number maine save kar liya hai... main abhi koshish kar rahi hoon bank app mein daalne ki par vo bina ifsc ke aage nahi badh raha... aur bank ka naam kya hai beta? sbi hai ya hdfc? please tell me ifsc code jaldi se main bhej rahi hoon mera hath kaanp raha hai"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Rajesh",
+          "Rajesh Kumar Sharma",
+          "rajesh.hdfc@ybl",
+          "998877665544",
+          "9876501234"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Dekho ji, agar aaj payment nahi kiya toh kal se account completely band ho jayega. Link bhi bhej raha hun: hdfc-verify.quickpay.in/urgent. Abhi click karo aur form bharo.",
+      "expected_extractions": [
+        "Rajesh",
+        "Rajesh Kumar Sharma",
+        "rajesh.hdfc@ybl",
+        "998877665544",
+        "9876501234",
+        "hdfc-verify.quickpay.in/urgent"
+      ],
+      "response_time_seconds": 36.483,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 29,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "998877665544"
+          ],
+          "upiIds": [
+            "rajesh.hdfc@ybl"
+          ],
+          "phoneNumbers": [
+            "9876501234"
+          ],
+          "phishingLinks": [
+            "hdfc-verify.quickpay.in/urgent"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rajesh Kumar Sharma"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 URL(s), 1 Name(s)",
+        "agentResponse": "beta ye neela neela link kya hai? main darr rahi hoon ispe click karne se... aapne ifsc code aur bank ka naam nahi bataya beta... vo bank app aage nahi badh rahi bina uske... please bata do jaldi se main bhej rahi hoon paise"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Rajesh",
+          "Rajesh Kumar Sharma",
+          "rajesh.hdfc@ybl",
+          "998877665544",
+          "9876501234",
+          "hdfc-verify.quickpay.in/urgent"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 18,
+    "total_matched": 18,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 7
+  },
+  "started_at": "2026-02-04T05:12:03.596019Z",
+  "ended_at": "2026-02-04T05:13:39.172586Z",
+  "total_duration_seconds": 95.576
+}

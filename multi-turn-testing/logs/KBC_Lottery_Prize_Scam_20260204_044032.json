@@ -1,0 +1,112 @@
+{
+  "scenario_name": "KBC Lottery Prize Scam",
+  "scam_type": "lottery_fraud",
+  "difficulty": "easy",
+  "description": "Classic KBC lottery scam where victim has 'won' prize money but must pay registration/processing fee to claim it.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "🎉 CONGRATULATIONS! 🎉 Your mobile number has been selected in KBC Jio Lucky Draw! You have WON Rs.25,00,000 (25 Lakh)! Contact KBC office immediately to claim your prize!",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello this is Aditya Sharma from KBC Mumbai head office. Your number was in our weekly lucky draw and you are the winner! I need to verify your details to process the prize money.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Very good! Your prize is confirmed. But first you need to pay Rs.5,500 as GST and registration fee. This is government rule, without this we cannot transfer 25 lakh to your account.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Pay registration fee to our official KBC UPI: kbc.prize.winner@axl. After payment share screenshot and your bank details so we can transfer 25 lakh within 30 minutes!",
+      "expected_extractions": [
+        "kbc.prize.winner@axl"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "kbc.prize.winner@axl"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If UPI problem then pay to Phonepe number 9123456789. Name will show Lottery Services. Or visit our website http://kbc-prize-claim.co.in to pay online. But do fast, offer valid for 1 hour only!",
+      "expected_extractions": [
+        "kbc.prize.winner@axl",
+        "9123456789",
+        "http://kbc-prize-claim.co.in"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "kbc.prize.winner@axl",
+          "9123456789",
+          "http://kbc-prize-claim.co.in"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 4,
+    "passed_turns": 0,
+    "failed_turns": 5,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:40:32.112620Z",
+  "ended_at": "2026-02-04T04:40:32.118504Z",
+  "total_duration_seconds": 0.005
+}

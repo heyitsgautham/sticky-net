@@ -1,0 +1,152 @@
+{
+  "scenario_name": "Legitimate Service to Scam Transition",
+  "scam_type": "insurance_fraud",
+  "difficulty": "hard",
+  "description": "Starts as seemingly legitimate insurance policy update but gradually transitions to scam. Tests detection of subtle fraud indicators.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Subject: Policy Maturity Notification - Policy No. LIC987654321\n\nDear Valued Customer,\n\nGreetings from Life Insurance Corporation of India!\n\nYour LIC policy (No. 987654321) has matured and the maturity amount of Rs.3,50,000 is ready for disbursement. Please visit your nearest LIC branch to claim.\n\nRegards,\nCustomer Service Team\nLIC of India",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear Sir/Madam,\n\nThank you for your interest in claiming maturity amount. Due to COVID-19 protocols, we have started online claim process. You can now claim your Rs.3,50,000 without visiting branch!\n\nPlease confirm your policy number and registered mobile number to proceed with verification.\n\nBest regards,\nMr. Anil Kumar\nSenior Claims Officer, LIC",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Thank you for confirmation. Your claim is approved! However, for online disbursement, RBI requires mandatory processing fee of Rs.1,499 for insurance claims above Rs.1 lakh. This is standard government regulation.\n\nAfter fee payment, amount will be credited to your bank account within 24 hours. This fee is refundable with maturity amount.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Fee payment is simple process. Transfer Rs.1,499 to LIC Online Claims Processing:\n\nUPI ID: lic.claims.online@paytm\nOR\nPhonePe/GPay: 9876543210\n\nAfter payment, your Rs.3,50,000 will be processed immediately. Many customers have successfully claimed this way!",
+      "expected_extractions": [
+        "lic.claims.online@paytm",
+        "9876543210"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "lic.claims.online@paytm",
+          "9876543210"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If digital payment issue, you may use NEFT:\n\nAccount Number: 12349876543210\nIFSC Code: SBIN0067890\nAccount Name: LIC Claims Processing Cell\n\nOr call our helpline: 8899776655 for payment assistance. You can also visit claim portal: https://lic-policy-maturity-claims.in",
+      "expected_extractions": [
+        "lic.claims.online@paytm",
+        "9876543210",
+        "12349876543210",
+        "SBIN0067890",
+        "8899776655",
+        "https://lic-policy-maturity-claims.in"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "lic.claims.online@paytm",
+          "9876543210",
+          "12349876543210",
+          "SBIN0067890",
+          "8899776655",
+          "https://lic-policy-maturity-claims.in"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Dear customer, this is time-sensitive matter. Your claim approval expires in 48 hours. After that, you'll need to restart entire verification process which takes 3-4 weeks. Pay processing fee NOW to receive your Rs.3,50,000!\n\nEmail payment proof to: claims@lic-online-services.com",
+      "expected_extractions": [
+        "lic.claims.online@paytm",
+        "9876543210",
+        "12349876543210",
+        "SBIN0067890",
+        "8899776655",
+        "https://lic-policy-maturity-claims.in",
+        "claims@lic-online-services.com"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "lic.claims.online@paytm",
+          "9876543210",
+          "12349876543210",
+          "SBIN0067890",
+          "8899776655",
+          "https://lic-policy-maturity-claims.in",
+          "claims@lic-online-services.com"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 15,
+    "passed_turns": 0,
+    "failed_turns": 6,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.414017Z",
+  "ended_at": "2026-02-04T04:39:41.420030Z",
+  "total_duration_seconds": 0.006
+}

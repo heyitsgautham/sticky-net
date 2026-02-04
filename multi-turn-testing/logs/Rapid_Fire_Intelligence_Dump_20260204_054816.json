@@ -1,0 +1,226 @@
+{
+  "scenario_name": "Rapid Fire Intelligence Dump",
+  "scam_type": "banking_fraud",
+  "difficulty": "easy",
+  "description": "Edge case where scammer immediately dumps all contact information in first 2-3 messages and demands urgent action. Tests quick detection and extraction.",
+  "total_turns": 3,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT! Your ICICI account is compromised! Transfer money to safe account NOW! Account: 11223344556677, IFSC: ICIC0001234, UPI: safe.account@paytm, Call: 9876543210 IMMEDIATELY! NO TIME TO WASTE!",
+      "expected_extractions": [
+        "11223344556677",
+        "ICIC0001234",
+        "safe.account@paytm",
+        "9876543210"
+      ],
+      "response_time_seconds": 16.401,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "11223344556677"
+          ],
+          "upiIds": [
+            "safe.account@paytm"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "ICICI"
+          ],
+          "ifscCodes": [
+            "ICIC0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 IFSC Code(s)",
+        "agentResponse": "oh my god beta i am so scared my icici account has all my savings pls help me... i am trying to type the upi but my phone is asking for name to verify... what name will show there? i dont want money to go to wrong place pls tell me name beta i am very worried"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "11223344556677",
+          "ICIC0001234",
+          "safe.account@paytm",
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "WHY DELAY??? Your Rs.2,50,000 will be STOLEN! Pay Rs.500 security deposit to safe.account@paytm OR 9876543210 NOW! Also WhatsApp: 8899776655, Email: urgent@saveaccount.com, Website: http://icici-emergency.save RIGHT NOW!!!",
+      "expected_extractions": [
+        "11223344556677",
+        "ICIC0001234",
+        "safe.account@paytm",
+        "9876543210",
+        "8899776655",
+        "urgent@saveaccount.com",
+        "http://icici-emergency.save"
+      ],
+      "response_time_seconds": 17.775,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 10,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "11223344556677"
+          ],
+          "upiIds": [
+            "safe.account@paytm"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [
+            "http://icici-emergency.save"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "ICICI"
+          ],
+          "ifscCodes": [
+            "ICIC0001234"
+          ],
+          "whatsappNumbers": [
+            "8899776655"
+          ],
+          "other_critical_info": [
+            {
+              "label": "Email",
+              "value": "urgent@saveaccount.com"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 URL(s), 1 IFSC Code(s), 1 WhatsApp(s), 1 Other Intel",
+        "agentResponse": "beta pls dont shout i am very scared... i typed teh upi id in paytm but it is asking for name to verify... what name will show there? i dont want my pension money to go to someone else... pls tell name beta then i will send 500 immediately"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "11223344556677",
+          "ICIC0001234",
+          "safe.account@paytm",
+          "9876543210",
+          "8899776655",
+          "urgent@saveaccount.com",
+          "http://icici-emergency.save"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "FINAL WARNING! POLICE COMING! PAY NOW: 9876543210, 8899776655, 7788990011, safe.account@paytm, emergency.transfer@okaxis, Account 11223344556677, Account 99887766554433! DO IT! NO QUESTIONS! MOVE FAST!!!",
+      "expected_extractions": [
+        "11223344556677",
+        "ICIC0001234",
+        "safe.account@paytm",
+        "9876543210",
+        "8899776655",
+        "urgent@saveaccount.com",
+        "http://icici-emergency.save",
+        "7788990011",
+        "emergency.transfer@okaxis",
+        "99887766554433"
+      ],
+      "response_time_seconds": 20.264,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "11223344556677",
+            "99887766554433"
+          ],
+          "upiIds": [
+            "safe.account@paytm",
+            "emergency.transfer@okaxis"
+          ],
+          "phoneNumbers": [
+            "9876543210",
+            "8899776655",
+            "7788990011"
+          ],
+          "phishingLinks": [
+            "http://icici-emergency.save"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "ICICI Bank",
+            "Axis Bank"
+          ],
+          "ifscCodes": [
+            "ICIC0001234"
+          ],
+          "whatsappNumbers": [
+            "8899776655"
+          ],
+          "other_critical_info": [
+            {
+              "label": "Email",
+              "value": "urgent@saveaccount.com"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 2 Bank Account(s), 2 UPI ID(s), 3 Phone(s), 1 URL(s), 1 IFSC Code(s), 1 WhatsApp(s), 1 Other Intel",
+        "agentResponse": "beta pls dont call police i am a retired teacher i will pay... my bp is high and i cant find my glasses... i am typing the upi but it is asking for beneficiary name to verify... what name will come? is it icici bank name or your name? pls tell me name so i can click pay beta i am very scared"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "11223344556677",
+          "ICIC0001234",
+          "safe.account@paytm",
+          "9876543210",
+          "8899776655",
+          "urgent@saveaccount.com",
+          "http://icici-emergency.save",
+          "7788990011",
+          "emergency.transfer@okaxis",
+          "99887766554433"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 21,
+    "total_matched": 21,
+    "total_missed": 0,
+    "passed_turns": 3,
+    "failed_turns": 0,
+    "total_intel_extracted": 13
+  },
+  "started_at": "2026-02-04T05:47:21.950601Z",
+  "ended_at": "2026-02-04T05:48:16.390970Z",
+  "total_duration_seconds": 54.44
+}

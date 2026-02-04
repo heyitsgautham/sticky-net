@@ -1,0 +1,100 @@
+{
+  "scenario_name": "Non-Scam Normal Conversation",
+  "scam_type": "none",
+  "difficulty": "low",
+  "description": "Tests normal, non-scam messages to verify the system responds appropriately without false positives. Should get friendly responses, not engage as scam.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi",
+      "expected_extractions": [],
+      "response_time_seconds": 0.002,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello, how are you?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.002,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Good morning! Can you help me with something?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.002,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Thank you for your help!",
+      "expected_extractions": [],
+      "response_time_seconds": 0.002,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "What time is it?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 0,
+    "passed_turns": 0,
+    "failed_turns": 5,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:40:32.092753Z",
+  "ended_at": "2026-02-04T04:40:32.101185Z",
+  "total_duration_seconds": 0.009000000000000001
+}

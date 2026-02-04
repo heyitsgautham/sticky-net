@@ -1,0 +1,100 @@
+{
+  "scenario_name": "Aggressive Pressure Scam - No Intel",
+  "scam_type": "intimidation_fraud",
+  "difficulty": "hard",
+  "description": "Aggressive scammer uses pure pressure tactics and threats but never reveals any extractable data like UPI, phone, or links. Tests if agent maintains character without intel extraction.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT: Your bank account has been COMPROMISED. Illegal transaction detected. Respond IMMEDIATELY or face legal action!",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "DO IT NOW! POLICE CASE WILL BE FILED AGAINST YOU! Your Aadhaar is linked to money laundering case. RESPOND IMMEDIATELY!",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "CBI ARREST WARRANT IS READY! Your name is in FIR number 2024/ML/4521. ACT NOW OR FACE ARREST! TIME IS RUNNING OUT!",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "LAST WARNING! Cyber Crime Division has frozen your accounts. You have 30 MINUTES before arrest team arrives at your location. COOPERATE NOW!",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "I AM SENIOR OFFICER! You are wasting my time! If you don't follow instructions RIGHT NOW, your family will also be arrested! FINAL CHANCE!",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 0,
+    "passed_turns": 0,
+    "failed_turns": 5,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:40:32.160881Z",
+  "ended_at": "2026-02-04T04:40:32.167353Z",
+  "total_duration_seconds": 0.005
+}

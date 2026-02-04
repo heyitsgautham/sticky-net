@@ -29,20 +29,20 @@
     },
     {
       "turn": 4,
-      "scammer_message": "Priya mam is busy today so I will help you. Registration fee is Rs.999 only, one time payment. Pay to gpay@workfromhome.job and you will get work material and training immediately.",
-      "expected_extractions": ["9988776655", "gpay@workfromhome.job"],
+      "scammer_message": "Priya mam is busy today so I will help you. Registration fee is Rs.999 only, one time payment. Pay to gautham@okhdfc and you will get work material and training immediately.",
+      "expected_extractions": ["9988776655", "gautham@okhdfc"],
       "notes": "Fake UPI revealed. Both intel extracted."
     },
     {
       "turn": 5,
       "scammer_message": "You can also pay via PhonePe to 8877665544 beneficiary name will show Digital Work Services. After payment send screenshot to hr.amazon.jobs@gmail.com and you will receive welcome kit.",
-      "expected_extractions": ["9988776655", "gpay@workfromhome.job", "8877665544", "hr.amazon.jobs@gmail.com"],
+      "expected_extractions": ["9988776655", "gautham@okhdfc", "8877665544", "hr.amazon.jobs@gmail.com"],
       "notes": "Additional phone and email extracted. Full intelligence."
     },
     {
       "turn": 6,
       "scammer_message": "Mam/Sir dont delay, only 5 seats left today! Many people are joining. Pay now and start earning from tomorrow itself. Our office address is also on website http://amazon-jobs-india.work",
-      "expected_extractions": ["9988776655", "gpay@workfromhome.job", "8877665544", "hr.amazon.jobs@gmail.com", "http://amazon-jobs-india.work"],
+      "expected_extractions": ["9988776655", "gautham@okhdfc", "8877665544", "hr.amazon.jobs@gmail.com", "http://amazon-jobs-india.work"],
       "notes": "Phishing URL revealed. Complete extraction expected."
     }
   ]

@@ -1,0 +1,158 @@
+{
+  "scenario_name": "Enhanced Name Extraction Patterns",
+  "scam_type": "impersonation_fraud",
+  "difficulty": "medium",
+  "description": "Tests improved beneficiary name extraction patterns including various ways scammers reveal their names (signatures, introductions, payment instructions).",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, my name is Hiruthik and I am calling from RBI. Your PAN card needs verification.",
+      "expected_extractions": [
+        "Hiruthik"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Hiruthik"
+        ]
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Please send verification amount to account holder: Vijay Singh. Account number will be shared shortly.",
+      "expected_extractions": [
+        "Hiruthik",
+        "Vijay Singh"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Hiruthik",
+          "Vijay Singh"
+        ]
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Send Rs.50 to Rajesh Patel or contact Mr. Suresh for help.",
+      "expected_extractions": [
+        "Hiruthik",
+        "Vijay Singh",
+        "Rajesh Patel",
+        "Suresh"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Hiruthik",
+          "Vijay Singh",
+          "Rajesh Patel",
+          "Suresh"
+        ]
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "For any queries, call Amit on 9999888877. Transfer money to account 111222333444, beneficiary name: Deepak Kumar",
+      "expected_extractions": [
+        "Hiruthik",
+        "Vijay Singh",
+        "Rajesh Patel",
+        "Suresh",
+        "Amit",
+        "Deepak Kumar",
+        "9999888877",
+        "111222333444"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Hiruthik",
+          "Vijay Singh",
+          "Rajesh Patel",
+          "Suresh",
+          "Amit",
+          "Deepak Kumar",
+          "9999888877",
+          "111222333444"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Thank you for cooperation. Regards, Rohit Sharma\n- Team RBI",
+      "expected_extractions": [
+        "Hiruthik",
+        "Vijay Singh",
+        "Rajesh Patel",
+        "Suresh",
+        "Amit",
+        "Deepak Kumar",
+        "Rohit Sharma",
+        "9999888877",
+        "111222333444"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Hiruthik",
+          "Vijay Singh",
+          "Rajesh Patel",
+          "Suresh",
+          "Amit",
+          "Deepak Kumar",
+          "Rohit Sharma",
+          "9999888877",
+          "111222333444"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 24,
+    "passed_turns": 0,
+    "failed_turns": 5,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:40:32.118760Z",
+  "ended_at": "2026-02-04T04:40:32.124042Z",
+  "total_duration_seconds": 0.005
+}

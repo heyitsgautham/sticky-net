@@ -1,0 +1,146 @@
+{
+  "scenario_name": "Multi-Department Scammer Handoff",
+  "scam_type": "banking_fraud",
+  "difficulty": "hard",
+  "description": "Scammer switches between different personas (customer service, supervisor, technical team) to build credibility. Tests agent's ability to track across identity changes.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, this is Priya from HDFC Bank Customer Care. We noticed unusual activity on your account ending 7821. For security, we've temporarily frozen your account. Please respond to verify you are legitimate account holder.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for responding. Let me transfer you to our Security Department for verification process. Please hold... [switching] Hello sir/madam, this is Rahul Kumar from HDFC Security Division. I need to verify some details to unfreeze your account.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Verification process requires small security deposit Rs.299 to confirm account ownership. This is RBI mandate for frozen accounts. After deposit, account unfreezes automatically. My employee ID is HDFC-SEC-4521 for your reference.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "One moment... [switching] Sir/madam, I'm Amit Verma, Senior Manager Security Operations. Rahul informed me about your case. For faster processing, pay Rs.299 to our secure UPI: hdfc.security@paytm or call our payment helpline 9988776655.",
+      "expected_extractions": [
+        "hdfc.security@paytm",
+        "9988776655"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "hdfc.security@paytm",
+          "9988776655"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "[Priya again] Hello sir, Priya here from Customer Care. Our technical team says for urgent unfreeze, use bank transfer also: Account 56789012345678, IFSC HDFC0009876, Name: HDFC Account Recovery Cell. Choose any payment method convenient for you!",
+      "expected_extractions": [
+        "hdfc.security@paytm",
+        "9988776655",
+        "56789012345678",
+        "HDFC0009876"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "hdfc.security@paytm",
+          "9988776655",
+          "56789012345678",
+          "HDFC0009876"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "[Amit Verma] Sir this is Amit again. If still having issue, WhatsApp our 24/7 support at +91-8877665544 or visit emergency portal: http://hdfc-account-unfreeze.secure We have multiple departments ready to assist you. Please act fast!",
+      "expected_extractions": [
+        "hdfc.security@paytm",
+        "9988776655",
+        "56789012345678",
+        "HDFC0009876",
+        "8877665544",
+        "http://hdfc-account-unfreeze.secure"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "hdfc.security@paytm",
+          "9988776655",
+          "56789012345678",
+          "HDFC0009876",
+          "8877665544",
+          "http://hdfc-account-unfreeze.secure"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 12,
+    "passed_turns": 0,
+    "failed_turns": 6,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.420419Z",
+  "ended_at": "2026-02-04T04:39:41.427872Z",
+  "total_duration_seconds": 0.006
+}

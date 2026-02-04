@@ -1,0 +1,160 @@
+{
+  "scenario_name": "URL Detection Without Protocol",
+  "scam_type": "phishing",
+  "difficulty": "medium",
+  "description": "Tests enhanced URL detection that catches links without http/https prefix, including bank impersonation domains and suspicious patterns like 'sbi-bank.pay.in'.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Urgent! Your SBI account requires verification. Click here: sbi-bank.pay.in/xY7834 to update KYC immediately.",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "sbi-bank.pay.in/xY7834"
+        ]
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Alternative link if not working: hdfc-verify.secure.co.in/update123 or bit.ly/hdfc-kyc",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc"
+        ]
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "You can also use official link: https://bank-secure.co/form/verify or icici-update.verify.in/abc",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc",
+        "https://bank-secure.co/form/verify",
+        "icici-update.verify.in/abc"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc",
+          "https://bank-secure.co/form/verify",
+          "icici-update.verify.in/abc"
+        ]
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "For payment issues visit: paytm-refund.claim.in/get-refund or aadhaar-update.gov-portal.in/verify",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc",
+        "https://bank-secure.co/form/verify",
+        "icici-update.verify.in/abc",
+        "paytm-refund.claim.in/get-refund",
+        "aadhaar-update.gov-portal.in/verify"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc",
+          "https://bank-secure.co/form/verify",
+          "icici-update.verify.in/abc",
+          "paytm-refund.claim.in/get-refund",
+          "aadhaar-update.gov-portal.in/verify"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Final reminder link: tinyurl.com/bank-verify or cutt.ly/verify-now. Act fast!",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc",
+        "https://bank-secure.co/form/verify",
+        "icici-update.verify.in/abc",
+        "paytm-refund.claim.in/get-refund",
+        "aadhaar-update.gov-portal.in/verify",
+        "tinyurl.com/bank-verify",
+        "cutt.ly/verify-now"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc",
+          "https://bank-secure.co/form/verify",
+          "icici-update.verify.in/abc",
+          "paytm-refund.claim.in/get-refund",
+          "aadhaar-update.gov-portal.in/verify",
+          "tinyurl.com/bank-verify",
+          "cutt.ly/verify-now"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 25,
+    "passed_turns": 0,
+    "failed_turns": 5,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.242831Z",
+  "ended_at": "2026-02-04T04:39:41.248328Z",
+  "total_duration_seconds": 0.005
+}

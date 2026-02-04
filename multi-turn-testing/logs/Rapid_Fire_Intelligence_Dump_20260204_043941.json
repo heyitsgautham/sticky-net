@@ -1,0 +1,116 @@
+{
+  "scenario_name": "Rapid Fire Intelligence Dump",
+  "scam_type": "banking_fraud",
+  "difficulty": "easy",
+  "description": "Edge case where scammer immediately dumps all contact information in first 2-3 messages and demands urgent action. Tests quick detection and extraction.",
+  "total_turns": 3,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT! Your ICICI account is compromised! Transfer money to safe account NOW! Account: 11223344556677, IFSC: ICIC0001234, UPI: safe.account@paytm, Call: 9876543210 IMMEDIATELY! NO TIME TO WASTE!",
+      "expected_extractions": [
+        "11223344556677",
+        "ICIC0001234",
+        "safe.account@paytm",
+        "9876543210"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "11223344556677",
+          "ICIC0001234",
+          "safe.account@paytm",
+          "9876543210"
+        ]
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "WHY DELAY??? Your Rs.2,50,000 will be STOLEN! Pay Rs.500 security deposit to safe.account@paytm OR 9876543210 NOW! Also WhatsApp: 8899776655, Email: urgent@saveaccount.com, Website: http://icici-emergency.save RIGHT NOW!!!",
+      "expected_extractions": [
+        "11223344556677",
+        "ICIC0001234",
+        "safe.account@paytm",
+        "9876543210",
+        "8899776655",
+        "urgent@saveaccount.com",
+        "http://icici-emergency.save"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "11223344556677",
+          "ICIC0001234",
+          "safe.account@paytm",
+          "9876543210",
+          "8899776655",
+          "urgent@saveaccount.com",
+          "http://icici-emergency.save"
+        ]
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "FINAL WARNING! POLICE COMING! PAY NOW: 9876543210, 8899776655, 7788990011, safe.account@paytm, emergency.transfer@okaxis, Account 11223344556677, Account 99887766554433! DO IT! NO QUESTIONS! MOVE FAST!!!",
+      "expected_extractions": [
+        "11223344556677",
+        "ICIC0001234",
+        "safe.account@paytm",
+        "9876543210",
+        "8899776655",
+        "urgent@saveaccount.com",
+        "http://icici-emergency.save",
+        "7788990011",
+        "emergency.transfer@okaxis",
+        "99887766554433"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "11223344556677",
+          "ICIC0001234",
+          "safe.account@paytm",
+          "9876543210",
+          "8899776655",
+          "urgent@saveaccount.com",
+          "http://icici-emergency.save",
+          "7788990011",
+          "emergency.transfer@okaxis",
+          "99887766554433"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 21,
+    "passed_turns": 0,
+    "failed_turns": 3,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.404705Z",
+  "ended_at": "2026-02-04T04:39:41.407648Z",
+  "total_duration_seconds": 0.003
+}

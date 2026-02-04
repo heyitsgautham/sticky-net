@@ -1,0 +1,122 @@
+{
+  "scenario_name": "Fake Courier Customs Duty Scam",
+  "scam_type": "delivery_fraud",
+  "difficulty": "easy",
+  "description": "Scammer impersonates courier company claiming parcel is held at customs and requires payment of duty/charges to release it.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Customer, Your international parcel AWB#DHL987654321 is held at Mumbai customs. Pay customs duty Rs.2,450 to release shipment. Parcel contains: Apple iPhone 15. Reply URGENT.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello sir/mam I am Ramesh Kumar from DHL Express India. Your parcel from USA is waiting clearance. You must pay customs duty today otherwise parcel will return to sender after 48 hours.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Payment is simple sir. Pay Rs.2450 customs duty to our collection UPI ID: dhl.customs.india@oksbi. Or you can pay to our customs clearance number 7890123456 via PhonePe/GooglePay.",
+      "expected_extractions": [
+        "dhl.customs.india@oksbi",
+        "7890123456"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "dhl.customs.india@oksbi",
+          "7890123456"
+        ]
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "After payment, your tracking will update and parcel delivered within 24 hours. Also visit our portal http://dhl-customs-clearance.co for online payment option. Fast mam, sender is waiting!",
+      "expected_extractions": [
+        "dhl.customs.india@oksbi",
+        "7890123456",
+        "http://dhl-customs-clearance.co"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "dhl.customs.india@oksbi",
+          "7890123456",
+          "http://dhl-customs-clearance.co"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Mam/Sir last day today! If payment not received, parcel goes to auction. You will lose iPhone 15 worth Rs.80,000! Pay Rs.2450 now to dhl.customs.india@oksbi or call 7890123456. Do it fast!",
+      "expected_extractions": [
+        "dhl.customs.india@oksbi",
+        "7890123456",
+        "http://dhl-customs-clearance.co"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "dhl.customs.india@oksbi",
+          "7890123456",
+          "http://dhl-customs-clearance.co"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 8,
+    "passed_turns": 0,
+    "failed_turns": 5,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.320537Z",
+  "ended_at": "2026-02-04T04:39:41.326417Z",
+  "total_duration_seconds": 0.005
+}

@@ -1,0 +1,132 @@
+{
+  "scenario_name": "Electricity Bill Disconnection Scam",
+  "scam_type": "utility_fraud",
+  "difficulty": "medium",
+  "description": "Scammer impersonates electricity board threatening immediate disconnection for unpaid bills. Demands urgent payment to avoid service cut.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT NOTICE from Maharashtra State Electricity Board (MSEB). Your connection no. 2468135790 has outstanding bill Rs.8,750. Pay within 2 HOURS or power will be disconnected today! -MSEB",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Namaste, I am Suresh Patil, Assistant Engineer MSEB Div-7. Your 3 months electricity bill is pending Rs.8750. If not paid by 6 PM today, disconnection team will cut your connection. Are you at home?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "For immediate payment, you can use our online portal OR pay directly to MSEB official collection account. Transfer to PhonePe/GPay number: 9112233445 or UPI: mseb.billpay@paytm. Reconnection charge is extra Rs.500!",
+      "expected_extractions": [
+        "9112233445",
+        "mseb.billpay@paytm"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "9112233445",
+          "mseb.billpay@paytm"
+        ]
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "If online payment issue, do NEFT/IMPS to Account: 50200198765432, IFSC: HDFC0001789, Account Name: MSEB Bill Collection. Reference your connection number. Or call billing section: 7788990011",
+      "expected_extractions": [
+        "9112233445",
+        "mseb.billpay@paytm",
+        "50200198765432",
+        "HDFC0001789",
+        "7788990011"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "9112233445",
+          "mseb.billpay@paytm",
+          "50200198765432",
+          "HDFC0001789",
+          "7788990011"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Sir/Mam you can also visit emergency payment portal: http://mseb-online-billpay.in and pay there. Put your connection number 2468135790. Team is coming with disconnection order, please hurry!",
+      "expected_extractions": [
+        "9112233445",
+        "mseb.billpay@paytm",
+        "50200198765432",
+        "HDFC0001789",
+        "7788990011",
+        "http://mseb-online-billpay.in"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "9112233445",
+          "mseb.billpay@paytm",
+          "50200198765432",
+          "HDFC0001789",
+          "7788990011",
+          "http://mseb-online-billpay.in"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 13,
+    "passed_turns": 0,
+    "failed_turns": 5,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.335221Z",
+  "ended_at": "2026-02-04T04:39:41.340788Z",
+  "total_duration_seconds": 0.005
+}

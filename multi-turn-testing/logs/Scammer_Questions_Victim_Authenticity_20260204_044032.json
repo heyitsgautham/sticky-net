@@ -1,0 +1,134 @@
+{
+  "scenario_name": "Scammer Questions Victim Authenticity",
+  "scam_type": "banking_fraud",
+  "difficulty": "hard",
+  "description": "Edge case where scammer becomes suspicious of victim's responses and starts asking verification questions. Tests agent's ability to recover and maintain believability.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, this is State Bank of India fraud prevention team. We detected suspicious activity on your account ending 8923. Is this you?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir/Madam, someone tried to transfer Rs.50,000 from your account to unknown beneficiary. We have temporarily blocked your account. To unblock, verify your identity by paying Rs.100 security deposit.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Wait... you seem too willing to pay. Are you really account holder? What is your date of birth? And mother's maiden name? Also tell me your account balance, I will verify from system.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Hmm okay. But why you didn't ask my employee ID or office phone number? Real customers always ask these things. Are you from cyber police trying to trap me? Tell me truth!",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Okay okay sorry sir/madam. I have to be careful these days. My employee ID is SBI4521 and office number is 7766554433. Now pay Rs.100 to sbi.security@paytm to unblock your account immediately.",
+      "expected_extractions": [
+        "7766554433",
+        "sbi.security@paytm"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "7766554433",
+          "sbi.security@paytm"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "If UPI problem, transfer to Account: 99887766554433, IFSC: HDFC0009876, Name: SBI Fraud Prevention Cell. Or visit verification portal http://sbi-account-verify.info for online unblock.",
+      "expected_extractions": [
+        "7766554433",
+        "sbi.security@paytm",
+        "99887766554433",
+        "HDFC0009876",
+        "http://sbi-account-verify.info"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "7766554433",
+          "sbi.security@paytm",
+          "99887766554433",
+          "HDFC0009876",
+          "http://sbi-account-verify.info"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 7,
+    "passed_turns": 0,
+    "failed_turns": 6,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:40:32.261635Z",
+  "ended_at": "2026-02-04T04:40:32.268238Z",
+  "total_duration_seconds": 0.006
+}

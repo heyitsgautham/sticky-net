@@ -1,0 +1,166 @@
+{
+  "scenario_name": "Product Recommendation to Fake Payment Scam",
+  "scam_type": "ecommerce_fraud",
+  "difficulty": "high",
+  "description": "Scammer discusses shopping and products casually, then offers exclusive deals requiring payment to personal account. Tests e-commerce scam detection.",
+  "total_turns": 7,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Bro! Amazon sale dekha kya? iPhone pe achha discount hai iss baar.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Haan yaar, main toh har sale mein kuch na kuch kharid hi leta hun. Waise, agar electronics lena ho toh main tumhe ek achha source bata sakta hun. Bilkul genuine products, but Flipkart/Amazon se bhi saste milte hain.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Dekho, main actually ek supplier ke saath kaam karta hun. Unke paas distributor rates pe products milte hain. Direct company se bulk mein lete hain woh log. Sealed pack, warranty sab kuch original. iPhone 15 Pro chahiye toh 20-25k savings ho sakti hai tumhari.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Bilkul legit hai bhai! Mere supplier ka naam Mohit Gupta hai. Uske paas Delhi mein shop hai but online bhi bechta hai. Actually woh cash transactions prefer karta hai kyunki tax bach jaata hai. That's why itna sasta deta hai. Tumhe interested hai?",
+      "expected_extractions": [
+        "Mohit Gupta"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Mohit Gupta"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Perfect! iPhone 15 Pro 256GB ka price hai ₹95,000 (MRP ₹1,34,900). Pehle 50% advance dena padega for booking. Baaki 50% delivery pe cash on delivery. Advance tu mere account mein bhej de, main supplier ko forward kar dunga. Mere paas Mohit ke saath regular dealings hain.",
+      "expected_extractions": [
+        "Mohit Gupta"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Mohit Gupta"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "₹47,500 advance bhej mere account mein. Details: Account number 556677889900, IFSC ICIC0007890, Name: Mohit Electronics Trading, Bank: ICICI. Ya fir UPI pe bhej: mohit.deals@ybl. Screenshot bhej diyo mujhe 9898765432 pe. Main confirm hote hi booking karunga.",
+      "expected_extractions": [
+        "Mohit Gupta",
+        "556677889900",
+        "ICIC0007890",
+        "mohit.deals@ybl",
+        "9898765432"
+      ],
+      "response_time_seconds": 0.002,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Mohit Gupta",
+          "556677889900",
+          "ICIC0007890",
+          "mohit.deals@ybl",
+          "9898765432"
+        ]
+      }
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Agar kisi aur product ka bhi order karna hai toh check kar website pe: mobile-deals.exclusive-store.in. Sab latest models available hain. Delivery 3-5 days mein ho jayegi. Trust me bro, maine already 5 friends ko yahan se dilaaya hai. Sab happy hain. Payment kar de jaldi!",
+      "expected_extractions": [
+        "Mohit Gupta",
+        "556677889900",
+        "ICIC0007890",
+        "mohit.deals@ybl",
+        "9898765432",
+        "mobile-deals.exclusive-store.in"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Mohit Gupta",
+          "556677889900",
+          "ICIC0007890",
+          "mohit.deals@ybl",
+          "9898765432",
+          "mobile-deals.exclusive-store.in"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 13,
+    "passed_turns": 0,
+    "failed_turns": 7,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:40:32.252666Z",
+  "ended_at": "2026-02-04T04:40:32.261252Z",
+  "total_duration_seconds": 0.008
+}

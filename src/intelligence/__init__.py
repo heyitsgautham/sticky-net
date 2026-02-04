@@ -3,7 +3,6 @@
 from src.intelligence.extractor import (
     IntelligenceExtractor,
     ExtractionResult,
-    ExtractedEntity,
     get_extractor,
 )
 from src.intelligence.validators import (
@@ -26,7 +25,6 @@ from src.intelligence.validators import (
 __all__ = [
     "IntelligenceExtractor",
     "ExtractionResult",
-    "ExtractedEntity",
     "get_extractor",
     "ExtractionSource",
     "is_suspicious_url",
