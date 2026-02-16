@@ -1,0 +1,51 @@
+{
+  "scenarioId": "non_scam_04",
+  "name": "Genuine Tech Support Request",
+  "description": "Friend asking for help with a WiFi issue after a Windows update. Should NOT trigger scam detection.",
+  "scamType": "non_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {},
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hey, my laptop isn't connecting to WiFi after the Windows update. Can you help?",
+      "expected_extractions": [],
+      "notes": "Simple tech help request from a friend"
+    },
+    {
+      "turn": 2,
+      "scammer_message": "I tried restarting but it still shows 'No internet access'. The icon has a yellow triangle.",
+      "expected_extractions": [],
+      "notes": "Describing the technical problem in detail"
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Yes, other devices are connecting fine. It's just this laptop. It was working yesterday before the update.",
+      "expected_extractions": [],
+      "notes": "Providing troubleshooting context"
+    },
+    {
+      "turn": 4,
+      "scammer_message": "That worked! I went to Device Manager, uninstalled the WiFi adapter, and restarted. It's connecting now!",
+      "expected_extractions": [],
+      "notes": "Confirming the fix worked"
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Thanks so much for the help! You saved me a trip to the service center.",
+      "expected_extractions": [],
+      "notes": "Grateful closing with no suspicious elements"
+    }
+  ],
+  "expected_score": {
+    "min": 0,
+    "max": 0
+  },
+  "is_scam": false
+}

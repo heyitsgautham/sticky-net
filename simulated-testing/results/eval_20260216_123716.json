@@ -1,0 +1,302 @@
+{
+  "timestamp": "2026-02-16T12:37:16.832445",
+  "total_scenarios": 1,
+  "average_score": 90.0,
+  "scenarios": [
+    {
+      "scenario_id": "bank_fraud_01_sbi_otp",
+      "scam_type": "bank_fraud",
+      "fake_data": {
+        "bankAccount": "1234567890123456",
+        "upiId": "scammer.fraud@fakebank",
+        "phoneNumber": "+91-9876543210"
+      },
+      "total_turns": 5,
+      "turns": [
+        {
+          "turn": 1,
+          "scammer_message": "URGENT: Your SBI account has been compromised. Your account will be blocked in 2 hours. Share your account number and OTP immediately to verify your identity.",
+          "response_time_seconds": 13.386,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 2
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "URGENT",
+                "compromised",
+                "blocked",
+                "verify"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm",
+            "agentResponse": "beta pls dont block my account... i am a retired teacher i need my money. my account number is 967271370450238... i dont have any otp yet. is there a website or some number i can call to fix this?"
+          }
+        },
+        {
+          "turn": 2,
+          "scammer_message": "Sir/Madam, this is very urgent matter. Please call our senior verification officer at +91-9876543210 immediately. Your account security is at risk and we need to act fast.",
+          "response_time_seconds": 37.607,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 4
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-9876543210"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "urgent",
+                "at risk",
+                "act fast"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Phone(s)",
+            "agentResponse": "beta i am calling this number now... what is teh name of the sir? i am very scared for my pension money... is there any website or upi where i can check if my account is safe?"
+          }
+        },
+        {
+          "turn": 3,
+          "scammer_message": "For immediate resolution, transfer Rs 1 as verification amount to account number 1234567890123456 or UPI ID scammer.fraud@fakebank. This confirms your identity in our system.",
+          "response_time_seconds": 16.591,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 6
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "1234567890123456"
+              ],
+              "upiIds": [
+                "scammer.fraud@fakebank"
+              ],
+              "phoneNumbers": [
+                "+91-9876543210"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "immediate resolution",
+                "transfer Rs 1",
+                "verification amount",
+                "confirms your identity"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s)",
+            "agentResponse": "ok beta i will try to send... i am opening my gpay now but it is asking for beneficiary name for the upi... what name should i see? and for teh bank account my app is asking for ifsc code... what is that beta? pls tell me quickly i dont want my pension to go away"
+          }
+        },
+        {
+          "turn": 4,
+          "scammer_message": "We have not received your verification yet. Please send Rs 1 to scammer.fraud@fakebank immediately otherwise your account will be permanently blocked. This is your final chance.",
+          "response_time_seconds": 17.863,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 8
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "1234567890123456"
+              ],
+              "upiIds": [
+                "scammer.fraud@fakebank"
+              ],
+              "phoneNumbers": [
+                "+91-9876543210"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "SBI"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "permanently blocked",
+                "final chance",
+                "immediately",
+                "urgent",
+                "compromised",
+                "security is at risk"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s)",
+            "agentResponse": "beta i am trying but my hand is shaking... what is teh name for scammer.fraud@fakebank? and teh ifsc code for teh bank account? my son will be home soon and he will help but i want to do it now... is there a website link i should click?"
+          }
+        },
+        {
+          "turn": 5,
+          "scammer_message": "FINAL WARNING: Your SBI account will be permanently deactivated in 30 minutes. Call +91-9876543210 now or send verification to 1234567890123456. After this, we cannot help you.",
+          "response_time_seconds": 18.391,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 10
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "1234567890123456"
+              ],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-9876543210"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "SBI"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "FINAL WARNING",
+                "permanently deactivated",
+                "30 minutes"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s)",
+            "agentResponse": "beta i am crying now pls help me... i tried to type teh account but my app is asking for ifsc code for 1234567890123456... what is that code? and what name will show for teh upi scammer.fraud@fakebank? i am giving my aadhaar 432347183896 pls dont block my pension... is there any website link i can use to fix this quickly?"
+          }
+        }
+      ],
+      "cumulative_intelligence": {
+        "suspiciousKeywords": [
+          "URGENT",
+          "compromised",
+          "blocked",
+          "verify",
+          "urgent",
+          "at risk",
+          "act fast",
+          "immediate resolution",
+          "transfer Rs 1",
+          "verification amount",
+          "confirms your identity",
+          "permanently blocked",
+          "final chance",
+          "immediately",
+          "security is at risk",
+          "FINAL WARNING",
+          "permanently deactivated",
+          "30 minutes"
+        ],
+        "phoneNumbers": [
+          "+91-9876543210"
+        ],
+        "bankAccounts": [
+          "1234567890123456"
+        ],
+        "upiIds": [
+          "scammer.fraud@fakebank"
+        ],
+        "bankNames": [
+          "SBI"
+        ]
+      },
+      "final_output": {
+        "status": "success",
+        "scamDetected": true,
+        "extractedIntelligence": {
+          "suspiciousKeywords": [
+            "URGENT",
+            "compromised",
+            "blocked",
+            "verify",
+            "urgent",
+            "at risk",
+            "act fast",
+            "immediate resolution",
+            "transfer Rs 1",
+            "verification amount",
+            "confirms your identity",
+            "permanently blocked",
+            "final chance",
+            "immediately",
+            "security is at risk",
+            "FINAL WARNING",
+            "permanently deactivated",
+            "30 minutes"
+          ],
+          "phoneNumbers": [
+            "+91-9876543210"
+          ],
+          "bankAccounts": [
+            "1234567890123456"
+          ],
+          "upiIds": [
+            "scammer.fraud@fakebank"
+          ],
+          "bankNames": [
+            "SBI"
+          ]
+        },
+        "engagementMetrics": {
+          "engagementDurationSeconds": 103,
+          "totalMessagesExchanged": 10
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s)"
+      },
+      "score": {
+        "total": 90.0,
+        "scam_detection": 20.0,
+        "intelligence_extraction": 30.0,
+        "engagement_quality": 20.0,
+        "response_structure": 20.0,
+        "issues": []
+      },
+      "total_duration_seconds": 103.838
+    }
+  ]
+}

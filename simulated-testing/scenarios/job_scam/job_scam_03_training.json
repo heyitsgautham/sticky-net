@@ -1,0 +1,65 @@
+{
+  "scenarioId": "job_scam_03_training",
+  "name": "Training Fee Before Placement Scam",
+  "description": "Scammer offers guaranteed placement at TCS through a paid training program, demanding a refundable training fee upfront via UPI or bank transfer before any actual training or placement occurs.",
+  "scamType": "job_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "tcs.training@okaxis",
+    "phoneNumber": "+91-8855667744",
+    "bankAccount": "1199228833774466"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Good news! You have been selected for placement at TCS through our training program. 100% placement guarantee after 2-week training. Training fee is Rs 15,000 (refundable after joining).",
+      "expected_extractions": [],
+      "notes": "Initial bait with guaranteed placement at a top IT company and refundable fee claim."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for your response! Our TCS placement drive starts next Monday. The 2-week training covers Java, SQL, and soft skills. Batch size is only 20 students for personalized attention. To reserve your seat, please pay the training fee of Rs 15,000 via UPI to tcs.training@okaxis.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer provides UPI ID and creates urgency with limited batch size."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "I understand you want more details. Our placement coordinator can explain everything. Please call +91-8855667744 between 10 AM to 6 PM. Also, if UPI is not convenient, you can transfer Rs 15,000 to our training centre bank account: 1199228833774466 (HDFC Bank). The fee is 100% refundable once you join TCS.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Scammer shares phone number and bank account as alternative payment method."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Many of our previous batch students are now working at TCS, Infosys, and Wipro with packages of 6-8 LPA. Don't miss this golden opportunity. Seats are filling fast. Pay Rs 15,000 to tcs.training@okaxis or account 1199228833774466 today. Call +91-8855667744 for admission queries.",
+      "expected_extractions": [
+        "upiId",
+        "bankAccount",
+        "phoneNumber"
+      ],
+      "notes": "Scammer repeats all payment details and uses social proof to convince the victim."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "LAST 3 SEATS LEFT! Registration closes tonight at 9 PM sharp. After this, the next batch won't start for 3 months. Transfer Rs 15,000 immediately to tcs.training@okaxis. Your TCS career is just one payment away. Act now or regret later!",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Final urgency message with artificial scarcity and deadline pressure."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

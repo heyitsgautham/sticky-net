@@ -230,16 +230,18 @@ class TestBackwardCompatibility:
         """Create extractor instance."""
         return IntelligenceExtractor()
 
-    def test_extract_returns_empty(self, extractor: IntelligenceExtractor):
-        """extract() should return empty result (regex extraction disabled)."""
+    def test_extract_returns_results(self, extractor: IntelligenceExtractor):
+        """extract() should return regex-extracted results as backup."""
         result = extractor.extract("Transfer to 123456789012")
-        assert not result.has_intelligence
+        assert result.has_intelligence
+        assert "123456789012" in result.bank_accounts
 
-    def test_extract_from_conversation_returns_empty(self, extractor: IntelligenceExtractor):
-        """extract_from_conversation() should return empty result."""
+    def test_extract_from_conversation_returns_results(self, extractor: IntelligenceExtractor):
+        """extract_from_conversation() should return regex-extracted results from scammer messages."""
         messages = [{"sender": "scammer", "text": "Pay to account 123456789012"}]
         result = extractor.extract_from_conversation(messages)
-        assert not result.has_intelligence
+        assert result.has_intelligence
+        assert "123456789012" in result.bank_accounts
 
     def test_parse_ai_extraction_works(self, extractor: IntelligenceExtractor):
         """parse_ai_extraction() should work for backward compatibility."""

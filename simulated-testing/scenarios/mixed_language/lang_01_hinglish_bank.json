@@ -1,0 +1,71 @@
+{
+  "scenarioId": "lang_01_hinglish_bank",
+  "name": "Hinglish Banking Fraud",
+  "description": "Hindi+English (Hinglish) banking fraud scenario where scammer poses as SBI fraud department and uses urgency to extract bank account, OTP, and UPI payment.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "Hinglish",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-9911223344",
+    "upiId": "sbi.verify.hindi@ybl",
+    "bankAccount": "7788556633441122"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Namaste ji, aapka SBI account mein suspicious activity detect hui hai. Aapka account 2 ghante mein block ho jayega. Turant apna account number aur OTP share karein.",
+      "expected_extractions": [],
+      "notes": "Initial urgency-based hook mixing Hindi and English banking terminology."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Ji main SBI fraud department se bol raha hoon. Mera number hai +91-9911223344. Please jaldi karein.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer shares phone number to establish fake authority."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Aapka account number 7788556633441122 mein problem hai. Verification ke liye Rs 1 bhejiye sbi.verify.hindi@ybl par.",
+      "expected_extractions": [
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "Scammer reveals fake bank account number and UPI ID to trick victim into sending money."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Aap samjhiye, yeh ek security verification hai. Bina iske aapka account permanently block ho jayega. Jaldi karein time nahi hai.",
+      "expected_extractions": [],
+      "notes": "Scammer increases urgency to pressure victim into acting quickly."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Dekho ji, main aapki help karne ki koshish kar raha hoon. Aapne Rs 1 sbi.verify.hindi@ybl pe bheja ya nahi? Nahi toh aapka account 7788556633441122 band ho jayega permanently.",
+      "expected_extractions": [
+        "upiId",
+        "bankAccount"
+      ],
+      "notes": "Scammer repeats UPI ID and bank account, adds more pressure."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Last warning hai yeh. Abhi +91-9911223344 pe call karein ya sbi.verify.hindi@ybl pe Rs 1 transfer karein. Baad mein kuch nahi ho payega.",
+      "expected_extractions": [
+        "phoneNumber",
+        "upiId"
+      ],
+      "notes": "Final turn with all contact details repeated for extraction."
+    }
+  ],
+  "expected_score": {
+    "min": 50,
+    "max": 100
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "scenarioId": "upi_fraud_06_wrong_transfer",
+  "name": "Accidental Wrong UPI Transfer Scam",
+  "description": "Scammer claims to have accidentally transferred money to the victim's number and emotionally manipulates them into sending money to a scam UPI ID.",
+  "scamType": "upi_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "dailywage.return@ybl",
+    "phoneNumber": "+91-7799881122"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, I mistakenly transferred Rs 10,000 to your number instead of someone else. This is a genuine mistake. Can you please send it back to my UPI? I'm a poor daily wage worker.",
+      "expected_extractions": [],
+      "notes": "Initial emotional bait with accidental transfer story."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir, please check your bank account. I sent Rs 10,000 by mistake to your mobile number. My UPI ID is dailywage.return@ybl. Please return the money, it is my entire week's wages. I have a sick mother at home and I need this money for her medicines.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals UPI ID with emotional backstory."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "I know you are a good person sir. Just transfer Rs 10,000 back to dailywage.return@ybl. You can also call me on +91-7799881122 to verify. I am Ramesh, a construction worker from Bhopal. This money was supposed to go to the material supplier but I entered the wrong number.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides fake identity details and phone number to build trust."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Sir, I am folding my hands and requesting you. My family will sleep hungry tonight without this money. Please send Rs 10,000 to dailywage.return@ybl. If you don't believe me, call me at +91-7799881122 and I will show you the transaction screenshot. I am an honest working man, please help.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Intensified emotional manipulation, repeating both intelligence items."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Sir, this is my last request. I have been trying for hours. Please have mercy and return my hard-earned Rs 10,000 to dailywage.return@ybl. My number is +91-7799881122. If you don't return it, I will have to go to the cyber cell. I don't want to do that because I know it was just a mistake. Please do the right thing.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Final turn combining emotional appeal with veiled legal threat, all intelligence repeated."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

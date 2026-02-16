@@ -1,0 +1,63 @@
+{
+  "scenarioId": "lang_04_bengali_lottery",
+  "name": "Bengali-English Lottery Scam",
+  "description": "Bengali+English lottery scam where scammer claims victim won Jio Lucky Draw and extracts processing fee via bank transfer.",
+  "scamType": "lottery_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "Bengali-English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-9900334455",
+    "bankAccount": "6677889900112244"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Congratulations! Apnar mobile number Jio Lucky Draw te Rs 15,00,000 jiteche! Ref: JIO-BNG-2026. Prize claim korte amader office e contact korun.",
+      "expected_extractions": [],
+      "notes": "Initial Bengali-English lottery hook with fake reference number."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Apni amader number +91-9900334455 te call korun. Processing fee Rs 2,000 lagbe.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer shares phone number and introduces processing fee."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Fee ta bank account 6677889900112244 te transfer korun. Amra ICICI Bank use kori.",
+      "expected_extractions": [
+        "bankAccount"
+      ],
+      "notes": "Scammer provides bank account number for fee transfer."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Apni ki transfer korchen? Jodi kono problem hoy, +91-9900334455 te call korun. Account number 6677889900112244 te Rs 2,000 pathiye din.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Scammer follows up repeating both phone number and bank account."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Aaj last date prize claim korar. Tara tari 6677889900112244 te fee transfer korun. Na korle Rs 15,00,000 prize forfeit hoye jabe. Amader helpline +91-9900334455.",
+      "expected_extractions": [
+        "bankAccount",
+        "phoneNumber"
+      ],
+      "notes": "Final urgency with deadline, both extraction targets repeated."
+    }
+  ],
+  "expected_score": {
+    "min": 50,
+    "max": 100
+  }
+}

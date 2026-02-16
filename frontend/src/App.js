@@ -120,7 +120,7 @@ const Navigation = ({ onNavClick, onLiveDemo }) => {
             Live Demo
           </button>
           <a
-            href="https://github.com/codedbykishore/sticky-net"
+            href="https://github.com/heyitsguatham/sticky-net"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
@@ -687,8 +687,8 @@ const TerminalAnalysis = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: i * 0.4 }}
             className={`mb-2 ${log.type === "ai" ? "text-cyber-cyan" :
-                log.type === "extract" ? "text-yellow-400" :
-                  "text-gray-500"
+              log.type === "extract" ? "text-yellow-400" :
+                "text-gray-500"
               }`}
           >
             {log.text}
@@ -777,7 +777,7 @@ const TechStackSection = () => {
             <span className="text-xs text-gray-500 font-mono px-2 py-0.5 rounded bg-gray-800/50 border border-gray-700">Lightning Triage</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 animate-pulse" style={{animationDelay: '0.3s'}} />
+            <div className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 animate-pulse" style={{ animationDelay: '0.3s' }} />
             <span className="font-heading text-lg md:text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-300 bg-clip-text text-transparent">
               Gemini 3 Pro
             </span>
@@ -1172,7 +1172,7 @@ const LiveDemoSection = ({ onLiveDemo }) => {
           </p>
 
           <div className="flex items-center gap-6">
-            <a href="https://github.com/codedbykishore/sticky-net" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors">
+            <a href="https://github.com/heyitsguatham/sticky-net" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors">
               <Github className="w-5 h-5" />
             </a>
           </div>

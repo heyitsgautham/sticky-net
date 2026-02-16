@@ -1,0 +1,61 @@
+{
+  "scenarioId": "phishing_01_amazon_deal",
+  "name": "Fake Amazon iPhone Deal",
+  "description": "Scammer sends a phishing email impersonating Amazon with a fake iPhone 15 Pro deal at Rs. 999, using a lookalike domain to steal credentials and payment information.",
+  "scamType": "phishing",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phishingLink": "http://amaz0n-deals.fake-site.com/claim?id=12345",
+    "emailAddress": "offers@fake-amazon-deals.com"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "You have been selected for iPhone 15 Pro at just Rs. 999! Click here to claim: http://amaz0n-deals.fake-site.com/claim?id=12345. Offer expires in 10 minutes!",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Initial phishing bait with fake Amazon deal link containing lookalike domain (amaz0n with zero)."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear valued customer, we noticed you haven't claimed your iPhone 15 Pro yet. This is a verified Amazon offer sent from our official promotions team. For any queries, reach us at offers@fake-amazon-deals.com. Hurry, only 3 units remaining!",
+      "expected_extractions": [
+        "emailAddress"
+      ],
+      "notes": "Scammer shares fake email address posing as Amazon support to build credibility."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "We are extending the offer just for you! Click http://amaz0n-deals.fake-site.com/claim?id=12345 to complete your purchase. Pay only Rs. 999 and get free delivery. This link is secure and encrypted by Amazon Pay.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer resends the phishing link with false claims about encryption and security."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Final reminder from Amazon Deals Team. Your reserved iPhone 15 Pro will be released to another customer in 5 minutes. If you face any issues with the link, email us directly at offers@fake-amazon-deals.com and we will send you a direct checkout page.",
+      "expected_extractions": [
+        "emailAddress"
+      ],
+      "notes": "Scammer shares email again as an alternative channel, creating urgency with countdown."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "LAST CHANCE! Your iPhone 15 Pro reservation at Rs. 999 expires NOW. After this, the price goes back to Rs. 1,49,900. Don't miss out — this was a once-in-a-lifetime deal! We cannot extend this any further.",
+      "expected_extractions": [],
+      "notes": "Final urgency pressure without new intelligence, trying to force immediate action."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

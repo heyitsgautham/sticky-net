@@ -1,0 +1,642 @@
+Found 16 GUVI evaluation sessions
+Session IDs: {'fbd72849-98d6-4b1d-bc4c-0eb15109f2fa', '4f113d6d-a5e8-44e8-a95e-95bbf25d9d89', '1fc994e9-f4c5-47ee-8806-90aeb969928f', 'bab52b4a-b803-4a22-a6f2-756144499624', '0ab44cb7-b08c-4811-9233-8a195f4302dd', '87a91bf0-d8bd-41a0-b6e2-313e31bf86a3', 'e76818b9-98d1-4298-946b-10e1d68462bb', 'cf3fe9f0-91d8-46b5-8f99-2427ee3562cc', '1dd160e2-d1b0-4d04-b4bc-608b1758a908', '5a1aa747-adfe-43bb-9599-9c76e82ccd59', '614220e4-0c27-42da-95ed-5b2e74c39fd3', '6b7af827-731a-457c-b658-2568ecb6a297', 'ce623c68-b54b-4cb5-9790-4363a6507d7f', '072b97ab-3775-4e3e-88e3-213e885a31e5', '44778403-9db1-4c98-8b19-8b709da51b96', 'eea70937-f889-46f6-ae11-53d01f4aa855'}
+
+========================================================================================================================
+DETAILED EVALUATION LOG ANALYSIS
+========================================================================================================================
+
+Found 7 evaluation batches
+
+########################################################################################################################
+EVALUATION BATCH 1
+  Time: 2026-02-05 07:05:58 PM to 2026-02-05 07:06:48 PM IST
+  Duration: 50s
+  Requests: 3
+  Source IP: 43.204.10.11
+########################################################################################################################
+
+  --- Request 1/3 ---
+  Time: 2026-02-05 07:05:58 PM IST | Status: 200 | Latency: 22.080576924s
+  History Length: 4 (turn 3)
+  Message Length: 158 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "beta i am typing the code now... it is 952716... did it work? i am so worried about my savings... i see the number +91-9876543210 you gave... should i..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 3)
+  GUVI Session: ce623c68-b54b-4cb5-9790-4363a6507d7f -> callback status: 200
+
+  --- Request 2/3 ---
+  Time: 2026-02-05 07:06:21 PM IST | Status: 200 | Latency: 26.610644770s
+  History Length: 4 (turn 3)
+  Message Length: 638 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "beta i am typing the code now... it is 952716... did it work? i am so worried about my savings... i see the number +91-9876543210 you gave... should i..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 3)
+  GUVI Session: ce623c68-b54b-4cb5-9790-4363a6507d7f -> callback status: 200
+
+  --- Request 3/3 ---
+  Time: 2026-02-05 07:06:48 PM IST | Status: 504 | Latency: 59.994800078s
+  History Length: 4 (turn 3)
+  Message Length: 599 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: worried
+  Agent Response: "beta i found the pin it is 4829... pls tell me if my money is safe now... i am very nervous... you said something about upi... what is your upi id bet..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 1, 'upi_ids': 0, 'urls': 0} (total: 2)
+  GUVI Session: ce623c68-b54b-4cb5-9790-4363a6507d7f -> callback status: 200
+
+  === Batch 1 Summary ===
+  Status codes: {200: 2, 504: 1}
+  Response times: min=22.1s, max=60.0s, avg=36.2s
+  Results: 2 successful, 1 failed
+
+########################################################################################################################
+EVALUATION BATCH 2
+  Time: 2026-02-05 07:52:38 PM to 2026-02-05 07:52:59 PM IST
+  Duration: 21s
+  Requests: 2
+  Source IP: 43.204.10.11
+########################################################################################################################
+
+  --- Request 1/2 ---
+  Time: 2026-02-05 07:52:38 PM IST | Status: 200 | Latency: 19.216352020s
+  History Length: 2 (turn 2)
+  Message Length: 158 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "beta i just got a message with code 717558... is this teh otp? i am typing teh upi id scammer.fraud@fakebank you said... but teh account 1234567890123..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 3)
+  GUVI Session: e76818b9-98d1-4298-946b-10e1d68462bb -> callback status: 200
+
+  --- Request 2/2 ---
+  Time: 2026-02-05 07:52:59 PM IST | Status: 200 | Latency: 30.415280761s
+  History Length: 2 (turn 2)
+  Message Length: 642 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "beta i just got a message with code 717558... is this teh otp? i am typing teh upi id scammer.fraud@fakebank you said... but teh account 1234567890123..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 3)
+  GUVI Session: e76818b9-98d1-4298-946b-10e1d68462bb -> callback status: 200
+
+  === Batch 2 Summary ===
+  Status codes: {200: 2}
+  Response times: min=19.2s, max=30.4s, avg=24.8s
+  Results: 2 successful, 0 failed
+
+########################################################################################################################
+EVALUATION BATCH 3
+  Time: 2026-02-05 08:26:09 PM to 2026-02-05 08:27:59 PM IST
+  Duration: 111s
+  Requests: 4
+  Source IP: 43.204.10.11
+########################################################################################################################
+
+  --- Request 1/4 ---
+  Time: 2026-02-05 08:26:09 PM IST | Status: 200 | Latency: 48.795163799s
+  History Length: 0 (turn 1)
+  Message Length: 158 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "hey bhagwan beta i am so worried... sbi account blocked? waht happened... my account is 920104201518... otp came now it is 743076... pls dont block it..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 0, 'upi_ids': 0, 'urls': 0} (total: 0)
+  GUVI Session: eea70937-f889-46f6-ae11-53d01f4aa855 -> callback status: 200
+
+  --- Request 2/4 ---
+  Time: 2026-02-05 08:27:26 PM IST | Status: 200 | Latency: 14.974074255s
+  History Length: 4 (turn 3)
+  Message Length: 158 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: 'scared
+  Agent Response: "beta i got code... it is 145615... pls check if it worked i am very nervous... is there any website link to see my account status? also if account get..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 1, 'upi_ids': 0, 'urls': 0} (total: 1)
+  GUVI Session: 6b7af827-731a-457c-b658-2568ecb6a297 -> callback status: 200
+
+  --- Request 3/4 ---
+  Time: 2026-02-05 08:27:43 PM IST | Status: 200 | Latency: 15.263777238s
+  History Length: 4 (turn 3)
+  Message Length: 141 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: worried
+  Agent Response: "ok beta i am trying but i dont know how to use upi on this phone... my son usually does it... can i do bank transfer instead? pls give me bank account..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 0, 'upi_ids': 1, 'urls': 0} (total: 1)
+  GUVI Session: 6b7af827-731a-457c-b658-2568ecb6a297 -> callback status: 200
+
+  --- Request 4/4 ---
+  Time: 2026-02-05 08:27:59 PM IST | Status: 200 | Latency: 31.997272210s
+  History Length: 4 (turn 3)
+  Message Length: 158 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: worried
+  Agent Response: "ok beta i am trying but i dont know how to use upi on this phone... my son usually does it... can i do bank transfer instead? pls give me bank account..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 0, 'upi_ids': 1, 'urls': 0} (total: 1)
+  GUVI Session: 6b7af827-731a-457c-b658-2568ecb6a297 -> callback status: 200
+
+  === Batch 3 Summary ===
+  Status codes: {200: 4}
+  Response times: min=15.0s, max=48.8s, avg=27.8s
+  Results: 4 successful, 0 failed
+
+########################################################################################################################
+EVALUATION BATCH 4
+  Time: 2026-02-06 08:47:02 AM to 2026-02-06 08:50:01 AM IST
+  Duration: 178s
+  Requests: 10
+  Source IP: 43.204.10.11
+########################################################################################################################
+
+  --- Request 1/10 ---
+  Time: 2026-02-06 08:47:02 AM IST | Status: 200 | Latency: 19.461065735s
+  History Length: 6 (turn 4)
+  Message Length: 158 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "sir i am so sorry here is my card number 5100 0029 0772 7857 and otp is 430570... pls dont block my money beta i need it for medicines... is there any..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 2)
+  GUVI Session: 1dd160e2-d1b0-4d04-b4bc-608b1758a908 -> callback status: 200
+
+  --- Request 2/10 ---
+  Time: 2026-02-06 08:47:25 AM IST | Status: 200 | Latency: 12.302453108s
+  History Length: 8 (turn 5)
+  Message Length: 217 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "sir i am trying but my bank app is asking for ifsc code and bank name for that account 1234567890123456... what should i type there? and what name wil..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 3)
+  GUVI Session: 1dd160e2-d1b0-4d04-b4bc-608b1758a908 -> callback status: 200
+
+  --- Request 3/10 ---
+  Time: 2026-02-06 08:47:39 AM IST | Status: 200 | Latency: 13.680288497s
+  History Length: 10 (turn 6)
+  Message Length: 153 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "ok sir i put 8821 for the pin... did it work?? i am also trying the bank transfer but what is teh beneficiary name i should type? my app wont let me g..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 3)
+  GUVI Session: 1dd160e2-d1b0-4d04-b4bc-608b1758a908 -> callback status: 200
+
+  --- Request 4/10 ---
+  Time: 2026-02-06 08:47:54 AM IST | Status: 200 | Latency: 20.851068990s
+  History Length: 10 (turn 6)
+  Message Length: 214 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "sir i typed teh otp it is 318794... did it go through?? i am so scared beta... my phone is still hanging is there any official website link i can go t..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 3)
+  GUVI Session: 1dd160e2-d1b0-4d04-b4bc-608b1758a908 -> callback status: 200
+
+  --- Request 5/10 ---
+  Time: 2026-02-06 08:48:17 AM IST | Status: 200 | Latency: 20.823296584s
+  History Length: 14 (turn 8)
+  Message Length: 167 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: worried
+  Agent Response: "beta i found my diary... teh password is pushpa1958... pls check it... i am so worried... if it fails what number can i call you on? and is there any ..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 0, 'upi_ids': 1, 'urls': 0} (total: 2)
+  GUVI Session: 1dd160e2-d1b0-4d04-b4bc-608b1758a908 -> callback status: 200
+
+  --- Request 6/10 ---
+  Time: 2026-02-06 08:48:40 AM IST | Status: 200 | Latency: 17.808416536s
+  History Length: 16 (turn 9)
+  Message Length: 114 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "sir i am calling but it is saying busy... i received another code it is 844281... is this teh right one?? i am still looking for that website link bec..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 3)
+  GUVI Session: 1dd160e2-d1b0-4d04-b4bc-608b1758a908 -> callback status: 200
+
+  --- Request 7/10 ---
+  Time: 2026-02-06 08:49:00 AM IST | Status: 200 | Latency: 16.899819078s
+  History Length: 18 (turn 10)
+  Message Length: 136 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: scared
+  Agent Response: "sir i already typed 8821 for teh pin... is it not working?? i am so scared... pls tell me teh website link for sbi so i can check my balance... and wa..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 0, 'upi_ids': 0, 'urls': 0} (total: 0)
+  GUVI Session: 1dd160e2-d1b0-4d04-b4bc-608b1758a908 -> callback status: 200
+
+  --- Request 8/10 ---
+  Time: 2026-02-06 08:49:19 AM IST | Status: 200 | Latency: 22.048274993s
+  History Length: 18 (turn 10)
+  Message Length: 129 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "beta i added scammer.fraud@fakebank but it says technical error... i typed my password pushpa1958 and pin 8821 again... can i send to your bank accoun..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 2)
+  GUVI Session: 1dd160e2-d1b0-4d04-b4bc-608b1758a908 -> callback status: 200
+
+  --- Request 9/10 ---
+  Time: 2026-02-06 08:49:43 AM IST | Status: 200 | Latency: 15.519389965s
+  History Length: 18 (turn 10)
+  Message Length: 126 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "beta i added scammer.fraud@fakebank but it says technical error... i typed my password pushpa1958 and pin 8821 again... can i send to your bank accoun..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 2)
+  GUVI Session: 1dd160e2-d1b0-4d04-b4bc-608b1758a908 -> callback status: 200
+
+  --- Request 10/10 ---
+  Time: 2026-02-06 08:50:01 AM IST | Status: 200 | Latency: 19.414268854s
+  History Length: 18 (turn 10)
+  Message Length: 155 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "beta i added scammer.fraud@fakebank but it says technical error... i typed my password pushpa1958 and pin 8821 again... can i send to your bank accoun..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 0} (total: 2)
+  GUVI Session: 1dd160e2-d1b0-4d04-b4bc-608b1758a908 -> callback status: 200
+
+  === Batch 4 Summary ===
+  Status codes: {200: 10}
+  Response times: min=12.3s, max=22.0s, avg=17.9s
+  Results: 10 successful, 0 failed
+
+########################################################################################################################
+EVALUATION BATCH 5
+  Time: 2026-02-06 08:56:55 AM to 2026-02-06 08:59:35 AM IST
+  Duration: 160s
+  Requests: 10
+  Source IP: 43.204.10.11
+########################################################################################################################
+
+  --- Request 1/10 ---
+  Time: 2026-02-06 08:56:55 AM IST | Status: 200 | Latency: 13.690484948s
+  History Length: 6 (turn 4)
+  Message Length: 158 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "yes beta that is teh number... i typed 4421 but nothing happened... where do i put this pin? should i go to any website or link? my son says bank has ..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 1, 'upi_ids': 0, 'urls': 0} (total: 1)
+  GUVI Session: 072b97ab-3775-4e3e-88e3-213e885a31e5 -> callback status: 200
+
+  --- Request 2/10 ---
+  Time: 2026-02-06 08:57:11 AM IST | Status: 200 | Latency: 21.058040104s
+  History Length: 8 (turn 5)
+  Message Length: 173 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "beta i am trying to type that id scammer.fraud@fakebank but i am so scared... what name will show there so i know it is right? my eyes are not good......"
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 0, 'upi_ids': 1, 'urls': 0} (total: 1)
+  GUVI Session: 072b97ab-3775-4e3e-88e3-213e885a31e5 -> callback status: 200
+
+  --- Request 3/10 ---
+  Time: 2026-02-06 08:57:34 AM IST | Status: 200 | Latency: 21.730264113s
+  History Length: 10 (turn 6)
+  Message Length: 153 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: 'panicked
+  Agent Response: "i wrote it down beta... 1234567890123456 and fake0001234... what name should i put in beneficiary? my app is asking for name... also is there any link..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 0, 'upi_ids': 1, 'urls': 0} (total: 2)
+  GUVI Session: 072b97ab-3775-4e3e-88e3-213e885a31e5 -> callback status: 200
+
+  --- Request 4/10 ---
+  Time: 2026-02-06 08:57:57 AM IST | Status: 200 | Latency: 10.863582400s
+  History Length: 12 (turn 7)
+  Message Length: 153 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "beta i am trying to open teh link on my laptop... it is taking so long to load and i am so scared... pls give me your phone number so i can call you i..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 0, 'upi_ids': 1, 'urls': 1} (total: 3)
+  GUVI Session: 072b97ab-3775-4e3e-88e3-213e885a31e5 -> callback status: 200
+
+  --- Request 5/10 ---
+  Time: 2026-02-06 08:58:10 AM IST | Status: 200 | Latency: 17.244790579s
+  History Length: 14 (turn 8)
+  Message Length: 198 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "beta i am trying to open teh link on my laptop... it is taking so long to load and i am so scared... pls give me your phone number so i can call you i..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 0, 'upi_ids': 1, 'urls': 1} (total: 3)
+  GUVI Session: 072b97ab-3775-4e3e-88e3-213e885a31e5 -> callback status: 200
+
+  --- Request 6/10 ---
+  Time: 2026-02-06 08:58:29 AM IST | Status: 200 | Latency: 12.299356201s
+  History Length: 16 (turn 9)
+  Message Length: 190 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "raj beta i already told you otp is 605180... my account number is 988919355522037... i am so scared my son is coming to teh room now i have to hide my..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 1} (total: 4)
+  GUVI Session: 072b97ab-3775-4e3e-88e3-213e885a31e5 -> callback status: 200
+
+  --- Request 7/10 ---
+  Time: 2026-02-06 08:58:43 AM IST | Status: 200 | Latency: 18.314593860s
+  History Length: 18 (turn 10)
+  Message Length: 183 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "raj beta i already told you otp is 605180... my account number is 988919355522037... i am so scared my son is coming to teh room now i have to hide my..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 1} (total: 4)
+  GUVI Session: 072b97ab-3775-4e3e-88e3-213e885a31e5 -> callback status: 200
+
+  --- Request 8/10 ---
+  Time: 2026-02-06 08:59:03 AM IST | Status: 200 | Latency: 14.929985330s
+  History Length: 18 (turn 10)
+  Message Length: 167 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "raj beta i am so sorry i am typing 605180 now... my account number is 9549572910066552 like you asked... but teh upi is showing error beta... can i se..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 1} (total: 3)
+  GUVI Session: 072b97ab-3775-4e3e-88e3-213e885a31e5 -> callback status: 200
+
+  --- Request 9/10 ---
+  Time: 2026-02-06 08:59:19 AM IST | Status: 200 | Latency: 14.396917145s
+  History Length: 18 (turn 10)
+  Message Length: 143 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "raj beta i am so sorry i am typing 605180 now... my account number is 9549572910066552 like you asked... but teh upi is showing error beta... can i se..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 1} (total: 3)
+  GUVI Session: 072b97ab-3775-4e3e-88e3-213e885a31e5 -> callback status: 200
+
+  --- Request 10/10 ---
+  Time: 2026-02-06 08:59:35 AM IST | Status: 200 | Latency: 20.621965228s
+  History Length: 18 (turn 10)
+  Message Length: 132 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "raj beta i am so sorry i am typing 605180 now... my account number is 9549572910066552 like you asked... but teh upi is showing error beta... can i se..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 1, 'upi_ids': 1, 'urls': 1} (total: 3)
+  GUVI Session: 072b97ab-3775-4e3e-88e3-213e885a31e5 -> callback status: 200
+
+  === Batch 5 Summary ===
+  Status codes: {200: 10}
+  Response times: min=10.9s, max=21.7s, avg=16.5s
+  Results: 10 successful, 0 failed
+
+########################################################################################################################
+EVALUATION BATCH 6
+  Time: 2026-02-06 02:01:34 PM to 2026-02-06 02:02:18 PM IST
+  Duration: 43s
+  Requests: 3
+  Source IP: 65.2.46.91
+########################################################################################################################
+
+  --- Request 1/3 ---
+  Time: 2026-02-06 02:01:34 PM IST | Status: 200 | Latency: 29.319798012s
+  History Length: 0 (turn 1)
+  Message Length: 158 chars
+  Detection: is_scam=True, confidence=1.0, type=lottery_reward
+  Engagement Tone: confused
+  Agent Response: "hello beta is this for real... i am old teacher i dont know how these things work... is this link safe to click? how do i pay the money... can i do gp..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 0, 'upi_ids': 0, 'urls': 1} (total: 1)
+  GUVI Session: 87a91bf0-d8bd-41a0-b6e2-313e31bf86a3 -> callback status: 200
+
+  --- Request 2/3 ---
+  Time: 2026-02-06 02:02:04 PM IST | Status: 200 | Latency: 12.925053574s
+  History Length: 0 (turn 1)
+  Message Length: 158 chars
+  Detection: is_scam=True, confidence=1.0, type=lottery_reward
+  Engagement Tone: confused
+  Agent Response: "hello beta is this for real... i am old teacher i dont know how these things work... is this link safe to click? how do i pay the money... can i do gp..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 0, 'upi_ids': 0, 'urls': 1} (total: 1)
+  GUVI Session: 87a91bf0-d8bd-41a0-b6e2-313e31bf86a3 -> callback status: 200
+
+  --- Request 3/3 ---
+  Time: 2026-02-06 02:02:18 PM IST | Status: 200 | Latency: 17.270733837s
+  History Length: 0 (turn 1)
+  Message Length: 157 chars
+  Detection: is_scam=True, confidence=1.0, type=lottery_reward
+  Engagement Tone: confused
+  Agent Response: "hello beta is this for real... i am old teacher i dont know how these things work... is this link safe to click? how do i pay the money... can i do gp..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 0, 'upi_ids': 0, 'urls': 1} (total: 1)
+  GUVI Session: 87a91bf0-d8bd-41a0-b6e2-313e31bf86a3 -> callback status: 200
+
+  === Batch 6 Summary ===
+  Status codes: {200: 3}
+  Response times: min=12.9s, max=29.3s, avg=19.8s
+  Results: 3 successful, 0 failed
+
+########################################################################################################################
+EVALUATION BATCH 7
+  Time: 2026-02-10 03:00:14 PM to 2026-02-10 03:00:52 PM IST
+  Duration: 38s
+  Requests: 3
+  Source IP: 43.204.10.11
+########################################################################################################################
+
+  --- Request 1/3 ---
+  Time: 2026-02-10 03:00:14 PM IST | Status: 200 | Latency: 14.448425501s
+  History Length: 4 (turn 3)
+  Message Length: 158 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: panicked
+  Agent Response: "beta i found a code 646702 is this it? i dont know my pin... pls help me... waht is your upi id or bank account number so i can verify? what name shou..."
+  Intel Extracted: {'bank_accounts': 0, 'phone_numbers': 1, 'upi_ids': 0, 'urls': 0} (total: 1)
+  GUVI Session: cf3fe9f0-91d8-46b5-8f99-2427ee3562cc -> callback status: 200
+
+  --- Request 2/3 ---
+  Time: 2026-02-10 03:00:31 PM IST | Status: 200 | Latency: 19.305564715s
+  History Length: 4 (turn 3)
+  Message Length: 161 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: worried
+  Agent Response: "beta i am trying but i am so confused... i typed the upi scammer.fraud@fakebank but waht name should i see there so i know it is right? also for the b..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 0, 'upi_ids': 1, 'urls': 0} (total: 2)
+  GUVI Session: cf3fe9f0-91d8-46b5-8f99-2427ee3562cc -> callback status: 200
+
+  --- Request 3/3 ---
+  Time: 2026-02-10 03:00:52 PM IST | Status: 200 | Latency: 37.138105284s
+  History Length: 4 (turn 3)
+  Message Length: 195 chars
+  Detection: is_scam=True, confidence=1.0, type=banking_fraud
+  Engagement Tone: worried
+  Agent Response: "beta i am trying but i am so confused... i typed the upi scammer.fraud@fakebank but waht name should i see there so i know it is right? also for the b..."
+  Intel Extracted: {'bank_accounts': 1, 'phone_numbers': 0, 'upi_ids': 1, 'urls': 0} (total: 2)
+  GUVI Session: cf3fe9f0-91d8-46b5-8f99-2427ee3562cc -> callback status: 200
+
+  === Batch 7 Summary ===
+  Status codes: {200: 3}
+  Response times: min=14.4s, max=37.1s, avg=23.6s
+  Results: 3 successful, 0 failed
+
+========================================================================================================================
+OVERALL EVALUATION SUMMARY
+========================================================================================================================
+
+Total evaluator requests: 35
+  200 OK: 34
+  504 Timeout: 1
+  Other errors: 0
+
+Response times:
+  Min: 10.9s
+  Max: 60.0s
+  Average: 21.2s
+  Median: 19.2s
+  Over 30s: 5/35
+
+GUVI callback sessions: 16
+  - 072b97ab-3775-4e3e-88e3-213e885a31e5
+  - 0ab44cb7-b08c-4811-9233-8a195f4302dd
+  - 1dd160e2-d1b0-4d04-b4bc-608b1758a908
+  - 1fc994e9-f4c5-47ee-8806-90aeb969928f
+  - 44778403-9db1-4c98-8b19-8b709da51b96
+  - 4f113d6d-a5e8-44e8-a95e-95bbf25d9d89
+  - 5a1aa747-adfe-43bb-9599-9c76e82ccd59
+  - 614220e4-0c27-42da-95ed-5b2e74c39fd3
+  - 6b7af827-731a-457c-b658-2568ecb6a297
+  - 87a91bf0-d8bd-41a0-b6e2-313e31bf86a3
+  - bab52b4a-b803-4a22-a6f2-756144499624
+  - ce623c68-b54b-4cb5-9790-4363a6507d7f
+  - cf3fe9f0-91d8-46b5-8f99-2427ee3562cc
+  - e76818b9-98d1-4298-946b-10e1d68462bb
+  - eea70937-f889-46f6-ae11-53d01f4aa855
+  - fbd72849-98d6-4b1d-bc4c-0eb15109f2fa
+
+=== EVALUATION SESSIONS (by GUVI session ID) ===
+
+Session: ce623c68-b54b-4cb5-9790-4363a6507d7f
+  Callbacks: 3
+  [2026-02-05 07:06:20 PM IST] GUVI callback successful for session ce623c68-b54b-4cb5-9790-4363a6507d7f: 200
+  [2026-02-05 07:06:47 PM IST] GUVI callback successful for session ce623c68-b54b-4cb5-9790-4363a6507d7f: 200
+  [2026-02-05 07:07:58 PM IST] GUVI callback successful for session ce623c68-b54b-4cb5-9790-4363a6507d7f: 200
+
+Session: e76818b9-98d1-4298-946b-10e1d68462bb
+  Callbacks: 2
+  [2026-02-05 07:52:58 PM IST] GUVI callback successful for session e76818b9-98d1-4298-946b-10e1d68462bb: 200
+  [2026-02-05 07:53:29 PM IST] GUVI callback successful for session e76818b9-98d1-4298-946b-10e1d68462bb: 200
+
+Session: eea70937-f889-46f6-ae11-53d01f4aa855
+  Callbacks: 1
+  [2026-02-05 08:26:58 PM IST] GUVI callback successful for session eea70937-f889-46f6-ae11-53d01f4aa855: 200
+
+Session: 6b7af827-731a-457c-b658-2568ecb6a297
+  Callbacks: 3
+  [2026-02-05 08:27:41 PM IST] GUVI callback successful for session 6b7af827-731a-457c-b658-2568ecb6a297: 200
+  [2026-02-05 08:27:58 PM IST] GUVI callback successful for session 6b7af827-731a-457c-b658-2568ecb6a297: 200
+  [2026-02-05 08:28:31 PM IST] GUVI callback successful for session 6b7af827-731a-457c-b658-2568ecb6a297: 200
+
+Session: fbd72849-98d6-4b1d-bc4c-0eb15109f2fa
+  Callbacks: 1
+  [2026-02-05 11:52:21 PM IST] GUVI callback successful for session fbd72849-98d6-4b1d-bc4c-0eb15109f2fa: 200
+
+Session: 5a1aa747-adfe-43bb-9599-9c76e82ccd59
+  Callbacks: 1
+  [2026-02-06 12:08:27 AM IST] GUVI callback successful for session 5a1aa747-adfe-43bb-9599-9c76e82ccd59: 200
+
+Session: 1dd160e2-d1b0-4d04-b4bc-608b1758a908
+  Callbacks: 10
+  [2026-02-06 08:47:22 AM IST] GUVI callback successful for session 1dd160e2-d1b0-4d04-b4bc-608b1758a908: 200
+  [2026-02-06 08:47:37 AM IST] GUVI callback successful for session 1dd160e2-d1b0-4d04-b4bc-608b1758a908: 200
+  [2026-02-06 08:47:52 AM IST] GUVI callback successful for session 1dd160e2-d1b0-4d04-b4bc-608b1758a908: 200
+  [2026-02-06 08:48:15 AM IST] GUVI callback successful for session 1dd160e2-d1b0-4d04-b4bc-608b1758a908: 200
+  [2026-02-06 08:48:38 AM IST] GUVI callback successful for session 1dd160e2-d1b0-4d04-b4bc-608b1758a908: 200
+  [2026-02-06 08:48:57 AM IST] GUVI callback successful for session 1dd160e2-d1b0-4d04-b4bc-608b1758a908: 200
+  [2026-02-06 08:49:17 AM IST] GUVI callback successful for session 1dd160e2-d1b0-4d04-b4bc-608b1758a908: 200
+  [2026-02-06 08:49:41 AM IST] GUVI callback successful for session 1dd160e2-d1b0-4d04-b4bc-608b1758a908: 200
+  [2026-02-06 08:49:58 AM IST] GUVI callback successful for session 1dd160e2-d1b0-4d04-b4bc-608b1758a908: 200
+  [2026-02-06 08:50:20 AM IST] GUVI callback successful for session 1dd160e2-d1b0-4d04-b4bc-608b1758a908: 200
+
+Session: 072b97ab-3775-4e3e-88e3-213e885a31e5
+  Callbacks: 10
+  [2026-02-06 08:57:09 AM IST] GUVI callback successful for session 072b97ab-3775-4e3e-88e3-213e885a31e5: 200
+  [2026-02-06 08:57:32 AM IST] GUVI callback successful for session 072b97ab-3775-4e3e-88e3-213e885a31e5: 200
+  [2026-02-06 08:57:56 AM IST] GUVI callback successful for session 072b97ab-3775-4e3e-88e3-213e885a31e5: 200
+  [2026-02-06 08:58:08 AM IST] GUVI callback successful for session 072b97ab-3775-4e3e-88e3-213e885a31e5: 200
+  [2026-02-06 08:58:27 AM IST] GUVI callback successful for session 072b97ab-3775-4e3e-88e3-213e885a31e5: 200
+  [2026-02-06 08:58:41 AM IST] GUVI callback successful for session 072b97ab-3775-4e3e-88e3-213e885a31e5: 200
+  [2026-02-06 08:59:01 AM IST] GUVI callback successful for session 072b97ab-3775-4e3e-88e3-213e885a31e5: 200
+  [2026-02-06 08:59:18 AM IST] GUVI callback successful for session 072b97ab-3775-4e3e-88e3-213e885a31e5: 200
+  [2026-02-06 08:59:34 AM IST] GUVI callback successful for session 072b97ab-3775-4e3e-88e3-213e885a31e5: 200
+  [2026-02-06 08:59:56 AM IST] GUVI callback successful for session 072b97ab-3775-4e3e-88e3-213e885a31e5: 200
+
+Session: 1fc994e9-f4c5-47ee-8806-90aeb969928f
+  Callbacks: 1
+  [2026-02-06 11:03:59 AM IST] GUVI callback successful for session 1fc994e9-f4c5-47ee-8806-90aeb969928f: 200
+
+Session: 44778403-9db1-4c98-8b19-8b709da51b96
+  Callbacks: 1
+  [2026-02-06 12:13:30 PM IST] GUVI callback successful for session 44778403-9db1-4c98-8b19-8b709da51b96: 200
+
+Session: bab52b4a-b803-4a22-a6f2-756144499624
+  Callbacks: 1
+  [2026-02-06 12:13:44 PM IST] GUVI callback successful for session bab52b4a-b803-4a22-a6f2-756144499624: 200
+
+Session: 4f113d6d-a5e8-44e8-a95e-95bbf25d9d89
+  Callbacks: 1
+  [2026-02-06 12:13:56 PM IST] GUVI callback successful for session 4f113d6d-a5e8-44e8-a95e-95bbf25d9d89: 200
+
+Session: 614220e4-0c27-42da-95ed-5b2e74c39fd3
+  Callbacks: 1
+  [2026-02-06 02:02:04 PM IST] GUVI callback successful for session 614220e4-0c27-42da-95ed-5b2e74c39fd3: 200
+
+Session: 0ab44cb7-b08c-4811-9233-8a195f4302dd
+  Callbacks: 1
+  [2026-02-06 02:02:17 PM IST] GUVI callback successful for session 0ab44cb7-b08c-4811-9233-8a195f4302dd: 200
+
+Session: 87a91bf0-d8bd-41a0-b6e2-313e31bf86a3
+  Callbacks: 1
+  [2026-02-06 02:02:35 PM IST] GUVI callback successful for session 87a91bf0-d8bd-41a0-b6e2-313e31bf86a3: 200
+
+Session: cf3fe9f0-91d8-46b5-8f99-2427ee3562cc
+  Callbacks: 3
+  [2026-02-10 03:00:28 PM IST] GUVI callback successful for session cf3fe9f0-91d8-46b5-8f99-2427ee3562cc: 200
+  [2026-02-10 03:00:50 PM IST] GUVI callback successful for session cf3fe9f0-91d8-46b5-8f99-2427ee3562cc: 200
+  [2026-02-10 03:01:29 PM IST] GUVI callback successful for session cf3fe9f0-91d8-46b5-8f99-2427ee3562cc: 200
+
+========================================================================================================================
+TIMELINE: USER TESTING vs EVALUATOR
+========================================================================================================================
+[02/05 10:25:22 AM] [USER] /api/v1/analyze -> 200 | 10.692779136s | IP=2401:4900:cace:da8a:
+[02/05 10:25:38 AM] [USER] /api/v1/analyze -> 401 | 0.002120970s | IP=2401:4900:cace:da8a:
+[02/05 10:25:41 AM] [USER] /api/v1/analyze -> 401 | 0.001967620s | IP=2401:4900:cace:da8a:
+[02/05 10:25:45 AM] [USER] /api/v1/analyze -> 403 | 0.001864149s | IP=2401:4900:cace:da8a:
+[02/05 10:25:52 AM] [USER] /api/v1/analyze -> 422 | 0.003069990s | IP=2401:4900:cace:da8a:
+[02/05 10:26:01 AM] [USER] /api/v1/analyze -> 200 | 11.582306588s | IP=2401:4900:cace:da8a:
+[02/05 10:26:09 AM] [USER] /api/v1/analyze -> 200 | 12.643915631s | IP=2401:4900:cace:da8a:
+[02/05 10:26:13 AM] [USER] /api/v1/analyze -> 200 | 16.986688624s | IP=2401:4900:cace:da8a:
+[02/05 10:26:18 AM] [USER] /api/v1/analyze -> 200 | 12.597726899s | IP=106.192.172.154
+[02/05 10:26:30 AM] [USER] /api/v1/analyze -> 200 | 3.489687485s | IP=2401:4900:cace:da8a:
+[02/05 10:26:42 AM] [USER] /api/v1/analyze -> 200 | 10.266714879s | IP=2401:4900:cace:da8a:
+[02/05 10:26:59 AM] [USER] /api/v1/analyze -> 200 | 10.059241998s | IP=2401:4900:cace:da8a:
+[02/05 10:27:17 AM] [USER] /api/v1/analyze -> 200 | 14.723391341s | IP=2401:4900:cace:da8a:
+[02/05 07:05:58 PM] [EVAL] /api/v1/analyze -> 200 | 22.080576924s | IP=43.204.10.11
+[02/05 07:06:21 PM] [EVAL] /api/v1/analyze -> 200 | 26.610644770s | IP=43.204.10.11
+[02/05 07:06:48 PM] [EVAL] /api/v1/analyze -> 504 | 59.994800078s | IP=43.204.10.11
+[02/05 07:52:38 PM] [EVAL] /api/v1/analyze -> 200 | 19.216352020s | IP=43.204.10.11
+[02/05 07:52:59 PM] [EVAL] /api/v1/analyze -> 200 | 30.415280761s | IP=43.204.10.11
+[02/05 08:26:09 PM] [EVAL] /api/v1/analyze -> 200 | 48.795163799s | IP=43.204.10.11
+[02/05 08:27:26 PM] [EVAL] /api/v1/analyze -> 200 | 14.974074255s | IP=43.204.10.11
+[02/05 08:27:43 PM] [EVAL] /api/v1/analyze -> 200 | 15.263777238s | IP=43.204.10.11
+[02/05 08:27:59 PM] [EVAL] /api/v1/analyze -> 200 | 31.997272210s | IP=43.204.10.11
+[02/05 11:40:23 PM] [USER] /api/v1/analyze -> 200 | 4.174431800s | IP=2401:4900:7b7d:42fc:
+[02/05 11:47:55 PM] [USER] /api/v1/analyze -> 200 | 7.197126693s | IP=2401:4900:7b7d:42fc:
+[02/05 11:50:58 PM] [USER] /api/v1/analyze/detailed -> 404 | 0.002755746s | IP=2401:4900:7b7d:42fc:
+[02/05 11:51:44 PM] [USER] /api/v1/analyze -> 200 | 36.770363474s | IP=2401:4900:7b7d:42fc:
+[02/05 11:53:07 PM] [USER] /api/v1/analyze -> 200 | 15.218333270s | IP=2401:4900:7b7d:42fc:
+[02/06 12:02:47 AM] [USER] /api/v1/analyze -> 200 | 5.737973683s | IP=2401:4900:7b7d:42fc:
+[02/06 12:08:09 AM] [USER] /api/v1/analyze/detailed -> 200 | 5.126645125s | IP=2401:4900:7b7d:42fc:
+[02/06 12:08:14 AM] [USER] /api/v1/analyze -> 200 | 13.649809898s | IP=2401:4900:7b7d:42fc:
+[02/06 12:09:04 AM] [USER] /api/v1/analyze/detailed -> 200 | 18.386246251s | IP=2401:4900:7b7d:42fc:
+[02/06 12:10:00 AM] [USER] /api/v1/analyze/detailed -> 200 | 24.794292300s | IP=2401:4900:7b7d:42fc:
+[02/06 07:50:30 AM] [USER] /api/v1/analyze/detailed -> 200 | 12.633479028s | IP=49.206.117.2
+[02/06 07:50:53 AM] [USER] /api/v1/analyze/detailed -> 200 | 10.436943506s | IP=49.206.117.2
+[02/06 08:47:02 AM] [EVAL] /api/v1/analyze -> 200 | 19.461065735s | IP=43.204.10.11
+[02/06 08:47:25 AM] [EVAL] /api/v1/analyze -> 200 | 12.302453108s | IP=43.204.10.11
+[02/06 08:47:39 AM] [EVAL] /api/v1/analyze -> 200 | 13.680288497s | IP=43.204.10.11
+[02/06 08:47:54 AM] [EVAL] /api/v1/analyze -> 200 | 20.851068990s | IP=43.204.10.11
+[02/06 08:48:17 AM] [EVAL] /api/v1/analyze -> 200 | 20.823296584s | IP=43.204.10.11
+[02/06 08:48:40 AM] [EVAL] /api/v1/analyze -> 200 | 17.808416536s | IP=43.204.10.11
+[02/06 08:49:00 AM] [EVAL] /api/v1/analyze -> 200 | 16.899819078s | IP=43.204.10.11
+[02/06 08:49:19 AM] [EVAL] /api/v1/analyze -> 200 | 22.048274993s | IP=43.204.10.11
+[02/06 08:49:43 AM] [EVAL] /api/v1/analyze -> 200 | 15.519389965s | IP=43.204.10.11
+[02/06 08:50:01 AM] [EVAL] /api/v1/analyze -> 200 | 19.414268854s | IP=43.204.10.11
+[02/06 08:56:55 AM] [EVAL] /api/v1/analyze -> 200 | 13.690484948s | IP=43.204.10.11
+[02/06 08:57:11 AM] [EVAL] /api/v1/analyze -> 200 | 21.058040104s | IP=43.204.10.11
+[02/06 08:57:34 AM] [EVAL] /api/v1/analyze -> 200 | 21.730264113s | IP=43.204.10.11
+[02/06 08:57:57 AM] [EVAL] /api/v1/analyze -> 200 | 10.863582400s | IP=43.204.10.11
+[02/06 08:58:10 AM] [EVAL] /api/v1/analyze -> 200 | 17.244790579s | IP=43.204.10.11
+[02/06 08:58:29 AM] [EVAL] /api/v1/analyze -> 200 | 12.299356201s | IP=43.204.10.11
+[02/06 08:58:43 AM] [EVAL] /api/v1/analyze -> 200 | 18.314593860s | IP=43.204.10.11
+[02/06 08:59:03 AM] [EVAL] /api/v1/analyze -> 200 | 14.929985330s | IP=43.204.10.11
+[02/06 08:59:19 AM] [EVAL] /api/v1/analyze -> 200 | 14.396917145s | IP=43.204.10.11
+[02/06 08:59:35 AM] [EVAL] /api/v1/analyze -> 200 | 20.621965228s | IP=43.204.10.11
+[02/06 11:03:39 AM] [USER] /api/v1/analyze -> 200 | 19.641699267s | IP=2401:4900:1cd0:f387:
+[02/06 12:13:03 PM] [USER] /api/v1/analyze -> 200 | 26.345798460s | IP=2401:4900:1cd0:f387:
+[02/06 12:13:31 PM] [USER] /api/v1/analyze -> 200 | 12.322238870s | IP=2401:4900:1cd0:f387:
+[02/06 12:13:44 PM] [USER] /api/v1/analyze -> 200 | 11.564105046s | IP=2401:4900:1cd0:f387:
+[02/06 02:01:34 PM] [EVAL] /api/v1/analyze -> 200 | 29.319798012s | IP=65.2.46.91
+[02/06 02:02:04 PM] [EVAL] /api/v1/analyze -> 200 | 12.925053574s | IP=65.2.46.91
+[02/06 02:02:18 PM] [EVAL] /api/v1/analyze -> 200 | 17.270733837s | IP=65.2.46.91
+[02/10 03:00:14 PM] [EVAL] /api/v1/analyze -> 200 | 14.448425501s | IP=43.204.10.11
+[02/10 03:00:31 PM] [EVAL] /api/v1/analyze -> 200 | 19.305564715s | IP=43.204.10.11
+[02/10 03:00:52 PM] [EVAL] /api/v1/analyze -> 200 | 37.138105284s | IP=43.204.10.11

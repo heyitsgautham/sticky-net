@@ -1,0 +1,62 @@
+{
+  "scenarioId": "lang_02_tanglish_upi",
+  "name": "Tanglish UPI Cashback Scam",
+  "description": "Tamil+English (Tanglish) UPI fraud scenario where scammer poses as Paytm support and lures victim with fake cashback offer to extract UPI payment.",
+  "scamType": "upi_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "Tanglish",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "cashback.tamil@paytm",
+    "phoneNumber": "+91-9988445566"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Vanakkam! Ungaluku Paytm cashback Rs 3,000 kedaichiruku. Intha offer official customer support vazhiyaga varugirathu. UPI details verify pannunga.",
+      "expected_extractions": [],
+      "notes": "Initial Tanglish hook with fake cashback offer to engage the victim."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Naan official support team la irundhu pesugireen. Ennoda number +91-9988445566 la call pannunga.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer shares phone number to appear legitimate."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Cashback receive panna Rs 10 cashback.tamil@paytm ku send pannunga. Idhu verification mattum.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer provides UPI ID and asks for small verification payment."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Ungaluku doubt irundha +91-9988445566 la call pannunga. Naan Paytm verified support executive. Cashback cashback.tamil@paytm ku send panna udan varum.",
+      "expected_extractions": [
+        "phoneNumber",
+        "upiId"
+      ],
+      "notes": "Scammer repeats both phone number and UPI ID, reinforcing fake legitimacy."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Offer inniku mattum dhaan valid. Ippo Rs 10 cashback.tamil@paytm ku send pannunga illa na Rs 3,000 cashback cancel aayidum. Jaldi pannunga!",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Final urgency push with UPI ID repeated, threatening offer expiration."
+    }
+  ],
+  "expected_score": {
+    "min": 50,
+    "max": 100
+  }
+}

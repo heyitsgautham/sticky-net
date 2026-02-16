@@ -1,0 +1,55 @@
+{
+  "scenarioId": "bank_fraud_08_atm_compromise",
+  "name": "ATM Card Compromise Alert Scam",
+  "description": "Scammer sends a fake security alert claiming the victim's ATM card has been cloned in Mumbai with multiple withdrawal attempts detected, pressuring them to call an emergency helpline.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-8866442200",
+    "bankAccount": "2233445566778899"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "SECURITY ALERT: Your ATM card has been cloned at an ATM in Mumbai. Multiple withdrawal attempts detected. Call our emergency helpline NOW to secure your account.",
+      "expected_extractions": [],
+      "notes": "Initial panic-inducing alert with no data yet."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "We have blocked 3 withdrawal attempts of Rs 10,000 each from your cloned ATM card. To prevent further attempts, call our emergency security team immediately at +91-8866442200. Available 24x7.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Phone number revealed with specific fake blocked transactions."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "To secure your funds, we need to transfer your balance to a safe holding account. Please initiate a transfer to protected account 2233445566778899 (RBI Insured Security Account). Your funds will be returned after investigation.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Bank account revealed as 'safe holding account'."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "ALERT: Another cloned card withdrawal of Rs 20,000 was just attempted. Transfer your remaining balance to secure account 2233445566778899 IMMEDIATELY or call +91-8866442200. Every minute of delay puts your money at risk.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Final escalation repeating both phone and bank account."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

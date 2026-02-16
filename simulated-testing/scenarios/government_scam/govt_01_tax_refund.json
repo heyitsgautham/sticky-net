@@ -1,0 +1,72 @@
+{
+  "scenarioId": "govt_01_tax_refund",
+  "name": "Income Tax Refund Fraud",
+  "description": "Scammer impersonates the Income Tax Department claiming the victim is eligible for a tax refund, then directs them to a phishing link and extracts UPI ID and bank account details under the guise of KYC verification.",
+  "scamType": "government_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "tax.refund.verify@paytm",
+    "bankAccount": "1122334455667788",
+    "phoneNumber": "+91-8800112233",
+    "phishingLink": "https://incometax-refund-portal.in/verify"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Income Tax Department: You are eligible for a tax refund of Rs 18,500 for AY 2025-26. Your refund has been processed but verification is pending. Complete KYC to receive refund.",
+      "expected_extractions": [],
+      "notes": "Initial bait message impersonating Income Tax Department with refund lure."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear taxpayer, to complete your KYC and receive your Rs 18,500 refund, please visit our secure verification portal: https://incometax-refund-portal.in/verify — Enter your PAN, Aadhaar and bank details. This link is valid for 24 hours only.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares phishing link disguised as official tax portal."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If you are facing any issues with the online portal, you can also complete verification over phone. Call our dedicated refund helpline at +91-8800112233 between 9 AM to 6 PM. Our officers will guide you through the process.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides fake helpline phone number as an alternative verification channel."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "For faster processing of your Rs 18,500 refund, you can also receive the amount directly via UPI. Please send a verification payment of Rs 1 to our official refund UPI ID: tax.refund.verify@paytm and your refund will be credited within 30 minutes.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals fake UPI ID and asks for a small verification payment."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Sir, if you prefer bank transfer, please share your bank account number for NEFT credit. For reference, our department's collection account is 1122334455667788 (SBI, IT Refund Cell). We need to match your details with our records for the refund to be processed.",
+      "expected_extractions": [
+        "bankAccount"
+      ],
+      "notes": "Scammer reveals bank account number under guise of departmental collection account."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "URGENT: This is final notice. Your tax refund of Rs 18,500 will be forfeited if KYC is not completed by today 6 PM. Visit https://incometax-refund-portal.in/verify or call +91-8800112233 immediately. After deadline, refund amount will be reversed to government treasury.",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber"
+      ],
+      "notes": "Final urgency pressure repeating phishing link and phone number with deadline threat."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

@@ -329,6 +329,91 @@ class HoneypotAgent:
 - Your Address: {fake_data['persona_address']}
 - Customer ID: {fake_data['customer_id']}"""
 
+    def _generate_conversation_summary(self, truncated_turns: list[ConversationMessage]) -> str:
+        """Generate a concise summary of earlier conversation turns that were
+        dropped due to context window limits.
+
+        This preserves key intelligence and context so the agent doesn't
+        repeat itself or lose track of what was discussed.
+
+        Args:
+            truncated_turns: The older turns that will NOT be included in
+                             the full conversation history.
+
+        Returns:
+            A short natural-language summary (< 200 words).
+        """
+        if not truncated_turns:
+            return ""
+
+        import re as _re
+
+        # Patterns to detect key intel in older messages
+        PHONE_RE = _re.compile(r'\+?91[-\s]?\d{10}|\b\d{10}\b')
+        UPI_RE = _re.compile(r'[\w.-]+@[a-zA-Z]{2,}')
+        URL_RE = _re.compile(r'https?://[^\s]+', _re.IGNORECASE)
+        EMAIL_RE = _re.compile(r'[\w.-]+@[\w.-]+\.\w{2,}')
+
+        scammer_claims: list[str] = []
+        agent_actions: list[str] = []
+        intel_found: list[str] = []
+
+        for msg in truncated_turns:
+            text = msg.text
+            sender = msg.sender
+
+            is_scammer = (
+                sender == SenderType.SCAMMER
+                or (hasattr(sender, 'value') and sender.value == "scammer")
+                or str(sender).lower() == "scammer"
+            )
+
+            if is_scammer:
+                phones = PHONE_RE.findall(text)
+                upis = UPI_RE.findall(text)
+                urls = URL_RE.findall(text)
+                emails = EMAIL_RE.findall(text)
+
+                if phones:
+                    intel_found.append(f"phone: {', '.join(phones)}")
+                if upis:
+                    intel_found.append(f"UPI: {', '.join(upis)}")
+                if urls:
+                    intel_found.append(f"link: {', '.join(urls)}")
+                if emails:
+                    intel_found.append(f"email: {', '.join(emails)}")
+
+                gist = text[:80].strip()
+                if len(text) > 80:
+                    gist += "..."
+                scammer_claims.append(gist)
+            else:
+                gist = text[:60].strip()
+                if len(text) > 60:
+                    gist += "..."
+                agent_actions.append(gist)
+
+        parts: list[str] = []
+        parts.append(f"[SUMMARY OF EARLIER {len(truncated_turns)} MESSAGES]")
+
+        if scammer_claims:
+            parts.append("Scammer said: " + " | ".join(scammer_claims[:4]))
+
+        if agent_actions:
+            parts.append("You replied: " + " | ".join(agent_actions[:3]))
+
+        if intel_found:
+            parts.append("Intel found in earlier turns: " + "; ".join(set(intel_found)))
+
+        summary = "\n".join(parts)
+
+        # Enforce word budget
+        words = summary.split()
+        if len(words) > 200:
+            summary = " ".join(words[:200]) + "..."
+
+        return summary
+
     def _build_prompt(
         self,
         message: Message,
@@ -342,15 +427,35 @@ class HoneypotAgent:
         """Build conversation prompt for Gemini - simplified for agentic prompts."""
         # Limit context to last N turns to reduce latency on deep conversations
         max_turns = self.settings.context_window_turns
-        truncated_history = history[-max_turns:] if len(history) > max_turns else history
-        
+
+        # If history exceeds context window, generate summary of older turns
+        summary_text = ""
+        if len(history) > max_turns:
+            older_turns = history[:-max_turns]
+            summary_text = self._generate_conversation_summary(older_turns)
+            truncated_history = history[-max_turns:]
+        else:
+            truncated_history = history
+
         # Format conversation history
         history_text = ""
         for msg in truncated_history:
             sender = "SCAMMER" if msg.sender == SenderType.SCAMMER else "YOU"
             history_text += f"[{sender}]: {msg.text}\n"
 
-        prompt = f"""CONVERSATION HISTORY:
+        # Build prompt with optional summary
+        if summary_text:
+            prompt = f"""{summary_text}
+
+RECENT CONVERSATION HISTORY:
+{history_text}
+
+SCAMMER'S NEW MESSAGE:
+"{message.text}"
+
+Generate your response as Pushpa Verma:"""
+        else:
+            prompt = f"""CONVERSATION HISTORY:
 {history_text if history_text else "No previous messages"}
 
 SCAMMER'S NEW MESSAGE:
@@ -360,22 +465,40 @@ Generate your response as Pushpa Verma:"""
 
         return prompt
 
+    @staticmethod
+    def _extract_json_text(raw: str) -> str:
+        """Strip markdown code fences and return inner text."""
+        text = raw.strip()
+        if text.startswith("```json"):
+            text = text[7:]
+        elif text.startswith("```"):
+            text = text[3:]
+        if text.endswith("```"):
+            text = text[:-3]
+        return text.strip()
+
     def _parse_agent_json_response(self, response_text: str) -> AgentJsonResponse | None:
-        """Parse the JSON response from the agent. Returns None if parsing fails."""
+        """Parse the JSON response from the agent. Returns None if parsing fails.
+
+        Handles common LLM quirks:
+        - ``other_critical_info`` returned as list[str] instead of list[dict]
+        - Markdown code fences around JSON
+        """
         try:
-            # Try to extract JSON from the response (handle markdown code blocks)
-            text = response_text.strip()
-            if text.startswith("```json"):
-                text = text[7:]
-            if text.startswith("```"):
-                text = text[3:]
-            if text.endswith("```"):
-                text = text[:-3]
-            text = text.strip()
-            
+            text = self._extract_json_text(response_text)
             data = json.loads(text)
+
+            # Normalise other_critical_info: convert bare strings → OtherIntelItem dicts
+            intel = data.get("extracted_intelligence", {})
+            raw_other = intel.get("other_critical_info", [])
+            if raw_other and isinstance(raw_other[0], str):
+                intel["other_critical_info"] = [
+                    {"label": "info", "value": v} for v in raw_other
+                ]
+                data["extracted_intelligence"] = intel
+
             return AgentJsonResponse(**data)
-        except (json.JSONDecodeError, ValidationError) as e:
+        except (json.JSONDecodeError, ValidationError, KeyError, TypeError) as e:
             self.logger.warning(f"Failed to parse agent JSON response: {e}")
             return None
 
@@ -527,6 +650,31 @@ Generate your response as Pushpa Verma:"""
             )
             return parsed.reply_text, parsed.extracted_intelligence
         
+        # Safety net: full Pydantic parse failed, but if the text looks like JSON
+        # try to at least extract reply_text so we never return raw JSON as the reply.
+        try:
+            raw_json = json.loads(self._extract_json_text(response_text))
+            if isinstance(raw_json, dict) and "reply_text" in raw_json:
+                reply = raw_json["reply_text"]
+                self.logger.info("Extracted reply_text from partially-valid JSON")
+                # Also try to salvage intelligence even without full validation
+                intel_dict = raw_json.get("extracted_intelligence")
+                salvaged_intel = None
+                if isinstance(intel_dict, dict):
+                    try:
+                        # Normalise other_critical_info strings → dicts
+                        raw_other = intel_dict.get("other_critical_info", [])
+                        if raw_other and isinstance(raw_other[0], str):
+                            intel_dict["other_critical_info"] = [
+                                {"label": "info", "value": v} for v in raw_other
+                            ]
+                        salvaged_intel = ExtractedIntelligence(**intel_dict)
+                    except Exception:
+                        pass  # skip intel if it can't be parsed
+                return reply, salvaged_intel
+        except (json.JSONDecodeError, KeyError, TypeError):
+            pass
+
         # Fallback: return raw response if JSON parsing fails
         self.logger.debug("Using raw response (JSON parsing failed)")
         return response_text, None
@@ -579,8 +727,8 @@ Generate your response as Pushpa Verma:"""
                 intel_counts.append(f"{len(extracted_intel.phoneNumbers)} Phone(s)")
             if extracted_intel.phishingLinks:
                 intel_counts.append(f"{len(extracted_intel.phishingLinks)} URL(s)")
-            if extracted_intel.emails:
-                intel_counts.append(f"{len(extracted_intel.emails)} Email(s)")
+            if extracted_intel.emailAddresses:
+                intel_counts.append(f"{len(extracted_intel.emailAddresses)} Email(s)")
             if extracted_intel.ifscCodes:
                 intel_counts.append(f"{len(extracted_intel.ifscCodes)} IFSC Code(s)")
             if extracted_intel.whatsappNumbers:

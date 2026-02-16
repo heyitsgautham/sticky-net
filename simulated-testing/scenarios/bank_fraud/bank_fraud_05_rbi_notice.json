@@ -1,0 +1,69 @@
+{
+  "scenarioId": "bank_fraud_05_rbi_notice",
+  "name": "Fake RBI Regulatory Notice Scam",
+  "description": "Scammer impersonates the Reserve Bank of India, claiming the victim's account is flagged for Aadhaar non-compliance, directing them to a phishing link.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "1122334455667788",
+    "phoneNumber": "+91-8877665544",
+    "phishingLink": "http://rbi-compliance-verify.in/kyc"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "IMPORTANT NOTICE from Reserve Bank of India: Your bank account linked to Aadhaar has been flagged for non-compliance with new RBI guidelines. Immediate verification required to avoid account seizure.",
+      "expected_extractions": [],
+      "notes": "Initial authoritative notice from fake RBI."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "As per RBI Circular No. RBI/2026-27/48, all accounts must be re-verified. Complete your verification online at http://rbi-compliance-verify.in/kyc or call the RBI compliance helpline at +91-8877665544.",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber"
+      ],
+      "notes": "Phishing link and phone number introduced with fake circular reference."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If you are unable to access the portal at http://rbi-compliance-verify.in/kyc, you can verify manually. Please provide your bank account details or transfer Re 1 to verification account 1122334455667788 for identity confirmation.",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Bank account revealed alongside repeated phishing link."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "WARNING: Your account seizure process has been initiated. You have 4 hours remaining. Visit http://rbi-compliance-verify.in/kyc immediately or call +91-8877665544. Failure to comply will result in legal action under Banking Regulation Act.",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Escalation with legal threats and repeated link/phone."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "FINAL NOTICE: Account seizure order signed. Last chance to comply. Transfer verification amount to 1122334455667788 or complete at http://rbi-compliance-verify.in/kyc. Call +91-8877665544 for emergency exemption.",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Final warning repeating all extractable data."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "scenarioId": "edge_02_slow_drip",
+  "name": "Slow Drip - Intel Trickles Over 10 Turns",
+  "description": "Scammer gradually reveals intelligence over a full 10-turn conversation, testing the system's ability to maintain engagement and extract data across many turns.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "9988776655443322",
+    "upiId": "verify.slow@ybl",
+    "phoneNumber": "+91-8877665544",
+    "emailAddress": "support@bankcare.help"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, this is customer care. We have noticed some issues with your account. Can you please confirm your name?",
+      "expected_extractions": [],
+      "notes": "Initial contact. No intel revealed yet. Pure social engineering setup."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for confirming. We are from the central banking security division. There has been an unauthorized login attempt on your account recently.",
+      "expected_extractions": [],
+      "notes": "Building trust and false authority. Still no intel revealed."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "For your safety, we need to verify a few details. This is a standard security procedure mandated by RBI. Please cooperate so we can protect your funds.",
+      "expected_extractions": [],
+      "notes": "Continued trust building. No data yet. Using RBI as false authority."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "To proceed with the verification, please call our senior officer directly at +91-8877665544. He is handling your case personally and can explain the situation better.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "First intel revealed: phone number. Scammer directs victim to call."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Were you able to reach the officer? If the line is busy, please wait a few minutes and try again. This is a very sensitive matter and we need to resolve it today itself.",
+      "expected_extractions": [],
+      "notes": "Follow-up with no new intel. Maintaining urgency."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "You can also send your details via email to support@bankcare.help for faster processing. Our email team responds within 5 minutes for priority cases like yours.",
+      "expected_extractions": [
+        "emailAddress"
+      ],
+      "notes": "Second intel revealed: email address."
+    },
+    {
+      "turn": 7,
+      "scammer_message": "I understand this is stressful. Rest assured, your money is safe with us. We just need to complete the verification process. Have you sent the email yet?",
+      "expected_extractions": [],
+      "notes": "No new intel. Emotional manipulation and pressure to use email."
+    },
+    {
+      "turn": 8,
+      "scammer_message": "For the refund of the unauthorized transaction, please send Rs 1 to our secure verification UPI ID: verify.slow@ybl. This will confirm your identity and the refund will be processed immediately.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Third intel revealed: UPI ID. Classic verification scam tactic."
+    },
+    {
+      "turn": 9,
+      "scammer_message": "The verification payment has been received. Now for the final step, we need to confirm your account number. Can you verify that your account ends with 3322?",
+      "expected_extractions": [],
+      "notes": "Partial hint at bank account but not full number yet. Building to final reveal."
+    },
+    {
+      "turn": 10,
+      "scammer_message": "Perfect. We have confirmed the refund of Rs 15,000 to your account 9988776655443322. Please check your balance in 24 hours. For any queries, contact +91-8877665544 or email support@bankcare.help.",
+      "expected_extractions": [
+        "bankAccount",
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Final turn: bank account revealed along with repeated phone and email. All intel now extracted."
+    }
+  ],
+  "expected_score": {
+    "min": 50,
+    "max": 100
+  }
+}

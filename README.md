@@ -33,6 +33,7 @@
 ## 📋 Table of Contents
 
 - [Architecture](#-architecture)
+- [Approach & Strategy](#-approach--strategy)
 - [Key Features](#-key-features--improvements)
 - [Technology Stack](#-technology-stack)
 - [Quick Start](#-quick-start)
@@ -128,6 +129,32 @@
 
 ---
 
+## 🧠 Approach & Strategy
+
+Sticky-Net uses a **multi-stage pipeline** to detect scams, engage scammers, and extract intelligence — all driven by generic, pattern-based logic and LLM reasoning (no hardcoded test responses).
+
+### How We Detect Scams
+
+1. **Regex Pre-Filter (Stage 0)** — A fast keyword/pattern scan (~10ms) catches obvious scam indicators (urgency words, account threats, OTP requests). Obvious safe messages are passed through without AI cost.
+2. **AI Semantic Classifier (Stage 1)** — Messages that pass the pre-filter are analyzed by **Gemini 3 Flash** for context-aware scam classification. The classifier considers the full `conversationHistory` and outputs a confidence score + scam type.
+3. **Monotonic Confidence** — Once a conversation is flagged as a scam, confidence only increases across turns, preventing false negative oscillation.
+
+### How We Extract Intelligence
+
+- **Hybrid Extraction** — Combines fast regex patterns (bank accounts, UPI IDs, phone numbers, URLs, emails) with LLM-powered extraction for context-dependent values.
+- **Generic Patterns** — All extraction is pattern-based and works for _any_ phone number, account, UPI ID, or URL — not tied to specific test data.
+- **Validation & Deduplication** — Extracted values are validated (e.g., Indian phone number prefix check, UPI provider list) and deduplicated across turns.
+- **Accumulated Intelligence** — Intel is accumulated across the full conversation session and reported via the callback endpoint.
+
+### How We Maintain Engagement
+
+- **Believable Persona** — The AI engagement agent (Gemini 3 Pro) roleplays as a naive, confused victim who asks clarifying questions that naturally prompt scammers to share identifying information.
+- **Adaptive Engagement Policy** — Confidence 0.6–0.85 triggers CAUTIOUS mode (up to 10 turns); confidence > 0.85 triggers AGGRESSIVE mode (up to 25 turns).
+- **Natural Intelligence Elicitation** — The agent asks for phone numbers, account details, and verification steps in a way that feels organic to the scammer.
+- **Smart Exit Conditions** — Engagement ends when all critical intel is gathered, the conversation stalls, or the scammer shows awareness.
+
+---
+
 ## 🚀 Key Features & Improvements
 
 ### Intelligent Exit Conditions
@@ -211,7 +238,7 @@ The API now returns comprehensive intelligence with:
 **Backend Setup:**
 ```bash
 # Clone the repository
-git clone https://github.com/codedbykishore/sticky-net.git
+git clone https://github.com/heyitsguatham/sticky-net.git
 cd sticky-net
 
 # Create virtual environment
@@ -329,8 +356,14 @@ The service account needs the following roles:
 
 ### Base URL
 
+**Local Development:**
 ```
 http://localhost:8000/api/v1
+```
+
+**Production (Cloud Run):**
+```
+https://<your-cloud-run-url>/api/v1
 ```
 
 **Web UI (when frontend is running):**
@@ -340,37 +373,39 @@ http://localhost:3000
 
 ### Authentication
 
-All requests require an API key header:
+All API requests require an API key header:
 
 ```
+Content-Type: application/json
 x-api-key: your-api-key
 ```
 
 ### Endpoints
 
-#### `POST /analyze`
+#### `POST /api/v1/analyze` — Primary Honeypot Endpoint
 
-Analyze a message for scam detection and engage if scam is detected.
+This is the main evaluation endpoint. It receives scam messages, detects threats, engages the scammer with a believable reply, extracts intelligence, and asynchronously reports findings via a callback.
 
 **Request:**
 
 ```json
 {
+  "sessionId": "uuid-v4-string",
   "message": {
     "sender": "scammer",
-    "text": "Your bank account will be blocked today. Verify immediately.",
+    "text": "URGENT: Your account has been compromised. Share OTP immediately.",
     "timestamp": "2026-01-21T10:15:30Z"
   },
   "conversationHistory": [
     {
       "sender": "scammer",
       "text": "Previous message from scammer",
-      "timestamp": "2026-01-21T10:10:00Z"
+      "timestamp": "1737451800000"
     },
     {
       "sender": "user",
       "text": "Previous response from honeypot",
-      "timestamp": "2026-01-21T10:12:00Z"
+      "timestamp": "1737451920000"
     }
   ],
   "metadata": {
@@ -381,7 +416,52 @@ Analyze a message for scam detection and engage if scam is detected.
 }
 ```
 
-**Response (Scam Detected):**
+**Response (200 OK):**
+
+The endpoint returns a simplified JSON with the agent's reply — suitable for multi-turn conversation:
+
+```json
+{
+  "status": "success",
+  "reply": "Oh no! Which account is blocked? I have SBI and HDFC both. Please help me sir!"
+}
+```
+
+> The evaluator checks for `reply`, `message`, or `text` fields in that order.
+
+#### Final Output (Callback)
+
+After each turn, the system **asynchronously** sends a full intelligence report to the evaluation callback endpoint with the following structure:
+
+```json
+{
+  "sessionId": "uuid-v4-string",
+  "status": "success",
+  "scamDetected": true,
+  "totalMessagesExchanged": 18,
+  "extractedIntelligence": {
+    "phoneNumbers": ["+91-9876543210"],
+    "bankAccounts": ["1234567890123456"],
+    "upiIds": ["scammer.fraud@fakebank"],
+    "phishingLinks": ["http://malicious-site.com"],
+    "emailAddresses": ["scammer@fake.com"]
+  },
+  "engagementMetrics": {
+    "engagementDurationSeconds": 420,
+    "totalMessagesExchanged": 18
+  },
+  "agentNotes": "Scammer used urgency tactics and payment redirection"
+}
+```
+
+Intelligence is **accumulated across turns** — each callback contains the full set of intel gathered so far in the session.
+
+#### `POST /api/v1/analyze/detailed` — Frontend Endpoint
+
+Returns the full analysis response including confidence scores, scam type, and complete extracted intelligence. Used by the web UI.
+
+<details>
+<summary>Detailed Response Schema</summary>
 
 ```json
 {
@@ -408,38 +488,11 @@ Analyze a message for scam detection and engage if scam is detected.
     ]
   },
   "agentNotes": "Scammer used urgency tactics and payment redirection",
-  "agentResponse": "Oh no! Which account is blocked? I have SBI and HDFC both. Please help me sir, I don't know what to do!"
+  "agentResponse": "Oh no! Which account is blocked?"
 }
 ```
 
-**Response (Not a Scam):**
-
-```json
-{
-  "status": "success",
-  "scamDetected": false,
-  "scamType": null,
-  "confidence": 0.15,
-  "engagementMetrics": {
-    "engagementDurationSeconds": 0,
-    "totalMessagesExchanged": 0
-  },
-  "extractedIntelligence": {
-    "bankAccounts": [],
-    "upiIds": [],
-    "phoneNumbers": [],
-    "beneficiaryNames": [],
-    "phishingLinks": [],
-    "ifscCodes": [],
-    "bankNames": [],
-    "whatsappNumbers": [],
-    "emails": [],
-    "other_critical_info": []
-  },
-  "agentNotes": "",
-  "agentResponse": null
-}
-```
+</details>
 
 #### `GET /health`
 
@@ -454,16 +507,20 @@ Health check endpoint.
 
 ### Scam Types
 
-The system classifies scams into the following categories:
+The system classifies scams into the following categories (generic detection — not limited to these):
 
 | Type | Description |
 |------|-------------|
 | `banking_fraud` | Fake bank alerts, account blocking threats |
+| `upi_fraud` | Cashback scams, UPI verification requests |
 | `job_offer` | Work-from-home scams, fake job offers |
 | `lottery_reward` | KBC lottery, prize winning scams |
+| `phishing` | Fake product offers with malicious links |
 | `impersonation` | Government official, company impersonation |
-| `others` | Other types of scams |
+| `investment_scam` | Investment and trading scheme fraud |
+| `others` | Any other type of scam |
 
+> The system is designed to detect **any** scam type generically — it does not rely on hardcoded scenario matching.
 
 
 ---
@@ -617,16 +674,16 @@ Run the full test suite using pytest:
 source .venv/bin/activate
 
 # Run all tests with verbose output
-pytest tests/ -v
+.venv/bin/python -m pytest tests/ -v
 
 # Run specific test files
-pytest tests/test_api.py -v
-pytest tests/test_detection.py -v
-pytest tests/test_agent.py -v
-pytest tests/test_extractor.py -v
+.venv/bin/python -m pytest tests/test_api.py -v
+.venv/bin/python -m pytest tests/test_detection.py -v
+.venv/bin/python -m pytest tests/test_agent.py -v
+.venv/bin/python -m pytest tests/test_extractor.py -v
 
 # Run with coverage report
-pytest tests/ --cov=src --cov-report=html
+.venv/bin/python -m pytest tests/ --cov=src --cov-report=html
 ```
 
 **Test Coverage:**
@@ -845,6 +902,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+## 🏆 Submission Information
+
+| Field | Value |
+|-------|-------|
+| **Deployed URL** | `https://<your-cloud-run-url>/api/v1/analyze` |
+| **API Key** | Sent via `x-api-key` header |
+| **GitHub URL** | [github.com/heyitsguatham/sticky-net](https://github.com/heyitsguatham/sticky-net) |
+| **Method** | `POST` |
+| **Response Time** | < 30 seconds per request |
+| **Max Turns** | Supports up to 10+ sequential requests per session |
+
+---
+
 ## 🙏 Acknowledgments
 
 - **Google Gemini Team** — For the powerful AI models
@@ -857,7 +927,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact
 
-**Project Repository:** [github.com/codedbykishore/sticky-net](https://github.com/codedbykishore/sticky-net)
+**Project Repository:** [github.com/heyitsguatham/sticky-net](https://github.com/heyitsguatham/sticky-net)
 
 **Reporting Scams in India:**
 - National Cyber Crime Reporting Portal: [cybercrime.gov.in](https://cybercrime.gov.in)

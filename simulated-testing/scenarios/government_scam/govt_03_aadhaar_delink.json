@@ -1,0 +1,64 @@
+{
+  "scenarioId": "govt_03_aadhaar_delink",
+  "name": "Aadhaar Deactivation Threat Scam",
+  "description": "Scammer impersonates UIDAI claiming the victim's Aadhaar will be deactivated due to suspected misuse, then directs them to a phishing link and collects personal information.",
+  "scamType": "government_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-7788991100",
+    "phishingLink": "http://aadhaar-verification-portal.in/verify",
+    "emailAddress": "support@uidai-helpline.com"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "UIDAI ALERT: Your Aadhaar number linked to mobile +91-XXXXXXXX will be deactivated on 18/02/2026 due to suspected misuse. Verify immediately to prevent deactivation.",
+      "expected_extractions": [],
+      "notes": "Initial scare message impersonating UIDAI with deactivation threat."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear citizen, your Aadhaar has been flagged for misuse in a fraud case. To prevent permanent deactivation, complete re-verification at our official portal: http://aadhaar-verification-portal.in/verify — Upload your Aadhaar front/back and a selfie for biometric matching.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares phishing link disguised as official UIDAI verification portal."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If you are unable to access the portal, please call our UIDAI helpline at +91-7788991100 for assisted verification. Our officers are available 24x7. You can also email your Aadhaar copy to support@uidai-helpline.com for manual processing.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Scammer provides fake phone number and email address as alternative contact methods."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "We have received multiple complaints about your Aadhaar being used for fraudulent SIM cards and bank accounts. This is a serious offence under IT Act Section 66D. Complete verification at http://aadhaar-verification-portal.in/verify within 12 hours or face legal action.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer escalates with legal threats and repeats phishing link."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "FINAL WARNING: Your Aadhaar deactivation is scheduled for today 11:59 PM. All linked services — bank accounts, SIM cards, PAN, passport — will be suspended. Call +91-7788991100 NOW or write to support@uidai-helpline.com to stop the process. This is your last chance.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Final urgency with deadline, repeating phone and email with threat of all linked services being suspended."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

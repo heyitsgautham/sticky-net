@@ -1,0 +1,67 @@
+{
+  "scenarioId": "bank_fraud_06_card_block",
+  "name": "Credit Card Blocking Scam",
+  "description": "Scammer sends fake transaction alert about SBI credit card usage at Amazon, urging victim to call and share details to 'block' the card.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "4567890123456789",
+    "phoneNumber": "+91-9900110022",
+    "upiId": "sbi.card.security@ybl"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Your SBI Credit Card ending 4567 has been used for a transaction of Rs 49,999 at Amazon. If this was not you, call immediately to block your card.",
+      "expected_extractions": [],
+      "notes": "Initial fake transaction alert to create panic."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "We understand this is alarming. To immediately block your card and reverse the unauthorized transaction, please contact our 24x7 fraud helpline at +91-9900110022. Do not delay.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Phone number revealed for fake fraud helpline."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "To process the reversal of Rs 49,999, our system requires a security deposit of Rs 999. Please transfer to our secure account 4567890123456789. This will be refunded along with the reversed amount within 48 hours.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Bank account introduced for 'security deposit'."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "You can also pay the security deposit via UPI for instant processing. Send Rs 999 to sbi.card.security@ybl. Your card will be blocked and the amount of Rs 49,999 will be reversed to your account immediately.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "UPI ID revealed as faster payment option."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "URGENT: Another transaction of Rs 35,000 is being attempted on your card RIGHT NOW. Pay security deposit to sbi.card.security@ybl or account 4567890123456789 immediately. Call +91-9900110022 for emergency blocking.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "Escalation with second fake transaction, all details repeated."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

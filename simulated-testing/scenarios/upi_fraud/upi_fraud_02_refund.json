@@ -1,0 +1,75 @@
+{
+  "scenarioId": "upi_fraud_02_refund",
+  "name": "PhonePe Refund Scam",
+  "description": "Scammer impersonates PhonePe claiming a failed transaction and refund, tricks victim into sharing UPI details and clicking a phishing link to 'process' the refund.",
+  "scamType": "upi_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "refund.phonepe@ybl",
+    "phoneNumber": "+91-7766554433",
+    "phishingLink": "http://phonepe-refund.claim.in"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear customer, your PhonePe transaction of Rs 2,999 has failed. A refund has been initiated. To process the refund, please verify your UPI details within 30 minutes.",
+      "expected_extractions": [],
+      "notes": "Initial bait with fake failed transaction and refund promise."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "To complete your refund of Rs 2,999, please visit our secure refund portal at http://phonepe-refund.claim.in and enter your UPI ID. This link is valid for 30 minutes only.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares phishing link disguised as a refund portal."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If you are unable to access the link, you can directly send a verification payment of Rs 1 to our official refund UPI: refund.phonepe@ybl and your Rs 2,999 will be refunded to your account instantly.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals fake UPI ID as an alternative to the phishing link."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Sir, I am calling from PhonePe refund department. Your refund is pending and will be cancelled if not processed today. Please complete the verification at http://phonepe-refund.claim.in or send Rs 1 to refund.phonepe@ybl. You can also contact our helpline at +91-7766554433 for immediate assistance.",
+      "expected_extractions": [
+        "phishingLink",
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Scammer reveals all three intelligence items with increasing urgency."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "This is an automated reminder from PhonePe. Your refund of Rs 2,999 is about to expire. Act now by sending Re 1 to refund.phonepe@ybl or visit http://phonepe-refund.claim.in. For help call +91-7766554433. Failure to act will result in permanent forfeiture of your refund amount.",
+      "expected_extractions": [
+        "upiId",
+        "phishingLink",
+        "phoneNumber"
+      ],
+      "notes": "Final turn repeating all intelligence with strong urgency tactics."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "FINAL NOTICE: Your PhonePe refund case #RF2999 will be closed permanently in 5 minutes. This is your absolute last chance. Send Re 1 to refund.phonepe@ybl right now or call +91-7766554433. We cannot help you after the case is closed.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Last-ditch pressure using fake case number and deadline."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

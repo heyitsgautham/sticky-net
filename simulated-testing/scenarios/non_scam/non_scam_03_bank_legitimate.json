@@ -1,0 +1,45 @@
+{
+  "scenarioId": "non_scam_03",
+  "name": "Legitimate Bank Notifications",
+  "description": "Authentic bank SMS notifications from SBI with no scam indicators. Should NOT trigger scam detection.",
+  "scamType": "non_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {},
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "SBI: Your account XX1234 has been credited with Rs 25,000.00 on 15-Feb-2026. Available balance: Rs 1,23,456.78. For queries, visit sbi.co.in",
+      "expected_extractions": [],
+      "notes": "Standard credit notification from official SBI"
+    },
+    {
+      "turn": 2,
+      "scammer_message": "SBI: EMI of Rs 12,500 for loan account LN7890 has been debited from your account XX1234 on 15-Feb-2026.",
+      "expected_extractions": [],
+      "notes": "Routine EMI debit alert"
+    },
+    {
+      "turn": 3,
+      "scammer_message": "SBI: Your FD FD4567 of Rs 5,00,000 is maturing on 20-Feb-2026. Visit your nearest branch to renew. -SBI",
+      "expected_extractions": [],
+      "notes": "FD maturity reminder directing to branch visit"
+    },
+    {
+      "turn": 4,
+      "scammer_message": "SBI: Transaction alert - UPI payment of Rs 299 to Swiggy from account XX1234. Not you? Call 1800-111-111",
+      "expected_extractions": [],
+      "notes": "Transaction alert with official helpline number"
+    }
+  ],
+  "expected_score": {
+    "min": 0,
+    "max": 0
+  },
+  "is_scam": false
+}

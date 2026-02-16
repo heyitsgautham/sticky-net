@@ -1,0 +1,67 @@
+{
+  "scenarioId": "investment_03_forex",
+  "name": "Forex Trading Automated System Scam",
+  "description": "Scammer promotes a fake automated forex trading system promising guaranteed monthly returns with zero risk, collecting deposits via bank transfer and directing victims to a phishing signup portal.",
+  "scamType": "investment_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "2211334455667700",
+    "phoneNumber": "+91-9900776655",
+    "phishingLink": "http://forex-elite-traders.com/signup"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Exclusive Forex Trading Opportunity! Our automated trading system generates 15-20% monthly returns. Start with just Rs 5,000. Over 10,000 satisfied investors worldwide. Zero risk guarantee.",
+      "expected_extractions": [],
+      "notes": "Initial bait with impossible guaranteed forex returns and zero risk claims."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for your inquiry. Our Forex Elite Trading system uses advanced algorithms developed by Goldman Sachs alumni. To get started, create your investor account at http://forex-elite-traders.com/signup. The minimum deposit is Rs 5,000 and you can withdraw profits anytime.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer uses prestigious name-dropping and shares phishing link for account creation."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "To fund your trading account, please transfer your investment amount to our escrow account: 2211334455667700 (Kotak Mahindra Bank, IFSC: KKBK0001234). Your fund manager will be assigned within 24 hours. For queries, reach our India desk at +91-9900776655.",
+      "expected_extractions": [
+        "bankAccount",
+        "phoneNumber"
+      ],
+      "notes": "Scammer reveals bank account and phone number, using 'escrow account' terminology for legitimacy."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "I wanted to share some exciting news - our system generated 18.5% returns last month! Check live results at http://forex-elite-traders.com/signup. Many Indian investors are already profiting. Transfer Rs 5,000 to account 2211334455667700 to start earning today. Call +91-9900776655 for a free consultation.",
+      "expected_extractions": [
+        "phishingLink",
+        "bankAccount",
+        "phoneNumber"
+      ],
+      "notes": "Scammer repeats all details with fake performance data to build confidence."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "EXCLUSIVE OFFER expiring midnight: Invest Rs 10,000 or more today and get a 50% bonus credit in your trading account! Transfer to 2211334455667700 and register at http://forex-elite-traders.com/signup. Call +91-9900776655 for priority activation. Don't miss this limited-time opportunity!",
+      "expected_extractions": [
+        "bankAccount",
+        "phishingLink",
+        "phoneNumber"
+      ],
+      "notes": "Final pressure with bonus offer, midnight deadline, and all contact/payment details repeated."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "scenarioId": "upi_fraud_01_cashback",
+  "name": "Paytm Cashback Scam",
+  "description": "Scammer impersonates Paytm customer support offering a fake cashback reward, then asks victim to share UPI details and make a small payment to 'verify' their account.",
+  "scamType": "upi_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "cashback.scam@fakeupi",
+    "phoneNumber": "+91-8765432109"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Congratulations! You have won a cashback of Rs. 5000 from Paytm. To claim your reward, please verify your UPI details. This is from official customer support.",
+      "expected_extractions": [],
+      "notes": "Initial bait message using cashback lure and fake official branding."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for your interest! To process your Rs 5000 cashback, we need to verify your UPI account. Please send a test payment of Rs 1 to our verification UPI ID: cashback.scam@fakeupi and your cashback will be credited within 5 minutes.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals the fake UPI ID and asks victim to send money to it."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Sir, this is a completely safe and official process. Paytm does this for all cashback winners. If you are having any trouble, you can also call our support team at +91-8765432109 for assistance. Please complete the verification quickly, the offer expires in 10 minutes.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer adds urgency and provides a fake phone number for 'support'."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "I understand your concern but this is 100% genuine. Many customers have already claimed their cashback today. Just send Rs 1 to cashback.scam@fakeupi and you will receive Rs 5000 immediately. This is our official verification process as per RBI guidelines.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer repeats UPI ID and uses false authority (RBI) to convince victim."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "This is your last chance! The cashback offer of Rs 5000 will expire in 2 minutes. Send Re 1 now to cashback.scam@fakeupi or call +91-8765432109. Don't miss this opportunity, it won't come again!",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Final pressure with urgency, repeating both UPI ID and phone number."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

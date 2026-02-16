@@ -1,0 +1,67 @@
+{
+  "scenarioId": "upi_fraud_04_collect_request",
+  "name": "Fake UPI Collect Request Scam",
+  "description": "Scammer sends a fake UPI payment notification claiming the victim received money, tricks them into approving a collect request that actually debits their account.",
+  "scamType": "upi_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "payment.hdfc@oksbi",
+    "phoneNumber": "+91-8811223344",
+    "bankAccount": "7788990011223344"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "You have received a payment of Rs 15,000 from HDFC Bank. To accept this payment, please approve the collect request on your UPI app. Payment reference: TXN78901234.",
+      "expected_extractions": [],
+      "notes": "Initial bait with fake incoming payment notification."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear customer, this is HDFC Bank payment processing department. The Rs 15,000 transfer to your account is pending your approval. Please approve the collect request from payment.hdfc@oksbi on your UPI app. This is a secure bank-to-bank transfer.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals UPI ID and impersonates HDFC Bank."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If you are not seeing the collect request, it may be because your UPI app needs to be refreshed. The payment of Rs 15,000 has been initiated from HDFC account number 7788990011223344. Please check and approve the request from payment.hdfc@oksbi at the earliest.",
+      "expected_extractions": [
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "Scammer reveals fake bank account number to appear legitimate."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Sir, I am the payment processing officer handling your case. The Rs 15,000 will be reversed if not accepted within 15 minutes. Please approve the collect request from payment.hdfc@oksbi or call our payment helpdesk at +91-8811223344 for manual processing. Source account: 7788990011223344.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "All three intelligence items revealed with time pressure."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "FINAL REMINDER: Payment of Rs 15,000 from account 7788990011223344 will be cancelled in 5 minutes. Approve the collect request from payment.hdfc@oksbi immediately or contact +91-8811223344. This amount cannot be re-initiated once cancelled as per RBI norms.",
+      "expected_extractions": [
+        "bankAccount",
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Final pressure with all intelligence items and false RBI reference."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "scenarioId": "bank_fraud_02_hdfc_kyc",
+  "name": "HDFC KYC Update Scam",
+  "description": "Scammer impersonates HDFC Bank and pressures victim to update KYC details, threatening deactivation of net banking and debit card services.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "9876543210987654",
+    "phoneNumber": "+91-8899001122",
+    "upiId": "hdfc.kyc.update@ybl"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Customer, your HDFC Bank KYC update is pending. Your net banking and debit card will be deactivated within 24 hours. Visit our branch or update online immediately.",
+      "expected_extractions": [],
+      "notes": "Initial KYC scare message with no extractable data."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Since you cannot visit the branch, we can process your KYC update over phone. Please call our dedicated KYC helpline at +91-8899001122. Our executive will guide you through the process.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides phone number for 'KYC helpline'."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "To verify your identity for KYC, we need you to make a token payment of Rs 10 to our verification account 9876543210987654 at HDFC Bank. This amount will be refunded after KYC completion.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Bank account introduced for 'token verification payment'."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "If you prefer UPI payment, you can send Rs 10 to hdfc.kyc.update@ybl for faster processing. Many customers find this easier. Your KYC will be updated within 15 minutes of payment.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "UPI ID revealed as alternative payment method."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Sir, we see your KYC is still pending. Only 6 hours remaining before deactivation. Please complete payment to hdfc.kyc.update@ybl or account 9876543210987654 and call +91-8899001122 for confirmation.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "All details reinforced with time pressure."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "This is the last reminder from HDFC Bank KYC department. If you do not complete verification within 2 hours, your account will be permanently closed. Contact +91-8899001122 immediately to avoid disruption.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "Final threatening reminder repeating phone number."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

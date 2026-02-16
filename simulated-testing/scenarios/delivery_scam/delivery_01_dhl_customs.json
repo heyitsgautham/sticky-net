@@ -1,0 +1,64 @@
+{
+  "scenarioId": "delivery_01_dhl_customs",
+  "name": "DHL Customs Duty Scam",
+  "description": "Scammer impersonates DHL Express claiming an international package is held at customs and requires payment of customs duty, then extracts UPI ID and directs victim to a phishing payment page.",
+  "scamType": "delivery_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "dhl.customs.india@oksbi",
+    "phoneNumber": "+91-7890123456",
+    "phishingLink": "http://dhl-customs-clearance.co/pay"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "DHL Express: Your international package from UK (Tracking: DHL78901234IN) is held at customs. Payment of Rs 3,500 customs duty required within 24 hours or package will be returned.",
+      "expected_extractions": [],
+      "notes": "Initial bait message impersonating DHL with customs duty payment demand."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear customer, to release your package DHL78901234IN from Indian customs, please pay the duty of Rs 3,500 via our secure payment portal: http://dhl-customs-clearance.co/pay — You can pay using credit card, debit card or net banking.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares phishing link disguised as DHL payment portal."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "For faster clearance, you can also pay the customs duty directly via UPI. Send Rs 3,500 to our official DHL India customs UPI: dhl.customs.india@oksbi — Your package will be dispatched for delivery within 4 hours of payment confirmation.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals UPI ID as alternative payment method."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "If you need any assistance with the customs clearance process, please call our DHL India customer support at +91-7890123456. Our agents can also process the payment over the phone. Package return process starts in 6 hours.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides fake phone number and adds time pressure."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "FINAL NOTICE: Your package DHL78901234IN will be RETURNED TO SENDER in 2 hours if customs duty of Rs 3,500 is not paid. Pay now at http://dhl-customs-clearance.co/pay or UPI: dhl.customs.india@oksbi or call +91-7890123456. No further extensions possible.",
+      "expected_extractions": [
+        "phishingLink",
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Final urgency message repeating all fake data with return-to-sender threat."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

@@ -15,15 +15,18 @@ class CallbackIntelligence(BaseModel):
     upiIds: list[str] = []
     phishingLinks: list[str] = []
     phoneNumbers: list[str] = []
+    emailAddresses: list[str] = []
     suspiciousKeywords: list[str] = []
 
 
 class CallbackPayload(BaseModel):
     """Full payload to send to GUVI callback endpoint."""
     sessionId: str
+    status: str = "success"
     scamDetected: bool
     totalMessagesExchanged: int
     extractedIntelligence: CallbackIntelligence
+    engagementMetrics: dict = {}
     agentNotes: str
 
 
@@ -32,7 +35,8 @@ async def send_guvi_callback(
     scam_detected: bool,
     total_messages: int,
     intelligence: dict,
-    agent_notes: str
+    agent_notes: str,
+    engagement_duration: int = 0,
 ) -> bool:
     """
     Send extracted intelligence to GUVI evaluation endpoint.
@@ -41,8 +45,9 @@ async def send_guvi_callback(
         session_id: Unique session ID from the platform
         scam_detected: Whether scam intent was confirmed
         total_messages: Total messages exchanged in session
-        intelligence: Dict with bankAccounts, upiIds, phishingLinks, phoneNumbers, suspiciousKeywords
+        intelligence: Dict with bankAccounts, upiIds, phishingLinks, phoneNumbers, emailAddresses, suspiciousKeywords
         agent_notes: Summary of scammer behavior
+        engagement_duration: Duration in seconds since first message in this session
         
     Returns:
         True if callback was successful, False otherwise
@@ -60,14 +65,20 @@ async def send_guvi_callback(
         upiIds=intelligence.get("upiIds", []),
         phishingLinks=intelligence.get("phishingLinks", []),
         phoneNumbers=intelligence.get("phoneNumbers", []),
+        emailAddresses=intelligence.get("emailAddresses", []),
         suspiciousKeywords=intelligence.get("suspiciousKeywords", [])
     )
     
     payload = CallbackPayload(
         sessionId=session_id,
+        status="success",
         scamDetected=scam_detected,
         totalMessagesExchanged=total_messages,
         extractedIntelligence=callback_intel,
+        engagementMetrics={
+            "engagementDurationSeconds": engagement_duration,
+            "totalMessagesExchanged": total_messages,
+        },
         agentNotes=agent_notes
     )
     
@@ -103,7 +114,8 @@ def send_guvi_callback_sync(
     scam_detected: bool,
     total_messages: int,
     intelligence: dict,
-    agent_notes: str
+    agent_notes: str,
+    engagement_duration: int = 0,
 ) -> bool:
     """
     Synchronous version of send_guvi_callback.
@@ -121,14 +133,20 @@ def send_guvi_callback_sync(
         upiIds=intelligence.get("upiIds", []),
         phishingLinks=intelligence.get("phishingLinks", []),
         phoneNumbers=intelligence.get("phoneNumbers", []),
+        emailAddresses=intelligence.get("emailAddresses", []),
         suspiciousKeywords=intelligence.get("suspiciousKeywords", [])
     )
     
     payload = CallbackPayload(
         sessionId=session_id,
+        status="success",
         scamDetected=scam_detected,
         totalMessagesExchanged=total_messages,
         extractedIntelligence=callback_intel,
+        engagementMetrics={
+            "engagementDurationSeconds": engagement_duration,
+            "totalMessagesExchanged": total_messages,
+        },
         agentNotes=agent_notes
     )
     

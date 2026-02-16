@@ -1,0 +1,77 @@
+{
+  "scenarioId": "investment_01_crypto",
+  "name": "Cryptocurrency Trading Bot Scam",
+  "description": "Scammer poses as a senior analyst at a fake crypto trading firm, promising guaranteed 3x returns through an AI trading bot, then collects investment payments via UPI and bank transfer while directing victims to a phishing portal.",
+  "scamType": "investment_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "9988776655443311",
+    "upiId": "cryptowealth.invest@paytm",
+    "phoneNumber": "+91-9876501234",
+    "phishingLink": "http://cryptowealth-india.trade/join"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello! I'm a senior analyst at CryptoWealth India. Our AI trading bot has 98% accuracy rate. Minimum investment Rs 10,000, guaranteed 3x returns in 30 days. Join our exclusive group of 500+ successful investors.",
+      "expected_extractions": [],
+      "notes": "Initial bait with guaranteed high returns and fake credentials to attract victims."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for your interest! Let me show you our investor dashboard where you can track live profits. Visit http://cryptowealth-india.trade/join to create your free account. Our current investors are seeing 15-20% weekly returns. I can guide you through the entire process.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares phishing link disguised as an investor dashboard."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "To start investing, the minimum amount is Rs 10,000. You can pay via UPI to cryptowealth.invest@paytm for instant activation. Your trading bot will start generating profits within 24 hours. For any questions, call our investment helpline at +91-9876501234.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Scammer reveals UPI ID and phone number for investment collection."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "I understand you want to verify first. Check the testimonials on our portal http://cryptowealth-india.trade/join. For larger investments above Rs 50,000, you can transfer directly to our corporate account 9988776655443311 (ICICI Bank) for better returns. Many investors start small and then increase.",
+      "expected_extractions": [
+        "phishingLink",
+        "bankAccount"
+      ],
+      "notes": "Scammer shares bank account for larger amounts and repeats phishing link."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "SPECIAL OFFER: Invest Rs 25,000 today and get a bonus Rs 5,000 trading credit! This offer is only for the next 50 investors. Pay to cryptowealth.invest@paytm or account 9988776655443311. Register at http://cryptowealth-india.trade/join now!",
+      "expected_extractions": [
+        "upiId",
+        "bankAccount",
+        "phishingLink"
+      ],
+      "notes": "Scammer uses limited-time bonus offer to push for immediate investment."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Last chance for the bonus offer! Only 5 spots remaining. Our AI bot made 22% profit just today. Transfer minimum Rs 10,000 to cryptowealth.invest@paytm or bank account 9988776655443311. Call +91-9876501234 for VIP onboarding. This opportunity won't come again!",
+      "expected_extractions": [
+        "upiId",
+        "bankAccount",
+        "phoneNumber"
+      ],
+      "notes": "Final pressure with artificial scarcity, repeating all payment methods and contact info."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

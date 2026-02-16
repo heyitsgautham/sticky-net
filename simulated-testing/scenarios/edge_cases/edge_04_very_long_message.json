@@ -1,0 +1,52 @@
+{
+  "scenarioId": "edge_04_very_long_message",
+  "name": "Very Long Message - Intel Buried in 2000+ Chars",
+  "description": "Scammer sends an extremely long email (2000+ characters) about a fake insurance policy maturity with intelligence buried deep within paragraphs of text. Tests extraction from verbose content.",
+  "scamType": "phishing",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-9900881122",
+    "phishingLink": "http://lic-maturity-claim.in/process",
+    "emailAddress": "claims@lic-policy-india.com"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Subject: IMPORTANT - Your LIC Policy No. 482917365 Has Matured - Immediate Action Required\n\nDear Valued Policyholder,\n\nGreetings from the Life Insurance Corporation of India (LIC). We are writing to inform you about a very important matter regarding your insurance policy. After careful review of our records and in accordance with the guidelines set forth by the Insurance Regulatory and Development Authority of India (IRDAI), we have determined that your policy number 482917365 has reached its maturity date.\n\nAs per the terms and conditions of your endowment plan, which was initiated on 15th March 2006, your policy has successfully completed its full term of 20 years. We are pleased to inform you that the total maturity benefit, including bonuses accumulated over the years and the loyalty addition component, amounts to Rs 12,47,850 (Twelve Lakhs Forty-Seven Thousand Eight Hundred and Fifty Rupees Only).\n\nThis is a significant milestone and we congratulate you on successfully maintaining your policy throughout its tenure. The bonuses have been calculated based on the annual declarations made by the Corporation, and the loyalty addition has been applied as per the prevailing rates for policies completing their full term.\n\nTo claim your maturity proceeds, you are required to complete the verification process. Due to the recent digitization initiative by LIC in collaboration with the Government of India's Digital India programme, all maturity claims are now being processed through our secure online portal. Please visit http://lic-maturity-claim.in/process to submit your claim form along with the required documents. The portal uses bank-grade encryption and is completely secure for your personal information.\n\nThe documents required for processing your claim include: (1) Original policy bond or indemnity bond in case of lost policy, (2) NEFT mandate form with cancelled cheque, (3) Identity proof such as Aadhaar or PAN card, (4) Recent passport-size photograph, and (5) Discharge voucher signed by the policyholder.\n\nPlease note that as per IRDAI regulations, maturity claims must be filed within 90 days of the maturity date. Failure to do so may result in the claim being classified as unclaimed and the amount being transferred to the Senior Citizens' Welfare Fund as mandated by the government. We strongly urge you to complete this process at the earliest.\n\nIf you have any questions or require assistance with the claim process, please do not hesitate to contact our dedicated maturity claims department. You can reach our claims officer Mr. Rajesh Kumar directly at +91-9900881122 during business hours (9 AM to 6 PM, Monday to Saturday). Alternatively, you can send your queries and documents via email to claims@lic-policy-india.com and our team will respond within 24 working hours.\n\nWe value your trust in LIC and look forward to serving you in the future. Please consider our new policy offerings for continued financial security for you and your family.\n\nWarm regards,\nMr. Suresh Patel\nSenior Manager - Maturity Claims Division\nLife Insurance Corporation of India\nCentral Office, Mumbai\nRef: LIC/MAT/2026/482917365",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Extremely long message (2000+ chars) with all three intel items buried within paragraphs. Phone number and email are in the contact section, phishing link is in the claims process section."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear Sir/Madam, this is a follow-up to our earlier communication regarding your LIC policy maturity. We noticed that you have not yet initiated the claim process on our portal http://lic-maturity-claim.in/process. Please be advised that the 90-day window is closing soon. Contact +91-9900881122 for urgent assistance.",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber"
+      ],
+      "notes": "Follow-up with repeated phishing link and phone number. Shorter message with urgency."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "FINAL REMINDER: Your maturity claim of Rs 12,47,850 expires in 7 days. After this, funds will be forfeited to government as per IRDAI mandate. Email claims@lic-policy-india.com or call +91-9900881122 TODAY. This is your last opportunity to claim your rightful amount.",
+      "expected_extractions": [
+        "emailAddress",
+        "phoneNumber"
+      ],
+      "notes": "Final pressure message repeating email and phone. All intel has been revealed across the conversation."
+    }
+  ],
+  "expected_score": {
+    "min": 50,
+    "max": 100
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "scenarioId": "delivery_02_bluedart",
+  "name": "BlueDart Redelivery Fee Scam",
+  "description": "Scammer impersonates BlueDart claiming a delivery attempt failed and asks for a small redelivery fee via UPI, using the low amount to reduce victim suspicion.",
+  "scamType": "delivery_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "bluedart.redeliver@paytm",
+    "phoneNumber": "+91-8811990022"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "BlueDart: Delivery attempt failed for AWB 12345678. Package will be returned to sender. Pay Rs 49 redelivery charge to reschedule.",
+      "expected_extractions": [],
+      "notes": "Initial bait message impersonating BlueDart with low redelivery charge to reduce suspicion."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear customer, your BlueDart package AWB 12345678 could not be delivered as no one was available at the address. To reschedule delivery, please pay the redelivery fee of Rs 49 via UPI to: bluedart.redeliver@paytm — Delivery will be attempted tomorrow.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals UPI ID for the small redelivery fee payment."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If you are having trouble with UPI payment, you can call our BlueDart customer care at +91-8811990022 and pay the Rs 49 redelivery charge over phone using your card. Our executive will also help you update your delivery address if needed.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides fake phone number, potentially to collect card details over call."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Last reminder: Your package AWB 12345678 will be returned to sender today if redelivery fee is not paid. Pay Rs 49 to bluedart.redeliver@paytm or call +91-8811990022 to reschedule. After return, you will need to place a new order.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Final urgency repeating both UPI and phone number with return-to-sender threat."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

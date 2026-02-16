@@ -1,0 +1,64 @@
+{
+  "scenarioId": "upi_fraud_03_gpay_reward",
+  "name": "Google Pay Reward Scam",
+  "description": "Scammer impersonates Google Pay offering a fake reward, tricks victim into sending money to a scam UPI ID under the guise of 'account verification'.",
+  "scamType": "upi_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "gpay.rewards@okicici",
+    "phoneNumber": "+91-9900887766"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Google Pay Special Offer! You've been selected for a reward of Rs 1,500. Send Rs 1 to our official UPI to verify your Google Pay account and receive your reward instantly!",
+      "expected_extractions": [],
+      "notes": "Initial lure with fake Google Pay reward offer."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for responding! To claim your Google Pay reward of Rs 1,500, simply send Rs 1 to our verified UPI ID: gpay.rewards@okicici. This is a one-time verification step required by Google. Your reward will be credited within 2 minutes after verification.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals the fake UPI ID and creates urgency."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "I can see your account is eligible for the reward. Many users have already received Rs 1,500 today. If you need any help with the process, our Google Pay support executive is available at +91-9900887766. Just send Rs 1 to gpay.rewards@okicici to get started.",
+      "expected_extractions": [
+        "phoneNumber",
+        "upiId"
+      ],
+      "notes": "Scammer provides fake phone number and repeats UPI ID with social proof."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Sir, I understand you may have questions. This is completely safe. Google Pay runs these promotions quarterly. The UPI ID gpay.rewards@okicici is our official rewards account. You can verify by calling +91-9900887766. Only Rs 1 is needed for verification, and you get Rs 1,500 back instantly.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Scammer uses false reassurance and repeats both data points."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "URGENT: Your Google Pay reward of Rs 1,500 expires in 3 minutes! This is the final notification. Send Rs 1 to gpay.rewards@okicici NOW or call +91-9900887766 immediately. After expiry, the reward will be transferred to another user. Don't lose your money!",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Final turn with maximum urgency, repeating all intelligence."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "scenarioId": "phishing_02_flipkart_sale",
+  "name": "Flipkart Flash Sale Phishing",
+  "description": "Scammer sends a phishing email impersonating Flipkart's Big Billion Day sale with an unbelievable deal on Samsung Galaxy S24 Ultra, directing victims to a fake checkout page.",
+  "scamType": "phishing",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phishingLink": "http://flipkart-bigsale.deals/s24ultra",
+    "emailAddress": "support@flipkart-bigbillion.shop"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "EXCLUSIVE: Flipkart Big Billion Day Early Access! Samsung Galaxy S24 Ultra at Rs 4,999. Only 50 units left! Claim now: http://flipkart-bigsale.deals/s24ultra",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Initial phishing bait with fake Flipkart sale link and extreme discount to lure victims."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for your interest in the Big Billion Day Early Access deal! To ensure smooth delivery, please complete your order at http://flipkart-bigsale.deals/s24ultra within the next 15 minutes. Only 23 units are still available.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer resends phishing link with decreasing stock count to create FOMO."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "We understand if you have questions about this exclusive offer. This is a genuine Flipkart promotion for our top customers. You can verify by contacting our dedicated support team at support@flipkart-bigbillion.shop. We are happy to assist you with the purchase process.",
+      "expected_extractions": [
+        "emailAddress"
+      ],
+      "notes": "Scammer provides fake support email to appear legitimate and build trust."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "STOCK UPDATE: Only 8 units of Samsung Galaxy S24 Ultra remain at Rs 4,999. Several customers are checking out right now. If you face any payment issues, write to support@flipkart-bigbillion.shop and our team will generate a direct payment link for you.",
+      "expected_extractions": [
+        "emailAddress"
+      ],
+      "notes": "Scammer repeats email address and creates artificial scarcity to pressure the victim."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "FINAL NOTICE: The Samsung Galaxy S24 Ultra deal at Rs 4,999 is SOLD OUT in 2 minutes. This is your absolute last chance. Click http://flipkart-bigsale.deals/s24ultra NOW or lose this deal forever. Flipkart Big Billion Day won't come again for another year!",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Final turn with maximum urgency, resending phishing link one last time."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

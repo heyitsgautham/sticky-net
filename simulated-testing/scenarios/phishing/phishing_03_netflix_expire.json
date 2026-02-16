@@ -1,0 +1,72 @@
+{
+  "scenarioId": "phishing_03_netflix_expire",
+  "name": "Netflix Subscription Expiry Phishing",
+  "description": "Scammer impersonates Netflix billing support claiming the victim's subscription has expired and their account will be permanently deleted, directing them to a fake renewal page to steal payment credentials.",
+  "scamType": "phishing",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phishingLink": "http://netflix-renew.secure-pay.com/billing",
+    "emailAddress": "billing@netflix-support.help",
+    "phoneNumber": "+91-8800990077"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Your Netflix subscription has expired. Your account will be permanently deleted in 24 hours. Renew now to avoid losing your watchlist and profiles.",
+      "expected_extractions": [],
+      "notes": "Initial scare tactic about account deletion without sharing any extractable data yet."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "To renew your Netflix subscription and prevent account deletion, please visit our secure billing portal: http://netflix-renew.secure-pay.com/billing. Your payment details need to be updated to continue enjoying uninterrupted streaming.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares the phishing link disguised as a Netflix billing portal."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "We noticed you haven't renewed yet. As a special offer for returning subscribers, we are giving you 3 months free if you renew today. For assistance, email our billing team at billing@netflix-support.help or call our India helpline at +91-8800990077.",
+      "expected_extractions": [
+        "emailAddress",
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides fake email and phone number for 'billing support' to seem legitimate."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "URGENT: Your Netflix account deletion is scheduled in 6 hours. All your viewing history, saved profiles, and downloaded content will be permanently erased. Renew immediately at http://netflix-renew.secure-pay.com/billing to save your account. This cannot be reversed once deleted.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Increased urgency with countdown, resending the phishing link."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "This is an automated reminder from Netflix Billing Department. Your account is in the final stage of deletion. If you are unable to access the renewal page, please call our priority support line at +91-8800990077. Our agents are available 24/7 to process your renewal over the phone.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer repeats phone number offering phone-based 'renewal' as alternative attack vector."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "FINAL WARNING: Account deletion in progress. You have 30 minutes remaining. Contact billing@netflix-support.help immediately or visit http://netflix-renew.secure-pay.com/billing. After deletion, you will need to create a new account and all your data will be lost permanently.",
+      "expected_extractions": [
+        "emailAddress",
+        "phishingLink"
+      ],
+      "notes": "Final pressure with all intelligence repeated — phishing link and email address."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

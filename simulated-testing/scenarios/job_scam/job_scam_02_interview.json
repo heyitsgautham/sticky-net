@@ -1,0 +1,63 @@
+{
+  "scenarioId": "job_scam_02_interview",
+  "name": "Fake Interview Registration Fee Scam",
+  "description": "Scammer impersonates Infosys HR claiming the victim has been shortlisted from Naukri.com, then demands a registration fee and shares a phishing portal link for the fake interview process.",
+  "scamType": "job_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "8899776655443322",
+    "phoneNumber": "+91-7766889900",
+    "phishingLink": "http://infosys-careers-portal.com/register"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Candidate, Based on your resume on Naukri.com, you have been shortlisted for a Senior Developer position at Infosys. Interview scheduled for tomorrow. Please confirm by registering.",
+      "expected_extractions": [],
+      "notes": "Initial bait using reputed company name and job portal to appear legitimate."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for confirming your interest. To complete your registration for the interview, a non-refundable processing fee of Rs 3,000 is required. This covers document verification and interview scheduling. Please arrange the payment at the earliest.",
+      "expected_extractions": [],
+      "notes": "Scammer introduces the registration fee concept without revealing payment details yet."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Please transfer Rs 3,000 to our HR department account number 8899776655443322 (Axis Bank, IFSC: UTIB0001234). For any queries, contact our placement coordinator at +91-7766889900. Payment must be completed before 5 PM today for tomorrow's interview slot.",
+      "expected_extractions": [
+        "bankAccount",
+        "phoneNumber"
+      ],
+      "notes": "Scammer reveals fake bank account and phone number for the supposed HR department."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Once payment is confirmed, please complete your candidate profile on our interview portal: http://infosys-careers-portal.com/register. Upload your resume, Aadhaar card, and PAN card. This is mandatory for the interview process as per company policy.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares phishing link to harvest personal documents and identity information."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "We have only 2 interview slots remaining for tomorrow. If we don't receive your payment of Rs 3,000 to account 8899776655443322 and completed profile on http://infosys-careers-portal.com/register within the next hour, your candidacy will be cancelled. Call +91-7766889900 if you need help.",
+      "expected_extractions": [
+        "bankAccount",
+        "phishingLink",
+        "phoneNumber"
+      ],
+      "notes": "Final pressure combining all fake data points with artificial deadline."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

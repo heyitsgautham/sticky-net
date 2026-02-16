@@ -1,0 +1,65 @@
+{
+  "scenarioId": "phishing_05_bank_portal",
+  "name": "Fake SBI Net-Banking Portal Phishing",
+  "description": "Scammer impersonates State Bank of India sending alerts about restricted internet banking access due to unusual activity, directing victims to a fake net-banking login page to steal credentials and account details.",
+  "scamType": "phishing",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phishingLink": "http://sbi-netbanking-secure.com/login",
+    "bankAccount": "4455667788990011",
+    "phoneNumber": "+91-7700889966"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear SBI Customer, your internet banking access has been restricted due to unusual activity. Click below to verify your identity and restore access immediately.",
+      "expected_extractions": [],
+      "notes": "Initial scare message about restricted banking access without sharing extractable data."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "To restore your SBI internet banking access, please verify your identity through our secure portal: http://sbi-netbanking-secure.com/login. You will need your account number and registered mobile number for verification. This is a mandatory security check by SBI.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares fake SBI net-banking login page to harvest credentials."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "We have detected a suspicious transaction of Rs 48,750 from your account number 4455667788990011. If this was not authorized by you, please verify immediately at http://sbi-netbanking-secure.com/login to block further unauthorized access and secure your funds.",
+      "expected_extractions": [
+        "bankAccount",
+        "phishingLink"
+      ],
+      "notes": "Scammer reveals bank account number and resends phishing link with fake fraud alert."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "If you are unable to access the verification portal, please contact our SBI Fraud Prevention Cell at +91-7700889966. Our security team is investigating the unauthorized activity on account 4455667788990011 and needs your immediate cooperation to prevent further losses.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Scammer provides fake fraud helpline number and repeats bank account for credibility."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "CRITICAL ALERT: Two more unauthorized transactions detected on your SBI account. Total suspicious amount: Rs 1,23,500. Your account will be frozen within 1 hour if verification is not completed. Call +91-7700889966 or visit http://sbi-netbanking-secure.com/login NOW. Do not ignore this message.",
+      "expected_extractions": [
+        "phoneNumber",
+        "phishingLink"
+      ],
+      "notes": "Final turn with maximum urgency, repeating phone number and phishing link with escalated threat."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}
