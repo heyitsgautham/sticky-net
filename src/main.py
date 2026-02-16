@@ -1,5 +1,7 @@
 """FastAPI application entry point."""
 
+import logging
+import sys
 from contextlib import asynccontextmanager
 from collections.abc import AsyncGenerator
 from pathlib import Path
@@ -17,7 +19,14 @@ from config.settings import get_settings
 # Static files directory
 STATIC_DIR = Path(__file__).parent / "static"
 
-# Configure structured logging
+# Configure standard library logging to output to console
+logging.basicConfig(
+    format="%(message)s",
+    stream=sys.stdout,
+    level=logging.INFO,
+)
+
+# Configure structured logging with console-friendly output
 structlog.configure(
     processors=[
         structlog.stdlib.filter_by_level,
@@ -28,7 +37,7 @@ structlog.configure(
         structlog.processors.StackInfoRenderer(),
         structlog.processors.format_exc_info,
         structlog.processors.UnicodeDecoder(),
-        structlog.processors.JSONRenderer(),
+        structlog.dev.ConsoleRenderer(colors=True),  # Human-readable output for dev
     ],
     wrapper_class=structlog.stdlib.BoundLogger,
     context_class=dict,
@@ -65,17 +74,27 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
-    # CORS middleware (configure for production)
+    # Custom middleware (added first, runs after CORS)
+    setup_middleware(app)
+
+    # CORS middleware (added last, runs first to handle preflight)
+    allowed_origins = [
+        "http://localhost:3000",
+        "http://localhost:8080",
+        "https://sticky-net-frontend-140367184766.asia-south1.run.app",
+        "https://hackathon.guvi.in",  # Hackathon testing framework
+        "https://www.hackathon.guvi.in",  # Alternative URL
+    ]
+    if settings.debug:
+        allowed_origins.append("*")
+    
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"] if settings.debug else [],
+        allow_origins=allowed_origins if not settings.debug else ["*"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
-    # Custom middleware
-    setup_middleware(app)
 
     # Include routers
     app.include_router(router)

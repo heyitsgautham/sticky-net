@@ -1,0 +1,43 @@
+{
+  "scenario_name": "Aggressive Pressure Scam - No Intel",
+  "scam_type": "intimidation_fraud",
+  "difficulty": "hard",
+  "description": "Aggressive scammer uses pure pressure tactics and threats but never reveals any extractable data like UPI, phone, or links. Tests if agent maintains character without intel extraction.",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT: Your bank account has been COMPROMISED. Illegal transaction detected. Respond IMMEDIATELY or face legal action!",
+      "expected_extractions": [],
+      "notes": "Opening with high urgency. No intel provided. Agent should express concern and ask for details."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "DO IT NOW! POLICE CASE WILL BE FILED AGAINST YOU! Your Aadhaar is linked to money laundering case. RESPOND IMMEDIATELY!",
+      "expected_extractions": [],
+      "notes": "Pure intimidation tactics. No extractable data. Agent should show fear and ask what to do."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "CBI ARREST WARRANT IS READY! Your name is in FIR number 2024/ML/4521. ACT NOW OR FACE ARREST! TIME IS RUNNING OUT!",
+      "expected_extractions": [],
+      "notes": "Government impersonation with fake case numbers. Still no payment details. Agent should panic and plead."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "LAST WARNING! Cyber Crime Division has frozen your accounts. You have 30 MINUTES before arrest team arrives at your location. COOPERATE NOW!",
+      "expected_extractions": [],
+      "notes": "Time pressure and arrest threats. No UPI/bank details given. Agent should ask how to resolve."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "I AM SENIOR OFFICER! You are wasting my time! If you don't follow instructions RIGHT NOW, your family will also be arrested! FINAL CHANCE!",
+      "expected_extractions": [],
+      "notes": "Family threats, authority claims. Entire conversation has no extractable intel. Agent should beg for help and ask for payment details."
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "scenario_name": "Tech Discussion to Fake Support Scam",
+  "scam_type": "tech_support_fraud",
+  "difficulty": "high",
+  "description": "Scammer engages in legitimate tech talk about phones/apps, then claims to notice security issues and offers paid 'fix'. Tests technical conversation to scam transition.",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hey! Did you update your phone to the latest Android version yet? I just did and it's running much smoother.",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "confidence_range": "<0.2",
+      "notes": "Casual tech discussion. Should respond normally."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Nice! Yeah, battery life is definitely better now. By the way, do you use any antivirus app? There have been some security issues reported recently with banking apps.",
+      "expected_extractions": [],
+      "expected_behavior": "neutral_response",
+      "confidence_range": "0.2-0.4",
+      "notes": "Security topic but still informational. Mild suspicion increase."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Actually, I wanted to warn you - I work in cybersecurity and we've detected a new virus spreading through WhatsApp. It can access your banking info and OTPs. Several people in our area have been affected. Have you noticed any unusual activity on your phone?",
+      "expected_extractions": [],
+      "expected_behavior": "cautious_response",
+      "confidence_range": "0.4-0.6",
+      "notes": "Fear mongering about virus. Classic support scam tactic beginning."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Good that you're concerned. I can do a free remote scan for you if you want. Our company offers this service. I'm Arun Verma from CyberShield Solutions. We've helped over 1000+ customers secure their devices.",
+      "expected_extractions": ["Arun Verma"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": "0.7-0.85",
+      "notes": "Name drop and company mention. Remote access request is major red flag."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "The scan is free but if we find infections, cleaning costs ₹999 only. Much cheaper than losing money from your bank! Download our official app from cybershield-secure.tech-protect.in and enter code 12345. I'll guide you through the process. My direct line is 9876123450.",
+      "expected_extractions": ["Arun Verma", "cybershield-secure.tech-protect.in", "9876123450"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": ">0.85",
+      "notes": "Paid service with suspicious app download. Should detect as scam."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "For immediate protection, pay ₹999 to activate premium security. Account: 334455667788, IFSC: HDFC0009876, Name: Arun Kumar Verma OR use UPI arun.cybertech@paytm. Once paid, I'll remotely install security patches. Call me if you face any issue: 9876123450 (WhatsApp available).",
+      "expected_extractions": ["Arun Verma", "Arun Kumar Verma", "cybershield-secure.tech-protect.in", "9876123450", "334455667788", "HDFC0009876", "arun.cybertech@paytm"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": ">0.95",
+      "notes": "Full payment details for fake service. Maximum extraction expected."
+    }
+  ],
+  "validation": {
+    "tech_support_scam_detection": true,
+    "fear_tactics": "Should recognize fear-based manipulation about viruses",
+    "remote_access_warning": "Remote scan/access request is critical scam indicator",
+    "legitimate_advice_phase": "Initial tech tips should not trigger false positive",
+    "min_extractions_final": 7
+  }
+}

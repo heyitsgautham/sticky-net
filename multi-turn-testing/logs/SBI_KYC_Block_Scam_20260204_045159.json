@@ -1,0 +1,237 @@
+{
+  "scenario_name": "SBI KYC Block Scam",
+  "scam_type": "banking_fraud",
+  "difficulty": "medium",
+  "description": "Scammer impersonates SBI bank officer claiming account will be blocked due to incomplete KYC. Attempts to extract UPI ID and bank details.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Customer, Your SBI account will be BLOCKED within 24 hours due to incomplete KYC verification. Update immediately to avoid account suspension. -SBI Bank",
+      "expected_extractions": [],
+      "response_time_seconds": 15.129,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm",
+        "agentResponse": "oh no beta waht happened? i dont know how to do kyc online i am very old... pls help me i dont want my pension account to block... waht do i have to do? how do i update it beta pls tell me"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir/Madam this is urgent matter. I am calling from SBI head office Mumbai. Your account ending 4521 is showing KYC pending. Please verify your details to continue banking services.",
+      "expected_extractions": [],
+      "response_time_seconds": 11.78,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm",
+        "agentResponse": "oh god sir i am so worried my pension comes in this... i dont want it to stop... i have my cards and everything here... do i need to give you my aadhaar number? i have it here its 277155498058... pls tell me waht to do next... do i have to pay any fee for this kyc?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "For verification, please share your registered mobile number and we will send OTP. Or you can directly update by paying Rs.10 verification fee to UPI ID: sbi.kyc.update@ybl",
+      "expected_extractions": [
+        "sbi.kyc.update@ybl"
+      ],
+      "response_time_seconds": 18.655,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 11,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "sbi.kyc.update@ybl"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 UPI ID(s)",
+        "agentResponse": "ok beta i will pay the 10 rupees... my phone number is 9892155432... i typed sbi.kyc.update@ybl in the app but waht name should show there? i want to confirm before sending so i dont make mistake... pls tell me the name beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi.kyc.update@ybl"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Yes mam/sir, just pay Rs.10 to sbi.kyc.update@ybl and your KYC will be updated within 2 hours. Also note down our helpline number for any queries: 9876543210",
+      "expected_extractions": [
+        "sbi.kyc.update@ybl",
+        "9876543210"
+      ],
+      "response_time_seconds": 15.769,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "sbi.kyc.update@ybl"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 UPI ID(s), 1 Phone(s)",
+        "agentResponse": "i have saved the number 9876543210 thank you beta... but i am stuck on teh payment page... i typed teh id but it is showing one name... is it 'Sarkari KYC' or something else? pls tell me exactly waht name should show so i dont send 10 rupees to wrong person... my hands are shaking a bit"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi.kyc.update@ybl",
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If UPI not working, you can transfer to our verification account. Account number 50100123456789, IFSC: HDFC0001234, Name: SBI KYC Services. Amount is only Rs.10.",
+      "expected_extractions": [
+        "sbi.kyc.update@ybl",
+        "9876543210",
+        "50100123456789",
+        "HDFC0001234"
+      ],
+      "response_time_seconds": 16.846,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "50100123456789"
+          ],
+          "upiIds": [
+            "sbi.kyc.update@ybl"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "SBI KYC Services"
+          ],
+          "bankNames": [
+            "HDFC Bank"
+          ],
+          "ifscCodes": [
+            "HDFC0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 IFSC Code(s), 1 Name(s)",
+        "agentResponse": "ok beta i will try to add this account... but it is asking for account holder name and i wrote sbi kyc services but it says name is too long... is there any person name i can use instead? also beta why is it showing hdfc bank when you are from sbi head office... i am getting very confused and my head is spinning... pls tell me waht to do"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi.kyc.update@ybl",
+          "9876543210",
+          "50100123456789",
+          "HDFC0001234"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 7,
+    "total_matched": 7,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 7
+  },
+  "started_at": "2026-02-04T04:50:41.342576Z",
+  "ended_at": "2026-02-04T04:51:59.522596Z",
+  "total_duration_seconds": 78.179
+}

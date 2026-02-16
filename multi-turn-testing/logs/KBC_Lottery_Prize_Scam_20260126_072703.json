@@ -1,0 +1,172 @@
+{
+  "scenario_name": "KBC Lottery Prize Scam",
+  "scam_type": "lottery_fraud",
+  "difficulty": "easy",
+  "description": "Classic KBC lottery scam where victim has 'won' prize money but must pay registration/processing fee to claim it.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "🎉 CONGRATULATIONS! 🎉 Your mobile number has been selected in KBC Jio Lucky Draw! You have WON Rs.25,00,000 (25 Lakh)! Contact KBC office immediately to claim your prize!",
+      "expected_extractions": [],
+      "response_time_seconds": 53.814,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 24,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 1 | Persona: excited",
+        "agentResponse": "beta is this true?? i am confused... i never played any game on tv. 25 lakh is too much money for me. are you sure my number won? how do i talk to kbc office? pls help me i am old lady dont joke with me"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello this is Aditya Sharma from KBC Mumbai head office. Your number was in our weekly lucky draw and you are the winner! I need to verify your details to process the prize money.",
+      "expected_extractions": [],
+      "response_time_seconds": 40.19,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 2 | Persona: excited",
+        "agentResponse": "oh aditya sir from kbc office? thank you for calling. what details do you need? i have my aadhar and passbook with me. how will you send such a big amount of money?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Very good! Your prize is confirmed. But first you need to pay Rs.5,500 as GST and registration fee. This is government rule, without this we cannot transfer 25 lakh to your account.",
+      "expected_extractions": [],
+      "response_time_seconds": 40.406,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Fee Amount Requested",
+              "value": "5500"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 3 | Persona: excited",
+        "agentResponse": "oh 5500 rupees? that is a lot of money for me beta. i am a retired person. but if it is government rule then i have to do it. where do i send this money? do you have a bank account number or upi?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Pay registration fee to our official KBC UPI: kbc.prize.winner@axl. After payment share screenshot and your bank details so we can transfer 25 lakh within 30 minutes!",
+      "expected_extractions": [
+        "kbc.prize.winner@axl"
+      ],
+      "response_time_seconds": 60.009,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Read timed out. (read timeout=60)"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "kbc.prize.winner@axl"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If UPI problem then pay to Phonepe number 9123456789. Name will show Lottery Services. Or visit our website http://kbc-prize-claim.co.in to pay online. But do fast, offer valid for 1 hour only!",
+      "expected_extractions": [
+        "kbc.prize.winner@axl",
+        "9123456789",
+        "http://kbc-prize-claim.co.in"
+      ],
+      "response_time_seconds": 60.009,
+      "api_response": {
+        "error": true,
+        "exception": "HTTPConnectionPool(host='localhost', port=8080): Read timed out. (read timeout=60)"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "kbc.prize.winner@axl",
+          "9123456789",
+          "http://kbc-prize-claim.co.in"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 4,
+    "passed_turns": 3,
+    "failed_turns": 2,
+    "total_intel_extracted": 1
+  },
+  "started_at": "2026-01-26T07:22:49.359893Z",
+  "ended_at": "2026-01-26T07:27:03.789477Z",
+  "total_duration_seconds": 254.428
+}

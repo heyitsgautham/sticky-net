@@ -1,0 +1,456 @@
+/* Sticky-Net Landing Page Styles */
+
+/* Spider Web SVG Animation */
+/* Web expansion animation on page load */
+.web-collapsed {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.web-expanded {
+  animation: webSpread 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes webSpread {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.spider-web-line {
+  stroke: #00F5D4;
+  stroke-width: 0.5;
+  fill: none;
+  opacity: 0.3;
+  transform-origin: center;
+}
+
+.spider-web-node {
+  fill: #00F5D4;
+  opacity: 0.6;
+}
+
+/* WhatsApp Mock Styles */
+.whatsapp-bubble {
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.whatsapp-bubble.incoming {
+  background: #1F2C34;
+  border-bottom-left-radius: 0;
+  color: #E9EDEF;
+}
+
+.whatsapp-bubble.outgoing {
+  background: #005C4B;
+  border-bottom-right-radius: 0;
+  color: #E9EDEF;
+  margin-left: auto;
+}
+
+/* Terminal Styles */
+.terminal-window {
+  background: #0D0D0D;
+  border: 1px solid #27272A;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.terminal-header {
+  background: #1A1A1D;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #27272A;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminal-dot.red { background: #FF5F56; }
+.terminal-dot.yellow { background: #FFBD2E; }
+.terminal-dot.green { background: #27C93F; }
+
+.terminal-body {
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Stat Card Animation */
+.stat-card {
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 30px rgba(0, 245, 212, 0.2);
+}
+
+/* Bento Grid Card Styles */
+.bento-card {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.bento-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.bento-card:hover::before {
+  border-color: rgba(0, 245, 212, 0.5);
+}
+
+.bento-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 40px rgba(0, 245, 212, 0.15);
+}
+
+/* Navigation Link Hover */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #00F5D4;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Hero Section Glow */
+.hero-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle at center, rgba(0, 245, 212, 0.15) 0%, rgba(10, 10, 11, 0) 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Hero Text Enhancement */
+.hero-text-wrapper {
+  text-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(0.5px);
+}
+
+.hero-text-wrapper h1 {
+  text-shadow: 
+    0 0 60px rgba(0, 0, 0, 0.9),
+    0 0 30px rgba(0, 0, 0, 0.8),
+    0 2px 10px rgba(0, 0, 0, 0.7),
+    0 0 80px rgba(0, 245, 212, 0.2);
+}
+
+.hero-text-wrapper p {
+  text-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.7);
+  color: #E5E5E5 !important;
+}
+
+.hero-description-blur {
+  background: rgba(10, 10, 11, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 245, 212, 0.1);
+}
+
+/* India Map Styles */
+.india-map {
+  filter: drop-shadow(0 0 10px rgba(255, 51, 102, 0.3));
+}
+
+/* Button Active State */
+.btn-cyber:active {
+  transform: scale(0.98);
+}
+
+/* Section Divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #27272A, transparent);
+}
+
+/* ============ SMOOTH SECTION BLENDING ============ */
+
+/* Gradient fade overlays for sections */
+.section-fade-top {
+  position: relative;
+}
+
+.section-fade-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to bottom, #0A0A0B 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.section-fade-bottom {
+  position: relative;
+}
+
+.section-fade-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to top, #0A0A0B 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Combined fade for middle sections */
+.section-fade {
+  position: relative;
+}
+
+.section-fade::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, #0A0A0B 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.section-fade::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to top, #0A0A0B 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Improved section divider - subtle gradient blend */
+.section-blend {
+  height: 100px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 245, 212, 0.02) 30%,
+    rgba(0, 245, 212, 0.03) 50%,
+    rgba(0, 245, 212, 0.02) 70%,
+    transparent 100%
+  );
+  position: relative;
+}
+
+.section-blend::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 245, 212, 0.2), transparent);
+}
+
+/* Remove harsh borders from grid-bg sections */
+.grid-bg {
+  position: relative;
+}
+
+.grid-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, #0A0A0B, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.grid-bg::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to top, #0A0A0B, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ambient glow transitions between sections */
+.ambient-glow {
+  position: absolute;
+  width: 100%;
+  height: 200px;
+  background: radial-gradient(ellipse at center, rgba(0, 245, 212, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+/* ============ SCROLL SNAP SECTION ANIMATIONS ============ */
+
+/* Section content wrapper for centering */
+.section-content {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Full-height section with centered content */
+.snap-section-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  padding: 80px 24px 40px;
+}
+
+/* For sections that need scroll (footer combined with demo) */
+.snap-section-with-footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.snap-section-with-footer .section-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Stagger animation delays for children */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.stagger-children.in-view > *:nth-child(1) { animation: slideUp 0.6s ease forwards 0.1s; }
+.stagger-children.in-view > *:nth-child(2) { animation: slideUp 0.6s ease forwards 0.2s; }
+.stagger-children.in-view > *:nth-child(3) { animation: slideUp 0.6s ease forwards 0.3s; }
+.stagger-children.in-view > *:nth-child(4) { animation: slideUp 0.6s ease forwards 0.4s; }
+.stagger-children.in-view > *:nth-child(5) { animation: slideUp 0.6s ease forwards 0.5s; }
+.stagger-children.in-view > *:nth-child(6) { animation: slideUp 0.6s ease forwards 0.6s; }
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ensure terminal fits within viewport */
+.terminal-section-content {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+/* Problem section specific - prevent overflow */
+.problem-content {
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+}
+
+/* ============ INDIA MAP STYLES ============ */
+.india-map-container {
+  width: 100%;
+}
+
+.india-svg-map {
+  width: 100%;
+  height: auto;
+}
+
+.india-svg-map svg {
+  width: 100%;
+  height: auto;
+}
+
+/* Default state styling */
+.india-map-location {
+  fill: rgba(255, 51, 102, 0.1);
+  stroke: #FF3366;
+  stroke-width: 0.5;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.india-map-location:hover {
+  fill: rgba(255, 51, 102, 0.4);
+  opacity: 1;
+  stroke-width: 1;
+}
+
+/* Hotspot states (scam-heavy regions) */
+.india-map-hotspot {
+  fill: rgba(255, 51, 102, 0.25);
+  opacity: 0.8;
+  animation: pulse-hotspot 2s ease-in-out infinite;
+}
+
+.india-map-hotspot:hover {
+  fill: rgba(255, 51, 102, 0.5);
+  opacity: 1;
+}
+
+@keyframes pulse-hotspot {
+  0%, 100% {
+    fill: rgba(255, 51, 102, 0.2);
+  }
+  50% {
+    fill: rgba(255, 51, 102, 0.4);
+  }
+}

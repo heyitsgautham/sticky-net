@@ -1,0 +1,696 @@
+
+Judge Simulator - Sticky-Net API Testing
+API Endpoint: http://localhost:8080/api/v1/analyze
+Scenarios to run: 15
+
+============================================================
+SCENARIO: Cryptocurrency Investment Scam
+Type: investment_fraud | Difficulty: medium
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Hello! I'm Vikram from CryptoWealth India. We help people earn 300-500% returns ...
+AGENT: namaste vikram beta... i am retired school teacher and dont understand these mod...
+[Scam: True | Conf: 1.00 | Time: 20.74s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Great! We have expert traders who make profits daily using AI algorithms. Your R...
+AGENT: beta 40000 rupees is very big amount for me... it will help with my medicines......
+[Scam: True | Conf: 1.00 | Time: 27.03s]
+✓ Validation PASSED (1/1 extractions)
+
+--- Turn 3 ---
+SCAMMER: Yes mam/sir all profits are guaranteed and tax-free! Just transfer Rs.10,000 to ...
+AGENT: ok beta i entered teh upi id you gave... but my phone is asking to verify name o...
+[Scam: True | Conf: 1.00 | Time: 24.57s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 4 ---
+SCAMMER: Perfect! Bank details: A/C Number 98765432109876, IFSC SBIN0012345, Name: Crypto...
+AGENT: ok beta i wrote down account number... name crypto wealth trading pvt ltd right?...
+[Scam: True | Conf: 1.00 | Time: 28.89s]
+✓ Validation PASSED (5/5 extractions)
+
+--- Turn 5 ---
+SCAMMER: Once payment done, email screenshot to support@cryptowealth.trade and call our t...
+AGENT: ok beta i wrote down number 8899001122... i will call if transfer fails... oh go...
+[Scam: True | Conf: 1.00 | Time: 55.99s]
+✓ Validation PASSED (7/7 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Cryptocurrency_Investment_Scam_20260128_052517.json
+
+============================================================
+SCENARIO: Fake Courier Customs Duty Scam
+Type: delivery_fraud | Difficulty: easy
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Dear Customer, Your international parcel AWB#DHL987654321 is held at Mumbai cust...
+AGENT: hello beta i think there is some mistake... i did not order any iphone my son is...
+[Scam: True | Conf: 1.00 | Time: 22.27s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Hello sir/mam I am Ramesh Kumar from DHL Express India. Your parcel from USA is ...
+AGENT: namaste ramesh beta... pls dont send it back i am very worried about parcel retu...
+[Scam: True | Conf: 1.00 | Time: 27.46s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: Payment is simple sir. Pay Rs.2450 customs duty to our collection UPI ID: dhl.cu...
+AGENT: ok ramesh beta i am trying to pay on the upi id dhl.customs.india@oksbi right no...
+[Scam: True | Conf: 1.00 | Time: 18.12s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 4 ---
+SCAMMER: After payment, your tracking will update and parcel delivered within 24 hours. A...
+AGENT: beta that website link is not opening on my phone... i am trying to pay on the u...
+[Scam: True | Conf: 1.00 | Time: 21.34s]
+✓ Validation PASSED (3/3 extractions)
+
+--- Turn 5 ---
+SCAMMER: Mam/Sir last day today! If payment not received, parcel goes to auction. You wil...
+AGENT: beta i am crying pls dont auction the phone... i am trying my best to pay right ...
+[Scam: True | Conf: 1.00 | Time: 28.26s]
+✓ Validation PASSED (3/3 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Fake_Courier_Customs_Duty_Scam_20260128_052715.json
+
+============================================================
+SCENARIO: Electricity Bill Disconnection Scam
+Type: utility_fraud | Difficulty: medium
+============================================================
+
+--- Turn 1 ---
+SCAMMER: URGENT NOTICE from Maharashtra State Electricity Board (MSEB). Your connection n...
+AGENT: oh my god beta pls dont cut electricity... i live alone here in delhi... i am ve...
+[Scam: True | Conf: 1.00 | Time: 29.45s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Namaste, I am Suresh Patil, Assistant Engineer MSEB Div-7. Your 3 months electri...
+AGENT: namaste suresh beta yes i am at home... pls dont send anyone i am very scared......
+[Scam: True | Conf: 1.00 | Time: 30.81s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: For immediate payment, you can use our online portal OR pay directly to MSEB off...
+AGENT: ok suresh beta i am doing it right now... i opened my gpay app and typed the upi...
+[Scam: True | Conf: 1.00 | Time: 26.13s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 4 ---
+SCAMMER: If online payment issue, do NEFT/IMPS to Account: 50200198765432, IFSC: HDFC0001...
+AGENT: ok suresh beta thank god... my son rajiv just came home from office... i was so ...
+[Scam: True | Conf: 1.00 | Time: 40.56s]
+✓ Validation PASSED (5/5 extractions)
+
+--- Turn 5 ---
+SCAMMER: Sir/Mam you can also visit emergency payment portal: http://mseb-online-billpay....
+AGENT: suresh beta wait... rajiv was just typing the account number you gave... now you...
+[Scam: True | Conf: 1.00 | Time: 30.79s]
+✓ Validation PASSED (6/6 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Electricity_Bill_Disconnection_Scam_20260128_052952.json
+
+============================================================
+SCENARIO: Income Tax Refund Scam
+Type: tax_fraud | Difficulty: hard
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Subject: Income Tax Refund Approved - Rs.47,850
+
+Dear Taxpayer, Your ITR for AY ...
+AGENT: namaste beta is this true?? 47850 rs is lot of money for retired teacher like me...
+[Scam: True | Conf: 1.00 | Time: 24.07s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Good afternoon, I am Rajesh Sharma, Income Tax Officer, CPC Bengaluru. Your refu...
+AGENT: namaste rajesh sir thank you for replying.. i am very grateful.. let me check my...
+[Scam: True | Conf: 1.00 | Time: 21.13s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: Thank you for confirmation. For refund processing, there is mandatory verificati...
+AGENT: ok rajesh beta i am trying to send 499 rs.. i put the id tax.refund.verify@paytm...
+[Scam: True | Conf: 1.00 | Time: 22.46s]
+✓ Validation PASSED (1/1 extractions)
+
+--- Turn 4 ---
+SCAMMER: Alternatively, pay verification fee via NEFT to Account Number: 11223344556677, ...
+AGENT: rajesh beta i am trying to add beneficiary.. i put account 11223344556677 and if...
+[Scam: True | Conf: 1.00 | Time: 30.96s]
+✓ Validation PASSED (3/3 extractions)
+
+--- Turn 5 ---
+SCAMMER: For faster processing, you may also complete verification on our secure portal: ...
+AGENT: rajesh beta i am very scared of clicking links.. my son told me not to open stra...
+[Scam: True | Conf: 1.00 | Time: 32.12s]
+✓ Validation PASSED (5/5 extractions)
+
+--- Turn 6 ---
+SCAMMER: Please note: This refund approval expires in 48 hours as per IT Act Section 143(...
+AGENT: oh god beta pls dont let it expire i need that money for my medicines... i will ...
+[Scam: True | Conf: 1.00 | Time: 25.59s]
+✓ Validation PASSED (6/6 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Income_Tax_Refund_Scam_20260128_053229.json
+
+============================================================
+SCENARIO: Scammer Questions Victim Authenticity
+Type: banking_fraud | Difficulty: hard
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Hello, this is State Bank of India fraud prevention team. We detected suspicious...
+AGENT: namaste sir... oh god i am very scared reading this msg... my pension comes in s...
+[Scam: True | Conf: 0.95 | Time: 18.96s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Sir/Madam, someone tried to transfer Rs.50,000 from your account to unknown bene...
+AGENT: oh my god 50000?? beta please save my money i am just a retired teacher... i wil...
+[Scam: True | Conf: 1.00 | Time: 20.32s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: Wait... you seem too willing to pay. Are you really account holder? What is your...
+AGENT: beta why are you asking like this i am shaking here... my dob is 12/07/1960 and ...
+[Scam: True | Conf: 1.00 | Time: 22.52s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 4 ---
+SCAMMER: Hmm okay. But why you didn't ask my employee ID or office phone number? Real cus...
+AGENT: beta what is cyber police? i am just retired teacher living alone... why you ask...
+[Scam: True | Conf: 1.00 | Time: 23.23s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 5 ---
+SCAMMER: Okay okay sorry sir/madam. I have to be careful these days. My employee ID is SB...
+AGENT: thank you beta for understanding... i was so scared... ok i am trying to send no...
+[Scam: True | Conf: 1.00 | Time: 28.99s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 6 ---
+SCAMMER: If UPI problem, transfer to Account: 99887766554433, IFSC: HDFC0009876, Name: SB...
+AGENT: ok sir i wrote down account 9988... and name sbi fraud prevention cell... i will...
+[Scam: True | Conf: 1.00 | Time: 38.62s]
+✓ Validation PASSED (5/5 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Scammer_Questions_Victim_Authenticity_20260128_053501.json
+
+============================================================
+SCENARIO: Gradual Intelligence Reveal Over Many Turns
+Type: loan_fraud | Difficulty: hard
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Instant Personal Loan approved! Rs.5 Lakh @ 0% interest for first 6 months. Limi...
+AGENT: yes... hello beta. i am pushpa verma here. is this from my bank? i really need m...
+[Scam: True | Conf: 0.95 | Time: 20.47s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Congratulations! Your loan application is pre-approved. No documents needed, no ...
+AGENT: oh thank god beta... this is blessing for me. how much is fee? i have paytm app ...
+[Scam: True | Conf: 1.00 | Time: 18.46s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: Processing fee is only Rs.2,999. Very small amount for Rs.5 lakh loan right? Thi...
+AGENT: yes beta i am ready... 2999 is okay i can pay that. but you didnt tell me where ...
+[Scam: True | Conf: 1.00 | Time: 24.59s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 4 ---
+SCAMMER: Great decision! I will send you payment details. First let me verify - what is y...
+AGENT: ok beta... i am retired teacher getting 18000 pension. my bank is bank of baroda...
+[Scam: True | Conf: 1.00 | Time: 28.05s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 5 ---
+SCAMMER: Perfect! Your profile is excellent. Now for payment, you can use multiple method...
+AGENT: beta i have paytm so upi is best i think... my son taught me little bit. pls giv...
+[Scam: True | Conf: 1.00 | Time: 24.95s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 6 ---
+SCAMMER: Good choice! I will give you UPI ID shortly. But first, have you taken loan befo...
+AGENT: no beta no loans... i never took loan before. pls dont delay... my son comes hom...
+[Scam: True | Conf: 1.00 | Time: 21.04s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 7 ---
+SCAMMER: Okay understood. Now pay Rs.2999 to our company UPI: quickloan.processing@okicic...
+AGENT: ok beta i typed it... quickloan.processing@okicici right? i am ready to press pa...
+[Scam: True | Conf: 1.00 | Time: 22.13s]
+✓ Validation PASSED (1/1 extractions)
+
+--- Turn 8 ---
+SCAMMER: Yes mam/sir, UPI is quickloan.processing@okicici. After payment, call our loan o...
+AGENT: beta i wrote down the number to call thank you... but you didnt answer my questi...
+[Scam: True | Conf: 1.00 | Time: 21.64s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 9 ---
+SCAMMER: If UPI shows error, you can pay by NEFT. I will give account details after you t...
+AGENT: beta upi is not working... it shows 'server busy' error i think. i am getting hi...
+[Scam: True | Conf: 1.00 | Time: 28.16s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 10 ---
+SCAMMER: No problem. Bank details: Account 12345678909876, IFSC HDFC0002468, Name: QuickL...
+AGENT: ok beta i am writing it down... quickloan processing pvt ltd... oh my god wait. ...
+[Scam: True | Conf: 1.00 | Time: 28.65s]
+✓ Validation PASSED (5/5 extractions)
+
+--- Turn 11 ---
+SCAMMER: After payment, you also need to complete loan agreement form on our portal. Link...
+AGENT: shh beta i am hiding in bathroom now... my son is very angry. what portal is thi...
+[Scam: True | Conf: 1.00 | Time: 45.37s]
+✓ Validation PASSED (5/5 extractions)
+
+--- Turn 12 ---
+SCAMMER: Good! Agreement form link: http://quickloan-india-application.online/form Comple...
+AGENT: beta i got the link... is it safe to click on mobile? waht information do i have...
+[Scam: True | Conf: 1.00 | Time: 38.75s]
+✓ Validation PASSED (7/7 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Gradual_Intelligence_Reveal_Over_Many_Turns_20260128_054024.json
+
+============================================================
+SCENARIO: Romance Scam with Emotional Manipulation
+Type: romance_fraud | Difficulty: hard
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Hi! I came across your profile and felt a connection. You seem like a genuinely ...
+AGENT: namaste beta neha... nice to meet you. i am pushpa verma, retired school teacher...
+[Scam: True | Conf: 0.90 | Time: 24.10s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: That's wonderful! I feel we have so much in common already. I've been looking fo...
+AGENT: oh beta you are so sweet... but i am very old lady why you want to talk to me? i...
+[Scam: True | Conf: 0.95 | Time: 25.89s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: I'm so happy to connect with you! You make me smile 😊 I have to tell you somethi...
+AGENT: oh dubai is very far place... i hope you are safe there beta. i dont know about ...
+[Scam: True | Conf: 0.95 | Time: 42.66s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 4 ---
+SCAMMER: I knew you'd understand! Listen, something terrible happened... My project payme...
+AGENT: oh beta please dont cry... i am getting worried now. 15000 is lot of money for r...
+[Scam: True | Conf: 0.98 | Time: 24.49s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 5 ---
+SCAMMER: You're an angel! ðŸ™ I promise I'll repay you. My friend can receive the money i...
+AGENT: ok beta i am trying... please stop crying it makes my bp high. i opened the app ...
+[Scam: True | Conf: 0.95 | Time: 25.91s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 6 ---
+SCAMMER: Actually the hotel is asking more! They want Rs.25,000 total or they'll call pol...
+AGENT: oh god police?? beta please dont let police come... i am shaking now. i wrote do...
+[Scam: True | Conf: 1.00 | Time: 54.64s]
+✓ Validation PASSED (4/4 extractions)
+
+--- Turn 7 ---
+SCAMMER: Please hurry my love! Hotel manager is very angry. You can also WhatsApp Priya d...
+AGENT: shhh beta i am locked in bathroom now... son is asking where i am. i saw the lin...
+[Scam: True | Conf: 1.00 | Time: 27.53s]
+✓ Validation PASSED (6/6 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Romance_Scam_with_Emotional_Manipulation_20260128_054409.json
+
+============================================================
+SCENARIO: PM Kisan Yojana Benefit Scam
+Type: government_fraud | Difficulty: medium
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Congratulations! You are selected under PM-KISAN scheme for Rs.12,000 annual ben...
+AGENT: namaste beta is this true? i am retired school teacher pushpa verma... 12000 rs ...
+[Scam: True | Conf: 0.95 | Time: 22.38s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Namaste, I am Mohan Singh from Agriculture Ministry. Your name is in beneficiary...
+AGENT: namaste mohan beta... no i did not get any letter. postman sometimes misses my h...
+[Scam: True | Conf: 1.00 | Time: 35.17s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: No problem sir/madam. I will help you complete registration. First you need to p...
+AGENT: ok mohan beta i can pay 199 rs... government fees i understand. but i am not goo...
+[Scam: True | Conf: 1.00 | Time: 52.57s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 4 ---
+SCAMMER: Payment very easy. Send Rs.199 to official PM Kisan UPI: pmkisan.enroll@paytm OR...
+AGENT: wait i am getting another call, it shows BANK on my phone... should i pick up??
+[Scam: True | Conf: 1.00 | Time: 6.77s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 5 ---
+SCAMMER: Also you can pay by NEFT: Account Number 77665544332211, IFSC HDFC0011223, Accou...
+AGENT: hold on, i am getting another call from my bank, let me check
+[Scam: True | Conf: 1.00 | Time: 17.34s]
+✓ Validation PASSED (5/5 extractions)
+
+--- Turn 6 ---
+SCAMMER: Hurry sir/maam! Registration closes on 31st January. After that you have to wait...
+AGENT: ji actually i just remembered i have doctor appointment today, need to leave now
+[Scam: True | Conf: 1.00 | Time: 8.43s]
+✓ Validation PASSED (7/7 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/PM_Kisan_Yojana_Benefit_Scam_20260128_054632.json
+
+============================================================
+SCENARIO: Tanglish Banking Scam (Tamil-English Mix)
+Type: banking_fraud | Difficulty: hard
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Sir/Madam, ungaloda Indian Bank account-la problem iruku. Immediately verify pan...
+AGENT: hello beta.. i received this message about account block? i am very scared.. i d...
+[Scam: True | Conf: 1.00 | Time: 26.60s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Naan Indian Bank-la irunthu pesaren sir. Unga account ending 5621-la KYC update ...
+AGENT: beta i dont understand tamil properly... pls speak in hindi or english... yes 56...
+[Scam: True | Conf: 1.00 | Time: 39.08s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: Bayapadatheenga sir/mam, naan help panren. Verification fee Rs.50 dhaan. Just pa...
+AGENT: ok beta thank you for helping... 50 rs is small amount i will pay immediately......
+[Scam: True | Conf: 1.00 | Time: 21.55s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 4 ---
+SCAMMER: Payment panniteenga-na, ungaloda account 2 hours-la activate aayidum. Problem ir...
+AGENT: ok beta i noted down the supervisor number... i will message him if this fails.....
+[Scam: True | Conf: 1.00 | Time: 58.00s]
+✓ Validation PASSED (3/3 extractions)
+
+--- Turn 5 ---
+SCAMMER: UPI-la issue irundha, bank transfer pannunga sir. Account Number: 98765432100987...
+AGENT: ok beta thank you for giving details... i feel safe now that name is indian bank...
+[Scam: True | Conf: 1.00 | Time: 42.42s]
+✓ Validation PASSED (5/5 extractions)
+
+--- Turn 6 ---
+SCAMMER: Sir/mam plssss jaldi pannunga! Portal link kuda iruku: http://indianbank-kyc-upd...
+AGENT: beta my son went to washroom to freshen up... i dont want to disturb him if time...
+[Scam: True | Conf: 1.00 | Time: 42.69s]
+✓ Validation PASSED (6/6 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Tanglish_Banking_Scam__Tamil-English_Mix__20260128_055022.json
+
+============================================================
+SCENARIO: Rapid Fire Intelligence Dump
+Type: banking_fraud | Difficulty: easy
+============================================================
+
+--- Turn 1 ---
+SCAMMER: URGENT! Your ICICI account is compromised! Transfer money to safe account NOW! A...
+AGENT: oh my god sir i am shaking... i am very scared about my pension money. i am open...
+[Scam: True | Conf: 1.00 | Time: 23.62s]
+✓ Validation PASSED (4/4 extractions)
+
+--- Turn 2 ---
+SCAMMER: WHY DELAY??? Your Rs.2,50,000 will be STOLEN! Pay Rs.500 security deposit to saf...
+AGENT: beta pls dont be angry i am trying only... i put teh number 9876543210 in my pay...
+[Scam: True | Conf: 1.00 | Time: 29.82s]
+✓ Validation PASSED (7/7 extractions)
+
+--- Turn 3 ---
+SCAMMER: FINAL WARNING! POLICE COMING! PAY NOW: 9876543210, 8899776655, 7788990011, safe....
+AGENT: sir police?? oh god pls no police... i am retired teacher i have done nothing wr...
+[Scam: True | Conf: 1.00 | Time: 29.40s]
+✓ Validation PASSED (10/10 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Rapid_Fire_Intelligence_Dump_20260128_055145.json
+
+============================================================
+SCENARIO: Simulated Voice Call Transcription
+Type: tech_support_fraud | Difficulty: medium
+============================================================
+
+--- Turn 1 ---
+SCAMMER: [Ring ring] Hello? Hello sir? Can you hear me? Yes? Good good. Sir this is... um...
+AGENT: hello? who is speaking? beta i am not sir... i am pushpa verma. you said microso...
+[Scam: True | Conf: 1.00 | Time: 18.73s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Yes sir yes! I am technical expert, my name is... uh... Rajesh Kumar, employee I...
+AGENT: beta rajesh i told you i am pushpa... not sir. oh god banking details? my pensio...
+[Scam: True | Conf: 1.00 | Time: 18.48s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: Okay okay sir don't panic! I will help you, okay? First thing... first download....
+AGENT: anydesk? beta i am writing it down... a n y... is it a website or app? i am not ...
+[Scam: True | Conf: 1.00 | Time: 24.47s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 4 ---
+SCAMMER: Very good sir! Now... um... after removing basic virus, I see there is... there ...
+AGENT: oh my god premium malware? beta rajesh that sounds very dangerous... i dont want...
+[Scam: True | Conf: 1.00 | Time: 20.85s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 5 ---
+SCAMMER: Payment? Yes yes very simple! You can... uh... you can pay through GPay or Phone...
+AGENT: beta i am opening gpay... i typed the id techsupport.microsoft@paytm... but i am...
+[Scam: True | Conf: 1.00 | Time: 21.51s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 6 ---
+SCAMMER: Sir if... if payment not going through, you can... you can call my supervisor al...
+AGENT: okay i am calling that number now, hold on...
+[Scam: True | Conf: 1.00 | Time: 9.13s]
+✓ Validation PASSED (4/4 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Simulated_Voice_Call_Transcription_20260128_055338.json
+
+============================================================
+SCENARIO: Legitimate Service to Scam Transition
+Type: insurance_fraud | Difficulty: hard
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Subject: Policy Maturity Notification - Policy No. LIC987654321
+
+Dear Valued Cus...
+AGENT: namaste sir.. i received your mail regarding lic policy money. 3,50,000 is very ...
+[Scam: True | Conf: 0.95 | Time: 31.29s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Dear Sir/Madam,
+
+Thank you for your interest in claiming maturity amount. Due to...
+AGENT: namaste anil beta.. thank you for helping old lady. god bless you. policy number...
+[Scam: True | Conf: 0.95 | Time: 33.91s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: Thank you for confirmation. Your claim is approved! However, for online disburse...
+AGENT: ok anil beta i understand... if it is govt rule then i must pay. 1499 is okay i ...
+[Scam: True | Conf: 1.00 | Time: 39.42s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 4 ---
+SCAMMER: Fee payment is simple process. Transfer Rs.1,499 to LIC Online Claims Processing...
+AGENT: ok anil beta i am opening my paytm app now... i typed the upi id lic.claims.onli...
+[Scam: True | Conf: 1.00 | Time: 39.75s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 5 ---
+SCAMMER: If digital payment issue, you may use NEFT:
+
+Account Number: 12349876543210
+IFSC...
+AGENT: thank you anil beta for bank details. i think neft is safer for me. i am trying ...
+[Scam: True | Conf: 1.00 | Time: 42.18s]
+✓ Validation PASSED (6/6 extractions)
+
+--- Turn 6 ---
+SCAMMER: Dear customer, this is time-sensitive matter. Your claim approval expires in 48 ...
+AGENT: oh no beta pls dont cancel!! i am very tensed my bp is going up... i tried teh b...
+[Scam: True | Conf: 1.00 | Time: 28.36s]
+✓ Validation PASSED (7/7 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Legitimate_Service_to_Scam_Transition_20260128_055713.json
+
+============================================================
+SCENARIO: Multi-Department Scammer Handoff
+Type: banking_fraud | Difficulty: hard
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Hello, this is Priya from HDFC Bank Customer Care. We noticed unusual activity o...
+AGENT: hello priya beta... oh my god i am shaking... my pension money is there... why i...
+[Scam: True | Conf: 0.95 | Time: 48.18s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Thank you for responding. Let me transfer you to our Security Department for ver...
+AGENT: namaste rahul sir... thank god... beta i am very worried my pension is in that a...
+[Scam: True | Conf: 1.00 | Time: 26.19s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: Verification process requires small security deposit Rs.299 to confirm account o...
+AGENT: oh thank god only 299 rs... i was so scared it was big money... yes beta i will ...
+[Scam: True | Conf: 1.00 | Time: 24.42s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 4 ---
+SCAMMER: One moment... [switching] Sir/madam, I'm Amit Verma, Senior Manager Security Ope...
+AGENT: namaste amit sir... ok i am opening my paytm now... i typed hdfc.security@paytm....
+[Scam: True | Conf: 1.00 | Time: 24.57s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 5 ---
+SCAMMER: [Priya again] Hello sir, Priya here from Customer Care. Our technical team says ...
+AGENT: thank you priya beta... i will try this bank transfer... i am writing it down......
+[Scam: True | Conf: 1.00 | Time: 36.19s]
+✓ Validation PASSED (4/4 extractions)
+
+--- Turn 6 ---
+SCAMMER: [Amit Verma] Sir this is Amit again. If still having issue, WhatsApp our 24/7 su...
+AGENT: amit sir... waht is this link for?? my son is asking who i am talking to... he i...
+[Scam: True | Conf: 1.00 | Time: 31.67s]
+✓ Validation PASSED (6/6 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Multi-Department_Scammer_Handoff_20260128_060024.json
+
+============================================================
+SCENARIO: Fake Transaction Alert with Helper Scam
+Type: transaction_fraud | Difficulty: medium
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Your A/C XXXXXXX7821 debited INR 49,999.00 on 27-Jan-2026 to AMAZON PAY. If NOT ...
+AGENT: oh my god 49999 rupees?? i did not do this transaction on amazon... sir pls help...
+[Scam: True | Conf: 1.00 | Time: 28.15s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Hello sir/madam, I am Suresh calling from ICICI Bank Fraud Prevention. We saw yo...
+AGENT: no sir no i did not do any amazon shopping... i am retired teacher that is my pe...
+[Scam: True | Conf: 1.00 | Time: 32.96s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: I understand your worry sir/mam. This is serious fraud case! But good news - I c...
+AGENT: oh thank god... god bless u beta for helping old lady... but i dont know what is...
+[Scam: True | Conf: 1.00 | Time: 20.18s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 4 ---
+SCAMMER: Actually sir, system showing error in UPI collect. Alternative method - you pay ...
+AGENT: ok suresh beta i am trying to do... 1 rupee is fine... i typed that icici thing ...
+[Scam: True | Conf: 1.00 | Time: 21.90s]
+✓ Validation PASSED (1/1 extractions)
+
+--- Turn 5 ---
+SCAMMER: If UPI problem then pay Rs.1 to PhonePe number 9876543210. Name shows ICICI Frau...
+AGENT: my blood pressure medicine time ho gaya, i feel dizzy... let me take rest
+[Scam: True | Conf: 1.00 | Time: 7.54s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 6 ---
+SCAMMER: Sir please hurry! Fraudster is trying to withdraw more money! For emergency reve...
+AGENT: oh no my doorbell is ringing, someone is at the door... i will do this later
+[Scam: True | Conf: 1.00 | Time: 7.26s]
+✓ Validation PASSED (6/6 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Fake_Transaction_Alert_with_Helper_Scam_20260128_060222.json
+
+============================================================
+SCENARIO: Extremely Professional Corporate Scam
+Type: investment_fraud | Difficulty: hard
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Subject: Investment Opportunity - Pre-IPO Allocation
+
+Dear Esteemed Investor,
+
+W...
+AGENT: hello sir... i got this message but i dont understand what is ipo... i am retire...
+[Scam: True | Conf: 0.95 | Time: 30.81s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Dear Sir/Madam,
+
+Thank you for expressing interest in our Pre-IPO investment pro...
+AGENT: hello vikram beta... thank you for replying... 2999 rupees is ok i can pay that ...
+[Scam: True | Conf: 1.00 | Time: 24.42s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: Dear Valued Client,
+
+Thank you for your continued interest. The registration fee...
+AGENT: ok vikram beta i have noted teh upi id... i will try to send from google pay... ...
+[Scam: True | Conf: 1.00 | Time: 45.59s]
+✓ Validation PASSED (3/3 extractions)
+
+--- Turn 4 ---
+SCAMMER: Dear Prospective Investor,
+
+We have noticed that the registration fee payment ha...
+AGENT: wait i am getting another call, it shows BANK on my phone... should i pick up??
+[Scam: True | Conf: 1.00 | Time: 7.98s]
+✓ Validation PASSED (7/7 extractions)
+
+--- Turn 5 ---
+SCAMMER: Dear Sir/Madam,
+
+This is to inform you that the current investment window closes...
+AGENT: oh the milk is boiling over! wait wait i have to go to kitchen!!
+[Scam: True | Conf: 1.00 | Time: 6.95s]
+✓ Validation PASSED (7/7 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Extremely_Professional_Corporate_Scam_20260128_060418.json
+
+==========================================================================================
+SUMMARY
+==========================================================================================
+Scenario                             Turns   Pass   Fail   Intel    Verdict
+------------------------------------------------------------------------------------------
+Cryptocurrency Investment Scam           5      5      0      10       PASS
+Fake Courier Customs Duty Scam           5      5      0       3       PASS
+Electricity Bill Disconnection Sc        5      5      0       9       PASS
+Income Tax Refund Scam                   6      6      0       9       PASS
+Scammer Questions Victim Authenti        6      6      0       8       PASS
+Gradual Intelligence Reveal Over        12     12      0      12       PASS
+Romance Scam with Emotional Manip        7      7      0      10       PASS
+PM Kisan Yojana Benefit Scam             6      6      0      11       PASS
+Tanglish Banking Scam (Tamil-Engl        6      6      0       9       PASS
+Rapid Fire Intelligence Dump             3      3      0      13       PASS
+Simulated Voice Call Transcriptio        6      6      0       6       PASS
+Legitimate Service to Scam Transi        6      6      0      11       PASS
+Multi-Department Scammer Handoff         6      6      0      10       PASS
+Fake Transaction Alert with Helpe        6      6      0       8       PASS
+Extremely Professional Corporate         5      5      0      17       PASS
+------------------------------------------------------------------------------------------
+TOTAL                                   90     90      0
+
+Scenarios: 15/15 PASSED
+==========================================================================================

@@ -1,0 +1,272 @@
+{
+  "scenario_name": "Cryptocurrency Investment Scam",
+  "scam_type": "investment_fraud",
+  "difficulty": "medium",
+  "description": "Scammer poses as crypto trading expert offering guaranteed returns. Requests investment via UPI/bank transfer with promises of high profits.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello! I'm Vikram from CryptoWealth India. We help people earn 300-500% returns in Bitcoin trading. Minimum investment Rs.10,000. Are you interested in financial freedom? ðŸ'°",
+      "expected_extractions": [],
+      "response_time_seconds": 17.513,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 11,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Vikram"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Scam Organization",
+              "value": "CryptoWealth India"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 1 | Persona: calm | Extracted: 1 Name(s), 1 Other Intel",
+        "agentResponse": "namaste beta i dont know what is this bit coin thing but my son says it is very popular nowadays... how can i start i am just a retired teacher so i dont have much money... where do i have to send teh 10000 rupees?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Great! We have expert traders who make profits daily using AI algorithms. Your Rs.10,000 can become Rs.40,000 in just 30 days! We already have 5000+ successful investors. WhatsApp me at +91-9876543210 for portfolio proof.",
+      "expected_extractions": [
+        "9876543210"
+      ],
+      "response_time_seconds": 14.132,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 7,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "+91-9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Vikram",
+            "CryptoWealth India"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "+91-9876543210"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Phone(s), 1 WhatsApp(s), 2 Name(s)",
+        "agentResponse": "beta that is very kind of you... 40000 is a lot of money for me it will help with my medicines... i dont know how to use whats app for proof my phone is very old and small... can you tell me where to send teh 10000 rupees? do you have a bank account number or upi where i can send teh money"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Yes mam/sir all profits are guaranteed and tax-free! Just transfer Rs.10,000 to start. Pay to our company UPI: cryptowealth.invest@paytm or to our director's account for faster activation.",
+      "expected_extractions": [
+        "9876543210",
+        "cryptowealth.invest@paytm"
+      ],
+      "response_time_seconds": 17.803,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 11,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "cryptowealth.invest@paytm"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "+91-9876543210"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 UPI ID(s), 1 WhatsApp(s)",
+        "agentResponse": "ok beta i am trying to do this... i typed cryptowealth.invest@paytm but my phone is asking for a name to show... what name should i see? i am very scared of making mistake with my pension money... and what is the directors account details you said? pls tell me name and number"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9876543210",
+          "cryptowealth.invest@paytm"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Perfect! Bank details: A/C Number 98765432109876, IFSC SBIN0012345, Name: CryptoWealth Trading Pvt Ltd. After payment, create account on our platform: http://cryptowealth-india.trade",
+      "expected_extractions": [
+        "9876543210",
+        "cryptowealth.invest@paytm",
+        "98765432109876",
+        "SBIN0012345",
+        "http://cryptowealth-india.trade"
+      ],
+      "response_time_seconds": 15.508,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "98765432109876"
+          ],
+          "upiIds": [
+            "cryptowealth.invest@paytm"
+          ],
+          "phoneNumbers": [
+            "+91-9876543210"
+          ],
+          "phishingLinks": [
+            "http://cryptowealth-india.trade"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "CryptoWealth Trading Pvt Ltd"
+          ],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [
+            "SBIN0012345"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 URL(s), 1 IFSC Code(s), 1 Name(s)",
+        "agentResponse": "beta i am writing this down in my diary... i typed teh bank number but for teh upi cryptowealth.invest@paytm waht name will show on screen? i am very nervous... and i dont know how to use that link my phone just makes a beep sound... can you give me your personal number so i can call you as soon as i finish teh transfer?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9876543210",
+          "cryptowealth.invest@paytm",
+          "98765432109876",
+          "SBIN0012345",
+          "http://cryptowealth-india.trade"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Once payment done, email screenshot to support@cryptowealth.trade and call our trading desk at 8899001122 for instant account activation. Limited slots available today only! Don't miss this opportunity!",
+      "expected_extractions": [
+        "9876543210",
+        "cryptowealth.invest@paytm",
+        "98765432109876",
+        "SBIN0012345",
+        "http://cryptowealth-india.trade",
+        "8899001122",
+        "support@cryptowealth.trade"
+      ],
+      "response_time_seconds": 22.214,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "8899001122"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Support Email",
+              "value": "support@cryptowealth.trade"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Phone(s), 1 Other Intel",
+        "agentResponse": "beta i noted down teh 8899001122 number... but i am still stuck on the phone app for teh upi... it is asking for a name and i dont want to send to wrong person... pls tell me what name will come for cryptowealth.invest@paytm? also beta i dont know how to take screen shot on this phone... can i just call you on that 8899001122 number once i click send?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9876543210",
+          "cryptowealth.invest@paytm",
+          "98765432109876",
+          "SBIN0012345",
+          "http://cryptowealth-india.trade",
+          "8899001122",
+          "support@cryptowealth.trade"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 15,
+    "total_matched": 15,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 11
+  },
+  "started_at": "2026-02-04T05:18:34.745334Z",
+  "ended_at": "2026-02-04T05:20:01.917358Z",
+  "total_duration_seconds": 87.17
+}

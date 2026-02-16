@@ -1,0 +1,64 @@
+Conversation:
+👤 Scammer
+Hello, this is Microsoft Windows Support. We have detected a dangerous ZEUS VIRUS on your computer network. Hackers are trying to steal your banking files. We need to secure your line immediately. Are you in front of your computer right now
+02:38 PM
+🤖 Honeypot Agent
+namaste sir... oh my god virus?? i am very scared sir i dont know much about computer... my son usually helps but he is in bangalore... yes i am sitting at my laptop only... pls help me save my files what should i do
+02:38 PM
+👤 Scammer
+Ma'am, please calm down. I am a Senior Engineer, I will protect your files. You need to connect to our Secure Server immediately to delete the virus. Open Google Chrome and search for 'AnyDesk'. Click the first link and download it. Once it is open, you will see a 9-digit number (Your Address). Tell me that number quickly so I can block the hackers
+02:39 PM
+🤖 Honeypot Agent
+ok sir i am doing it... my internet is slow sorry... ok i downloaded it... i see a number here 882 145 693... is this the one you need? will you charge money for this fixing? i need to know beta pls tell me
+02:39 PM
+
+server logs:
+uvicorn src.main:app --reload
+INFO:     Will watch for changes in these directories: ['/Users/gauthamkrishna/Projects/sticky-net']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [90524] using WatchFiles
+INFO:     Started server process [90526]
+INFO:     Waiting for application startup.
+2026-01-25T09:07:35.640906Z [info     ] Starting Sticky-Net            [src.main] debug=True llm_model=gemini-3-flash-preview
+INFO:     Application startup complete.
+INFO:     127.0.0.1:65004 - "GET / HTTP/1.1" 200 OK
+2026-01-25T09:08:02.824987Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=0
+2026-01-25T09:08:02.871721Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=242
+2026-01-25T09:08:02.872126Z [info     ] Uncertain message, using AI classification [src.detection.detector] component=ScamDetector
+2026-01-25T09:08:02.872182Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=242
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-25T09:08:08.059609Z [info     ] Classification successful      [src.detection.classifier] component=ScamClassifier model=gemini-3-flash-preview response_length=650
+2026-01-25T09:08:08.059787Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=0
+2026-01-25T09:08:08.060075Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=0 urls=0 whatsapp_numbers=0
+2026-01-25T09:08:08.074397Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=dafded89-0fa4-4515-9d26-619231269766 history_length=0 turn=1
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-25T09:08:31.696526Z [info     ] Response generated successfully [src.agents.honeypot_agent] component=HoneypotAgent model=gemini-3-pro-preview response_length=539
+2026-01-25T09:08:31.696881Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone=panicked intel_found=False
+2026-01-25T09:08:31.697136Z [info     ] Agent engagement complete      [src.api.routes] agent_response='namaste sir... oh my god virus?? i am very scared sir i dont know much about computer... my son usually helps but he is in bangalore... yes i am sitting at my laptop only... pls help me save my files what should i do' channel=SMS has_extracted_intel=True history_length=0
+2026-01-25T09:08:31.697348Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=0 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-25T09:08:31.697512Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-25T09:08:31.697697Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=0 total_urls=0
+2026-01-25T09:08:31.697760Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=0 other_info=0 phone_numbers=0 upi_ids=0
+INFO:     127.0.0.1:65005 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+2026-01-25T09:09:06.718645Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=2
+2026-01-25T09:09:06.742218Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=353
+2026-01-25T09:09:06.742756Z [info     ] Uncertain message, using AI classification [src.detection.detector] component=ScamDetector
+2026-01-25T09:09:06.742827Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=353
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-25T09:09:13.312729Z [info     ] Classification successful      [src.detection.classifier] component=ScamClassifier model=gemini-3-flash-preview response_length=749
+2026-01-25T09:09:13.313165Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=2
+2026-01-25T09:09:13.314205Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=0 urls=0 whatsapp_numbers=0
+2026-01-25T09:09:13.332587Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=66fb2bfd-927e-40b5-8b58-b0bc81e7149f history_length=2 turn=2
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-25T09:09:33.354506Z [info     ] Response generated successfully [src.agents.honeypot_agent] component=HoneypotAgent model=gemini-3-pro-preview response_length=543
+2026-01-25T09:09:33.354932Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='panicked and compliant' intel_found=False
+2026-01-25T09:09:33.355182Z [info     ] Agent engagement complete      [src.api.routes] agent_response='ok sir i am doing it... my internet is slow sorry... ok i downloaded it... i see a number here 882 145 693... is this the one you need? will you charge money for this fixing? i need to know beta pls tell me' channel=SMS has_extracted_intel=True history_length=2
+2026-01-25T09:09:33.355305Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=2 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-25T09:09:33.356046Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-25T09:09:33.356219Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=0 total_urls=0
+2026-01-25T09:09:33.356321Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=2 other_info=0 phone_numbers=0 upi_ids=0
+INFO:     127.0.0.1:65056 - "POST /api/v1/analyze HTTP/1.1" 200 OK

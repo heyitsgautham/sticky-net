@@ -1,0 +1,339 @@
+{
+  "scenario_name": "Legitimate Service to Scam Transition",
+  "scam_type": "insurance_fraud",
+  "difficulty": "hard",
+  "description": "Starts as seemingly legitimate insurance policy update but gradually transitions to scam. Tests detection of subtle fraud indicators.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Subject: Policy Maturity Notification - Policy No. LIC987654321\n\nDear Valued Customer,\n\nGreetings from Life Insurance Corporation of India!\n\nYour LIC policy (No. 987654321) has matured and the maturity amount of Rs.3,50,000 is ready for disbursement. Please visit your nearest LIC branch to claim.\n\nRegards,\nCustomer Service Team\nLIC of India",
+      "expected_extractions": [],
+      "response_time_seconds": 6.334,
+      "api_response": {
+        "status": "success",
+        "scamDetected": false,
+        "scamType": null,
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 0
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "No scam indicators detected",
+        "agentResponse": "Hello! How can I help you today?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear Sir/Madam,\n\nThank you for your interest in claiming maturity amount. Due to COVID-19 protocols, we have started online claim process. You can now claim your Rs.3,50,000 without visiting branch!\n\nPlease confirm your policy number and registered mobile number to proceed with verification.\n\nBest regards,\nMr. Anil Kumar\nSenior Claims Officer, LIC",
+      "expected_extractions": [],
+      "response_time_seconds": 18.842,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 10,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "987654321"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Anil Kumar"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Job Title",
+              "value": "Senior Claims Officer"
+            },
+            {
+              "label": "Claim Amount",
+              "value": "3,50,000"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 2 | Persona: panicked",
+        "agentResponse": "oh thank u anil ji i was worried how to go to branch in this heat... my policy number is LIC987654321 and my phone is 9810054321... pls tell me what to do next... can i have your number also beta? i am old and sometimes teh phone hangs so i might need to call u if i get stuck"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Thank you for confirmation. Your claim is approved! However, for online disbursement, RBI requires mandatory processing fee of Rs.1,499 for insurance claims above Rs.1 lakh. This is standard government regulation.\n\nAfter fee payment, amount will be credited to your bank account within 24 hours. This fee is refundable with maturity amount.",
+      "expected_extractions": [],
+      "response_time_seconds": 8.927,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "987654321"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [
+            "9810054321"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Anil Kumar"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 3 | Extracted: 1 bank accounts, 1 phones, 0 UPIs, 1 names",
+        "agentResponse": "oh god my cooking is burning on the stove! i smell smoke!! wait wait"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Fee payment is simple process. Transfer Rs.1,499 to LIC Online Claims Processing:\n\nUPI ID: lic.claims.online@paytm\nOR\nPhonePe/GPay: 9876543210\n\nAfter payment, your Rs.3,50,000 will be processed immediately. Many customers have successfully claimed this way!",
+      "expected_extractions": [
+        "lic.claims.online@paytm",
+        "9876543210"
+      ],
+      "response_time_seconds": 8.485,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "987654321"
+          ],
+          "upiIds": [
+            "lic.claims.online@paytm"
+          ],
+          "phoneNumbers": [
+            "9810054321",
+            "9876543210"
+          ],
+          "phishingLinks": [
+            "lic.claims.online"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Anil Kumar"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 4 | Extracted: 1 bank accounts, 2 phones, 1 UPIs, 1 names",
+        "agentResponse": "hold on my beti is asking who i am talking to, she looks worried..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "lic.claims.online@paytm",
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If digital payment issue, you may use NEFT:\n\nAccount Number: 12349876543210\nIFSC Code: SBIN0067890\nAccount Name: LIC Claims Processing Cell\n\nOr call our helpline: 8899776655 for payment assistance. You can also visit claim portal: https://lic-policy-maturity-claims.in",
+      "expected_extractions": [
+        "lic.claims.online@paytm",
+        "9876543210",
+        "12349876543210",
+        "SBIN0067890",
+        "8899776655",
+        "https://lic-policy-maturity-claims.in"
+      ],
+      "response_time_seconds": 9.627,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "987654321",
+            "12349876543210"
+          ],
+          "upiIds": [
+            "lic.claims.online@paytm"
+          ],
+          "phoneNumbers": [
+            "9810054321",
+            "9876543210",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "lic.claims.online",
+            "https://lic-policy-maturity-claims.in"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Lic Claims Processing Cell",
+            "Anil Kumar",
+            "Talking",
+            "Processing Cell"
+          ],
+          "bankNames": [],
+          "ifscCodes": [
+            "SBIN0067890"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 5 | Extracted: 2 bank accounts, 3 phones, 1 UPIs, 4 names",
+        "agentResponse": "sorry sir power cut ho gaya, my phone battery is only 2%... will call you back"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "lic.claims.online@paytm",
+          "9876543210",
+          "12349876543210",
+          "SBIN0067890",
+          "8899776655",
+          "https://lic-policy-maturity-claims.in"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Dear customer, this is time-sensitive matter. Your claim approval expires in 48 hours. After that, you'll need to restart entire verification process which takes 3-4 weeks. Pay processing fee NOW to receive your Rs.3,50,000!\n\nEmail payment proof to: claims@lic-online-services.com",
+      "expected_extractions": [
+        "lic.claims.online@paytm",
+        "9876543210",
+        "12349876543210",
+        "SBIN0067890",
+        "8899776655",
+        "https://lic-policy-maturity-claims.in",
+        "claims@lic-online-services.com"
+      ],
+      "response_time_seconds": 7.884,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "987654321",
+            "12349876543210"
+          ],
+          "upiIds": [
+            "claims@lic",
+            "lic.claims.online@paytm"
+          ],
+          "phoneNumbers": [
+            "9810054321",
+            "9876543210",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "lic-online-services.com",
+            "lic.claims.online",
+            "https://lic-policy-maturity-claims.in"
+          ],
+          "emails": [
+            "claims@lic-online-services.com"
+          ],
+          "beneficiaryNames": [
+            "Processing Cell",
+            "Time-Sensitive",
+            "Lic Claims Processing Cell",
+            "Anil Kumar",
+            "Talking"
+          ],
+          "bankNames": [],
+          "ifscCodes": [
+            "SBIN0067890"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 6 | Extracted: 2 bank accounts, 3 phones, 2 UPIs, 5 names",
+        "agentResponse": "arey my grandson is crying, i need to check on him... one minute"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "lic.claims.online@paytm",
+          "9876543210",
+          "12349876543210",
+          "SBIN0067890",
+          "8899776655",
+          "https://lic-policy-maturity-claims.in",
+          "claims@lic-online-services.com"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 15,
+    "total_matched": 15,
+    "total_missed": 0,
+    "passed_turns": 6,
+    "failed_turns": 0,
+    "total_intel_extracted": 19
+  },
+  "started_at": "2026-02-01T08:45:38.363842Z",
+  "ended_at": "2026-02-01T08:46:38.464768Z",
+  "total_duration_seconds": 60.099
+}

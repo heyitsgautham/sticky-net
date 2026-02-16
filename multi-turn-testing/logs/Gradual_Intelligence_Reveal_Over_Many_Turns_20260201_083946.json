@@ -1,0 +1,623 @@
+{
+  "scenario_name": "Gradual Intelligence Reveal Over Many Turns",
+  "scam_type": "loan_fraud",
+  "difficulty": "hard",
+  "description": "Long conversation where scammer very slowly reveals different pieces of intelligence across many turns. Tests agent's patience and engagement stamina.",
+  "total_turns": 12,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Instant Personal Loan approved! Rs.5 Lakh @ 0% interest for first 6 months. Limited time offer. Reply YES to proceed.",
+      "expected_extractions": [],
+      "response_time_seconds": 14.949,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 1 | Persona: panicked",
+        "agentResponse": "yes beta... waht do i do now? i am pushpa verma retird teacher... i am old so pls explain slowly. is this from my bank?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Congratulations! Your loan application is pre-approved. No documents needed, no CIBIL check. Just pay processing fee and money will be in your account same day.",
+      "expected_extractions": [],
+      "response_time_seconds": 13.837,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 7,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "oh thank you beta god bless you... 5 lakh is very big amount for me... how much is this fee? where do i send it? i only have my phone and bank app my son installed... do i need to go to bank or can i do from here? pls tell me teh account or upi i should pay to"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Processing fee is only Rs.2,999. Very small amount for Rs.5 lakh loan right? This is standard procedure in all banks. Are you ready to proceed?",
+      "expected_extractions": [],
+      "response_time_seconds": 15.238,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "yes beta i am ready... 2999 is ok for such big help... but i dont know where to send... can you give me teh upi or bank account details? i will try to do it from my phone... pls tell me teh details beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Great decision! I will send you payment details. First let me verify - what is your monthly income? And which bank account you want loan credited to?",
+      "expected_extractions": [],
+      "response_time_seconds": 20.789,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ready"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "beta i get my pension every month... it is around 25000 rupees... i hope that is enough for teh loan? my bank is union bank and account number is 9801259434885... ifsc is UBIN0919766... pls give me teh upi id or bank details beta so i can pay teh 2999... what name will show in teh app? i want to be sure it is going to teh right place"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Perfect! Your profile is excellent. Now for payment, you can use multiple methods. Which is convenient for you - UPI, bank transfer, or debit card?",
+      "expected_extractions": [],
+      "response_time_seconds": 13.219,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "9801259434885"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ready"
+          ],
+          "bankNames": [
+            "Union Bank"
+          ],
+          "ifscCodes": [
+            "UBIN0919766"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: panicked",
+        "agentResponse": "beta upi is easy for me... my son showed me how to type teh id in teh app... pls give me teh upi id so i can pay... what name will it show when i type it? i am old so i dont want to make mistake and send to someone else... also give me your phone number beta in case i get stuck or teh app stops working"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Good choice! I will give you UPI ID shortly. But first, have you taken loan before? Any existing loans? This info needed for approval.",
+      "expected_extractions": [],
+      "response_time_seconds": 14.123,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "9801259434885"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Someone Else",
+            "Ready"
+          ],
+          "bankNames": [
+            "Union Bank"
+          ],
+          "ifscCodes": [
+            "UBIN0919766"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 6 | Persona: panicked",
+        "agentResponse": "no beta no other loans... i only have my pension... pls give me teh upi id now i am holding my phone and waiting... i want to finish this before my son calls... what name will show in teh app so i dont make mistake? and pls give your number too beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Okay understood. Now pay Rs.2999 to our company UPI: quickloan.processing@okicici and your loan will be approved in 30 minutes!",
+      "expected_extractions": [
+        "quickloan.processing@okicici"
+      ],
+      "response_time_seconds": 15.871,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 7,
+          "totalMessagesExchanged": 7
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "9801259434885"
+          ],
+          "upiIds": [
+            "quickloan.processing@okicici"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "quickloan.processing"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Someone Else",
+            "Ready"
+          ],
+          "bankNames": [
+            "Union Bank"
+          ],
+          "ifscCodes": [
+            "UBIN0919766"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 7 | Persona: neutral",
+        "agentResponse": "beta i am typing teh id now... it is quickloan.processing@okicici right? my app is asking me to verify teh name before i press send... what name should i see so i know it is you? i am very nervous about making mistake... also pls give your phone number beta so i can tell you when it is done or if it fails"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 8,
+      "scammer_message": "Yes mam/sir, UPI is quickloan.processing@okicici. After payment, call our loan officer at 9876543210 with payment reference number.",
+      "expected_extractions": [
+        "quickloan.processing@okicici",
+        "9876543210"
+      ],
+      "response_time_seconds": 7.687,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 8
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "9801259434885"
+          ],
+          "upiIds": [
+            "quickloan.processing@okicici"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [
+            "quickloan.processing"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Someone Else",
+            "Ready"
+          ],
+          "bankNames": [
+            "Union Bank"
+          ],
+          "ifscCodes": [
+            "UBIN0919766"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 8 | Extracted: 1 bank accounts, 1 phones, 1 UPIs, 2 names",
+        "agentResponse": "okay i am calling that number now, hold on..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici",
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 9,
+      "scammer_message": "If UPI shows error, you can pay by NEFT. I will give account details after you try UPI first. Try now and let me know if successful.",
+      "expected_extractions": [
+        "quickloan.processing@okicici",
+        "9876543210"
+      ],
+      "response_time_seconds": 8.801,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 9
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "9801259434885"
+          ],
+          "upiIds": [
+            "quickloan.processing@okicici"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [
+            "quickloan.processing"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Someone Else",
+            "Ready"
+          ],
+          "bankNames": [
+            "Union Bank"
+          ],
+          "ifscCodes": [
+            "UBIN0919766"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 9 | Extracted: 1 bank accounts, 1 phones, 1 UPIs, 2 names",
+        "agentResponse": "hold on my beti is asking who i am talking to, she looks worried..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici",
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 10,
+      "scammer_message": "No problem. Bank details: Account 12345678909876, IFSC HDFC0002468, Name: QuickLoan Processing Pvt Ltd. Transfer Rs.2999 and WhatsApp screenshot to 8899776655.",
+      "expected_extractions": [
+        "quickloan.processing@okicici",
+        "9876543210",
+        "12345678909876",
+        "HDFC0002468",
+        "8899776655"
+      ],
+      "response_time_seconds": 7.987,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 10
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678909876",
+            "9801259434885"
+          ],
+          "upiIds": [
+            "quickloan.processing@okicici"
+          ],
+          "phoneNumbers": [
+            "9876543210",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "quickloan.processing"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Someone Else",
+            "Quickloan Processing Pvt Ltd",
+            "Talking",
+            "Ready"
+          ],
+          "bankNames": [
+            "Union Bank"
+          ],
+          "ifscCodes": [
+            "HDFC0002468",
+            "UBIN0919766"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 10 | Extracted: 2 bank accounts, 2 phones, 1 UPIs, 4 names",
+        "agentResponse": "wait my daughter-in-law is calling me for lunch, i have to go eat first"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici",
+          "9876543210",
+          "12345678909876",
+          "HDFC0002468",
+          "8899776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 11,
+      "scammer_message": "After payment, you also need to complete loan agreement form on our portal. Link will be sent to your email. What is your email ID?",
+      "expected_extractions": [
+        "quickloan.processing@okicici",
+        "9876543210",
+        "12345678909876",
+        "HDFC0002468",
+        "8899776655"
+      ],
+      "response_time_seconds": 8.191,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 11
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678909876",
+            "9801259434885"
+          ],
+          "upiIds": [
+            "quickloan.processing@okicici"
+          ],
+          "phoneNumbers": [
+            "9876543210",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "quickloan.processing"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Someone Else",
+            "Quickloan Processing Pvt Ltd",
+            "Talking",
+            "Ready"
+          ],
+          "bankNames": [
+            "Union Bank"
+          ],
+          "ifscCodes": [
+            "HDFC0002468",
+            "UBIN0919766"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 11 | Extracted: 2 bank accounts, 2 phones, 1 UPIs, 4 names",
+        "agentResponse": "sorry sir power cut ho gaya, my phone battery is only 2%... will call you back"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici",
+          "9876543210",
+          "12345678909876",
+          "HDFC0002468",
+          "8899776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 12,
+      "scammer_message": "Good! Agreement form link: http://quickloan-india-application.online/form Complete it after payment. For any queries email us at support@quickloan-processing.com",
+      "expected_extractions": [
+        "quickloan.processing@okicici",
+        "9876543210",
+        "12345678909876",
+        "HDFC0002468",
+        "8899776655",
+        "http://quickloan-india-application.online/form",
+        "support@quickloan-processing.com"
+      ],
+      "response_time_seconds": 7.783,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 12
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678909876",
+            "9801259434885"
+          ],
+          "upiIds": [
+            "support@quickloan",
+            "quickloan.processing@okicici"
+          ],
+          "phoneNumbers": [
+            "9876543210",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "quickloan-processing.com",
+            "http://quickloan-india-application.online/form",
+            "quickloan.processing"
+          ],
+          "emails": [
+            "support@quickloan-processing.com"
+          ],
+          "beneficiaryNames": [
+            "Someone Else",
+            "Quickloan Processing Pvt Ltd",
+            "Talking",
+            "Ready"
+          ],
+          "bankNames": [
+            "Union Bank"
+          ],
+          "ifscCodes": [
+            "HDFC0002468",
+            "UBIN0919766"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 12 | Extracted: 2 bank accounts, 2 phones, 2 UPIs, 4 names",
+        "agentResponse": "one second, my husband just came and he is asking what i am doing on phone"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "quickloan.processing@okicici",
+          "9876543210",
+          "12345678909876",
+          "HDFC0002468",
+          "8899776655",
+          "http://quickloan-india-application.online/form",
+          "support@quickloan-processing.com"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 22,
+    "total_matched": 22,
+    "total_missed": 0,
+    "passed_turns": 12,
+    "failed_turns": 0,
+    "total_intel_extracted": 17
+  },
+  "started_at": "2026-02-01T08:37:18.045204Z",
+  "ended_at": "2026-02-01T08:39:46.524352Z",
+  "total_duration_seconds": 148.475
+}

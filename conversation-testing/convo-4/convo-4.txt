@@ -1,0 +1,34 @@
+👤 Scammer
+
+Hi da, I am sanjay how are you ?
+
+02:50 PM
+
+👤 Scammer
+
+I want urgently 5000 ruppees send to my upi id sanjay@hdfc
+
+02:52 PM
+
+🤖 Honeypot Agent
+
+ok beta i am trying... my hands are shaking a bit i am worried. i opened the paytm to send 5000. i typed sanjay@hdfc... what name should come up on the screen? i want to check before i click pay so money doesnt go to wrong place pls tell me
+
+02:52 PM
+
+
+
+Detection Metrics
+Scam Detected
+Yes
+Confidence
+85%
+Messages Exchanged
+2
+Duration
+113s
+🔍 Extracted Intelligence
+📱 UPI IDs
+sanjay@hdfc
+📝 Agent Notes
+Mode: aggressive | Tactics: authority, urgency, financial | Confidence: 100% | Turn: 2 | Persona: cautious

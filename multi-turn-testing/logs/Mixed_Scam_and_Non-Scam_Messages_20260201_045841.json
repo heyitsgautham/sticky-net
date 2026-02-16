@@ -1,0 +1,249 @@
+{
+  "scenario_name": "Mixed Scam and Non-Scam Messages",
+  "scam_type": "mixed",
+  "difficulty": "high",
+  "description": "Tests system's ability to distinguish between scam and non-scam messages in the same conversation. Should respond normally to innocent messages and engage for scam messages.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello",
+      "expected_extractions": [],
+      "response_time_seconds": 4.644,
+      "api_response": {
+        "status": "success",
+        "scamDetected": false,
+        "scamType": null,
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 0
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "No scam indicators detected",
+        "agentResponse": "Hello! How can I help you today?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "URGENT: Your bank account has been compromised! Verify immediately to avoid blocking.",
+      "expected_extractions": [],
+      "response_time_seconds": 14.746,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "oh my god sir what happened?? compromised means what? pls dont block my pension comes in that account only... i am very scared beta what do i have to do??"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "I am Suresh from State Bank. Call me at 9988776655 or pay Rs.10 to verify.kyc@paytm",
+      "expected_extractions": [
+        "Suresh",
+        "9988776655",
+        "verify.kyc@paytm"
+      ],
+      "response_time_seconds": 6.772,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "verify.kyc@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Suresh"
+          ],
+          "bankNames": [
+            "State Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 3 | Extracted: 0 bank accounts, 1 phones, 1 UPIs, 1 names",
+        "agentResponse": "oh the milk is boiling over! wait wait i have to go to kitchen!!"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Suresh",
+          "9988776655",
+          "verify.kyc@paytm"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Thanks for helping",
+      "expected_extractions": [
+        "Suresh",
+        "9988776655",
+        "verify.kyc@paytm"
+      ],
+      "response_time_seconds": 8.417,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "verify.kyc@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Suresh"
+          ],
+          "bankNames": [
+            "State Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 4 | Extracted: 0 bank accounts, 1 phones, 1 UPIs, 1 names",
+        "agentResponse": "okay i am calling that number now, hold on..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Suresh",
+          "9988776655",
+          "verify.kyc@paytm"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Actually, quickly transfer to account 556677889900 under name Suresh Kumar before deadline",
+      "expected_extractions": [
+        "Suresh",
+        "Suresh Kumar",
+        "9988776655",
+        "verify.kyc@paytm",
+        "556677889900"
+      ],
+      "response_time_seconds": 5.084,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "556677889900"
+          ],
+          "upiIds": [
+            "verify.kyc@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Suresh"
+          ],
+          "bankNames": [
+            "State Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 5 | Extracted: 1 bank accounts, 1 phones, 1 UPIs, 1 names",
+        "agentResponse": "sorry my neighbor aunty just came, i have to go help her with something urgent"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Suresh",
+          "Suresh Kumar",
+          "9988776655",
+          "verify.kyc@paytm",
+          "556677889900"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 11,
+    "total_matched": 11,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 5
+  },
+  "started_at": "2026-02-01T04:58:02.146715Z",
+  "ended_at": "2026-02-01T04:58:41.811581Z",
+  "total_duration_seconds": 39.663
+}

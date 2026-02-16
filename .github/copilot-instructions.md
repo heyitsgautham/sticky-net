@@ -24,13 +24,6 @@ An AI-powered honeypot system that detects scam messages and autonomously engage
 For each time running any test, always run 
 .venv/bin/python -m pytest tests/ -v
 
-## Vertex AI Models
-See [docs/VERTEX_API_DOCS.md](./../docs/VERTEX_API_DOCS.md) for details on the models used.
-
-## Architecture
-
-See [docs/ARCHITECTURE.md](./../docs/ARCHITECTURE.md) for detailed architecture documentation.
-
 ### High-Level Flow
 
 ```

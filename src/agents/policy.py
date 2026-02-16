@@ -24,6 +24,7 @@ class EngagementState:
     intelligence_complete: bool
     scammer_suspicious: bool
     turns_since_new_info: int
+    has_unextracted_urls: bool = False  # True if scammer mentioned URL but not yet extracted
 
 
 class EngagementPolicy:
@@ -68,6 +69,13 @@ class EngagementPolicy:
             if state.mode == EngagementMode.AGGRESSIVE 
             else self.max_turns_cautious
         )
+        
+        # CRITICAL: If scammer just mentioned a URL that wasn't extracted yet,
+        # keep engagement going to capture it (even if other conditions suggest exit)
+        if state.has_unextracted_urls:
+            # Allow 2 more turns to extract the URL before hard limits apply
+            if state.turn_count < max_turns and state.duration_seconds < self.max_duration_seconds:
+                return True
         
         # Check all exit conditions
         if state.turn_count >= max_turns:

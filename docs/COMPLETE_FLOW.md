@@ -82,57 +82,70 @@ Sticky-Net is an **AI-powered honeypot system** designed to:
                                  ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                    DETECTION LAYER                                       │
-│    ┌─────────────────┐         ┌────────────────────────────────┐       │
-│    │ Regex Pre-Filter│────────▶│ AI Classifier (Gemini 3 Flash) │       │
-│    │ (~10ms)         │         │ (~150ms)                       │       │
-│    │ • Obvious Scam  │         │ • Semantic Analysis            │       │
-│    │ • Obvious Safe  │         │ • Context-Aware                │       │
-│    │ • Uncertain     │         │ • Confidence Scoring           │       │
-│    └─────────────────┘         └────────────────────────────────┘       │
+│    ┌────────────────────────────────────────────────────────────┐       │
+│    │ AI Classifier (Gemini 3 Flash)                             │       │
+│    │ (~150ms, context-aware)                                    │       │
+│    │ • Semantic Analysis with conversation history              │       │
+│    │ • Confidence Scoring (0.0 to 1.0)                          │       │
+│    │ • Scam Type Classification                                 │       │
+│    │ • Model: gemini-3-flash-preview                            │       │
+│    │ • Fallback: gemini-2.5-flash                               │       │
+│    └────────────────────────────────────────────────────────────┘       │
 └────────────────────────────────┬────────────────────────────────────────┘
                                  │
                                  ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    INTELLIGENCE EXTRACTION                               │
+│                    INTELLIGENCE EXTRACTION (Regex)                       │
 │    ┌───────────────────────────────────────────────────────────────┐    │
-│    │ Regex-based extraction (runs on ALL messages)                 │    │
-│    │ • Bank Accounts (9-18 digits)                                  │    │
-│    │ • UPI IDs (username@provider)                                  │    │
-│    │ • Phone Numbers (Indian: 6-9 prefix, 10 digits)               │    │
-│    │ • Beneficiary Names (account holder names)                     │    │
-│    │ • IFSC Codes, Bank Names, WhatsApp Numbers                    │    │
-│    │ • Phishing Links (suspicious URLs)                            │    │
+│    │ Regex-based extraction (runs on ALL messages, ~5ms)          │    │
+│    │ • Bank Accounts (9-18 digits)                                 │    │
+│    │ • UPI IDs (username@provider)                                 │    │
+│    │ • Phone Numbers (Indian: 6-9 prefix, 10 digits)              │    │
+│    │ • Beneficiary Names (account holder names)                    │    │
+│    │ • IFSC Codes, WhatsApp Numbers                               │    │
+│    │ • Phishing Links (suspicious URLs)                           │    │
 │    └───────────────────────────────────────────────────────────────┘    │
 └────────────────────────────────┬────────────────────────────────────────┘
                                  │
         ┌────────────────────────┴────────────────────────┐
         │                                                  │
-    Not Scam                                           Is Scam
+    Not Scam (conf < 0.6)                          Is Scam (conf ≥ 0.6)
         │                                                  │
         ▼                                                  ▼
 ┌───────────────────┐                    ┌─────────────────────────────────┐
 │ Return neutral    │                    │ ENGAGEMENT POLICY CHECK         │
 │ response          │                    │ • High-value intel complete?    │
 │ Continue monitor  │                    │   → Exit with polite excuse     │
-└───────────────────┘                    │ • Still missing intel?          │
+└───────────────────┘                    │ • Max turns/duration reached?   │
+                                         │   → Exit with excuse            │
+                                         │ • Still missing intel?          │
                                          │   → Continue engagement         │
                                          └─────────────────────────────────┘
                                                            │
                                                            ▼
                                          ┌─────────────────────────────────┐
                                          │ AI ENGAGEMENT AGENT             │
-                                         │ (Gemini 3 Pro)                  │
-                                         │ • Persona management            │
+                                         │ (Gemini 3 Flash, One-Pass JSON) │
+                                         │ • Persona: Pushpa Verma (65+)   │
                                          │ • Fake data generation          │
                                          │ • Targeted extraction prompts   │
                                          │ • Believable human responses    │
+                                         │ • Returns reply + LLM intel     │
+                                         └─────────────────────────────────┘
+                                                           │
+                                                           ▼
+                                         ┌─────────────────────────────────┐
+                                         │ INTELLIGENCE MERGE              │
+                                         │ • Validate LLM intel with regex │
+                                         │ • Merge regex + validated LLM   │
+                                         │ • Deduplicate all fields        │
                                          └─────────────────────────────────┘
                                                            │
                                                            ▼
                                          ┌─────────────────────────────────┐
                                          │ RESPONSE BUILDER                │
                                          │ • Format API response           │
-                                         │ • Include extracted intel       │
+                                         │ • Include merged intel          │
                                          │ • Return agent notes            │
                                          └─────────────────────────────────┘
 ```
@@ -146,19 +159,25 @@ Sticky-Net is an **AI-powered honeypot system** designed to:
 ```
 Time ──────────────────────────────────────────────────────────────────────▶
 
-│ T+0ms       │ T+5ms         │ T+15ms        │ T+200ms       │ T+700ms     │
-│             │               │               │               │             │
-▼             ▼               ▼               ▼               ▼             ▼
-┌─────────┐   ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐
-│ Request │──▶│ Middleware  │─▶│ Regex       │─▶│ AI Class.  │─▶│ AI Agent  │
-│ Arrives │   │ Auth+Timer  │ │ Pre-filter  │ │ (if needed) │ │ Engagement│
-└─────────┘   └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘
-                                                                     │
-                                                                     ▼
-                                                              ┌───────────┐
-                                                              │ Response  │
-                                                              │ Returned  │
-                                                              └───────────┘
+│ T+0ms       │ T+5ms         │ T+15ms        │ T+200ms       │ T+210ms     │ T+710ms     │
+│             │               │               │               │             │             │
+▼             ▼               ▼               ▼               ▼             ▼             ▼
+┌─────────┐   ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────────┐ ┌───────────┐
+│ Request │──▶│ Middleware  │─▶│ Regex       │─▶│ AI Class.  │─▶│ Regex     │─▶│ Agent     │
+│ Arrives │   │ Auth+Timer  │ │ Pre-filter  │ │ (if needed) │ │ Extraction│ │ One-Pass  │
+└─────────┘   └─────────────┘ └─────────────┘ └─────────────┘ └───────────┘ └─────┬─────┘
+                                                                                  │
+                                                               ┌──────────────────┘
+                                                               ▼
+                                                        ┌─────────────┐
+                                                        │ Merge Intel │
+                                                        │ (LLM+Regex) │
+                                                        └──────┬──────┘
+                                                               ▼
+                                                        ┌───────────┐
+                                                        │ Response  │
+                                                        │ Returned  │
+                                                        └───────────┘
 ```
 
 ### Timing Breakdown
@@ -166,13 +185,13 @@ Time ─────────────────────────
 | Stage | Typical Duration | Description |
 |-------|------------------|-------------|
 | Middleware | ~2ms | API key validation, timing start |
-| Regex Pre-filter | ~10ms | Pattern matching for obvious cases |
 | AI Classification | ~150ms | Gemini 3 Flash semantic analysis |
-| Intelligence Extraction | ~5ms | Regex extraction of all intel types |
+| Regex Extraction | ~5ms | Fast, deterministic intel extraction |
 | Policy Check | ~1ms | Exit condition evaluation |
-| AI Engagement | ~500ms | Gemini 3 Pro response generation |
-| **Total (scam)** | **~700ms** | Full pipeline for scam engagement |
-| **Total (safe)** | **~200ms** | Early exit for non-scam messages |
+| AI Engagement (One-Pass) | ~500ms | Gemini 3 Flash returns reply + LLM extraction |
+| Intel Merge | ~2ms | Validate LLM intel with regex, merge, dedupe |
+| **Total (scam)** | **~660ms** | Full pipeline with One-Pass JSON |
+| **Total (safe)** | **~160ms** | Early exit for non-scam messages |
 
 ---
 
@@ -353,28 +372,21 @@ class RequestTimingMiddleware:
 
 ---
 
-## 6. Stage 2: Hybrid Scam Detection
+## 6. Stage 2: AI Scam Detection
 
-### Why Hybrid Detection?
+### Why AI-Only Detection?
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    REGEX-ONLY LIMITATIONS                               │
+│                    AI-ONLY DETECTION BENEFITS                           │
 ├─────────────────────────────────────────────────────────────────────────┤
-│ ❌ Misses obfuscated data ("nine eight seven..." spelled out)           │
-│ ❌ Cannot understand contextual references ("same account as before")   │
-│ ❌ Fails on non-standard formats scammers may use                       │
-│ ❌ No semantic understanding of implicit threats                        │
-│ ❌ Multi-stage scams look benign initially                              │
-└─────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────┐
-│                    HYBRID APPROACH BENEFITS                             │
-├─────────────────────────────────────────────────────────────────────────┤
-│ ✅ Regex: Fast (~10ms), deterministic, catches standard patterns        │
-│ ✅ AI: Semantic understanding, context-aware, catches sophisticated scams│
-│ ✅ Combined: Maximum detection accuracy with minimal latency            │
-│ ✅ Fallback: Regex provides baseline if AI fails                        │
+│ ✅ Simpler architecture — single detection path                        │
+│ ✅ Semantic understanding of context and conversation flow             │
+│ ✅ Catches multi-stage scams that start benign                         │
+│ ✅ Context-aware — uses full conversation history                      │
+│ ✅ Handles obfuscated data ("nine eight seven..." spelled out)         │
+│ ✅ Understands implicit threats and manipulation tactics               │
+│ ✅ Scam type classification for persona adaptation                     │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -385,51 +397,25 @@ class RequestTimingMiddleware:
                                │
                                ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    STAGE 2A: REGEX PRE-FILTER                           │
-│                         (~10ms, no cost)                                │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  Pattern Categories Checked:                                            │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │ URGENCY: "immediately", "urgent", "within X hours"              │   │
-│  │ AUTHORITY: "RBI", "SBI", "cyber cell", "government"             │   │
-│  │ THREAT: "blocked", "suspended", "legal action", "arrest"        │   │
-│  │ REQUEST: "OTP", "PIN", "CVV", "verify", "KYC"                   │   │
-│  │ FINANCIAL: "transfer money", "pay now", "UPI ID"                │   │
-│  │ PHISHING: suspicious URLs, URL shorteners                       │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-│                                                                         │
-│  Result Classification:                                                 │
-│  ┌────────────────┬────────────────────────────────────────────────┐   │
-│  │ OBVIOUS_SCAM   │ High-weight patterns matched (e.g., "send OTP")│   │
-│  │ OBVIOUS_SAFE   │ Matches safe patterns (e.g., actual OTP msg)   │   │
-│  │ UNCERTAIN      │ Needs AI analysis                              │   │
-│  └────────────────┴────────────────────────────────────────────────┘   │
-│                                                                         │
-└─────────────────────────────────┬───────────────────────────────────────┘
-                                  │
-          ┌───────────────────────┼───────────────────────┐
-          │                       │                       │
-    OBVIOUS_SCAM            UNCERTAIN               OBVIOUS_SAFE
-          │                       │                       │
-          ▼                       ▼                       ▼
-   ┌─────────────┐     ┌─────────────────┐      ┌─────────────────┐
-   │ Skip AI     │     │ Continue to     │      │ Skip AI         │
-   │ conf=0.95   │     │ AI Classifier   │      │ conf=0.05       │
-   │ Engage now! │     │                 │      │ Return neutral  │
-   └─────────────┘     └────────┬────────┘      └─────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                    STAGE 2B: AI CLASSIFICATION                          │
-│                  (Gemini 3 Flash, ~150ms, ~$0.0001)                     │
+│                    AI CLASSIFICATION                                     │
+│               (Gemini 3 Flash, ~150ms)                                  │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
 │  Model: gemini-3-flash-preview (fallback: gemini-2.5-flash)            │
 │                                                                         │
+│  Configuration:                                                         │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │ temperature: 0.1 (deterministic outputs)                        │   │
+│  │ max_output_tokens: 10000                                        │   │
+│  │ timeout: 90 seconds                                             │   │
+│  │ max_retries: 2                                                  │   │
+│  │ retry_delay: 1.0 seconds                                        │   │
+│  │ safety_settings: BLOCK_ONLY_HIGH (all harm categories)          │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│                                                                         │
 │  Prompt Construction:                                                   │
 │  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │ CONVERSATION HISTORY: [last 5 messages for context]             │   │
+│  │ CONVERSATION HISTORY: [full context]                            │   │
 │  │ NEW MESSAGE: "Your account blocked. Send OTP now!"              │   │
 │  │ METADATA: channel=SMS, locale=IN                                │   │
 │  │ PREVIOUS ASSESSMENT: is_scam=true, confidence=0.72 (if exists) │   │
@@ -441,13 +427,6 @@ class RequestTimingMiddleware:
 │  │ 4. Use FULL context, not just current message                  │   │
 │  └─────────────────────────────────────────────────────────────────┘   │
 │                                                                         │
-│  Configuration:                                                         │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │ thinking_level: LOW (fast classification, not deep reasoning)  │   │
-│  │ temperature: 0.1 (consistent, deterministic outputs)           │   │
-│  │ safety_settings: BLOCK_ONLY_HIGH (allow scam content analysis) │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-│                                                                         │
 │  Output (JSON):                                                         │
 │  {                                                                      │
 │    "is_scam": true,                                                     │
@@ -457,108 +436,132 @@ class RequestTimingMiddleware:
 │    "reasoning": "Message uses classic OTP phishing pattern..."         │
 │  }                                                                      │
 │                                                                         │
+│  Scam Types:                                                            │
+│  ┌─────────────────────────────────────────────────────────────────┐   │
+│  │ job_offer: Part-time job, work from home, YouTube liking        │   │
+│  │ banking_fraud: KYC update, account blocked, verify account      │   │
+│  │ lottery_reward: Lottery winner, reward points, cashback         │   │
+│  │ impersonation: Police, CBI, bank official impersonation         │   │
+│  │ others: Any scam that doesn't fit above categories              │   │
+│  └─────────────────────────────────────────────────────────────────┘   │
+│                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
                                   │
                                   ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    STAGE 2C: CONFIDENCE COMBINATION                     │
+│                    CONFIDENCE ESCALATION                                │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
-│  Final confidence = f(AI_confidence, pattern_matches, previous_conf)   │
-│                                                                         │
-│  Adjustments:                                                           │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │ 1. Pattern boost: +0.03 per matched pattern (max +0.15)        │   │
-│  │ 2. CRITICAL: confidence = max(current, previous)               │   │
-│  │    → Confidence can only INCREASE over conversation            │   │
-│  │    → Prevents false negative oscillation                       │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
+│  CRITICAL: confidence = max(current, previous)                         │
+│  → Confidence can only INCREASE over conversation                      │
+│  → Prevents false negative oscillation                                 │
 │                                                                         │
 │  Thresholds:                                                            │
 │  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │ conf < 0.60  → NOT_SCAM (monitoring mode)                      │   │
+│  │ conf < 0.60  → NOT_SCAM (return neutral response)              │   │
 │  │ conf 0.60-0.85 → CAUTIOUS engagement (10 turns max)            │   │
-│  │ conf > 0.85  → AGGRESSIVE engagement (25 turns max)            │   │
+│  │ conf ≥ 0.85  → AGGRESSIVE engagement (25 turns max)            │   │
 │  └─────────────────────────────────────────────────────────────────┘   │
 │                                                                         │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
-
-### Pattern Categories Detail
-
-```python
-# File: src/detection/patterns.py
-
-# Each pattern has:
-# - category: ScamCategory enum
-# - pattern: Compiled regex
-# - weight: 0.0-1.0 importance score
-# - description: Human-readable explanation
-
-URGENCY_PATTERNS = [
-    # "immediately", "urgent", "asap", "right now" → weight 0.7
-    # "today", "within X hours" → weight 0.6
-    # "hurry", "quickly", "fast" → weight 0.5
-    # "last chance", "final warning", "expires" → weight 0.8
-]
-
-AUTHORITY_PATTERNS = [
-    # Bank names: RBI, SBI, HDFC, ICICI → weight 0.8
-    # Government: ministry, police, cyber cell → weight 0.9
-    # Support: customer care, helpline → weight 0.5
-]
-
-THREAT_PATTERNS = [
-    # Account threats: blocked, suspended, deactivated → weight 0.8
-    # Legal threats: arrest, legal action, court → weight 0.9
-    # Fraud accusations → weight 0.6
-]
-
-REQUEST_PATTERNS = [
-    # OTP/code requests → weight 0.95 (very high!)
-    # Card details: PIN, CVV → weight 0.95
-    # Password requests → weight 0.9
-    # KYC/verification → weight 0.6-0.7
-]
-```
-
 ---
 
 ## 7. Stage 3: Intelligence Extraction
 
-### Hybrid Extraction Architecture
+### Hybrid Extraction Architecture (One-Pass JSON)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                    HYBRID EXTRACTION PIPELINE                            │
+│                       (One-Pass JSON Architecture)                       │
 └─────────────────────────────────────────────────────────────────────────┘
 
-                    Scammer Message (+ full history)
-                          │
-          ┌───────────────┴───────────────┐
-          │                               │
-          ▼                               ▼
-┌─────────────────────┐       ┌─────────────────────────────────────┐
-│   REGEX EXTRACTOR   │       │     AI EXTRACTOR (During Engage)    │
-│     (Always runs)   │       │   (Gemini 3 Pro - same call)        │
-├─────────────────────┤       ├─────────────────────────────────────┤
-│ • Standard formats  │       │ • Structured output extraction      │
-│ • 9-18 digit nums   │       │ • Obfuscated numbers               │
-│ • user@provider     │       │ • Contextual references            │
-│ • +91 phones        │       │ • Implicit information             │
-│ • http/https URLs   │       │ • Semantic validation              │
-│ ~5ms                │       │ ~0ms extra (piggybacks on engage)  │
-└─────────┬───────────┘       └───────────────┬─────────────────────┘
-          │                                   │
-          └───────────────┬───────────────────┘
-                          │
-                          ▼
-              ┌───────────────────────┐
-              │   MERGE & DEDUPLICATE │
-              │   • Union of both     │
-              │   • Normalize formats │
-              │   • Validate entities │
-              └───────────────────────┘
+                         Scammer Message
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │  REGEX EXTRACTION   │  ◀── Fast, deterministic (~5ms)
+                    │  (Runs FIRST)       │
+                    ├─────────────────────┤
+                    │ • Bank accounts     │
+                    │ • UPI IDs           │
+                    │ • Phone numbers     │
+                    │ • URLs              │
+                    │ • IFSC codes        │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+         ┌─────────────────────────────────────────────────┐
+         │     AGENT (Gemini 3 Pro) - ONE-PASS JSON        │
+         │     Returns BOTH in single call (~500ms):       │
+         ├─────────────────────────────────────────────────┤
+         │ {                                               │
+         │   "reply_text": "oh no what do i do...",       │
+         │   "emotional_tone": "panicked",                │
+         │   "extracted_intelligence": {                  │
+         │     "bank_accounts": [...],                    │
+         │     "upi_ids": [...],                          │
+         │     "phone_numbers": [...],                    │
+         │     "beneficiary_names": [...],                │
+         │     "urls": [...],                             │
+         │     "crypto_addresses": [...],                 │
+         │     "other_critical_info": [                   │
+         │       {"label": "TeamViewer ID", "value": ...}│
+         │     ]                                          │
+         │   }                                            │
+         │ }                                              │
+         └──────────────────────┬──────────────────────────┘
+                                │
+                                ▼
+         ┌─────────────────────────────────────────────────┐
+         │  VALIDATE LLM EXTRACTION WITH REGEX             │
+         │  • UPI IDs must match user@provider pattern     │
+         │  • IFSC codes must match [A-Z]{4}0[A-Z0-9]{6}  │
+         │  • Bank accounts must be 9-18 digits            │
+         │  • Phone numbers must start with 6-9            │
+         └──────────────────────┬──────────────────────────┘
+                                │
+                                ▼
+         ┌─────────────────────────────────────────────────┐
+         │  MERGE & DEDUPLICATE                            │
+         │  • Union of regex + validated LLM results       │
+         │  • Normalize formats (strip whitespace, etc.)   │
+         │  • Remove duplicates                            │
+         └──────────────────────┬──────────────────────────┘
+                                │
+                                ▼
+                         Final Response
+                    (Merged intelligence used
+                     for exit checks + API response)
+```
+
+### Benefits of One-Pass JSON Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    ONE-PASS JSON BENEFITS                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ✅ LOWER LATENCY                                                       │
+│     • Single LLM call: ~500ms (vs ~650ms with separate calls)           │
+│     • No orchestration overhead between engagement + extraction         │
+│                                                                          │
+│  ✅ CONTEXT-AWARE REPLIES                                               │
+│     • Reply text can naturally reference extracted intel                │
+│     • "i am sending to [extracted UPI]... what name shows?"             │
+│                                                                          │
+│  ✅ SIMPLER ARCHITECTURE                                                │
+│     • No call orchestration needed                                      │
+│     • Single prompt, single response parsing                            │
+│     • Easier to debug and maintain                                      │
+│                                                                          │
+│  ✅ HYBRID VALIDATION                                                   │
+│     • LLM catches obfuscated data ("nine eight seven...")              │
+│     • Regex validates structured fields (UPI, IFSC)                     │
+│     • Best of both worlds                                               │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Intelligence Types
@@ -576,6 +579,49 @@ class IntelligenceType(str, Enum):
     BANK_NAME = "bank_name"            # Indian bank names
     IFSC_CODE = "ifsc_code"            # Bank branch codes
     WHATSAPP_NUMBER = "whatsapp_number"  # WhatsApp contact numbers
+    CRYPTO_ADDRESS = "crypto_address"  # Bitcoin, Ethereum, etc. wallets
+    OTHER_CRITICAL = "other_critical"  # Ad-hoc high-value data
+```
+
+### Extended Intelligence Fields (One-Pass JSON)
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    EXTENDED INTELLIGENCE SCHEMA                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  extracted_intelligence: {                                              │
+│    // Standard fields (regex + LLM validated)                           │
+│    bank_accounts: ["12345678901234"],                                   │
+│    upi_ids: ["scammer@ybl"],                                            │
+│    phone_numbers: ["+91-9876543210"],                                   │
+│    beneficiary_names: ["Rahul Kumar"],                                  │
+│    urls: ["http://fake-bank.com/verify"],                               │
+│    whatsapp_numbers: ["+91-8888899999"],                                │
+│    ifsc_codes: ["SBIN0001234"],                                         │
+│                                                                          │
+│    // NEW: Dedicated crypto field                                       │
+│    crypto_addresses: [                                                  │
+│      "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",  // Bitcoin         │
+│      "0x742d35Cc6634C0532925a3b844Bc9e7595f..."     // Ethereum        │
+│    ],                                                                    │
+│                                                                          │
+│    // NEW: Flexible field for ad-hoc high-value data                    │
+│    other_critical_info: [                                               │
+│      {"label": "TeamViewer ID", "value": "123 456 789"},               │
+│      {"label": "AnyDesk ID", "value": "987654321"},                    │
+│      {"label": "Reference Number", "value": "TXN20260125001"},         │
+│      {"label": "Ticket ID", "value": "SUPPORT-789456"}                 │
+│    ]                                                                     │
+│  }                                                                       │
+│                                                                          │
+│  PURPOSE of other_critical_info:                                        │
+│  • Captures high-value data that doesn't fit standard fields            │
+│  • LLM uses judgment to identify scammer-provided identifiers           │
+│  • Examples: remote desktop IDs, reference numbers, case IDs            │
+│  • Each entry has label + value for flexible categorization             │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Extraction Patterns Detail
@@ -590,61 +636,87 @@ BANK ACCOUNTS:
 │   Example: "123456789012345"
 ├── Formatted: \b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{0,6}\b
 │   Example: "1234-5678-9012-3456"
-└── Prefixed: (?:a/c|account|acc)[\s:]*#?\s*(\d{9,18})
-    Example: "A/C: 123456789012345"
+├── Prefixed: (?:a/c|account|acc)[\s:]*#?\s*(\d{9,18})
+│   Example: "A/C: 123456789012345"
+└── Validation:
+    • 9-18 digits
+    • Not all same digit (e.g., not 1111111111)
+    • Not phone-like (10-12 digits starting 6-9)
 
 UPI IDs:
-├── Known providers: [\w.-]+@(?:ybl|paytm|okicici|oksbi|...)
+├── Known providers: [\w.-]+@(?:ybl|paytm|okicici|oksbi|okhdfcbank|okaxis|
+│                     apl|upi|ibl|axisb|sbi|icici|hdfc|kotak|barodampay|
+│                     aubank|indus|federal)
 │   Example: "john@ybl", "scammer@paytm"
-└── Generic: [\w.-]{3,}@[a-zA-Z]{2,15}
-    Example: "fraudster@okaxis"
+└── Validation: Must match user@provider pattern
 
 PHONE NUMBERS (Indian):
 ├── With +91: \+91[-\s]?\d{10}
 ├── Plain 10-digit: [6-9]\d{9}
-├── Formatted: [6-9]\d{2}[-\s]?\d{3}[-\s]?\d{4}
-└── With 91 prefix: 91[6-9]\d{9}
+├── With 91 prefix: 91[6-9]\d{9}
+└── Validation:
+    • Exactly 10 digits after cleaning
+    • Must start with 6, 7, 8, or 9
 
 BENEFICIARY NAMES (CRITICAL for mule identification):
-├── "name shows as 'Name'"
-├── "Account Holder: Name"
-├── "Transfer to Name"
-└── "Name - Title" (e.g., "Rahul Kumar - KYC Support")
+├── Patterns:
+│   • "name shows as 'Name'"
+│   • "Account Holder: Name"
+│   • "Transfer to Name"
+│   • "beneficiary name: Name"
+└── Validation:
+    • 3-50 characters
+    • Mostly alphabetic
+    • Filtered through blocklist (action words, banking terms, honorifics)
 
 WHATSAPP NUMBERS:
 ├── "WhatsApp: +91 9876543210"
 ├── "message on WhatsApp 9876543210"
 └── wa.me/919876543210 links
+
+URLS (Phishing Detection):
+├── Pattern: https?://[\w.-]+(?:\.[a-z]{2,10})+(?:/[^\s<>\"'{}|\\^`\[\]]*)?
+└── Suspicious Indicators:
+    • URL shorteners: bit.ly, tinyurl, t.co, goo.gl, is.gd, cutt.ly
+    • Phishing keywords: login, verify, update, secure, account, signin
+    • KYC/OTP: kyc, otp, bank, sbi, hdfc, icici, axis
+    • Brand impersonation: amazon, flipkart, paytm, phonepe, gpay
+    • Prize/lottery: prize, claim, refund, reward, winner, lottery
+    • Free TLDs: .tk, .ml, .ga, .cf, .gq, .xyz, .work, .top
+
+IFSC CODES:
+├── Pattern: [A-Z]{4}0[A-Z0-9]{6}
+└── Example: "SBIN0001234"
 ```
 
-### Validation Rules
+### Beneficiary Name Blocklist
 
-```python
-# File: src/intelligence/extractor.py
-
-def _is_valid_bank_account(self, number: str) -> bool:
-    """
-    Validates bank account numbers:
-    - Must be 9-18 digits
-    - Cannot be all zeros
-    - Cannot be all same digit (e.g., 1111111111)
-    """
-
-def _is_valid_phone(self, number: str) -> bool:
-    """
-    Validates Indian phone numbers:
-    - Removes +91/91 prefix
-    - Must be exactly 10 digits
-    - Must start with 6, 7, 8, or 9
-    """
-
-def _is_valid_name(self, name: str) -> bool:
-    """
-    Validates beneficiary names:
-    - Must have at least 2 characters
-    - Must contain letters (not just numbers)
-    - Excludes common non-names
-    """
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    BENEFICIARY NAME BLOCKLIST                            │
+│           (Words that should NOT be extracted as names)                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Action Words: now, before, paying, please, urgent, click, here, send,  │
+│                pay, fast, verification                                   │
+│                                                                          │
+│  Banking Terms: account, bank, upi, payment, money, transfer, amount,   │
+│                 rupees, rs, inr, credited, debited, pending, failed,    │
+│                 success, transaction, beneficiary, receiver, sender     │
+│                                                                          │
+│  Honorifics: sir, madam, ji, mr, mrs, ms, dr, shri, smt, sahab         │
+│                                                                          │
+│  Support Terms: customer, user, member, client, support, help, desk,    │
+│                 center, service, team, officer, dear                    │
+│                                                                          │
+│  Instructions: call, contact, message, reply, confirm, complete,        │
+│                submit, enter, provide, share, receive, collect          │
+│                                                                          │
+│  Common Words: the, and, for, with, from, holder, number, today,        │
+│                immediately, asap, quick, verify, update, link, otp,     │
+│                pin, password, name                                       │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -731,91 +803,178 @@ class EngagementMode(str, Enum):
 ### Exit Responses
 
 ```python
-# When high-value intelligence is complete, use these believable excuses:
+# When high-value intelligence is complete, use these believable excuses (17 variations):
 EXIT_RESPONSES = [
     "okay i am calling that number now, hold on...",
     "wait my son just came home, let me ask him to help me with this",
     "one second, someone is at the door, i will call you back",
     "okay i sent the money, now my phone is dying, i need to charge it",
     "hold on, i am getting another call from my bank, let me check",
+    "oh no my doorbell is ringing, someone is at the door... i will do this later",
+    "sorry my neighbor aunty just came, i have to go help her with something urgent",
+    "arey my grandson is crying, i need to check on him... one minute",
+    "oh god my cooking is burning on the stove! i smell smoke!! wait wait",
+    "wait my daughter-in-law is calling me for lunch, i have to go eat first",
+    "oh the milk is boiling over! wait wait i have to go to kitchen!!",
+    "my blood pressure medicine time ho gaya, i feel dizzy... let me take rest",
+    "ji actually i just remembered i have doctor appointment today, need to leave now",
+    "sorry sir power cut ho gaya, my phone battery is only 2%... will call you back",
+    "wait i am getting another call, it shows BANK on my phone... should i pick up??",
+    "hold on my beti is asking who i am talking to, she looks worried...",
+    "one second, my husband just came and he is asking what i am doing on phone",
 ]
 ```
 
 ---
 
-## 9. Stage 5: AI Agent Engagement
+## 9. Stage 5: AI Agent Engagement (One-Pass JSON)
 
 ### HoneypotAgent Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                    HONEYPOT AGENT COMPONENTS                             │
+│                       (One-Pass JSON Architecture)                       │
 └─────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                         HoneypotAgent                                    │
 │                                                                          │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────────────┐  │
-│  │ PersonaManager  │  │ EngagementPolicy│  │ FakeDataGenerator       │  │
-│  │                 │  │                 │  │                         │  │
-│  │ • Emotional     │  │ • Mode routing  │  │ • Credit cards          │  │
-│  │   state machine │  │ • Exit checks   │  │ • Bank accounts         │  │
-│  │ • Turn-based    │  │ • Intel check   │  │ • OTPs, Aadhaar, PAN   │  │
-│  │   adaptation    │  │ • Thresholds    │  │ • Persona details       │  │
+│  │ Persona         │  │ EngagementPolicy│  │ FakeDataGenerator       │  │
+│  │ (Pushpa Verma)  │  │                 │  │                         │  │
+│  │                 │  │ • Mode routing  │  │ • Credit cards          │  │
+│  │ • 65+ elderly   │  │ • Exit checks   │  │ • Bank accounts         │  │
+│  │   teacher       │  │ • Intel check   │  │ • OTPs, Aadhaar, PAN   │  │
+│  │ • Tech-confused │  │ • Thresholds    │  │ • Persona details       │  │
+│  │ • Trusting      │  │                 │  │                         │  │
 │  └─────────────────┘  └─────────────────┘  └─────────────────────────┘  │
 │                                                                          │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
-│  │                    Gemini 3 Pro Client                          │    │
-│  │  Primary: gemini-3-pro-preview                                  │    │
+│  │                    Gemini 3 Flash Client                        │    │
+│  │  Primary: gemini-3-flash-preview                                │    │
 │  │  Fallback: gemini-2.5-pro                                       │    │
 │  │  Config:                                                        │    │
-│  │    • thinking_level: HIGH (deep reasoning for believable text) │    │
-│  │    • safety_settings: BLOCK_NONE (allow scam roleplay)         │    │
+│  │    • temperature: 0.7 (creative, varied responses)              │    │
+│  │    • max_output_tokens: 65536 (for Gemini 3 thinking)          │    │
+│  │    • context_window: 8 turns                                    │    │
+│  │    • safety_settings: BLOCK_NONE (allows scam roleplay)         │    │
+│  │                                                                 │    │
+│  │  ONE-PASS JSON OUTPUT:                                          │    │
+│  │  {                                                              │    │
+│  │    "reply_text": "conversational response to scammer",         │    │
+│  │    "emotional_tone": "panicked",                               │    │
+│  │    "extracted_intelligence": { bank_accounts, upi_ids, ... }   │    │
+│  │  }                                                              │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Persona Management
-
-```python
-# File: src/agents/persona.py
-
-class EmotionalState(str, Enum):
-    CALM = "calm"           # Default, early conversation
-    ANXIOUS = "anxious"     # Worried, mid-conversation
-    PANICKED = "panicked"   # Very scared, high-pressure scams
-    RELIEVED = "relieved"   # Lottery/reward scams
-    SUSPICIOUS = "suspicious"  # Use sparingly, late conversation only
-```
-
-### Emotional State Mapping
+### One-Pass JSON Flow
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    EMOTIONAL STATE TRANSITIONS                           │
+│                    ONE-PASS JSON ENGAGEMENT FLOW                         │
 └─────────────────────────────────────────────────────────────────────────┘
 
-Scam Type Detection → Emotional Response:
+     Scammer Message + History + Regex-Extracted Intel
+                          │
+                          ▼
+     ┌────────────────────────────────────────────────────────────────────┐
+     │  BUILD PROMPT                                                      │
+     │  • Persona: Pushpa Verma (65+ elderly retired teacher)            │
+     │  • Emotional state based on scam type + confidence + turn         │
+     │  • Conversation history (8-turn window)                           │
+     │  • Already-extracted intelligence (from regex)                    │
+     │  • Fake data for compliance                                       │
+     │  • Extraction directives for missing intel                        │
+     └────────────────────────────────────────────────────────────────────┘
+                          │
+                          ▼
+     ┌────────────────────────────────────────────────────────────────────┐
+     │  SINGLE LLM CALL (Gemini 3 Flash, ~500ms)                         │
+     │  Returns JSON with BOTH:                                          │
+     │  • reply_text: Believable engagement response                     │
+     │  • extracted_intelligence: LLM-identified intel from conversation │
+     └────────────────────────────────────────────────────────────────────┘
+                          │
+                          ▼
+     ┌────────────────────────────────────────────────────────────────────┐
+     │  VALIDATE + MERGE                                                  │
+     │  • LLM extraction validated against regex patterns                │
+     │  • Merged with pre-extracted regex intel                          │
+     │  • Deduplicated final intelligence set                            │
+     └────────────────────────────────────────────────────────────────────┘
+                          │
+                          ▼
+                  EngagementResult {
+                    response: "reply text",
+                    extracted_intelligence: { merged intel },
+                    turn_number: N
+                  }
+```
 
-banking_fraud, account_threat:
-    ├── conf < 0.5  → CALM
-    ├── conf 0.5-0.8 → ANXIOUS
-    └── conf > 0.8  → PANICKED
+### Persona: Pushpa Verma
 
-job_offer, recruitment:
-    └── Any conf → ANXIOUS (interested but worried)
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    PERSONA: PUSHPA VERMA                                 │
+│                 65+ Elderly Retired School Teacher from Delhi           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  TRAITS:                                                                │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ • trusting: Believes what they're told                          │    │
+│  │ • easily_panicked: Easily panicked                              │    │
+│  │ • tech_confused: Needs step-by-step explanation                 │    │
+│  │ • cooperative: Wants to help/comply                             │    │
+│  │ • old_fashioned: Struggles with smartphones                     │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│  TYPING STYLE:                                                          │
+│  • Mostly lowercase                                                     │
+│  • Minimal punctuation                                                  │
+│  • Occasional typos                                                     │
+│  • Simple vocabulary                                                    │
+│  • Hindi-English mixing (Hinglish)                                     │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
 
-lottery, prize, reward:
-    └── Any conf → RELIEVED (excited/hopeful)
+### Emotional States by Scam Type
 
-police, government, authority:
-    └── Any conf → ANXIOUS (worried about authority)
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    EMOTIONAL STATE MAPPING                               │
+└─────────────────────────────────────────────────────────────────────────┘
 
-Turn-based modifiers:
-    Turn 1-2: "what is this about?", "i dont understand"
-    Turn 3-5: "this is concerning", "what should i do"
-    Turn 6+:  "ok i will try", "let me see if i can do this"
+Available Emotional States:
+┌─────────────────────────────────────────────────────────────────────────┐
+│ CALM: Default state                                                     │
+│ ANXIOUS: Worried but manageable                                        │
+│ PANICKED: Very scared                                                  │
+│ RELIEVED: Temporary relief                                             │
+│ COOPERATIVE: Use sparingly, only late in conversation                  │
+│ INTERESTED: For job offers - curious about opportunity                 │
+│ EXCITED: For lottery/rewards - happy about winning                     │
+│ CAUTIOUS: For impersonation - intimidated but careful                  │
+│ NEUTRAL: For unknown scam types                                        │
+└─────────────────────────────────────────────────────────────────────────┘
+
+Emotional Mapping by Scam Type:
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Scam Type       │ High Intensity (>0.6) │ Low Intensity (≤0.6)         │
+├─────────────────┼───────────────────────┼──────────────────────────────┤
+│ job_offer       │ INTERESTED            │ INTERESTED                   │
+│ banking_fraud   │ PANICKED              │ ANXIOUS                      │
+│ lottery_reward  │ EXCITED               │ EXCITED                      │
+│ impersonation   │ CAUTIOUS              │ CAUTIOUS                     │
+│ others          │ NEUTRAL               │ CALM                         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+NOTE: The LLM interprets these states and generates natural responses.
+      No hardcoded phrases are injected.
 ```
 
 ### Fake Data Generation
@@ -834,96 +993,58 @@ Turn-based modifiers:
 │  │ • Consistent across conversation (seeded by conversation_id)    │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
-│  Generated Data:                                                         │
+│  Generated Data Types:                                                   │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
-│  │ Credit Card: 4000 1234 5678 9012 (Luhn-valid, invalid BIN)     │    │
-│  │ Expiry: 08/27                                                   │    │
-│  │ CVV: 456                                                        │    │
-│  │ Bank Account: 12345678901234 (valid format)                    │    │
-│  │ IFSC: SBIN0999999 (valid prefix, fake branch)                  │    │
-│  │ OTP: 847291                                                     │    │
-│  │ Aadhaar: 2345 6789 0123                                        │    │
-│  │ PAN: ABCDE1234F                                                │    │
-│  │ Name: Kamala Sharma                                            │    │
-│  │ Age: 63                                                        │    │
-│  │ Address: 45, Gandhi Nagar, Mumbai                              │    │
+│  │ Credit Card: Luhn-valid 16-digit with invalid BINs              │    │
+│  │              BINs: 400000, 411111, 510000, 520000, 607000, etc. │    │
+│  │              Example: 4000 1234 5678 9012                       │    │
+│  │ Expiry: MM/YY format                                            │    │
+│  │ CVV: 3 digits                                                   │    │
+│  │ Bank Account: 11-16 digits starting with 9                      │    │
+│  │ IFSC: Real bank prefix + fake branch (9XXXXX)                   │    │
+│  │ OTP: 6 digits (avoiding 000000, 123456, 654321)                 │    │
+│  │ Aadhaar: 12 digits starting with 2-9                            │    │
+│  │ PAN: Format AAAAP9999A                                          │    │
+│  │ Persona: Elderly Indian name (55-80 years), address with PIN    │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
 │  ALWAYS follow fake data with extraction question:                       │
 │  "ok my card number is [CARD]. what name should appear on your side?"   │
 │                                                                          │
+│  NOTE: Fake data is seeded by conversation_id to ensure                 │
+│        consistency across multiple turns in the same conversation.      │
+│                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### System Prompt Structure
-
-```python
-# File: src/agents/prompts.py
-
-HONEYPOT_SYSTEM_PROMPT = """
-## Your Persona
-- Middle-aged, not very tech-savvy, trusting of authority figures
-- Emotional state: {emotional_state}
-
-## Engagement Strategy
-1. Show concern but confusion
-2. Request specifics (extract intel)
-3. Express willingness to comply
-4. Delay tactics
-5. Feign technical difficulties
-
-## CRITICAL RULES
-- NEVER reveal you know it's a scam
-- NEVER use security terms like "phishing", "fraud"
-- DO ask for payment details "to verify"
-- DO make small mistakes requiring re-explanation
-
-## VARIATION RULES
-- Do NOT repeat same opening phrases
-- Type like elderly person: lowercase, simple, occasional typos
-- Vary based on turn number
-
-## Intelligence Targets
-- Bank accounts
-- UPI IDs
-- Phone numbers
-- Links
-- BENEFICIARY NAME (CRITICAL - always ask for name when you have UPI/account)
-
-## FAKE DATA STRATEGY
-When asked for sensitive data, GIVE IT using provided fake values.
-{fake_data_section}
-ALWAYS follow with question to extract more intel.
-"""
-```
-
-### Targeted Extraction Directives
+### Intelligence Extraction Priority
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    EXTRACTION DIRECTIVE GENERATION                       │
+│                    EXTRACTION PRIORITY                                   │
+│                    (Targets for engagement)                              │
+├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
-│  Based on what's MISSING, the prompt includes specific instructions:     │
-│                                                                          │
-│  Missing: beneficiary_name (have UPI)                                   │
+│  PHASE 1: Payment Method                                                │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
-│  │ **CRITICAL EXTRACTION TARGET: BENEFICIARY NAME**                │    │
-│  │ You have the UPI "scammer@ybl" but NOT the account holder name. │    │
-│  │ Use the "validation attack" - pretend you need to verify name.  │    │
-│  │ Example: "i am typing scammer@ybl... what name should pop up?"  │    │
-│  │ DO NOT exit until you get the name!                             │    │
+│  │ Bank Account OR UPI ID                                          │    │
+│  │ → "where should i send the money?"                              │    │
+│  │ → "what is your upi id?"                                        │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
-│  Missing: payment_details                                               │
+│  PHASE 2: Beneficiary Name (HIGHEST VALUE)                              │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
-│  │ **EXTRACTION TARGET: PAYMENT DETAILS**                          │    │
-│  │ Ask naturally: "where should i send the money?"                 │    │
+│  │ Account holder name (identifies mule account)                   │    │
+│  │ → "Validation Attack": Pretend app needs to verify name         │    │
+│  │ → "i am typing [UPI]... what name should pop up?"              │    │
+│  │ → "my app is showing [NAME], is that correct?"                 │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
-│  Missing: phone_number                                                  │
+│  PHASE 3: Phone Number                                                  │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
-│  │ **EXTRACTION TARGET: PHONE NUMBER**                             │    │
-│  │ Ask: "what number can i call if i have problem?"                │    │
+│  │ Scammer contact for law enforcement                             │    │
+│  │ → "what number can i call if i have problem?"                  │    │
+│  │ → "can you send me message on whatsapp?"                       │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -982,6 +1103,8 @@ ALWAYS follow with question to extract more intel.
 {
   "status": "success",
   "scamDetected": true,
+  "scamType": "banking_fraud",
+  "confidence": 0.92,
   "engagementMetrics": {
     "engagementDurationSeconds": 2,
     "totalMessagesExchanged": 5
@@ -990,11 +1113,44 @@ ALWAYS follow with question to extract more intel.
     "bankAccounts": ["12345678901234"],
     "upiIds": ["scammer@ybl"],
     "phoneNumbers": ["9876543210"],
-    "phishingLinks": ["http://bit.ly/fake-bank"]
+    "beneficiaryNames": ["Rahul Kumar"],
+    "phishingLinks": ["http://bit.ly/fake-bank"],
+    "emails": [],
+    "bankNames": [],
+    "whatsappNumbers": ["+91-8888899999"],
+    "ifscCodes": ["SBIN0001234"],
+    "other_critical_info": [
+      {"label": "TeamViewer ID", "value": "123 456 789"}
+    ]
   },
-  "agentNotes": "Mode: aggressive | Intel: bank+phone+upi extracted | Turn: 5 | Still need: beneficiary_name",
-  "agentResponse": "ok i am typing scammer@ybl in my app... what name should it show? want to make sure before sending"
+  "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 92% | Turn: 5 | Persona: panicked",
+  "agentResponse": "ok i am typing scammer@ybl in my app... it shows Rahul Kumar, is that right?"
 }
+```
+
+### Intelligence Source Attribution
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    INTELLIGENCE SOURCES                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  REGEX-EXTRACTED (fast, deterministic):                                 │
+│  • bankAccounts, upiIds, phoneNumbers, ifscCodes, urls                  │
+│                                                                          │
+│  LLM-EXTRACTED (flexible, context-aware):                               │
+│  • beneficiaryNames (from "name shows as...", "account holder...")     │
+│  • cryptoAddresses (various wallet formats)                             │
+│  • otherCriticalInfo (ad-hoc identifiers)                               │
+│                                                                          │
+│  HYBRID (LLM-extracted, regex-validated):                               │
+│  • UPI IDs (LLM catches obfuscated, regex validates format)             │
+│  • IFSC codes (LLM finds in context, regex validates pattern)           │
+│  • Bank accounts (LLM catches spelled-out numbers, regex validates)     │
+│                                                                          │
+│  Final result is MERGED and DEDUPLICATED from all sources               │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -1060,17 +1216,20 @@ ALWAYS follow with question to extract more intel.
 ```python
 class ScamDetector:
     """
-    Hybrid scam detector combining regex pre-filter with AI classification.
+    Pure AI scam detector using Gemini 3 Flash.
     
     Key Methods:
-    - analyze(): Main entry point for message analysis
-    - _combine_confidence(): Merges AI + pattern confidence
-    - _calculate_category_scores(): Aggregates pattern weights by category
+    - detect(): Main entry point for message analysis
+    - get_engagement_mode(): Returns NONE, CAUTIOUS, or AGGRESSIVE
     
     Important Constants:
     - SCAM_THRESHOLD = 0.6 (minimum confidence to flag as scam)
-    - OBVIOUS_SCAM_CONFIDENCE = 0.95 (confidence for regex fast-path scams)
-    - OBVIOUS_SAFE_CONFIDENCE = 0.05 (confidence for allowlisted messages)
+    - CAUTIOUS_THRESHOLD = 0.60 (minimum for cautious engagement)
+    - AGGRESSIVE_THRESHOLD = 0.85 (minimum for aggressive engagement)
+    
+    Key Feature: Confidence Escalation
+    - Confidence can only INCREASE over conversation
+    - Prevents false negatives from oscillation
     """
 ```
 
@@ -1084,12 +1243,21 @@ class ScamClassifier:
     Features:
     - Primary model: gemini-3-flash-preview
     - Fallback model: gemini-2.5-flash (if primary fails)
-    - Low thinking level for speed
     - Context-aware (uses conversation history)
+    
+    Configuration:
+    - Temperature: 0.1 (deterministic outputs)
+    - Max Output Tokens: 10000
+    - Timeout: 90 seconds
+    - Max Retries: 2
+    - Retry Delay: 1.0 seconds
     
     Safety Settings:
     - BLOCK_ONLY_HIGH for all harm categories
     - Allows analysis of scam content without triggering safety blocks
+    
+    Scam Types:
+    - job_offer, banking_fraud, lottery_reward, impersonation, others
     """
 ```
 
@@ -1098,20 +1266,40 @@ class ScamClassifier:
 ```python
 class IntelligenceExtractor:
     """
-    Regex-based intelligence extraction.
+    Hybrid intelligence extraction (Regex + LLM validation).
     
-    Extraction Methods:
-    - _extract_bank_accounts(): 9-18 digit numbers (excludes phone numbers)
-    - _extract_upi_ids(): username@provider patterns
-    - _extract_phone_numbers(): Indian mobile formats
-    - _extract_beneficiary_names(): Account holder names
-    - _extract_urls(): Suspicious/phishing links
-    - _extract_whatsapp_numbers(): WhatsApp-specific contacts
+    REGEX EXTRACTION (runs first, fast, deterministic, ~5ms):
+    - extract_bank_accounts(): 9-18 digit numbers (excludes phone numbers)
+    - extract_upi_ids(): username@provider patterns (known providers)
+    - extract_phone_numbers(): Indian mobile formats (6-9 prefix)
+    - extract_beneficiary_names(): Account holder names (multiple patterns)
+    - extract_urls(): URLs with phishing detection
+    - extract_whatsapp_numbers(): WhatsApp-specific contacts
+    - extract_ifsc_codes(): [A-Z]{4}0[A-Z0-9]{6}
+    
+    LLM EXTRACTION VALIDATION:
+    - validate_llm_extraction(): Validates LLM-extracted intel with regex
+    - UPI IDs must match user@provider pattern
+    - IFSC codes must match [A-Z]{4}0[A-Z0-9]{6}
+    - Bank accounts must be 9-18 digits
+    
+    MERGE OPERATION:
+    - merge_intelligence(): Combines regex + validated LLM results
+    - Deduplicates all fields
+    - Normalizes formats (strip whitespace, etc.)
+    
+    Extended Fields (for One-Pass JSON):
+    - crypto_addresses: Bitcoin, Ethereum, etc. wallet addresses
+    - other_critical_info: Ad-hoc high-value data (TeamViewer IDs, etc.)
     
     Validation:
-    - Luhn check for card numbers (if implementing)
-    - Phone prefix validation (must start with 6-9)
-    - Name validation (excludes non-name patterns)
+    - Phone: 10 digits, starts with 6-9
+    - Bank Account: 9-18 digits, not all same digit, not phone-like
+    - Name: 3-50 chars, mostly alphabetic, blocklist filtered
+    
+    Known UPI Providers:
+    ybl, paytm, okicici, oksbi, okhdfcbank, okaxis, apl, upi, ibl,
+    axisb, sbi, icici, hdfc, kotak, barodampay, aubank, indus, federal
     """
 ```
 
@@ -1120,43 +1308,71 @@ class IntelligenceExtractor:
 ```python
 class HoneypotAgent:
     """
-    AI agent that engages scammers with believable human persona.
+    AI agent that engages scammers with believable elderly persona.
+    Uses ONE-PASS JSON architecture for efficiency.
     
     Key Components:
-    - PersonaManager: Manages emotional state and behavior
+    - Persona: Pushpa Verma (65+ elderly retired teacher)
     - EngagementPolicy: Determines engagement mode and exit conditions
     - FakeDataGenerator: Provides fake financial data
+    - IntelligenceExtractor: For hybrid LLM+regex extraction
     
     Gemini Configuration:
-    - Primary model: gemini-3-pro-preview
+    - Primary model: gemini-3-flash-preview
     - Fallback: gemini-2.5-pro
-    - Thinking level: HIGH (for sophisticated reasoning)
+    - Temperature: 0.7 (creative, varied responses)
+    - Max Output Tokens: 65536 (for Gemini 3 thinking)
+    - Context Window: 8 turns
     - Safety: BLOCK_NONE (allows scam roleplay)
+    
+    ONE-PASS JSON Architecture:
+    - Single LLM call returns BOTH reply_text AND extracted_intelligence
+    - Lower latency (~500ms vs ~650ms with separate calls)
+    - Reply is context-aware of extracted intel
+    - LLM extraction validated with regex patterns
+    - Results merged with pre-extracted regex intel
     
     Response Strategy:
     - Build targeted extraction directives based on missing intel
     - Include fake data for apparent compliance
-    - Vary emotional tone based on scam type and turn number
+    - Emotional state based on scam type + confidence + turn number
     """
 ```
 
-### 12.5 PersonaManager (`src/agents/persona.py`)
+### 12.5 Persona (`src/agents/persona.py`)
 
 ```python
-class PersonaManager:
+class Persona:
     """
-    Manages persona state across conversation turns.
+    State tracker for Pushpa Verma persona.
+    
+    Core Persona: 65+ elderly retired school teacher from Delhi
+    
+    Traits:
+    - trusting: Believes what they're told
+    - easily_panicked: Easily panicked
+    - tech_confused: Needs step-by-step explanation
+    - cooperative: Wants to help/comply
+    - old_fashioned: Struggles with smartphones
+    
+    Key Method:
+    - get_emotional_state(scam_type, confidence, turn_number)
+      Returns appropriate emotional state based on context
     
     Emotional States:
     - CALM: Default, early conversation
     - ANXIOUS: Worried, mid-conversation
-    - PANICKED: Very scared (high-confidence banking scams)
-    - RELIEVED: Lottery/reward scams
-    - SUSPICIOUS: Used sparingly, late conversation
+    - PANICKED: Very scared (banking_fraud with high confidence)
+    - COOPERATIVE: Ready to comply (later turns)
+    - INTERESTED: For job offers
+    - EXCITED: For lottery/rewards
+    - CAUTIOUS: For impersonation
+    - NEUTRAL: For unknown scam types
     
-    Persona Traits:
-    - TRUSTING, WORRIED, TECH_NAIVE (default)
-    - Influences response style and extraction probability
+    Design Rationale:
+    - LLM generates natural, varied emotional responses
+    - State context guides tone without constraining expression
+    - Different emotions for different scam types
     """
 ```
 
@@ -1166,18 +1382,23 @@ class PersonaManager:
 class FakeDataGenerator:
     """
     Generates believable but invalid financial data.
+    Seeded by conversation_id for consistency across turns.
     
     Features:
     - Luhn-valid credit card numbers (pass format checks, fail transactions)
-    - Real bank IFSC prefixes with fake branch codes
-    - Elderly Indian names (typical scam targets)
+    - Invalid BINs: 400000, 411111, 510000, 520000, 607000, etc.
+    - Real bank IFSC prefixes with fake branch codes (9XXXXX)
+    - Elderly Indian names (typical scam targets, 55-80 years)
     - Consistent data per conversation (seeded by conversation_id)
     
     Generated Data Types:
-    - Credit cards (Visa, Mastercard, RuPay)
-    - Bank accounts with IFSC
-    - OTPs, Aadhaar, PAN
-    - Persona details (name, age, address)
+    - Credit cards (Luhn-valid, 16 digits)
+    - Bank accounts (11-16 digits starting with 9)
+    - IFSC codes (real prefix + fake branch)
+    - OTPs (6 digits, avoiding obvious patterns)
+    - Aadhaar (12 digits starting with 2-9)
+    - PAN (format AAAAP9999A)
+    - Persona details (name, age, address with PIN)
     """
 ```
 
@@ -1216,16 +1437,16 @@ class ConfigurationError(StickyNetError):
 AI Classification Failure:
 ┌────────────────────────────────────────────────────────────────────────┐
 │ 1. Try primary model (gemini-3-flash-preview)                          │
-│ 2. On failure, try fallback model (gemini-2.5-flash)                   │
-│ 3. If both fail, return uncertain result (confidence=0.5)              │
-│ 4. Continue with regex-based detection                                 │
+│ 2. On failure, retry up to 2 times with 1 second delay                 │
+│ 3. If still failing, try fallback model (gemini-2.5-flash)             │
+│ 4. If both fail, return uncertain result (confidence=0.5)              │
 └────────────────────────────────────────────────────────────────────────┘
 
 AI Engagement Failure:
 ┌────────────────────────────────────────────────────────────────────────┐
-│ 1. Try primary model (gemini-3-pro-preview)                            │
+│ 1. Try primary model (gemini-3-flash-preview)                          │
 │ 2. On failure, try fallback model (gemini-2.5-pro)                     │
-│ 3. If both fail, return fallback response from templates               │
+│ 3. If both fail, return generic engagement response                    │
 └────────────────────────────────────────────────────────────────────────┘
 
 Request Validation Failure:
@@ -1239,7 +1460,7 @@ Internal Errors:
 ┌────────────────────────────────────────────────────────────────────────┐
 │ • StickyNetError → 500 with error message                             │
 │ • Unexpected Exception → 500 "Internal server error" (no details)     │
-│ • All errors logged with structured context                           │
+│ • All errors logged with structured context (structlog)              │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -1261,12 +1482,14 @@ DEBUG=false
 GOOGLE_CLOUD_LOCATION=global
 GOOGLE_GENAI_USE_VERTEXAI=true
 
-# AI Models (defaults to Gemini 3 with 2.5 fallback)
+# AI Models (defaults to Gemini 3 Flash with fallbacks)
 FLASH_MODEL=gemini-3-flash-preview
-PRO_MODEL=gemini-3-pro-preview
 FALLBACK_FLASH_MODEL=gemini-2.5-flash
 FALLBACK_PRO_MODEL=gemini-2.5-pro
 LLM_TEMPERATURE=0.7
+LLM_TIMEOUT=90
+MAX_RETRIES=2
+RETRY_DELAY=1.0
 
 # Engagement Policy
 MAX_ENGAGEMENT_TURNS_CAUTIOUS=10
@@ -1274,6 +1497,7 @@ MAX_ENGAGEMENT_TURNS_AGGRESSIVE=25
 MAX_ENGAGEMENT_DURATION_SECONDS=600
 CAUTIOUS_CONFIDENCE_THRESHOLD=0.60
 AGGRESSIVE_CONFIDENCE_THRESHOLD=0.85
+CONTEXT_WINDOW=8
 
 # Firestore (optional)
 FIRESTORE_COLLECTION=conversations
@@ -1351,9 +1575,11 @@ class Settings(BaseSettings):
 │                                                                          │
 │  AI Safety Settings:                                                    │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
-│  │ • Classifier: BLOCK_ONLY_HIGH (allows scam analysis)           │    │
-│  │ • Agent: BLOCK_NONE (allows scam roleplay for honeypot)        │    │
-│  │ • These settings are essential for the system to function      │    │
+│  │ • Classifier: BLOCK_ONLY_HIGH (allows scam analysis)            │    │
+│  │ • Agent: BLOCK_NONE (allows scam roleplay for honeypot)         │    │
+│  │ • Categories: HARASSMENT, HATE_SPEECH, SEXUALLY_EXPLICIT,       │    │
+│  │   DANGEROUS_CONTENT                                             │    │
+│  │ • These settings are essential for the system to function       │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -1388,32 +1614,40 @@ class Settings(BaseSettings):
 
 ## Summary
 
-### Request Flow Summary
+### Request Flow Summary (One-Pass JSON Architecture)
 
 ```
 1. REQUEST RECEIVED
-   └─▶ Middleware validates API key
+   └─▶ Middleware validates API key (x-api-key header)
    
 2. DETECTION PHASE
-   ├─▶ Regex pre-filter checks obvious patterns (~10ms)
-   ├─▶ If uncertain, AI classifier analyzes semantically (~150ms)
-   └─▶ Confidence score determined (can only increase)
+   ├─▶ AI classifier (Gemini 3 Flash) analyzes semantically (~150ms)
+   ├─▶ Context-aware: uses full conversation history
+   ├─▶ Returns: is_scam, confidence, scam_type, threat_indicators
+   └─▶ Confidence can only INCREASE (prevents oscillation)
 
-3. EXTRACTION PHASE
-   └─▶ Regex extracts all intelligence types (~5ms)
+3. REGEX EXTRACTION (~5ms)
+   └─▶ Regex extracts all standard intel types
+       (bank accounts, UPI IDs, phone numbers, beneficiary names, URLs, etc.)
 
 4. POLICY DECISION
-   ├─▶ If high-value intel complete → EXIT with polite excuse
+   ├─▶ If confidence < 0.60 → Return neutral response
+   ├─▶ If high-value intel complete → EXIT with random polite excuse
    └─▶ If intel incomplete → CONTINUE engagement
 
-5. ENGAGEMENT PHASE (if continuing)
-   ├─▶ PersonaManager determines emotional state
+5. ENGAGEMENT PHASE - ONE-PASS JSON (if continuing)
+   ├─▶ Persona: Pushpa Verma (65+ elderly teacher)
+   ├─▶ Emotional state based on scam type + confidence + turn
    ├─▶ FakeDataGenerator provides compliant-looking data
    ├─▶ Extraction directives target missing intel
-   └─▶ Gemini 3 Pro generates believable response (~500ms)
+   ├─▶ Gemini 3 Flash returns BOTH reply + LLM extraction (~500ms)
+   └─▶ LLM extraction validated with regex patterns
 
-6. RESPONSE RETURNED
-   └─▶ Full intelligence + agent response + metrics
+6. INTELLIGENCE MERGE
+   └─▶ Combine regex + validated LLM extraction, deduplicate
+
+7. RESPONSE RETURNED
+   └─▶ Full merged intelligence + agent response + metrics
 ```
 
 ### Key Design Principles
@@ -1423,13 +1657,18 @@ class Settings(BaseSettings):
 | **Never break character** | Agent never reveals scam awareness |
 | **Confidence monotonicity** | Confidence can only increase |
 | **Prioritize beneficiary names** | Critical for mule identification |
-| **Hybrid detection** | Fast regex + smart AI |
+| **AI-only detection** | Simpler architecture, Gemini 3 Flash |
+| **One-Pass JSON** | Single LLM call returns reply + extraction (~500ms) |
+| **Hybrid extraction** | LLM catches obfuscated data, regex validates structured fields |
+| **Pushpa Verma persona** | 65+ elderly teacher, tech-confused, trusting |
+| **Scam-type-aware emotions** | Different emotions for banking vs lottery vs job scams |
 | **Fake data compliance** | Appear cooperative, extract intel |
 | **Graceful degradation** | Fallback models when primary fails |
 | **Targeted extraction** | Directives based on missing intel |
+| **17 exit responses** | Natural, varied excuses for graceful exit |
 
 ---
 
-*Document generated: January 24, 2026*
-*Version: 1.0*
+*Document generated: January 30, 2026*
+*Version: 2.1 (Updated for current implementation)*
 *Author: Sticky-Net Development Team*

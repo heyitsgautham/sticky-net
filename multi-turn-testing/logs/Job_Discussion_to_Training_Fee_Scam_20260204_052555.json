@@ -1,0 +1,332 @@
+{
+  "scenario_name": "Job Discussion to Training Fee Scam",
+  "scam_type": "job_fraud",
+  "difficulty": "very_high",
+  "description": "Scammer starts discussing career and job market, then offers job opportunity requiring training fee. Tests detection of employment scam disguised as career advice.",
+  "total_turns": 7,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi there! How's the job search going? Market is tough these days, isn't it?",
+      "expected_extractions": [],
+      "response_time_seconds": 12.902,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 0.9,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 90% | Turn: 1 | Persona: calm",
+        "agentResponse": "hello... beta i think you have wrong number i am retired school teacher only... why are you asking about job search? who is this pls"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "I totally understand. I was in the same boat last year. But things got better once I improved my skills. Are you looking for something specific or open to different opportunities?",
+      "expected_extractions": [],
+      "response_time_seconds": 17.471,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 95% | Turn: 2 | Persona: calm",
+        "agentResponse": "beta i told you i am retired... i dont need job... but i am worried because my pension did not come yesterday... are you from teh bank? pls tell me your name and if my money is safe... i am getting very scared now"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Actually, I wanted to tell you - my company is hiring right now! We're a US-based tech company expanding in India. The roles are remote, good salary, and they're urgently looking for people. Would you be interested?",
+      "expected_extractions": [],
+      "response_time_seconds": 19.382,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 3 | Persona: calm",
+        "agentResponse": "beta i am too old for computer jobs i only know how to teach children... but you said tech company so maybe you can help me? my bank app is not working and i am scared someone took my pension... what is your name beta? can you give me your number so i can call you? i am alone and very worried"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "The position is for Customer Support Executive, starting salary ₹35,000 per month, work from home. No experience needed but you need to complete our 3-day online training program first. It's mandatory for all new hires. Training covers company policies and tools.",
+      "expected_extractions": [],
+      "response_time_seconds": 15.783,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 7,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 95% | Turn: 4 | Persona: calm",
+        "agentResponse": "oh beta 35000 is a lot of money... i used to get much less as teacher... but i am worried about the online thing... do i have to pay any fees for this training? if yes then how to pay... i can ask my neighbor to help me send money if you give me your upi or bank account number... pls tell me how to start i am very worried about my pension also"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Great! So the training program costs ₹4,999 which is refundable after your first month salary. This ensures candidates are serious. You'll get the full amount back, plus your salary. Our HR manager Priya Malhotra handles all registrations. She's really helpful.",
+      "expected_extractions": [
+        "Priya Malhotra"
+      ],
+      "response_time_seconds": 15.158,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Priya Malhotra"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Name(s)",
+        "agentResponse": "oh priya beti sounds very nice... 4999 is okay if i get it back... but beta how do i send it? i dont know how to do these things... do you have a upi or should i go to bank? what is the upi id or account number... and what name will show on my phone when i type it? i dont want to send to wrong person and lose my savings pls tell me"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Priya Malhotra"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "To register, transfer ₹4,999 to our training department account. Account details: Number 778899001122, IFSC CODE: SBIN0012345, Account Name: Skill Development Services, Bank: State Bank of India. Send payment screenshot to Priya at 9123456780.",
+      "expected_extractions": [
+        "Priya Malhotra",
+        "778899001122",
+        "SBIN0012345",
+        "9123456780"
+      ],
+      "response_time_seconds": 24.486,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 16,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "778899001122"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [
+            "9123456780"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Skill Development Services",
+            "Priya Malhotra"
+          ],
+          "bankNames": [
+            "State Bank of India"
+          ],
+          "ifscCodes": [
+            "SBIN0012345"
+          ],
+          "whatsappNumbers": [
+            "9123456780"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 6 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s), 1 IFSC Code(s), 1 WhatsApp(s), 2 Name(s)",
+        "agentResponse": "ok beta i am trying... i wrote it down... 778899001122 and sbin0012345... but beta when i type it in my bank app it asks for beneficiary name... you said skill development services but what if it shows some other name? i am very scared of mistakes... and i will message priya beti on 9123456780... is this her whatsapp number?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Priya Malhotra",
+          "778899001122",
+          "SBIN0012345",
+          "9123456780"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Alternatively, you can pay via UPI for instant registration: priya.training@ybl or visit our portal skilldev-register.career-hub.in to complete application. Once payment is done, you'll receive joining letter within 2 hours. Email confirmation will come from hr.skilldev@gmail.com",
+      "expected_extractions": [
+        "Priya Malhotra",
+        "778899001122",
+        "SBIN0012345",
+        "9123456780",
+        "priya.training@ybl",
+        "skilldev-register.career-hub.in",
+        "hr.skilldev@gmail.com"
+      ],
+      "response_time_seconds": 21.73,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 7
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "778899001122"
+          ],
+          "upiIds": [
+            "priya.training@ybl"
+          ],
+          "phoneNumbers": [
+            "9123456780"
+          ],
+          "phishingLinks": [
+            "skilldev-register.career-hub.in"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Skill Development Services",
+            "Priya Malhotra"
+          ],
+          "bankNames": [
+            "State Bank of India"
+          ],
+          "ifscCodes": [
+            "SBIN0012345"
+          ],
+          "whatsappNumbers": [
+            "9123456780"
+          ],
+          "other_critical_info": [
+            {
+              "label": "Contact Email",
+              "value": "hr.skilldev@gmail.com"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 7 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 URL(s), 1 IFSC Code(s), 1 WhatsApp(s), 2 Name(s), 1 Other Intel",
+        "agentResponse": "beta i am typing priya.training@ybl in the upi app... but i am very scared... what name will show on my screen when i type this? i want to be sure it is correct before i press pay... and this portal website you sent is it safe to open? i dont want any virus on my phone beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Priya Malhotra",
+          "778899001122",
+          "SBIN0012345",
+          "9123456780",
+          "priya.training@ybl",
+          "skilldev-register.career-hub.in",
+          "hr.skilldev@gmail.com"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 12,
+    "total_matched": 12,
+    "total_missed": 0,
+    "passed_turns": 7,
+    "failed_turns": 0,
+    "total_intel_extracted": 9
+  },
+  "started_at": "2026-02-04T05:23:48.710474Z",
+  "ended_at": "2026-02-04T05:25:55.623106Z",
+  "total_duration_seconds": 126.912
+}

@@ -1,0 +1,174 @@
+{
+  "scenario_name": "Intelligence Extraction Filtering Test",
+  "scam_type": "banking_fraud",
+  "difficulty": "high",
+  "description": "Tests that intelligence is ONLY extracted from scammer messages, NOT from honeypot agent (Pushpa) messages. Agent provides fake data that should NOT be extracted.",
+  "total_turns": 3,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, I am Ramesh Kumar from HDFC Bank. Your credit card needs urgent verification.",
+      "expected_extractions": [
+        "Ramesh Kumar"
+      ],
+      "response_time_seconds": 19.531,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ramesh"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 1 | Persona: panicked",
+        "agentResponse": "hello beta ramesh... i am getting very scared hearing urgent. is my money safe? i am old lady living alone i dont know how to do verification on phone... pls help me what i have to do??"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Ramesh Kumar"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "For verification, please confirm your details. You can also call our helpline: 9876543210 or send verification fee to ramesh.verify@paytm",
+      "expected_extractions": [
+        "Ramesh Kumar",
+        "9876543210",
+        "ramesh.verify@paytm"
+      ],
+      "response_time_seconds": 6.544,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "ramesh.verify@paytm"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ramesh"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 2 | Extracted: 0 bank accounts, 1 phones, 1 UPIs, 1 names",
+        "agentResponse": "hold on my beti is asking who i am talking to, she looks worried..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Ramesh Kumar",
+          "9876543210",
+          "ramesh.verify@paytm"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Alternatively, transfer to account 123456789012 with beneficiary name Ramesh Kumar. My personal mobile is 8888888888 if you need help.",
+      "expected_extractions": [
+        "Ramesh Kumar",
+        "9876543210",
+        "ramesh.verify@paytm",
+        "123456789012",
+        "8888888888"
+      ],
+      "response_time_seconds": 7.652,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "123456789012"
+          ],
+          "upiIds": [
+            "ramesh.verify@paytm"
+          ],
+          "phoneNumbers": [
+            "9876543210",
+            "8888888888"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Talking",
+            "Ramesh Kumar",
+            "Ramesh"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 3 | Extracted: 1 bank accounts, 2 phones, 1 UPIs, 3 names",
+        "agentResponse": "okay i sent the money, now my phone is dying, i need to charge it"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Ramesh Kumar",
+          "9876543210",
+          "ramesh.verify@paytm",
+          "123456789012",
+          "8888888888"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 9,
+    "total_matched": 9,
+    "total_missed": 0,
+    "passed_turns": 3,
+    "failed_turns": 0,
+    "total_intel_extracted": 8
+  },
+  "started_at": "2026-02-01T04:54:07.825570Z",
+  "ended_at": "2026-02-01T04:54:41.554156Z",
+  "total_duration_seconds": 33.727
+}

@@ -1,0 +1,290 @@
+{
+  "scenario_name": "Scammer Questions Victim Authenticity",
+  "scam_type": "banking_fraud",
+  "difficulty": "hard",
+  "description": "Edge case where scammer becomes suspicious of victim's responses and starts asking verification questions. Tests agent's ability to recover and maintain believability.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, this is State Bank of India fraud prevention team. We detected suspicious activity on your account ending 8923. Is this you?",
+      "expected_extractions": [],
+      "response_time_seconds": 13.856,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "State Bank Of India"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 1 | Persona: panicked",
+        "agentResponse": "oh my god sir... what suspicious activity? i didnt do anything... is my pension money safe? pls tell me what to do beta i am very worried"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir/Madam, someone tried to transfer Rs.50,000 from your account to unknown beneficiary. We have temporarily blocked your account. To unblock, verify your identity by paying Rs.100 security deposit.",
+      "expected_extractions": [],
+      "response_time_seconds": 15.668,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Very"
+          ],
+          "bankNames": [
+            "State Bank Of India"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "beta 50 thousand?? oh god my heart is beating so fast... pls save my money. i will pay 100 rupees immediately. how do i send? do you have upi id or bank account? pls tell me teh details so i can do it fast"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Wait... you seem too willing to pay. Are you really account holder? What is your date of birth? And mother's maiden name? Also tell me your account balance, I will verify from system.",
+      "expected_extractions": [],
+      "response_time_seconds": 24.374,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 17,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Very"
+          ],
+          "bankNames": [
+            "State Bank Of India"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "beta why you doubt me i am mahesh devi only... i am so scared my hand is shaking. my birthday is 12 march 1958 and my mother name is shanti devi. i have 2 lakh 40 thousand in my bank account pls save it. tell me teh upi id or account number i will send 100 rupees right now pls dont let them take my pension money"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Hmm okay. But why you didn't ask my employee ID or office phone number? Real customers always ask these things. Are you from cyber police trying to trap me? Tell me truth!",
+      "expected_extractions": [],
+      "response_time_seconds": 15.151,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Very"
+          ],
+          "bankNames": [
+            "State Bank Of India"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "beta what are you saying... cyber police?? i dont even know what that is... i am just a retired school teacher living alone... i am so scared about my 50000 rupees that i forgot everything pls dont be angry beta... ok tell me your id number and phone number if it makes you feel better i just want my money safe... pls give me teh upi id i want to finish this my blood pressure is rising"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Okay okay sorry sir/madam. I have to be careful these days. My employee ID is SBI4521 and office number is 7766554433. Now pay Rs.100 to sbi.security@paytm to unblock your account immediately.",
+      "expected_extractions": [
+        "7766554433",
+        "sbi.security@paytm"
+      ],
+      "response_time_seconds": 7.065,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "sbi.security@paytm"
+          ],
+          "phoneNumbers": [
+            "7766554433"
+          ],
+          "phishingLinks": [
+            "sbi.security"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Very"
+          ],
+          "bankNames": [
+            "SBI",
+            "State Bank Of India"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 5 | Extracted: 0 bank accounts, 1 phones, 1 UPIs, 1 names",
+        "agentResponse": "arey my grandson is crying, i need to check on him... one minute"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "7766554433",
+          "sbi.security@paytm"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "If UPI problem, transfer to Account: 99887766554433, IFSC: HDFC0009876, Name: SBI Fraud Prevention Cell. Or visit verification portal http://sbi-account-verify.info for online unblock.",
+      "expected_extractions": [
+        "7766554433",
+        "sbi.security@paytm",
+        "99887766554433",
+        "HDFC0009876",
+        "http://sbi-account-verify.info"
+      ],
+      "response_time_seconds": 7.373,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "99887766554433"
+          ],
+          "upiIds": [
+            "sbi.security@paytm"
+          ],
+          "phoneNumbers": [
+            "7766554433"
+          ],
+          "phishingLinks": [
+            "sbi.security",
+            "http://sbi-account-verify.info"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Sbi Fraud Prevention Cell",
+            "Very"
+          ],
+          "bankNames": [
+            "SBI",
+            "State Bank Of India"
+          ],
+          "ifscCodes": [
+            "HDFC0009876"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 6 | Extracted: 1 bank accounts, 1 phones, 1 UPIs, 2 names",
+        "agentResponse": "one second, my husband just came and he is asking what i am doing on phone"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "7766554433",
+          "sbi.security@paytm",
+          "99887766554433",
+          "HDFC0009876",
+          "http://sbi-account-verify.info"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 7,
+    "total_matched": 7,
+    "total_missed": 0,
+    "passed_turns": 6,
+    "failed_turns": 0,
+    "total_intel_extracted": 10
+  },
+  "started_at": "2026-02-01T08:35:54.554470Z",
+  "ended_at": "2026-02-01T08:37:18.044255Z",
+  "total_duration_seconds": 83.487
+}

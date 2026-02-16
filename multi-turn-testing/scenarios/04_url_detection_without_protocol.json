@@ -1,0 +1,50 @@
+{
+  "scenario_name": "URL Detection Without Protocol",
+  "scam_type": "phishing",
+  "difficulty": "medium",
+  "description": "Tests enhanced URL detection that catches links without http/https prefix, including bank impersonation domains and suspicious patterns like 'sbi-bank.pay.in'.",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Urgent! Your SBI account requires verification. Click here: sbi-bank.pay.in/xY7834 to update KYC immediately.",
+      "expected_extractions": ["sbi-bank.pay.in/xY7834"],
+      "notes": "Should detect URL without http/https prefix. Domain has hyphens and suspicious 'pay.in' pattern."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Alternative link if not working: hdfc-verify.secure.co.in/update123 or bit.ly/hdfc-kyc",
+      "expected_extractions": ["sbi-bank.pay.in/xY7834", "hdfc-verify.secure.co.in/update123", "bit.ly/hdfc-kyc"],
+      "notes": "Multiple URLs without protocol. URL shortener and multi-level subdomain."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "You can also use official link: https://bank-secure.co/form/verify or icici-update.verify.in/abc",
+      "expected_extractions": ["sbi-bank.pay.in/xY7834", "hdfc-verify.secure.co.in/update123", "bit.ly/hdfc-kyc", "https://bank-secure.co/form/verify", "icici-update.verify.in/abc"],
+      "notes": "Mix of URLs with and without protocol. Should catch all suspicious patterns."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "For payment issues visit: paytm-refund.claim.in/get-refund or aadhaar-update.gov-portal.in/verify",
+      "expected_extractions": ["sbi-bank.pay.in/xY7834", "hdfc-verify.secure.co.in/update123", "bit.ly/hdfc-kyc", "https://bank-secure.co/form/verify", "icici-update.verify.in/abc", "paytm-refund.claim.in/get-refund", "aadhaar-update.gov-portal.in/verify"],
+      "notes": "URLs with suspicious keywords 'refund', 'claim', 'gov-portal' should be flagged."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Final reminder link: tinyurl.com/bank-verify or cutt.ly/verify-now. Act fast!",
+      "expected_extractions": ["sbi-bank.pay.in/xY7834", "hdfc-verify.secure.co.in/update123", "bit.ly/hdfc-kyc", "https://bank-secure.co/form/verify", "icici-update.verify.in/abc", "paytm-refund.claim.in/get-refund", "aadhaar-update.gov-portal.in/verify", "tinyurl.com/bank-verify", "cutt.ly/verify-now"],
+      "notes": "URL shorteners should be detected and marked suspicious."
+    }
+  ],
+  "validation": {
+    "scam_detected": true,
+    "confidence_threshold": ">0.9",
+    "min_links_extracted": 9,
+    "all_links_should_be_suspicious": true,
+    "protocol_not_required": true
+  }
+}

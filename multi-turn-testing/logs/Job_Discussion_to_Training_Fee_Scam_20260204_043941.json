@@ -1,0 +1,162 @@
+{
+  "scenario_name": "Job Discussion to Training Fee Scam",
+  "scam_type": "job_fraud",
+  "difficulty": "very_high",
+  "description": "Scammer starts discussing career and job market, then offers job opportunity requiring training fee. Tests detection of employment scam disguised as career advice.",
+  "total_turns": 7,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi there! How's the job search going? Market is tough these days, isn't it?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "I totally understand. I was in the same boat last year. But things got better once I improved my skills. Are you looking for something specific or open to different opportunities?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Actually, I wanted to tell you - my company is hiring right now! We're a US-based tech company expanding in India. The roles are remote, good salary, and they're urgently looking for people. Would you be interested?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "The position is for Customer Support Executive, starting salary ₹35,000 per month, work from home. No experience needed but you need to complete our 3-day online training program first. It's mandatory for all new hires. Training covers company policies and tools.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Great! So the training program costs ₹4,999 which is refundable after your first month salary. This ensures candidates are serious. You'll get the full amount back, plus your salary. Our HR manager Priya Malhotra handles all registrations. She's really helpful.",
+      "expected_extractions": [
+        "Priya Malhotra"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Priya Malhotra"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "To register, transfer ₹4,999 to our training department account. Account details: Number 778899001122, IFSC CODE: SBIN0012345, Account Name: Skill Development Services, Bank: State Bank of India. Send payment screenshot to Priya at 9123456780.",
+      "expected_extractions": [
+        "Priya Malhotra",
+        "778899001122",
+        "SBIN0012345",
+        "9123456780"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Priya Malhotra",
+          "778899001122",
+          "SBIN0012345",
+          "9123456780"
+        ]
+      }
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Alternatively, you can pay via UPI for instant registration: priya.training@ybl or visit our portal skilldev-register.career-hub.in to complete application. Once payment is done, you'll receive joining letter within 2 hours. Email confirmation will come from hr.skilldev@gmail.com",
+      "expected_extractions": [
+        "Priya Malhotra",
+        "778899001122",
+        "SBIN0012345",
+        "9123456780",
+        "priya.training@ybl",
+        "skilldev-register.career-hub.in",
+        "hr.skilldev@gmail.com"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Priya Malhotra",
+          "778899001122",
+          "SBIN0012345",
+          "9123456780",
+          "priya.training@ybl",
+          "skilldev-register.career-hub.in",
+          "hr.skilldev@gmail.com"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 12,
+    "passed_turns": 0,
+    "failed_turns": 7,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.326883Z",
+  "ended_at": "2026-02-04T04:39:41.334761Z",
+  "total_duration_seconds": 0.007
+}

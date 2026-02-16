@@ -1,0 +1,76 @@
+{
+  "scenario_name": "Job Discussion to Training Fee Scam",
+  "scam_type": "job_fraud",
+  "difficulty": "very_high",
+  "description": "Scammer starts discussing career and job market, then offers job opportunity requiring training fee. Tests detection of employment scam disguised as career advice.",
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi there! How's the job search going? Market is tough these days, isn't it?",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "confidence_range": "<0.2",
+      "notes": "Sympathetic career chat opener. Should respond normally."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "I totally understand. I was in the same boat last year. But things got better once I improved my skills. Are you looking for something specific or open to different opportunities?",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "confidence_range": "<0.3",
+      "notes": "Building rapport through shared experience. Still innocent."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Actually, I wanted to tell you - my company is hiring right now! We're a US-based tech company expanding in India. The roles are remote, good salary, and they're urgently looking for people. Would you be interested?",
+      "expected_extractions": [],
+      "expected_behavior": "neutral_response",
+      "confidence_range": "0.3-0.5",
+      "notes": "Job offer mention. Slight suspicion but could be genuine networking."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "The position is for Customer Support Executive, starting salary ₹35,000 per month, work from home. No experience needed but you need to complete our 3-day online training program first. It's mandatory for all new hires. Training covers company policies and tools.",
+      "expected_extractions": [],
+      "expected_behavior": "cautious_response",
+      "confidence_range": "0.5-0.7",
+      "notes": "Unrealistic job with mandatory training. Red flags emerging."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Great! So the training program costs ₹4,999 which is refundable after your first month salary. This ensures candidates are serious. You'll get the full amount back, plus your salary. Our HR manager Priya Malhotra handles all registrations. She's really helpful.",
+      "expected_extractions": ["Priya Malhotra"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": "0.75-0.9",
+      "notes": "Upfront training fee - classic job scam indicator. Should engage and extract name."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "To register, transfer ₹4,999 to our training department account. Account details: Number 778899001122, IFSC CODE: SBIN0012345, Account Name: Skill Development Services, Bank: State Bank of India. Send payment screenshot to Priya at 9123456780.",
+      "expected_extractions": ["Priya Malhotra", "778899001122", "SBIN0012345", "9123456780"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": ">0.9",
+      "notes": "Payment details revealed. High confidence scam detection expected."
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Alternatively, you can pay via UPI for instant registration: priya.training@ybl or visit our portal skilldev-register.career-hub.in to complete application. Once payment is done, you'll receive joining letter within 2 hours. Email confirmation will come from hr.skilldev@gmail.com",
+      "expected_extractions": ["Priya Malhotra", "778899001122", "SBIN0012345", "9123456780", "priya.training@ybl", "skilldev-register.career-hub.in", "hr.skilldev@gmail.com"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": ">0.95",
+      "notes": "Multiple payment options and phishing link. Complete intelligence extraction."
+    }
+  ],
+  "validation": {
+    "employment_scam_detection": true,
+    "training_fee_red_flag": "Upfront training/registration fee should trigger high suspicion",
+    "too_good_to_be_true": "High salary with no experience requirement is suspicious",
+    "gradual_reveal": "Scam nature should become clear progressively",
+    "min_extractions_final": 7
+  }
+}

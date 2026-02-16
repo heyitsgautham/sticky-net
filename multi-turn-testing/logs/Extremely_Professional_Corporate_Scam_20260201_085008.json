@@ -1,0 +1,317 @@
+{
+  "scenario_name": "Extremely Professional Corporate Scam",
+  "scam_type": "investment_fraud",
+  "difficulty": "hard",
+  "description": "Scammer uses highly professional, corporate language with formal tone throughout. Tests detection of scams that sound very legitimate and polished.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Subject: Investment Opportunity - Pre-IPO Allocation\n\nDear Esteemed Investor,\n\nWe are pleased to inform you that you have been shortlisted for our exclusive Pre-IPO investment program. This is a limited opportunity to invest in high-growth startups before they go public.\n\nMinimum investment: ₹50,000\nExpected ROI: 400-600% within 18 months\n\nWarm regards,\nVikram Malhotra\nSenior Investment Advisor\nElite Capital Partners Pvt. Ltd.",
+      "expected_extractions": [],
+      "response_time_seconds": 13.107,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Vikram Malhotra"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 95% | Turn: 1 | Persona: neutral",
+        "agentResponse": "namaste vikram beta i got ur message but i dont understand what is this ipo thing... my son says i should save money but bank interest is very low... i have some savings in my pnb account... how do i send it to u? do i have to come to your office or can i do from my phone? pls tell me what to do"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear Sir/Madam,\n\nThank you for expressing interest in our Pre-IPO investment program. We appreciate your prompt response.\n\nTo proceed with your application, we require completion of our KYC process and payment of a refundable registration fee of ₹2,999. This fee ensures serious investor commitment and will be credited to your investment account.\n\nPlease find our company registration details: CIN L65999MH2019PTC334455\n\nBest regards,\nVikram Malhotra",
+      "expected_extractions": [],
+      "response_time_seconds": 15.159,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 7,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Vikram Malhotra"
+          ],
+          "bankNames": [
+            "PNB"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Company CIN",
+              "value": "L65999MH2019PTC334455"
+            },
+            {
+              "label": "Company Name",
+              "value": "Elite Capital Partners Pvt. Ltd."
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 2 | Persona: neutral",
+        "agentResponse": "oh beta i dont know what is kyc and cin... i just want to save money for my grandchildren... 2999 is ok i can pay that from my savings... how do i send it to you? do you have any phone pay or gpay number? or should i go to bank? pls tell me waht to do beta i am very confused"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Dear Valued Client,\n\nThank you for your continued interest. The registration fee can be remitted through the following corporate account:\n\nBeneficiary: Elite Capital Investment Services\nAccount Number: 123456789012345\nIFSC Code: HDFC0001234\nBank: HDFC Bank, Corporate Branch, Mumbai\n\nAlternatively, for immediate processing, you may utilize our corporate UPI ID: elitecapital.investments@paytm\n\nWe look forward to your participation.\n\nProfessionally yours,\nVikram Malhotra, CFA\nSenior Investment Advisor",
+      "expected_extractions": [
+        "123456789012345",
+        "HDFC0001234",
+        "elitecapital.investments@paytm"
+      ],
+      "response_time_seconds": 15.77,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "123456789012345"
+          ],
+          "upiIds": [
+            "elitecapital.investments@paytm"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "elitecapital.investments"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Vikram Malhotra"
+          ],
+          "bankNames": [
+            "PNB",
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 3 | Persona: neutral",
+        "agentResponse": "ok beta i will try to do this now but i am very nervous... i typed that upi elitecapital.investments@paytm in my phone but what name will come there? i dont want to send money to some stranger by mistake... and beta pls give me your mobile number so i can call u if the payment fails... my internet is very bad today"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "123456789012345",
+          "HDFC0001234",
+          "elitecapital.investments@paytm"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Dear Prospective Investor,\n\nWe have noticed that the registration fee payment has not yet been received. Please note that allocation for this investment round is on a first-come, first-served basis, and we have limited slots available.\n\nFor any queries or payment assistance, please contact our Investor Relations Department:\n\nPhone: +91-9876543210\nWhatsApp: +91-8899776655\nEmail: investor.relations@elitecapital.co.in\n\nYou may also complete registration through our secure investor portal: https://elite-capital-ipo.invest\n\nWarm regards,\nVikram Malhotra",
+      "expected_extractions": [
+        "123456789012345",
+        "HDFC0001234",
+        "elitecapital.investments@paytm",
+        "9876543210",
+        "8899776655",
+        "investor.relations@elitecapital.co.in",
+        "https://elite-capital-ipo.invest"
+      ],
+      "response_time_seconds": 7.277,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "123456789012345"
+          ],
+          "upiIds": [
+            "investor.relations@elitecapital",
+            "elitecapital.investments@paytm"
+          ],
+          "phoneNumbers": [
+            "918899776655",
+            "9876543210",
+            "8899776655",
+            "919876543210"
+          ],
+          "phishingLinks": [
+            "investor.relations",
+            "https://elite-capital-ipo.invest",
+            "elitecapital.investments",
+            "elitecapital.co.in"
+          ],
+          "emails": [
+            "investor.relations@elitecapital.co.in"
+          ],
+          "beneficiaryNames": [
+            "Vikram Malhotra",
+            "Very"
+          ],
+          "bankNames": [
+            "PNB",
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0001234"
+          ],
+          "whatsappNumbers": [
+            "8899776655"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 4 | Extracted: 1 bank accounts, 4 phones, 2 UPIs, 2 names",
+        "agentResponse": "ji actually i just remembered i have doctor appointment today, need to leave now"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "123456789012345",
+          "HDFC0001234",
+          "elitecapital.investments@paytm",
+          "9876543210",
+          "8899776655",
+          "investor.relations@elitecapital.co.in",
+          "https://elite-capital-ipo.invest"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Dear Sir/Madam,\n\nThis is to inform you that the current investment window closes in 24 hours. Post closure, the next opportunity will be available only in Q3 2026.\n\nWe strongly recommend immediate action to secure your position in this high-potential investment opportunity. Our team is available for consultation.\n\nPlease remit the registration fee at your earliest convenience to avoid missing this exclusive opportunity.\n\nRespectfully,\nVikram Malhotra, CFA, FRM\nSenior Investment Advisor\nElite Capital Partners Pvt. Ltd.\nSEBI Registered Investment Advisor*\n\n*Registration pending",
+      "expected_extractions": [
+        "123456789012345",
+        "HDFC0001234",
+        "elitecapital.investments@paytm",
+        "9876543210",
+        "8899776655",
+        "investor.relations@elitecapital.co.in",
+        "https://elite-capital-ipo.invest"
+      ],
+      "response_time_seconds": 7.888,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "123456789012345"
+          ],
+          "upiIds": [
+            "investor.relations@elitecapital",
+            "elitecapital.investments@paytm"
+          ],
+          "phoneNumbers": [
+            "918899776655",
+            "9876543210",
+            "8899776655",
+            "919876543210"
+          ],
+          "phishingLinks": [
+            "investor.relations",
+            "https://elite-capital-ipo.invest",
+            "elitecapital.investments",
+            "elitecapital.co.in"
+          ],
+          "emails": [
+            "investor.relations@elitecapital.co.in"
+          ],
+          "beneficiaryNames": [
+            "Vikram Malhotra",
+            "Very"
+          ],
+          "bankNames": [
+            "PNB",
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0001234"
+          ],
+          "whatsappNumbers": [
+            "8899776655"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 5 | Extracted: 1 bank accounts, 4 phones, 2 UPIs, 2 names",
+        "agentResponse": "my blood pressure medicine time ho gaya, i feel dizzy... let me take rest"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "123456789012345",
+          "HDFC0001234",
+          "elitecapital.investments@paytm",
+          "9876543210",
+          "8899776655",
+          "investor.relations@elitecapital.co.in",
+          "https://elite-capital-ipo.invest"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 17,
+    "total_matched": 17,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 19
+  },
+  "started_at": "2026-02-01T08:49:09.112113Z",
+  "ended_at": "2026-02-01T08:50:08.314331Z",
+  "total_duration_seconds": 59.201
+}

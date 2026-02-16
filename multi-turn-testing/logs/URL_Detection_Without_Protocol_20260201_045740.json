@@ -1,0 +1,286 @@
+{
+  "scenario_name": "URL Detection Without Protocol",
+  "scam_type": "phishing",
+  "difficulty": "medium",
+  "description": "Tests enhanced URL detection that catches links without http/https prefix, including bank impersonation domains and suspicious patterns like 'sbi-bank.pay.in'.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Urgent! Your SBI account requires verification. Click here: sbi-bank.pay.in/xY7834 to update KYC immediately.",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834"
+      ],
+      "response_time_seconds": 18.828,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 11,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: panicked",
+        "agentResponse": "hello beta i got this msg about kyc... i am very scared my account will stop?? i clicked teh link but it is not working on my phone... pls tell me what to do i dont understand these things"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi-bank.pay.in/xY7834"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Alternative link if not working: hdfc-verify.secure.co.in/update123 or bit.ly/hdfc-kyc",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc"
+      ],
+      "response_time_seconds": 22.021,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI",
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "beta i clicked but my phone screen is showing red mark and saying danger... i am shaking now... is there any fee for this kyc?? can i just send you the money directly to fix it?? i dont want to click anything more pls help"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "You can also use official link: https://bank-secure.co/form/verify or icici-update.verify.in/abc",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc",
+        "https://bank-secure.co/form/verify",
+        "icici-update.verify.in/abc"
+      ],
+      "response_time_seconds": 19.355,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 11,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "https://bank-secure.co/form/verify"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Shaking"
+          ],
+          "bankNames": [
+            "SBI",
+            "ICICI",
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "beta i cannot open anything now my phone is hanged completely... i am very worried about my account... pls sir is there any account number or upi id where i can send the kyc fee?? i will ask my neighbor to send it for me immediately... i just want to save my account pls"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc",
+          "https://bank-secure.co/form/verify",
+          "icici-update.verify.in/abc"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "For payment issues visit: paytm-refund.claim.in/get-refund or aadhaar-update.gov-portal.in/verify",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc",
+        "https://bank-secure.co/form/verify",
+        "icici-update.verify.in/abc",
+        "paytm-refund.claim.in/get-refund",
+        "aadhaar-update.gov-portal.in/verify"
+      ],
+      "response_time_seconds": 22.833,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "https://bank-secure.co/form/verify"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Shaking"
+          ],
+          "bankNames": [
+            "SBI",
+            "ICICI",
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "beta pls try to understand... nothing is opening on my screen... my neighbor mr sharma is here to help me... he says he will not click any link but he can send money to any bank account or upi id right now... pls sir give me details so he can pay and i can sleep... i am very stressed"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc",
+          "https://bank-secure.co/form/verify",
+          "icici-update.verify.in/abc"
+        ],
+        "missed": [
+          "paytm-refund.claim.in/get-refund",
+          "aadhaar-update.gov-portal.in/verify"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Final reminder link: tinyurl.com/bank-verify or cutt.ly/verify-now. Act fast!",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc",
+        "https://bank-secure.co/form/verify",
+        "icici-update.verify.in/abc",
+        "paytm-refund.claim.in/get-refund",
+        "aadhaar-update.gov-portal.in/verify",
+        "tinyurl.com/bank-verify",
+        "cutt.ly/verify-now"
+      ],
+      "response_time_seconds": 20.671,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "https://bank-secure.co/form/verify"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Shaking"
+          ],
+          "bankNames": [
+            "SBI",
+            "ICICI",
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: panicked",
+        "agentResponse": "sir mr sharma is shouting at me saying links are not working... he is ready to pay the fee from his google pay right now but he needs your upi id... pls beta send it quickly he is about to leave... i am crying now pls help me save my account just give the id"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc",
+          "https://bank-secure.co/form/verify",
+          "icici-update.verify.in/abc"
+        ],
+        "missed": [
+          "paytm-refund.claim.in/get-refund",
+          "aadhaar-update.gov-portal.in/verify",
+          "tinyurl.com/bank-verify",
+          "cutt.ly/verify-now"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 25,
+    "total_matched": 19,
+    "total_missed": 6,
+    "passed_turns": 3,
+    "failed_turns": 2,
+    "total_intel_extracted": 5
+  },
+  "started_at": "2026-02-01T04:55:56.649024Z",
+  "ended_at": "2026-02-01T04:57:40.358519Z",
+  "total_duration_seconds": 103.708
+}

@@ -1,0 +1,295 @@
+{
+  "scenario_name": "Enhanced Name Extraction Patterns",
+  "scam_type": "impersonation_fraud",
+  "difficulty": "medium",
+  "description": "Tests improved beneficiary name extraction patterns including various ways scammers reveal their names (signatures, introductions, payment instructions).",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, my name is Hiruthik and I am calling from RBI. Your PAN card needs verification.",
+      "expected_extractions": [
+        "Hiruthik"
+      ],
+      "response_time_seconds": 10.954,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Hiruthik"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Scam Organization",
+              "value": "RBI"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm | Extracted: 1 Name(s), 1 Other Intel",
+        "agentResponse": "namaste sir... i am pushpa verma. why is pan card needing verification? i hope nothing is wrong i am very scared pls tell me what to do beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Hiruthik"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Please send verification amount to account holder: Vijay Singh. Account number will be shared shortly.",
+      "expected_extractions": [
+        "Hiruthik",
+        "Vijay Singh"
+      ],
+      "response_time_seconds": 16.021,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Vijay Singh"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Claimed Agency",
+              "value": "RBI"
+            },
+            {
+              "label": "Scammer Name",
+              "value": "Hiruthik"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Name(s), 2 Other Intel",
+        "agentResponse": "namaste beta... vijay singh is who? rbi officer? i will send money but i dont have the number... where to send? pls give account number or upi id... i am very nervous my hands are shaking"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Hiruthik",
+          "Vijay Singh"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Send Rs.50 to Rajesh Patel or contact Mr. Suresh for help.",
+      "expected_extractions": [
+        "Hiruthik",
+        "Vijay Singh",
+        "Rajesh Patel",
+        "Suresh"
+      ],
+      "response_time_seconds": 12.534,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rajesh Patel",
+            "Mr. Suresh"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 2 Name(s)",
+        "agentResponse": "sir i will send 50 rupees but how to send to rajesh beta? i dont have his upi id or bank number... and what is mr suresh phone number so i can call him for help pls i am very worried"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Hiruthik",
+          "Vijay Singh",
+          "Rajesh Patel",
+          "Suresh"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "For any queries, call Amit on 9999888877. Transfer money to account 111222333444, beneficiary name: Deepak Kumar",
+      "expected_extractions": [
+        "Hiruthik",
+        "Vijay Singh",
+        "Rajesh Patel",
+        "Suresh",
+        "Amit",
+        "Deepak Kumar",
+        "9999888877",
+        "111222333444"
+      ],
+      "response_time_seconds": 19.938,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "111222333444"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [
+            "9999888877"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Deepak Kumar",
+            "Amit",
+            "Hiruthik",
+            "Rajesh Patel",
+            "Vijay Singh",
+            "Suresh"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s), 6 Name(s)",
+        "agentResponse": "ok beta i wrote down deepak kumar and the number 111222333444... but my phone app is asking for something called ifsc code... waht is that? which bank is this account in pls tell me i want to do it fast so my pan card is safe... i will call amit beta also if i get stuck"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Hiruthik",
+          "Vijay Singh",
+          "Rajesh Patel",
+          "Suresh",
+          "Amit",
+          "Deepak Kumar",
+          "9999888877",
+          "111222333444"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Thank you for cooperation. Regards, Rohit Sharma\n- Team RBI",
+      "expected_extractions": [
+        "Hiruthik",
+        "Vijay Singh",
+        "Rajesh Patel",
+        "Suresh",
+        "Amit",
+        "Deepak Kumar",
+        "Rohit Sharma",
+        "9999888877",
+        "111222333444"
+      ],
+      "response_time_seconds": 19.813,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 10,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "111222333444"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [
+            "9999888877"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Vijay Singh",
+            "Rajesh Patel",
+            "Deepak Kumar",
+            "Amit",
+            "Rohit Sharma"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s), 5 Name(s)",
+        "agentResponse": "rohit beta u didnt tell me teh ifsc code... my phone is asking for ifsc and bank name to send money to deepak... pls tell me fast beta i am very worried about my pan card... i dont want any trouble with rbi"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Hiruthik",
+          "Vijay Singh",
+          "Rajesh Patel",
+          "Suresh",
+          "Amit",
+          "Deepak Kumar",
+          "Rohit Sharma",
+          "9999888877",
+          "111222333444"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 24,
+    "total_matched": 24,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 11
+  },
+  "started_at": "2026-02-04T04:57:05.572349Z",
+  "ended_at": "2026-02-04T04:58:24.834560Z",
+  "total_duration_seconds": 79.26
+}

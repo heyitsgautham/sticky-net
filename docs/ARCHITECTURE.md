@@ -1,15 +1,15 @@
 # Sticky-Net Architecture
 
-> **Production-ready honeypot system with hybrid AI/Regex detection and multi-turn scammer engagement**
+> **Production-ready honeypot system with AI-powered scam detection and multi-turn scammer engagement**
 
 ---
 
 ## System Overview
 
 Sticky-Net is an AI-powered honeypot that:
-1. **Detects scam messages** using a hybrid approach (regex pre-filter + AI classification)
-2. **Engages scammers** with a believable human persona
-3. **Extracts intelligence** (bank accounts, UPI IDs, phishing URLs)
+1. **Detects scam messages** using AI classification with Gemini 3 Flash
+2. **Engages scammers** with a believable elderly human persona (Pushpa Verma)
+3. **Extracts intelligence** (bank accounts, UPI IDs, phone numbers, beneficiary names, phishing URLs)
 
 ---
 
@@ -23,34 +23,26 @@ Sticky-Net is an AI-powered honeypot that:
                                  │
                                  ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                    STAGE 0: Regex Pre-Filter                        │
-│                         (Fast Path: ~10ms)                          │
+│                    STAGE 1: AI Scam Classifier                      │
+│              (Gemini 3 Flash: ~150ms, context-aware)                │
 ├─────────────────────────────────────────────────────────────────────┤
-│  • Obvious Scam (95%+ confidence):                                  │
-│    - "send OTP/PIN/CVV", "account blocked immediately"              │
-│    → SKIP AI → Engage directly                                      │
-│                                                                     │
-│  • Obvious Safe (allowlist):                                        │
-│    - Banking notifications, OTP from known services                 │
-│    → SKIP AI → Return neutral response                              │
-│                                                                     │
-│  • Uncertain (~70% of messages):                                    │
-│    → Continue to AI Classification                                  │
-└────────────────────────────────┬────────────────────────────────────┘
-                                 │
-                                 ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                 STAGE 1: AI Scam Classifier                         │
-│              (Gemini 3 Flash: ~150ms, $0.0001/call)                 │
-├─────────────────────────────────────────────────────────────────────┤
-│  MODEL: gemini-3-flash-preview                                      │
+│  MODEL: gemini-3-flash-preview (fallback: gemini-2.5-flash)         │
 │                                                                     │
 │  INPUT:                                                             │
 │  ┌────────────────────────────────────────────────────────────┐    │
 │  │  • Current message                                          │    │
-│  │  • Conversation history (last 3-5 turns)                   │    │
+│  │  • Conversation history (full context)                      │    │
 │  │  • Metadata: channel, locale, timestamp                    │    │
 │  │  • Previous classification (if exists)                     │    │
+│  └────────────────────────────────────────────────────────────┘    │
+│                                                                     │
+│  CONFIGURATION:                                                     │
+│  ┌────────────────────────────────────────────────────────────┐    │
+│  │  • Temperature: 0.1 (deterministic outputs)                 │    │
+│  │  • Max Output Tokens: 10000                                 │    │
+│  │  • Timeout: 90 seconds                                      │    │
+│  │  • Max Retries: 2                                           │    │
+│  │  • Safety Settings: BLOCK_ONLY_HIGH (all categories)        │    │
 │  └────────────────────────────────────────────────────────────┘    │
 │                                                                     │
 │  OUTPUT:                                                            │
@@ -59,11 +51,19 @@ Sticky-Net is an AI-powered honeypot that:
 │  │    "is_scam": true,                                         │    │
 │  │    "confidence": 0.87,                                      │    │
 │  │    "scam_type": "banking_fraud",                           │    │
-│  │    "threat_indicators": ["urgency", "payment_request"]     │    │
+│  │    "threat_indicators": ["urgency", "payment_request"],    │    │
+│  │    "reasoning": "Message uses classic OTP phishing..."     │    │
 │  │  }                                                          │    │
 │  └────────────────────────────────────────────────────────────┘    │
 │                                                                     │
-│  FALLBACK: On API failure → Use regex + heuristics                 │
+│  SCAM TYPES:                                                        │
+│  • job_offer: Part-time job, work from home, YouTube liking        │
+│  • banking_fraud: KYC update, account blocked, verify account      │
+│  • lottery_reward: Lottery winner, reward points, cashback         │
+│  • impersonation: Police, CBI, bank official impersonation         │
+│  • others: Any scam that doesn't fit above categories              │
+│                                                                     │
+│  FALLBACK: On API failure → Try gemini-2.5-flash                   │
 └────────────────────────────────┬────────────────────────────────────┘
                                  │
               ┌──────────────────┴──────────────────┐
@@ -75,40 +75,53 @@ Sticky-Net is an AI-powered honeypot that:
 │  Return Neutral         │     │      STAGE 2: Engagement Policy     │
 │  Response               │     │         (Confidence Routing)        │
 │  • Log for analysis     │     ├─────────────────────────────────────┤
-│  • Continue monitoring  │     │  conf 0.6-0.85: CAUTIOUS mode       │
+│  • Continue monitoring  │     │  conf 0.60-0.85: CAUTIOUS mode      │
 └─────────────────────────┘     │    • Max 10 turns                    │
                                 │    • Quick extraction attempts       │
                                 │                                      │
-                                │  conf > 0.85: AGGRESSIVE mode        │
+                                │  conf ≥ 0.85: AGGRESSIVE mode        │
                                 │    • Max 25 turns                    │
                                 │    • Full persona engagement         │
                                 └───────────────┬─────────────────────┘
                                                 │
                                                 ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                   STAGE 3: AI Engagement Agent                       │
-│                (Gemini 3 Pro: ~500ms, $0.01/call)                   │
+│          STAGE 3: AI Engagement Agent (One-Pass JSON)               │
+│           (Gemini 3 Flash: ~500ms, persona-driven)                  │
 ├─────────────────────────────────────────────────────────────────────┤
-│  MODEL: gemini-3-pro-preview                                        │
+│  MODEL: gemini-3-flash-preview (fallback: gemini-2.5-pro)           │
+│                                                                     │
+│  CONFIGURATION:                                                     │
+│  ┌────────────────────────────────────────────────────────────┐    │
+│  │  • Temperature: 0.7 (creative, varied responses)            │    │
+│  │  • Max Output Tokens: 65536 (for Gemini 3 thinking)         │    │
+│  │  • Context Window: 8 turns                                  │    │
+│  │  • Safety Settings: BLOCK_NONE (allows scam roleplay)       │    │
+│  └────────────────────────────────────────────────────────────┘    │
+│                                                                     │
+│  ╔═══════════════════════════════════════════════════════════════╗ │
+│  ║  ONE-PASS ARCHITECTURE: Single LLM call returns BOTH:         ║ │
+│  ║  • Conversational reply (persona-driven engagement)           ║ │
+│  ║  • Extracted intelligence (bank accounts, UPI IDs, etc.)      ║ │
+│  ╚═══════════════════════════════════════════════════════════════╝ │
 │                                                                     │
 │  ┌───────────────┐  ┌───────────────┐  ┌───────────────────────┐   │
-│  │ Persona       │  │ Conversation  │  │ Intelligence          │   │
-│  │ Manager       │  │ Memory        │  │ Extractor             │   │
+│  │ Persona       │  │ Conversation  │  │ Hybrid Extraction     │   │
+│  │ (Pushpa)      │  │ Memory        │  │ (LLM + Regex)         │   │
 │  ├───────────────┤  ├───────────────┤  ├───────────────────────┤   │
-│  │ Emotional     │  │ Full history  │  │ Bank account regex    │   │
-│  │ state machine │  │ tracking      │  │ UPI ID patterns       │   │
-│  │ Turn-based    │  │ Context       │  │ Phishing URL capture  │   │
-│  │ adaptation    │  │ windowing     │  │ Entity validation     │   │
+│  │ 65+ elderly   │  │ Full history  │  │ LLM: flexible extract │   │
+│  │ teacher       │  │ tracking      │  │ Regex: validation     │   │
+│  │ Tech-confused │  │ 8-turn window │  │ Merge & deduplicate   │   │
+│  │ Trusting      │  │               │  │ other_critical_info   │   │
 │  └───────────────┘  └───────────────┘  └───────────────────────┘   │
 │                                                                     │
-│  EXIT CONDITIONS (EngagementPolicy):                                │
+│  EXIT CONDITIONS (checked before engagement):                       │
 │  ┌────────────────────────────────────────────────────────────┐    │
-│  │  ✓ Intelligence complete (bank + UPI + link extracted)     │    │
+│  │  ✓ High-value intel complete (bank/UPI + phone + name)     │    │
 │  │  ✓ Max turns reached (10 cautious / 25 aggressive)         │    │
-│  │  ✓ Max duration exceeded (10 minutes)                      │    │
-│  │  ✓ Scammer becomes hostile/suspicious                      │    │
-│  │  ✓ No new information in last 5 turns (stale)              │    │
-│  │  ✓ Conversation goes off-topic                             │    │
+│  │  ✓ Max duration exceeded (10 minutes / 600s)               │    │
+│  │  ✓ Scammer becomes suspicious                              │    │
+│  │  ✓ No new information in 5 turns (stale)                   │    │
 │  └────────────────────────────────────────────────────────────┘    │
 └────────────────────────────────┬────────────────────────────────────┘
                                  │
@@ -116,28 +129,37 @@ Sticky-Net is an AI-powered honeypot that:
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    STAGE 4: Response Builder                         │
 ├─────────────────────────────────────────────────────────────────────┤
-│  OUTPUT:                                                            │
+│  AGENT JSON OUTPUT (from One-Pass LLM call):                        │
+│  {                                                                  │
+│    "reply_text": "oh no which account? i have sbi and hdfc...",    │
+│    "emotional_tone": "panicked",                                    │
+│    "extracted_intelligence": {                                      │
+│      "bank_accounts": ["1234567890"],                               │
+│      "upi_ids": ["scammer@paytm"],                                  │
+│      "phone_numbers": ["9888899999"],                               │
+│      "beneficiary_names": ["Rahul Kumar"],                          │
+│      "urls": [],                                                    │
+│      "whatsapp_numbers": [],                                        │
+│      "ifsc_codes": ["SBIN0001234"],                                 │
+│      "crypto_addresses": [],                                        │
+│      "other_critical_info": [                                       │
+│        {"label": "TeamViewer ID", "value": "123456789"}             │
+│      ]                                                              │
+│    }                                                                │
+│  }                                                                  │
+│                                                                     │
+│  API RESPONSE (final):                                              │
 │  {                                                                  │
 │    "status": "success",                                             │
 │    "scamDetected": true,                                            │
 │    "confidence": 0.87,                                              │
 │    "scamType": "banking_fraud",                                     │
-│    "response": "Oh no, which account? I have SBI and HDFC...",     │
-│    "engagementMetrics": {                                           │
-│      "turnNumber": 3,                                               │
-│      "engagementMode": "aggressive",                                │
-│      "engagementDurationSeconds": 180,                              │
-│      "shouldContinue": true                                         │
-│    },                                                               │
-│    "extractedIntelligence": {                                       │
-│      "bankAccounts": ["1234567890"],                                │
-│      "upiIds": ["scammer@paytm"],                                   │
-│      "phishingLinks": []                                            │
-│    },                                                               │
-│    "agentNotes": "Scammer used RBI impersonation tactic"           │
+│    "agentResponse": "oh no which account? i have sbi and hdfc...", │
+│    "engagementMetrics": { ... },                                    │
+│    "extractedIntelligence": { ... merged LLM + regex ... },        │
+│    "agentNotes": "Mode: aggressive | Type: banking_fraud | ..."    │
 │  }                                                                  │
 │                                                                     │
-│  PERSIST: Save conversation state to Firestore                      │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -151,11 +173,12 @@ Sticky-Net is an AI-powered honeypot that:
 │                                                                     │
 │   Key Principle: State can ONLY escalate, never de-escalate         │
 │   Once scam detected → stays in engagement mode                     │
+│   Confidence can only INCREASE (prevents false negatives)          │
 └─────────────────────────────────────────────────────────────────────┘
 
      ┌──────────────┐
      │   MONITORING │ ◄─── Initial state for all conversations
-     │  (Neutral)   │      Every message still gets classified
+     │  (Neutral)   │      Every message gets classified
      └──────┬───────┘
             │
             │ Scam detected (conf ≥ 0.6)
@@ -166,11 +189,11 @@ Sticky-Net is an AI-powered honeypot that:
      │  Aggressive) │      Mode can escalate (cautious → aggressive)
      └──────┬───────┘
             │
-            │ Exit condition met
+            │ Exit condition met (intel complete, max turns, etc.)
             ▼
      ┌──────────────┐
      │   COMPLETE   │ ◄─── Intelligence extracted or limits reached
-     │              │      Conversation archived
+     │              │      Returns exit response
      └──────────────┘
 ```
 
@@ -222,40 +245,30 @@ CONFIDENCE PROGRESSION:
 
 ## Component Details
 
-### 1. Regex Pre-Filter (`src/detection/patterns.py`)
+### 1. AI Scam Classifier (`src/detection/classifier.py`)
 
-**Purpose**: Fast-path obvious cases without AI cost
-
-```python
-class RegexPreFilter:
-    # Instant scam patterns (skip AI, engage immediately)
-    INSTANT_SCAM_PATTERNS = [
-        r"send\s+(otp|password|pin|cvv)",
-        r"verify\s+within\s+\d+\s+(hours?|minutes?)",
-        r"account\s+(blocked|suspended|locked).*immediately",
-        r"click\s+(here|link).*verify",
-        r"lottery|jackpot|won\s+\$?\d+",
-    ]
-    
-    # Safe patterns (skip AI, return neutral)
-    SAFE_PATTERNS = [
-        r"your\s+otp\s+is\s+\d{4,6}",      # OTP from services
-        r"transaction\s+of\s+rs\.?\s*\d+.*debited",  # Bank notifications
-    ]
-    
-    def classify(self, message: str) -> PreFilterResult:
-        # Returns: OBVIOUS_SCAM | OBVIOUS_SAFE | UNCERTAIN
-```
-
-### 2. AI Scam Classifier (`src/detection/classifier.py`)
-
-**Model**: `gemini-3-flash-preview` (fast, cheap, semantic understanding)
+**Model**: `gemini-3-flash-preview` (fallback: `gemini-2.5-flash`)
 
 ```python
 class ScamClassifier:
+    """
+    AI-based scam classifier using Gemini 3 Flash.
+    
+    Configuration:
+    - Temperature: 0.1 (deterministic outputs)
+    - Max Output Tokens: 10000
+    - Timeout: 90 seconds
+    - Max Retries: 2
+    - Retry Delay: 1.0 seconds
+    
+    Safety Settings: BLOCK_ONLY_HIGH for all harm categories
+    (HARASSMENT, HATE_SPEECH, SEXUALLY_EXPLICIT, DANGEROUS_CONTENT)
+    """
+    
     def __init__(self):
         self.client = genai.Client()
-        self.model = "gemini-3-flash-preview"
+        self.model = settings.flash_model  # "gemini-3-flash-preview"
+        self.fallback_model = settings.fallback_flash_model  # "gemini-2.5-flash"
     
     async def classify(
         self,
@@ -264,37 +277,39 @@ class ScamClassifier:
         metadata: MessageMetadata,
         previous_classification: ClassificationResult | None
     ) -> ClassificationResult:
-        
-        prompt = f"""
-        Analyze if this conversation is a scam attempt.
-        
-        CONVERSATION HISTORY:
-        {self._format_history(history)}
-        
-        NEW MESSAGE: "{message}"
-        
-        METADATA: channel={metadata.channel}, locale={metadata.locale}
-        
-        PREVIOUS ASSESSMENT: {previous_classification}
-        
-        CONSIDER:
-        1. Does the conversation show ESCALATION toward scam tactics?
-        2. Is this a multi-stage scam setup?
-        3. Combined with history, does this reveal scam intent?
-        
-        Return JSON: {{"is_scam": bool, "confidence": float, "scam_type": str}}
-        """
-        
-        response = self.client.models.generate_content(
-            model=self.model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                thinking_config=types.ThinkingConfig(
-                    thinking_level=types.ThinkingLevel.LOW  # Fast classification
-                )
-            )
-        )
-        return self._parse_response(response)
+        # Returns: is_scam, confidence, scam_type, threat_indicators, reasoning
+```
+
+**Scam Types (Enum)**:
+| Type | Description |
+|------|-------------|
+| `job_offer` | Part-time job, work from home, YouTube liking scams |
+| `banking_fraud` | KYC update, account blocked, verify account |
+| `lottery_reward` | Lottery winner, reward points, cashback |
+| `impersonation` | Police, CBI, bank official impersonation |
+| `others` | Any scam that doesn't fit above categories |
+
+### 2. Scam Detector (`src/detection/detector.py`)
+
+**Purpose**: Wraps the AI classifier with confidence escalation logic
+
+```python
+class ScamDetector:
+    """
+    Pure AI detection (no regex pre-filtering).
+    
+    Key Features:
+    - Uses ScamClassifier for AI-based detection
+    - SCAM_THRESHOLD = 0.6 (minimum confidence to flag as scam)
+    - Confidence escalation: confidence can only INCREASE from previous
+    """
+    
+    def get_engagement_mode(self, confidence: float) -> EngagementMode:
+        if confidence >= self.AGGRESSIVE_THRESHOLD:  # 0.85
+            return EngagementMode.AGGRESSIVE
+        elif confidence >= self.CAUTIOUS_THRESHOLD:   # 0.60
+            return EngagementMode.CAUTIOUS
+        return EngagementMode.NONE
 ```
 
 ### 3. Engagement Policy (`src/agents/policy.py`)
@@ -318,37 +333,39 @@ class EngagementPolicy:
     # Stale detection
     STALE_TURN_THRESHOLD = 5   # Exit if no new info in 5 turns
     
-    def get_engagement_mode(self, confidence: float) -> EngagementMode:
-        if confidence >= self.AGGRESSIVE_THRESHOLD:
-            return EngagementMode.AGGRESSIVE
-        elif confidence >= self.CAUTIOUS_THRESHOLD:
-            return EngagementMode.CAUTIOUS
-        return EngagementMode.NONE
-    
-    def should_continue(self, state: EngagementState) -> bool:
-        max_turns = (self.AGGRESSIVE_MAX_TURNS 
-                     if state.mode == EngagementMode.AGGRESSIVE 
-                     else self.CAUTIOUS_MAX_TURNS)
-        
-        return (
-            state.turn_count < max_turns and
-            state.duration_seconds < self.MAX_DURATION_SECONDS and
-            not state.intelligence_complete and
-            not state.scammer_suspicious and
-            state.turns_since_new_info < self.STALE_TURN_THRESHOLD
-        )
+    def is_high_value_intel_complete(self, intel: dict) -> bool:
+        """
+        High-value intel is complete when we have ALL of:
+        - (Bank Account OR UPI ID)
+        - AND Phone Number
+        - AND Beneficiary Name
+        """
 ```
 
 ### 4. Honeypot Agent (`src/agents/honeypot_agent.py`)
 
-**Model**: `gemini-3-pro-preview` (sophisticated reasoning for believable responses)
+**Model**: `gemini-3-flash-preview` (fallback: `gemini-2.5-pro`)
+
+**Architecture**: One-Pass JSON — single LLM call returns both conversational reply AND extracted intelligence.
 
 ```python
 class HoneypotAgent:
+    """
+    AI agent that engages scammers with believable elderly persona.
+    
+    Configuration:
+    - Temperature: 0.7 (creative, varied responses)
+    - Max Output Tokens: 65536 (for Gemini 3 thinking)
+    - Context Window: 8 turns
+    - Safety Settings: BLOCK_NONE (allows scam roleplay)
+    """
+    
     def __init__(self):
         self.client = genai.Client()
-        self.model = "gemini-3-pro-preview"
-        self.persona_manager = PersonaManager()
+        self.model = settings.flash_model  # "gemini-3-flash-preview"
+        self.fallback_model = settings.fallback_pro_model  # "gemini-2.5-pro"
+        self.persona = Persona()
+        self.fake_data_generator = FakeDataGenerator()
     
     async def engage(
         self,
@@ -357,132 +374,144 @@ class HoneypotAgent:
         detection: ClassificationResult,
         state: ConversationState
     ) -> EngagementResult:
-        
-        persona = self.persona_manager.get_persona(state)
-        
-        response = self.client.models.generate_content(
-            model=self.model,
-            contents=self._build_prompt(message, history, persona),
-            config=types.GenerateContentConfig(
-                thinking_config=types.ThinkingConfig(
-                    thinking_level=types.ThinkingLevel.HIGH  # Deep reasoning
-                ),
-                system_instruction=HONEYPOT_SYSTEM_PROMPT
-            )
-        )
-        
-        return EngagementResult(
-            response=response.text,
-            persona_state=persona.emotional_state,
-            turn_number=state.turn_count
-        )
+        # Returns JSON with BOTH reply_text AND extracted_intelligence
 ```
 
-### 5. Persona Manager (`src/agents/persona.py`)
+### 5. Persona (`src/agents/persona.py`)
 
-**Purpose**: Maintain believable human character across turns
+**Purpose**: State tracker for persona — Pushpa Verma (65+ elderly retired teacher)
+
+**Persona Traits**:
+| Trait | Description |
+|-------|-------------|
+| `trusting` | Believes what they're told |
+| `easily_panicked` | Easily panicked |
+| `tech_confused` | Needs step-by-step explanation |
+| `cooperative` | Wants to help/comply |
+| `old_fashioned` | Struggles with smartphones |
+
+**Emotional States by Scam Type**:
+| Scam Type | High Intensity (>0.6) | Low Intensity (≤0.6) |
+|-----------|----------------------|---------------------|
+| `job_offer` | INTERESTED | INTERESTED |
+| `banking_fraud` | PANICKED | ANXIOUS |
+| `lottery_reward` | EXCITED | EXCITED |
+| `impersonation` | CAUTIOUS | CAUTIOUS |
+| `others` | NEUTRAL | CALM |
 
 ```python
-class PersonaManager:
-    EMOTIONAL_STATES = {
-        "calm": "Slightly confused, asking for clarification",
-        "anxious": "Worried, expressing concern about account",
-        "panicked": "Very scared, willing to do anything to fix it",
-        "cooperative": "Ready to share information to 'resolve' issue"
-    }
+class Persona:
+    """
+    Pure state tracker - LLM handles emotional expression.
     
-    def get_persona_context(self, state: ConversationState) -> str:
-        emotional_state = self._calculate_emotion(
-            turn=state.turn_count,
-            scam_intensity=state.confidence
-        )
-        
-        return f"""
-        You are a naive, trusting person who:
-        - Emotional state: {self.EMOTIONAL_STATES[emotional_state]}
-        - Turn {state.turn_count}: {"confused" if turn < 5 else "cooperative"}
-        - Ask questions that extract: bank details, UPI IDs, links
-        - NEVER reveal you know it's a scam
-        """
+    Emotional States:
+    - CALM: Default, early conversation
+    - ANXIOUS: Worried, mid-conversation
+    - PANICKED: Very scared, high-pressure scams
+    - COOPERATIVE: Ready to comply, later turns
+    - INTERESTED: For job offers
+    - EXCITED: For lottery/rewards
+    - CAUTIOUS: For impersonation
+    """
+    
+    def get_emotional_state(
+        self, 
+        scam_type: str | None, 
+        confidence: float, 
+        turn_number: int
+    ) -> str:
+        # Returns appropriate emotional state based on context
 ```
 
 ### 6. Intelligence Extractor (`src/intelligence/extractor.py`)
 
-**Purpose**: Extract actionable data using regex patterns
+**Purpose**: Hybrid extraction using LLM + regex validation
+
+**Extraction Patterns**:
+| Type | Pattern Description |
+|------|---------------------|
+| **Bank Account** | 9-18 digits; formatted `XXXX-XXXX-XXXX`; prefixed with `A/C`, `Account:` |
+| **UPI ID** | Known providers: `[\w.-]+@(ybl|paytm|okicici|oksbi|okhdfcbank|okaxis|...)` |
+| **Phone** | `+91` prefix + 10 digits; 10 digits starting [6-9] |
+| **Beneficiary Name** | "name shows as", "Account Holder:", "Transfer to Name" |
+| **URL** | `https?://` patterns with suspicious indicators |
+| **IFSC** | `[A-Z]{4}0[A-Z0-9]{6}` |
+| **WhatsApp** | Various patterns with "whatsapp" keyword; `wa.me` links |
 
 ```python
 class IntelligenceExtractor:
-    PATTERNS = {
-        "bank_account": r'\b\d{9,18}\b',
-        "upi_id": r'\b[\w.-]+@[a-zA-Z]+\b',
-        "phone": r'\b[6-9]\d{9}\b',
-        "url": r'https?://[^\s<>"{}|\\^`\[\]]+',
-    }
+    """
+    Hybrid extraction: Regex + LLM validation.
     
-    def extract(self, text: str) -> ExtractedIntelligence:
-        return ExtractedIntelligence(
-            bank_accounts=self._find_all("bank_account", text),
-            upi_ids=self._find_all("upi_id", text),
-            phishing_links=self._find_suspicious_urls(text)
-        )
+    Regex Extraction: Fast, deterministic (~5ms)
+    - Bank accounts, UPI IDs, phone numbers, URLs, IFSC codes
+    
+    LLM Extraction: Flexible, context-aware
+    - Beneficiary names (from natural language)
+    - Obfuscated data ("nine eight seven..." spelled out)
+    - Crypto addresses, other_critical_info
+    
+    Validation:
+    - Phone: Must start with 6-9, exactly 10 digits
+    - Bank Account: 9-18 digits, not all same digit, not phone-like
+    - UPI: Must match user@provider pattern
+    - Name: 3-50 chars, mostly alphabetic, filtered through blocklist
+    """
 ```
 
----
+**Known UPI Providers**:
+```
+ybl, paytm, okicici, oksbi, okhdfcbank, okaxis, apl, upi, ibl, 
+axisb, sbi, icici, hdfc, kotak, barodampay, aubank, indus, federal
+```
 
-## Firestore State Schema
+**`other_critical_info` Field**: Captures high-value data that doesn't fit standard fields:
+- Crypto wallet addresses
+- Remote desktop IDs (TeamViewer, AnyDesk)
+- Reference/ticket numbers
+- App download links (APK links)
+- Alternative payment methods
+
+### 7. Fake Data Generator (`src/agents/fake_data.py`)
+
+**Purpose**: Generate believable but invalid financial data to waste scammer time
 
 ```python
-@dataclass
-class ConversationState:
-    conversation_id: str
-    mode: EngagementMode          # MONITORING | CAUTIOUS | AGGRESSIVE | COMPLETE
+class FakeDataGenerator:
+    """
+    Generates fake data seeded by conversation_id for consistency.
     
-    # Classification tracking
-    current_confidence: float     # Highest confidence seen (never decreases)
-    is_scam_detected: bool        # True once detected (never resets)
-    scam_type: str | None
-    
-    # History
-    history: list[Message]        # Full conversation
-    turn_count: int
-    
-    # Engagement metrics
-    started_at: datetime
-    last_message_at: datetime
-    intelligence_extracted: ExtractedIntelligence
-    
-    # Exit tracking
-    turns_since_new_info: int
-    should_continue: bool
+    Generated Types:
+    - Credit Card: Luhn-valid 16-digit with invalid BINs
+    - Bank Account: 11-16 digits starting with 9
+    - IFSC: Real bank prefix + fake branch (9XXXXX)
+    - OTP: 6 digits (avoiding 000000, 123456, 654321)
+    - Aadhaar: 12 digits starting with 2-9
+    - PAN: Format AAAAP9999A
+    - Persona: Elderly Indian name (55-80 years), address with PIN
+    """
 ```
 
 ---
 
 ## Configuration Parameters
 
-| Parameter | Value | Purpose |
-|-----------|-------|---------|
-| `FLASH_MODEL` | `gemini-3-flash-preview` | Fast scam classification |
-| `PRO_MODEL` | `gemini-3-pro-preview` | Engagement response generation |
-| `CLASSIFICATION_TIMEOUT_MS` | 200 | Max time for AI classifier |
-| `CAUTIOUS_CONFIDENCE` | 0.60 | Min confidence to engage cautiously |
-| `AGGRESSIVE_CONFIDENCE` | 0.85 | Min confidence for full engagement |
-| `MAX_TURNS_CAUTIOUS` | 10 | Turn limit for uncertain scams |
-| `MAX_TURNS_AGGRESSIVE` | 25 | Turn limit for high-confidence scams |
-| `MAX_DURATION_SECONDS` | 600 | 10-minute engagement cap |
-| `STALE_THRESHOLD` | 5 | Turns without new info before exit |
-
----
-
-## Cost Analysis
-
-| Stage | Model | Cost/Call | % Messages | Effective Cost |
-|-------|-------|-----------|------------|----------------|
-| Regex Pre-Filter | — | $0 | 100% | $0 |
-| AI Classifier | Gemini 3 Flash | $0.0001 | ~30% (uncertain) | $0.00003 |
-| Engagement | Gemini 3 Pro | $0.01 | ~10% (scams) | $0.001 |
-
-**Total cost per message: ~$0.001**
+| Parameter | Default Value | Purpose |
+|-----------|---------------|---------|
+| `FLASH_MODEL` | `gemini-3-flash-preview` | Scam classification & engagement |
+| `FALLBACK_FLASH_MODEL` | `gemini-2.5-flash` | Classifier fallback |
+| `FALLBACK_PRO_MODEL` | `gemini-2.5-pro` | Engagement fallback |
+| `LLM_TEMPERATURE` | `0.7` | Creativity in responses |
+| `LLM_TIMEOUT` | `90` seconds | API call timeout |
+| `MAX_RETRIES` | `2` | Retry attempts on failure |
+| `RETRY_DELAY` | `1.0` seconds | Delay between retries |
+| `CAUTIOUS_CONFIDENCE` | `0.60` | Min confidence to engage cautiously |
+| `AGGRESSIVE_CONFIDENCE` | `0.85` | Min confidence for aggressive mode |
+| `MAX_TURNS_CAUTIOUS` | `10` | Turn limit for cautious mode |
+| `MAX_TURNS_AGGRESSIVE` | `25` | Turn limit for aggressive mode |
+| `MAX_DURATION_SECONDS` | `600` | 10-minute engagement cap |
+| `STALE_THRESHOLD` | `5` | Turns without new info before exit |
+| `CONTEXT_WINDOW` | `8` | Number of turns in agent context |
 
 ---
 
@@ -496,7 +525,10 @@ class ConversationState:
     "text": "Your bank account will be blocked today. Verify immediately.",
     "timestamp": "2026-01-21T10:15:30Z"
   },
-  "conversationHistory": [],
+  "conversationHistory": [
+    {"sender": "scammer", "text": "...", "timestamp": "..."},
+    {"sender": "user", "text": "...", "timestamp": "..."}
+  ],
   "metadata": {
     "channel": "SMS",
     "language": "English",
@@ -510,22 +542,49 @@ class ConversationState:
 {
   "status": "success",
   "scamDetected": true,
-  "confidence": 0.87,
   "scamType": "banking_fraud",
-  "agentResponse": "Oh no! What do I need to do? Which account?",
+  "confidence": 0.92,
   "engagementMetrics": {
-    "turnNumber": 1,
-    "engagementMode": "aggressive",
     "engagementDurationSeconds": 2,
-    "shouldContinue": true
+    "totalMessagesExchanged": 5
   },
   "extractedIntelligence": {
-    "bankAccounts": [],
-    "upiIds": [],
-    "phishingLinks": []
+    "bankAccounts": ["123456789012"],
+    "upiIds": ["scammer@upi"],
+    "phoneNumbers": ["9876543210"],
+    "phishingLinks": ["http://malicious.example"],
+    "emails": ["scammer@example.com"],
+    "beneficiaryNames": ["John Doe"],
+    "bankNames": ["State Bank of India"],
+    "ifscCodes": ["SBIN0001234"],
+    "whatsappNumbers": ["919876543210"],
+    "other_critical_info": [{"label": "Remote Access Tool", "value": "AnyDesk"}]
   },
-  "agentNotes": "Detected urgency + threat tactics. Engagement initiated."
+  "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 92% | Turn: 5 | Persona: panicked",
+  "agentResponse": "oh no! what do i need to do to verify?"
 }
+```
+
+### Exit Responses (17 variations)
+When high-value intelligence is complete, random exit phrase is used:
+```
+- okay i am calling that number now, hold on...
+- wait my son just came home, let me ask him to help me with this
+- one second, someone is at the door, i will call you back
+- okay i sent the money, now my phone is dying, i need to charge it
+- hold on, i am getting another call from my bank, let me check
+- oh no my doorbell is ringing, someone is at the door...
+- sorry my neighbor aunty just came, i have to go help her
+- arey my grandson is crying, i need to check on him...
+- oh god my cooking is burning on the stove! wait wait
+- wait my daughter-in-law is calling me for lunch
+- oh the milk is boiling over! wait wait i have to go to kitchen!!
+- my blood pressure medicine time ho gaya, i feel dizzy...
+- ji actually i just remembered i have doctor appointment today
+- sorry sir power cut ho gaya, my phone battery is only 2%...
+- wait i am getting another call, it shows BANK on my phone...
+- hold on my beti is asking who i am talking to...
+- one second, my husband just came and asking what i am doing
 ```
 
 ---
@@ -537,8 +596,9 @@ class ConversationState:
 | **Runtime** | Python 3.11+ |
 | **API Framework** | FastAPI |
 | **AI SDK** | `google-genai` (v1.51.0+) |
-| **LLM Provider** | Google Vertex AI (Gemini 3 Flash/Pro) |
-| **Database** | Firestore |
+| **LLM Provider** | Google Vertex AI (Gemini 3 Flash) |
+| **Logging** | structlog |
+| **Validation** | Pydantic |
 | **Containerization** | Docker |
 | **Deployment** | Google Cloud Run |
 
@@ -548,11 +608,16 @@ class ConversationState:
 
 | Decision | Rationale |
 |----------|-----------|
-| Hybrid detection (regex + AI) | Speed for obvious cases, accuracy for edge cases |
-| Gemini Flash for classification | Fast (~150ms), cheap (~$0.0001), semantic understanding |
-| Gemini Pro for engagement | Deep reasoning for believable human-like responses |
+| AI-only detection (no regex pre-filter) | Simpler architecture, AI handles all classification |
+| Gemini 3 Flash for classification | Fast (~150ms), semantic understanding, context-aware |
+| Gemini 3 Flash for engagement | Same model, creative responses with temperature 0.7 |
 | Every message classified | Catches multi-stage scams that start benign |
 | Confidence only increases | Prevents false negatives from state oscillation |
 | State machine (monitor→engage→complete) | Clear lifecycle management |
-| Exit conditions | Prevents infinite loops, saves costs |
-| Regex for intelligence extraction | Deterministic, fast, reliable for structured data |
+| Exit on high-value intel complete | Bank/UPI + Phone + Beneficiary Name = complete |
+| **One-Pass JSON architecture** | Single LLM call returns reply + extraction — lower latency |
+| **Hybrid extraction (LLM + regex)** | LLM catches obfuscated/flexible data, regex validates structured fields |
+| **Pushpa Verma persona** | 65+ elderly teacher, tech-confused, trusting — believable target |
+| **Scam-type-aware emotions** | Different emotional responses for banking vs lottery vs job scams |
+| **`other_critical_info` field** | Captures high-value data that doesn't fit standard fields |
+| **17 exit responses** | Natural, varied excuses for graceful conversation exit |

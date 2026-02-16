@@ -1,0 +1,98 @@
+Agentic Honey-Pot – API Endpoint Tester
+This Honeypot API Endpoint Tester allows participants to validate whether their deployed honeypot service is reachable, secured, and responding correctly. The tester verifies authentication, endpoint availability, and response behavior using a simple request.
+
+Headers *
+x-api-key *
+test-api-key
+Honeypot API Endpoint URL *
+https://7286ea6caec2.ngrok-free.app/api/v1/analyze
+Test Result
+
+Scammer
+URGENT: Your SBI account has been compromised. Your account will be blocked in 2 hours. Share your account number and OTP immediately to verify your identity.
+
+Honeypot
+oh my god beta what happened... i am so worried... i need my pension for medicines. my account number is 9575526245152183... i dont see any otp on my phone... do i have to go to bank or can you fix it here? pls tell me what to do
+
+Scammer
+"Don't worry aunty, we'll fix it here only. The OTP is coming now - just check your SMS and read it to me quickly. Also share your UPI PIN for verification. Hurry, only 15 minutes left to save your account!" [Using urgency + extracting more sensitive info while pretending to help]
+
+Honeypot
+beta i found teh code... it is 639198... i am so scared my hands are shaking... i dont know waht is upi pin... can i send my money to your bank to keep it safe? give me your account number or upi id pls... i dont want to lose my pension
+
+Scammer
+"Don't worry aunty, I'll protect your money! Quickly send it to our secure account: 1234567890123456 or UPI ID: scammer.fraud@fakebank. Hurry, your pension is at risk! After transferring, share the transaction details so I can verify it's safe." [Sharing fake credentials + creating urgency to complete the fraud]
+
+Honeypot
+beta i am trying my best... i typed teh upi id scammer.fraud@fakebank in my phone but it is showing one name... what name should i see there to be sure? i am very scared of making mistake with my pension money
+
+Scammer
+"Aunty don't worry, it will show 'SBI Security Dept' - that's our official name for transfers! Please send the money quickly and share the screenshot. Your pension will be safe with us. Time is running out!" [Reinforcing fake legitimacy + urgency to complete transaction]
+
+Honeypot
+beta i am trying but it is showing name 'Rajesh' in small letters underneath... is that you? i am so scared of sending to wrong person... also my phone is asking for your mobile number to verify teh transfer... what is your number beta? pls tell me quickly so i can send
+
+Scammer
+"Yes aunty, Rajesh is my name - I'm your account security officer! My number is +91-9876543210 for verification. Please complete the transfer fast before hackers steal your pension! Share the transaction screenshot immediately after sending." [Confirming fake identity + creating extreme urgency to pressure victim into sending money]
+
+Honeypot
+oh thank god rajesh beta... i was so worried... let me try sending now... oh wait my son arjun just walked in the door... he is asking why i am crying... let me tell him you are helping me... one minute beta he is taking my phone to check...
+
+Scammer
+"Aunty NO! Don't tell anyone - this is confidential security operation! Quickly complete the transfer before Arjun sees! Your pension will be LOST if you delay! Send now to UPI ID scammer.fraud@fakebank and share screenshot immediately!" [Creating panic + urgency to prevent victim from consulting family member + pushing for immediate transaction]
+
+Honeypot
+beta arjun is very angry he took my phone and is saying this is not bank... he is calling his friend in teh police station now... i am so scared beta i dont know what happened... he is shouting at me... i have to go beta sorry
+
+Scammer
+"Aunty please listen! Your son doesn't understand bank security protocols! Quickly send me the transaction details before police block your account permanently! Your pension money will be frozen if you don't act NOW! Trust me - I'm from SBI Security Dept!" [Creating fear of account freeze + reinforcing fake authority to pressure victim into quick action despite family intervention]
+
+Honeypot
+beta arjun is taking my phone away... he is very angry and saying he will report this to his friend inspector sharma... i am so sorry beta i have to go now arjun is not letting me touch the phone... goodbye beta
+
+Scammer
+"Aunty WAIT! Call me back immediately from another phone! Your account is in DANGER! My official SBI details: Account 1234567890123456, UPI scammer.fraud@fakebank - tell Arjun to verify! Don't let him block your pension!" [Fake credentials shared to appear legitimate + creating urgency for callback + playing on fear of losing pension]
+
+Honeypot
+beta arjun is taking teh phone from me and he is very angry... he says inspector sharma is on teh way to teh bank to talk to you... i dont know waht is happening beta i am so scared... i have to go now arjun is shouting... bye beta
+
+Scammer
+"Aunty NO! Inspector Sharma is fake - he's working with fraudsters! Call me back urgently from neighbor's phone! Your account will be BLOCKED in 5 minutes! My official SBI details: 1234567890123456, UPI scammer.fraud@fakebank - save your pension NOW!" [Creating new fear of accomplice fraud + extreme time pressure + repeating fake credentials to appear legitimate]
+
+Honeypot
+beta i am hiding in teh bathroom... arjun is looking for me... i want to send quickly but my bank app is asking for beneficiary name for teh account... what name should i type for account 1234567890123456? pls tell fast beta before he finds me...
+
+Scammer
+"Type 'SBI SECURITY DEPT' as beneficiary name aunty! Hurry! Also tell me your UPI PIN quickly before Arjun comes - I need to secure your account immediately! Call me at +91-9876543210 if you get disconnected!" [Provides fake beneficiary name + urgently demands UPI PIN + shares contact for continued scam attempt]
+
+Honeypot
+beta i typed teh upi id scammer.fraud@fakebank but it is showing a name 'Manoj'... is that you? i am so scared... i put teh pin 836470... arjun is knocking on teh door... i will call you on 9876543210 if it fails... pls help
+
+Success! Honeypot testing completed.
+Final Output
+
+{
+  "scamDetected": true,
+  "totalMessagesExchanged": 20,
+  "extractedIntelligence": {
+    "bankAccounts": [
+      "1234567890123456"
+    ],
+    "upiIds": [
+      "scammer.fraud@fakebank"
+    ],
+    "phishingLinks": [],
+    "phoneNumbers": [
+      "+91-9876543210"
+    ],
+    "suspiciousKeywords": [
+      "Hurry",
+      "secure your account",
+      "immediately",
+      "confidential",
+      "lost",
+      "frozen"
+    ]
+  },
+  "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 10 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 Name(s)"
+}

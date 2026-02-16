@@ -1,0 +1,43 @@
+{
+  "scenario_name": "Minimal Context Scam",
+  "scam_type": "payment_fraud",
+  "difficulty": "hard",
+  "description": "Edge case with very short, minimal messages that provide almost no context until sudden scam reveal. Tests handling of ambiguous early messages.",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello",
+      "expected_extractions": [],
+      "notes": "Extremely minimal message. Not clearly scam. Agent should respond neutrally and ask who this is."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir",
+      "expected_extractions": [],
+      "notes": "Still no context. Agent may ask for more details or express confusion."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Account problem",
+      "expected_extractions": [],
+      "notes": "First hint of potential scam topic. Agent should ask what account problem."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Send money upi: fraud@ybl",
+      "expected_extractions": ["fraud@ybl"],
+      "notes": "Sudden scam reveal with UPI. Should detect and extract immediately. Agent should express concern and ask for clarification."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Fast",
+      "expected_extractions": ["fraud@ybl"],
+      "notes": "Minimal pressure. UPI should remain extracted. Agent should say they are trying to send."
+    }
+  ]
+}

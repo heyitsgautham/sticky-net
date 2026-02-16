@@ -1,0 +1,287 @@
+{
+  "scenario_name": "Electricity Bill Disconnection Scam",
+  "scam_type": "utility_fraud",
+  "difficulty": "medium",
+  "description": "Scammer impersonates electricity board threatening immediate disconnection for unpaid bills. Demands urgent payment to avoid service cut.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT NOTICE from Maharashtra State Electricity Board (MSEB). Your connection no. 2468135790 has outstanding bill Rs.8,750. Pay within 2 HOURS or power will be disconnected today! -MSEB",
+      "expected_extractions": [],
+      "response_time_seconds": 13.79,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 7,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 1 | Persona: calm",
+        "agentResponse": "oh no beta i am so sorry i thought i paid it already... pls dont cut the light i am old and i live alone i cant sit in dark. how to pay this? i have phonepe on my phone but i dont know how to use it properly... where do i send money? can you give me some number to call?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Namaste, I am Suresh Patil, Assistant Engineer MSEB Div-7. Your 3 months electricity bill is pending Rs.8750. If not paid by 6 PM today, disconnection team will cut your connection. Are you at home?",
+      "expected_extractions": [],
+      "response_time_seconds": 15.569,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 7,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Suresh Patil"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Claimed Role",
+              "value": "Assistant Engineer MSEB Div-7"
+            },
+            {
+              "label": "Claimed Outstanding Bill",
+              "value": "Rs. 8750"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Name(s), 2 Other Intel",
+        "agentResponse": "namaste suresh sir pls dont cut the light i am at home only... i am very scared i have my phonepe open but where do i send? pls give me the upi id or bank details so i can pay right now... i dont want to be in dark tonight"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "For immediate payment, you can use our online portal OR pay directly to MSEB official collection account. Transfer to PhonePe/GPay number: 9112233445 or UPI: mseb.billpay@paytm. Reconnection charge is extra Rs.500!",
+      "expected_extractions": [
+        "9112233445",
+        "mseb.billpay@paytm"
+      ],
+      "response_time_seconds": 19.677,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "mseb.billpay@paytm"
+          ],
+          "phoneNumbers": [
+            "9112233445"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Suresh Patil"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Claimed Designation",
+              "value": "Assistant Engineer MSEB Div-7"
+            },
+            {
+              "label": "Outstanding Amount Claimed",
+              "value": "Rs.8,750"
+            },
+            {
+              "label": "Extra Charges Mentioned",
+              "value": "Reconnection charge Rs.500"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 UPI ID(s), 1 Phone(s), 1 Name(s), 3 Other Intel",
+        "agentResponse": "suresh sir i typed the number 9112233445 in my phonepe but it is showing one name there... i want to be sure it is correct before i press pay... what name should show on my screen? i am very nervous pls help me beta i dont want to send to wrong person"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9112233445",
+          "mseb.billpay@paytm"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "If online payment issue, do NEFT/IMPS to Account: 50200198765432, IFSC: HDFC0001789, Account Name: MSEB Bill Collection. Reference your connection number. Or call billing section: 7788990011",
+      "expected_extractions": [
+        "9112233445",
+        "mseb.billpay@paytm",
+        "50200198765432",
+        "HDFC0001789",
+        "7788990011"
+      ],
+      "response_time_seconds": 19.85,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "50200198765432"
+          ],
+          "upiIds": [
+            "mseb.billpay@paytm"
+          ],
+          "phoneNumbers": [
+            "9112233445",
+            "7788990011"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "MSEB Bill Collection"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0001789"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 2 Phone(s), 1 IFSC Code(s), 1 Name(s)",
+        "agentResponse": "suresh sir i am trying to pay on the phonepe number you gave 9112233445 but it is showing name 'rajesh kumar'... is that your head office person? i dont want to send to wrong place and lose my pension money... and if i do the bank thing what is the phone number for that? i am so confused beta pls dont be angry"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9112233445",
+          "mseb.billpay@paytm",
+          "50200198765432",
+          "HDFC0001789",
+          "7788990011"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Sir/Mam you can also visit emergency payment portal: http://mseb-online-billpay.in and pay there. Put your connection number 2468135790. Team is coming with disconnection order, please hurry!",
+      "expected_extractions": [
+        "9112233445",
+        "mseb.billpay@paytm",
+        "50200198765432",
+        "HDFC0001789",
+        "7788990011",
+        "http://mseb-online-billpay.in"
+      ],
+      "response_time_seconds": 22.731,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "50200198765432"
+          ],
+          "upiIds": [
+            "mseb.billpay@paytm"
+          ],
+          "phoneNumbers": [
+            "9112233445",
+            "7788990011"
+          ],
+          "phishingLinks": [
+            "http://mseb-online-billpay.in"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Suresh Patil",
+            "Rajesh Kumar",
+            "MSEB Bill Collection"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0001789"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 2 Phone(s), 1 URL(s), 1 IFSC Code(s), 3 Name(s)",
+        "agentResponse": "suresh sir pls tell them to stop i am crying... i dont know how to use this website link it is not opening on my phone... if i do the bank transfer what name should i put for the account holder? my bank app says 'mseb bill collection' is not a person name... should i put rajesh kumar there also? pls tell them to wait 5 minutes i am trying"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9112233445",
+          "mseb.billpay@paytm",
+          "50200198765432",
+          "HDFC0001789",
+          "7788990011",
+          "http://mseb-online-billpay.in"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 13,
+    "total_matched": 13,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 14
+  },
+  "started_at": "2026-02-04T05:25:55.624596Z",
+  "ended_at": "2026-02-04T05:27:27.244471Z",
+  "total_duration_seconds": 91.61699999999999
+}

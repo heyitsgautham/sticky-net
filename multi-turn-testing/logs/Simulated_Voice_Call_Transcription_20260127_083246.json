@@ -1,0 +1,132 @@
+{
+  "scenario_name": "Simulated Voice Call Transcription",
+  "scam_type": "tech_support_fraud",
+  "difficulty": "medium",
+  "description": "Scam conversation formatted as voice call transcription with natural speech patterns, filler words, and interruptions. Tests handling of conversational flow.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "[Ring ring] Hello? Hello sir? Can you hear me? Yes? Good good. Sir this is... um... this is calling from Microsoft Technical Support Team. Your computer, sir, your computer is having very serious virus problem. Are you... sir are you there?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.008,
+      "api_response": {
+        "error": true,
+        "status_code": 422,
+        "body": "{\"detail\":[{\"type\":\"enum\",\"loc\":[\"body\",\"metadata\",\"channel\"],\"msg\":\"Input should be 'SMS', 'WhatsApp', 'Email' or 'Chat'\",\"input\":\"Voice Call (Transcribed)\",\"ctx\":{\"expected\":\"'SMS', 'WhatsApp', 'Email' or 'Chat'\"}}]}"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Yes sir yes! I am technical expert, my name is... uh... Rajesh Kumar, employee ID MS2024789. Sir we detected malicious software in your Windows PC. Very dangerous sir! Your banking details, password, everything is at risk! Sir you need to... you need to take immediate action!",
+      "expected_extractions": [],
+      "response_time_seconds": 0.004,
+      "api_response": {
+        "error": true,
+        "status_code": 422,
+        "body": "{\"detail\":[{\"type\":\"enum\",\"loc\":[\"body\",\"metadata\",\"channel\"],\"msg\":\"Input should be 'SMS', 'WhatsApp', 'Email' or 'Chat'\",\"input\":\"Voice Call (Transcribed)\",\"ctx\":{\"expected\":\"'SMS', 'WhatsApp', 'Email' or 'Chat'\"}}]}"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Okay okay sir don't panic! I will help you, okay? First thing... first download... uh... download AnyDesk application. A-N-Y-D-E-S-K. You know AnyDesk? It's safe application, all companies use it. I need to see your screen to remove virus. You have computer in front now?",
+      "expected_extractions": [],
+      "response_time_seconds": 0.003,
+      "api_response": {
+        "error": true,
+        "status_code": 422,
+        "body": "{\"detail\":[{\"type\":\"enum\",\"loc\":[\"body\",\"metadata\",\"channel\"],\"msg\":\"Input should be 'SMS', 'WhatsApp', 'Email' or 'Chat'\",\"input\":\"Voice Call (Transcribed)\",\"ctx\":{\"expected\":\"'SMS', 'WhatsApp', 'Email' or 'Chat'\"}}]}"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Very good sir! Now... um... after removing basic virus, I see there is... there is premium malware also installed. This one is... how to say... very advanced hacking software. For this we need to... we need Microsoft Protection Suite. Cost is... let me check... yes Rs.3,999 only.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.004,
+      "api_response": {
+        "error": true,
+        "status_code": 422,
+        "body": "{\"detail\":[{\"type\":\"enum\",\"loc\":[\"body\",\"metadata\",\"channel\"],\"msg\":\"Input should be 'SMS', 'WhatsApp', 'Email' or 'Chat'\",\"input\":\"Voice Call (Transcribed)\",\"ctx\":{\"expected\":\"'SMS', 'WhatsApp', 'Email' or 'Chat'\"}}]}"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Payment? Yes yes very simple! You can... uh... you can pay through GPay or PhonePe. Just send to my number 9988776655. Or... or UPI ID is... wait I'm checking... yes: techsupport.microsoft@paytm. Very easy sir! Then I immediately activate protection!",
+      "expected_extractions": [
+        "9988776655",
+        "techsupport.microsoft@paytm"
+      ],
+      "response_time_seconds": 0.003,
+      "api_response": {
+        "error": true,
+        "status_code": 422,
+        "body": "{\"detail\":[{\"type\":\"enum\",\"loc\":[\"body\",\"metadata\",\"channel\"],\"msg\":\"Input should be 'SMS', 'WhatsApp', 'Email' or 'Chat'\",\"input\":\"Voice Call (Transcribed)\",\"ctx\":{\"expected\":\"'SMS', 'WhatsApp', 'Email' or 'Chat'\"}}]}"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "9988776655",
+          "techsupport.microsoft@paytm"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Sir if... if payment not going through, you can... you can call my supervisor also. His number is 8877665544. Or... uh... there is online portal also: http://microsoft-tech-india.support. You can pay there with credit card. But sir do fast! Hackers are... they are active right now in your system!",
+      "expected_extractions": [
+        "9988776655",
+        "techsupport.microsoft@paytm",
+        "8877665544",
+        "http://microsoft-tech-india.support"
+      ],
+      "response_time_seconds": 0.002,
+      "api_response": {
+        "error": true,
+        "status_code": 422,
+        "body": "{\"detail\":[{\"type\":\"enum\",\"loc\":[\"body\",\"metadata\",\"channel\"],\"msg\":\"Input should be 'SMS', 'WhatsApp', 'Email' or 'Chat'\",\"input\":\"Voice Call (Transcribed)\",\"ctx\":{\"expected\":\"'SMS', 'WhatsApp', 'Email' or 'Chat'\"}}]}"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "9988776655",
+          "techsupport.microsoft@paytm",
+          "8877665544",
+          "http://microsoft-tech-india.support"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 6,
+    "passed_turns": 0,
+    "failed_turns": 6,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-01-27T08:32:46.686106Z",
+  "ended_at": "2026-01-27T08:32:46.710043Z",
+  "total_duration_seconds": 0.024
+}

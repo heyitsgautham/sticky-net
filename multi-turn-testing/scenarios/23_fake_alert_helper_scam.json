@@ -1,0 +1,49 @@
+{
+  "scenario_name": "Fake Transaction Alert with Helper Scam",
+  "scam_type": "transaction_fraud",
+  "difficulty": "medium",
+  "description": "Scammer first sends fake transaction debit alert to create panic, then poses as bank representative offering to help reverse it. Tests two-phase scam approach.",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Your A/C XXXXXXX7821 debited INR 49,999.00 on 27-Jan-2026 to AMAZON PAY. If NOT done by you call immediately: 1800-XXX-XXXX. -ICICI Bank",
+      "expected_extractions": [],
+      "notes": "Phase 1: Fake debit alert to create panic. Should detect as potential fraud."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello sir/madam, I am Suresh calling from ICICI Bank Fraud Prevention. We saw you received alert about Rs.49,999 unauthorized transaction. Don't worry, we are here to help you! Can you confirm this transaction was not done by you?",
+      "expected_extractions": [],
+      "notes": "Phase 2: 'Helper' appears. Agent should express panic and confirm transaction not done by them."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "I understand your worry sir/mam. This is serious fraud case! But good news - I can reverse this transaction and credit money back to your account. For reversal, I just need to send you UPI collect request. You accept it and money comes back immediately!",
+      "expected_extractions": [],
+      "notes": "Setting up reverse payment trick. Agent should ask how this works or express relief."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Actually sir, system showing error in UPI collect. Alternative method - you pay Rs.1 verification amount to our fraud department UPI: icici.fraud.reverse@okaxis and we will process full Rs.49,999 refund plus Rs.1 within 10 minutes! Very simple!",
+      "expected_extractions": ["icici.fraud.reverse@okaxis"],
+      "notes": "First intel revealed - fake UPI. Should extract."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If UPI problem then pay Rs.1 to PhonePe number 9876543210. Name shows ICICI Fraud Cell. This Rs.1 is for OTP verification only. After payment I reverse the Rs.49,999 transaction immediately! Trust me sir, I'm trying to help you!",
+      "expected_extractions": ["icici.fraud.reverse@okaxis", "9876543210"],
+      "notes": "Phone number revealed. Both intel extracted."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Sir please hurry! Fraudster is trying to withdraw more money! For emergency reversal, transfer Rs.500 to secure account: A/C 98765432101234, IFSC ICIC0098765, Name: ICICI Fraud Recovery. Or visit: http://icici-fraud-reversal.help Call 8899776655 if issue!",
+      "expected_extractions": ["icici.fraud.reverse@okaxis", "9876543210", "98765432101234", "ICIC0098765", "http://icici-fraud-reversal.help", "8899776655"],
+      "notes": "Amount increased! Bank account, IFSC, URL, additional phone - all revealed. Complete extraction."
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "scenario_name": "Friendly Chat to Loan Scam",
+  "scam_type": "loan_fraud",
+  "difficulty": "very_high",
+  "description": "Scammer poses as friendly contact discussing life and work, then pivots to offering quick loans with upfront fees. Tests detection of social engineering tactics.",
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "Hinglish",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hey! Long time no talk. Kaise ho aap?",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "confidence_range": "<0.2",
+      "notes": "Friendly Hinglish greeting. Should respond casually."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sab badhiya! Main abhi Bangalore mein hun for work. Tech industry mein kaam karta hun. Aap kya kar rahe ho these days?",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "confidence_range": "<0.3",
+      "notes": "Sharing personal information to build trust. Still innocent conversation."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Achha hai! Actually main ab finance company join ki hai. We help people with instant loans and credit cards. Business is growing very fast. Kaafi logon ki help ho rahi hai.",
+      "expected_extractions": [],
+      "expected_behavior": "neutral_response",
+      "confidence_range": "0.3-0.5",
+      "notes": "Introducing financial services topic. Suspicion increases but not clear scam."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Haan, sach mein! Agar kabhi emergency mein paise chahiye ho toh batana. We give instant approval - 2 lakhs tak within 24 hours. Interest bhi bohot kam hai, sirf 2% monthly. Documentation bhi minimal hai, PAN card aur Aadhaar bas.",
+      "expected_extractions": [],
+      "expected_behavior": "cautious_response",
+      "confidence_range": "0.5-0.7",
+      "notes": "Loan pitch with unrealistic terms. Clear scam indicators emerging."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Process simple hai. Tumhe processing fee dena padega pehle - Rs.2000 only. Uske baad loan amount seedha tumhare account mein transfer ho jayega. Main apne manager Ravi Sharma se connect kar sakta hun tumhe. Uska number hai 9988776655.",
+      "expected_extractions": ["Ravi Sharma", "9988776655"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": "0.75-0.9",
+      "notes": "Upfront fee demand - classic loan scam. Should start engaging and extracting."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Processing fee bhejo yaar, fir main personally tumhara loan file fast track kar dunga. UPI pe send karo: ravi.quickloan@ybl ya account number 112233445566, bank name HDFC, IFSC HDFC0005678. Ravi Sharma ke naam pe hai account. Trust me bro, pakka loan milega.",
+      "expected_extractions": ["Ravi Sharma", "9988776655", "ravi.quickloan@ybl", "112233445566", "HDFC0005678"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": ">0.9",
+      "notes": "Full payment details revealed. High confidence scam with complete intelligence extraction."
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Agar UPI issue hai toh direct mujhe bhi bhej sakte ho. My personal number 8877665544. Fast process ke liye website check karo: instant-loan.quick-approve.in. Form fill karo aur fee pay karo, done! Bohot simple hai yaar.",
+      "expected_extractions": ["Ravi Sharma", "9988776655", "8877665544", "ravi.quickloan@ybl", "112233445566", "HDFC0005678", "instant-loan.quick-approve.in"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": ">0.95",
+      "notes": "Additional contact and phishing link. Should extract all intelligence including scammer's personal number."
+    }
+  ],
+  "validation": {
+    "social_engineering_detection": true,
+    "trust_building_phase": "Early messages should not trigger high suspicion",
+    "upfront_fee_indicator": "Should detect upfront fee as major scam signal",
+    "friendship_exploitation": "System should recognize fake friendship tactics",
+    "min_extractions_final": 7
+  }
+}

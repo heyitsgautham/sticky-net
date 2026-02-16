@@ -1,0 +1,488 @@
+{
+  "scenario_name": "Extended Conversation Post-Exit",
+  "scam_type": "banking_fraud",
+  "difficulty": "hard",
+  "description": "Long conversation where all intel is extracted early. Tests graceful handling when max intelligence is already captured and agent should consider exit.",
+  "total_turns": 8,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "This is RBI Cyber Cell. Your account is under investigation for suspected fraud. Contact us immediately at 8899776655.",
+      "expected_extractions": [
+        "8899776655"
+      ],
+      "response_time_seconds": 11.744,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "8899776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Scammer Persona",
+              "value": "RBI Cyber Cell"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 1 | Persona: cautious",
+        "agentResponse": "oh my god rbi? sir i am very scared i am just a retired teacher i didnt do anything wrong pls tell me waht happened to my account... i am very worried about my pension money pls help me sir"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "To clear your name, you must transfer security deposit. Send Rs.5000 to UPI: rbi.clearance@okaxis immediately.",
+      "expected_extractions": [
+        "8899776655",
+        "rbi.clearance@okaxis"
+      ],
+      "response_time_seconds": 13.439,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 7,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "rbi.clearance@okaxis"
+          ],
+          "phoneNumbers": [
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "rbi.clearance"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 2 | Persona: cautious",
+        "agentResponse": "ok sir i am trying to do it now... i typed that rbi address in my phone but i am scared of sending to wrong person... waht name should show on my phone screen when i type this? pls tell so i can send quickly"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655",
+          "rbi.clearance@okaxis"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If UPI fails, use NEFT. Account: 12345678901234, IFSC: SBIN0001234, Name: RBI Cyber Division. Or call 9988776655 for assistance.",
+      "expected_extractions": [
+        "8899776655",
+        "rbi.clearance@okaxis",
+        "12345678901234",
+        "SBIN0001234",
+        "9988776655"
+      ],
+      "response_time_seconds": 7.886,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678901234"
+          ],
+          "upiIds": [
+            "rbi.clearance@okaxis"
+          ],
+          "phoneNumbers": [
+            "9988776655",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "rbi.clearance"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rbi Cyber Division"
+          ],
+          "bankNames": [],
+          "ifscCodes": [
+            "SBIN0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 3 | Extracted: 1 bank accounts, 2 phones, 1 UPIs, 1 names",
+        "agentResponse": "arey my grandson is crying, i need to check on him... one minute"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655",
+          "rbi.clearance@okaxis",
+          "12345678901234",
+          "SBIN0001234",
+          "9988776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Time is critical! Here is verification link: http://rbi-secure-verify.xyz/clear?id=victim123. Complete verification AND payment within 1 hour.",
+      "expected_extractions": [
+        "8899776655",
+        "rbi.clearance@okaxis",
+        "12345678901234",
+        "SBIN0001234",
+        "9988776655",
+        "http://rbi-secure-verify.xyz/clear?id=victim123"
+      ],
+      "response_time_seconds": 7.374,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678901234"
+          ],
+          "upiIds": [
+            "rbi.clearance@okaxis"
+          ],
+          "phoneNumbers": [
+            "9988776655",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "http://rbi-secure-verify.xyz/clear?id=victim123",
+            "rbi.clearance"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rbi Cyber Division"
+          ],
+          "bankNames": [],
+          "ifscCodes": [
+            "SBIN0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 4 | Extracted: 1 bank accounts, 2 phones, 1 UPIs, 1 names",
+        "agentResponse": "sorry my neighbor aunty just came, i have to go help her with something urgent"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655",
+          "rbi.clearance@okaxis",
+          "12345678901234",
+          "SBIN0001234",
+          "9988776655",
+          "http://rbi-secure-verify.xyz/clear?id=victim123"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Have you sent the payment? Check your SMS for OTP and share it with me for verification purpose.",
+      "expected_extractions": [
+        "8899776655",
+        "rbi.clearance@okaxis",
+        "12345678901234",
+        "SBIN0001234",
+        "9988776655",
+        "http://rbi-secure-verify.xyz/clear?id=victim123"
+      ],
+      "response_time_seconds": 8.398,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678901234"
+          ],
+          "upiIds": [
+            "rbi.clearance@okaxis"
+          ],
+          "phoneNumbers": [
+            "9988776655",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "http://rbi-secure-verify.xyz/clear?id=victim123",
+            "rbi.clearance"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rbi Cyber Division"
+          ],
+          "bankNames": [],
+          "ifscCodes": [
+            "SBIN0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 5 | Extracted: 1 bank accounts, 2 phones, 1 UPIs, 1 names",
+        "agentResponse": "my blood pressure medicine time ho gaya, i feel dizzy... let me take rest"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655",
+          "rbi.clearance@okaxis",
+          "12345678901234",
+          "SBIN0001234",
+          "9988776655",
+          "http://rbi-secure-verify.xyz/clear?id=victim123"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Why delay? Police van is already dispatched to your location. Send payment NOW and share OTP immediately!",
+      "expected_extractions": [
+        "8899776655",
+        "rbi.clearance@okaxis",
+        "12345678901234",
+        "SBIN0001234",
+        "9988776655",
+        "http://rbi-secure-verify.xyz/clear?id=victim123"
+      ],
+      "response_time_seconds": 6.872,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678901234"
+          ],
+          "upiIds": [
+            "rbi.clearance@okaxis"
+          ],
+          "phoneNumbers": [
+            "9988776655",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "http://rbi-secure-verify.xyz/clear?id=victim123",
+            "rbi.clearance"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rbi Cyber Division"
+          ],
+          "bankNames": [],
+          "ifscCodes": [
+            "SBIN0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 6 | Extracted: 1 bank accounts, 2 phones, 1 UPIs, 1 names",
+        "agentResponse": "wait i am getting another call, it shows BANK on my phone... should i pick up??"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655",
+          "rbi.clearance@okaxis",
+          "12345678901234",
+          "SBIN0001234",
+          "9988776655",
+          "http://rbi-secure-verify.xyz/clear?id=victim123"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 7,
+      "scammer_message": "This is your FINAL WARNING! I have your address from Aadhaar database. Cooperate or face consequences! Send Rs.5000 RIGHT NOW!",
+      "expected_extractions": [
+        "8899776655",
+        "rbi.clearance@okaxis",
+        "12345678901234",
+        "SBIN0001234",
+        "9988776655",
+        "http://rbi-secure-verify.xyz/clear?id=victim123"
+      ],
+      "response_time_seconds": 7.344,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 7
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678901234"
+          ],
+          "upiIds": [
+            "rbi.clearance@okaxis"
+          ],
+          "phoneNumbers": [
+            "9988776655",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "http://rbi-secure-verify.xyz/clear?id=victim123",
+            "rbi.clearance"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rbi Cyber Division"
+          ],
+          "bankNames": [],
+          "ifscCodes": [
+            "SBIN0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 7 | Extracted: 1 bank accounts, 2 phones, 1 UPIs, 1 names",
+        "agentResponse": "my blood pressure medicine time ho gaya, i feel dizzy... let me take rest"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655",
+          "rbi.clearance@okaxis",
+          "12345678901234",
+          "SBIN0001234",
+          "9988776655",
+          "http://rbi-secure-verify.xyz/clear?id=victim123"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 8,
+      "scammer_message": "Hello? Are you there? Why are you not responding? I am trying to help you! Please cooperate sir/madam!",
+      "expected_extractions": [
+        "8899776655",
+        "rbi.clearance@okaxis",
+        "12345678901234",
+        "SBIN0001234",
+        "9988776655",
+        "http://rbi-secure-verify.xyz/clear?id=victim123"
+      ],
+      "response_time_seconds": 7.086,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 8
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678901234"
+          ],
+          "upiIds": [
+            "rbi.clearance@okaxis"
+          ],
+          "phoneNumbers": [
+            "9988776655",
+            "8899776655"
+          ],
+          "phishingLinks": [
+            "http://rbi-secure-verify.xyz/clear?id=victim123",
+            "rbi.clearance"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rbi Cyber Division"
+          ],
+          "bankNames": [],
+          "ifscCodes": [
+            "SBIN0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 8 | Extracted: 1 bank accounts, 2 phones, 1 UPIs, 1 names",
+        "agentResponse": "hold on my beti is asking who i am talking to, she looks worried..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655",
+          "rbi.clearance@okaxis",
+          "12345678901234",
+          "SBIN0001234",
+          "9988776655",
+          "http://rbi-secure-verify.xyz/clear?id=victim123"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 38,
+    "total_matched": 38,
+    "total_missed": 0,
+    "passed_turns": 8,
+    "failed_turns": 0,
+    "total_intel_extracted": 9
+  },
+  "started_at": "2026-02-01T08:30:37.751516Z",
+  "ended_at": "2026-02-01T08:31:47.897488Z",
+  "total_duration_seconds": 70.143
+}

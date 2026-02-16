@@ -1,26 +1,31 @@
 """Main honeypot agent implementation using Gemini 3 Pro."""
 
+import asyncio
 import hashlib
+import json
 import os
 import random
 import time
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import structlog
 from google import genai
 from google.genai import types
+from pydantic import ValidationError
 
 from config.settings import get_settings
-from src.api.schemas import ConversationMessage, Message, Metadata, SenderType
-from src.detection.detector import DetectionResult
-from src.agents.prompts import (
-    HONEYPOT_SYSTEM_PROMPT,
-    EXTRACTION_QUESTIONS,
-    BENEFICIARY_EXTRACTION_STRATEGIES,
-    MISSING_INTEL_PROMPTS,
-    format_scam_indicators,
+from src.api.schemas import (
+    AgentJsonResponse,
+    ConversationMessage,
+    ExtractedIntelligence,
+    Message,
+    Metadata,
+    OtherIntelItem,
+    SenderType,
 )
+from src.detection.detector import DetectionResult
+from src.agents.prompts import HONEYPOT_SYSTEM_PROMPT
 from src.agents.persona import PersonaManager, Persona
 from src.agents.policy import EngagementPolicy, EngagementMode, EngagementState
 from src.agents.fake_data import FakeDataGenerator, FakeCreditCard, FakeBankAccount, FakePersona
@@ -49,6 +54,32 @@ HONEYPOT_SAFETY_SETTINGS = [
 logger = structlog.get_logger()
 
 
+def _extract_text_from_response(response) -> str:
+    """Extract text from Gemini response without triggering thought_signature warning.
+    
+    Gemini 3 models return 'thought_signature' parts alongside text parts.
+    Using response.text triggers a warning. This function extracts only text parts.
+    
+    Args:
+        response: The Gemini GenerateContentResponse object
+        
+    Returns:
+        Concatenated text from all text parts
+    """
+    if not response.candidates:
+        return ""
+    
+    text_parts = []
+    for candidate in response.candidates:
+        if candidate.content and candidate.content.parts:
+            for part in candidate.content.parts:
+                # Only extract text parts, skip thought_signature and other non-text parts
+                if hasattr(part, 'text') and part.text:
+                    text_parts.append(part.text)
+    
+    return "".join(text_parts)
+
+
 @dataclass
 class EngagementResult:
     """Result of agent engagement."""
@@ -61,6 +92,7 @@ class EngagementResult:
     engagement_mode: EngagementMode
     should_continue: bool
     exit_reason: str | None = None
+    extracted_intelligence: ExtractedIntelligence | None = None
 
 
 class HoneypotAgent:
@@ -142,10 +174,11 @@ class HoneypotAgent:
         # Determine engagement mode
         engagement_mode = self.policy.get_engagement_mode(detection.confidence)
 
-        # Get/update persona state
+        # Get/update persona state with scam_type for context-aware emotions
         persona = self.persona_manager.update_persona(
             conv_id,
             scam_intensity=detection.confidence,
+            scam_type=detection.scam_type,
         )
         # Override persona's internal turn with actual calculated turn
         persona.engagement_turn = actual_turn
@@ -166,14 +199,27 @@ class HoneypotAgent:
 
         # Generate response using Gemini 3 Pro
         fake_data_section = self._format_fake_data_section(fake_data)
+        llm_extracted_intel: ExtractedIntelligence | None = None
         try:
-            response = await self._generate_response(prompt, persona, fake_data_section)
+            response, llm_extracted_intel = await self._generate_response(
+                prompt,
+                persona,
+                fake_data_section,
+                extracted_intel=extracted_intel,
+                missing_intel=missing_intel,
+            )
         except Exception as e:
             self.logger.error("Failed to generate response", error=str(e))
             response = self._get_fallback_response(detection)
 
         # Calculate duration
         duration = int(time.time() - start_time)
+
+        # Check if scammer's message contains URLs that weren't extracted yet
+        has_unextracted_urls = self._has_unextracted_urls(
+            message.text,
+            extracted_intel.get("phishing_links", []) if extracted_intel else []
+        )
 
         # Check if engagement should continue
         state = EngagementState(
@@ -183,12 +229,13 @@ class HoneypotAgent:
             intelligence_complete=False,  # Set by intelligence extractor
             scammer_suspicious=False,  # Detect from response patterns
             turns_since_new_info=0,  # Track over time
+            has_unextracted_urls=has_unextracted_urls,
         )
         should_continue = self.policy.should_continue(state)
         exit_reason = self.policy.get_exit_reason(state) if not should_continue else None
 
-        # Generate notes with actual turn number
-        notes = self._generate_notes(detection, persona, engagement_mode, actual_turn)
+        # Generate notes with actual turn number (intelligence will be added in routes.py after merging)
+        notes = self._generate_notes(detection, persona, engagement_mode, actual_turn, extracted_intel=None)
 
         return EngagementResult(
             response=response,
@@ -199,6 +246,7 @@ class HoneypotAgent:
             engagement_mode=engagement_mode,
             should_continue=should_continue,
             exit_reason=exit_reason,
+            extracted_intelligence=llm_extracted_intel,
         )
 
     def _get_fake_data(self, conversation_id: str) -> dict:
@@ -291,22 +339,16 @@ class HoneypotAgent:
         extracted_intel: dict | None = None,
         fake_data: dict | None = None,
     ) -> str:
-        """Build conversation prompt for Gemini with targeted extraction directives."""
-        # Format scam indicators
-        scam_indicators = [m.description for m in detection.matched_patterns[:5]]
-        indicators_text = format_scam_indicators(scam_indicators) if scam_indicators else "General suspicious behavior"
-
+        """Build conversation prompt for Gemini - simplified for agentic prompts."""
+        # Limit context to last N turns to reduce latency on deep conversations
+        max_turns = self.settings.context_window_turns
+        truncated_history = history[-max_turns:] if len(history) > max_turns else history
+        
         # Format conversation history
         history_text = ""
-        for msg in history[-10:]:  # Last 10 messages for context
+        for msg in truncated_history:
             sender = "SCAMMER" if msg.sender == SenderType.SCAMMER else "YOU"
             history_text += f"[{sender}]: {msg.text}\n"
-
-        # Build targeted extraction directive based on what's missing
-        extraction_directive = self._build_extraction_directive(
-            missing_intel or [],
-            extracted_intel or {},
-        )
 
         prompt = f"""CONVERSATION HISTORY:
 {history_text if history_text else "No previous messages"}
@@ -314,185 +356,180 @@ class HoneypotAgent:
 SCAMMER'S NEW MESSAGE:
 "{message.text}"
 
-YOUR TASK:
-Generate a response as the naive, trusting victim. Your emotional state is: {persona.emotional_state.value}
-This is turn {persona.engagement_turn} of the conversation.
-
-Remember:
-- Stay in character as a confused, worried person
-- Ask questions that extract intelligence (bank accounts, UPI IDs, links)
-- Keep responses short (1-3 sentences)
-- Show willingness to comply but need guidance
-
-DETECTED SCAM INDICATORS: {indicators_text}
-
-{extraction_directive}
-
-Generate your response:"""
+Generate your response as Pushpa Verma:"""
 
         return prompt
 
-    def _build_extraction_directive(
-        self,
-        missing_intel: list[str],
-        extracted_intel: dict,
-    ) -> str:
-        """Build a targeted extraction directive based on what intelligence is missing."""
-        if not missing_intel:
-            return ""
-
-        directives = []
-        
-        # Get extracted values for reference in prompts
-        upi_ids = extracted_intel.get("upi_ids", [])
-        bank_accounts = extracted_intel.get("bank_accounts", [])
-        
-        # Priority 1: Beneficiary name (CRITICAL for mule identification)
-        if "beneficiary_name" in missing_intel:
-            if upi_ids:
-                # We have UPI but no name - use validation attack
-                upi = upi_ids[0]
-                example = random.choice(BENEFICIARY_EXTRACTION_STRATEGIES["upi_validation"])
-                example = example.format(upi_id=upi)
-                directives.append(f"""
-**CRITICAL EXTRACTION TARGET: BENEFICIARY NAME**
-You have the UPI ID "{upi}" but NOT the account holder's name. 
-This is the MOST IMPORTANT piece of intelligence to extract.
-Use the "validation attack" - pretend you're entering the UPI and need to verify the name.
-Example approach: "{example}"
-DO NOT exit or end the conversation until you get the name!""")
-            elif bank_accounts:
-                # We have bank account but no name
-                account = bank_accounts[0]
-                example = random.choice(BENEFICIARY_EXTRACTION_STRATEGIES["bank_account_validation"])
-                example = example.format(account=account)
-                directives.append(f"""
-**CRITICAL EXTRACTION TARGET: BENEFICIARY NAME**
-You have bank account "{account}" but NOT the account holder's name.
-This is the MOST IMPORTANT piece of intelligence to extract.
-Ask naturally for the name as if your bank app requires it.
-Example approach: "{example}"
-DO NOT exit or end the conversation until you get the name!""")
-            else:
-                # No payment details yet but we want the name
-                example = random.choice(BENEFICIARY_EXTRACTION_STRATEGIES["general_name_extraction"])
-                directives.append(f"""
-**EXTRACTION TARGET: BENEFICIARY NAME**
-When payment details are shared, immediately ask for the account holder name.
-Example: "{example}" """)
-
-        # Priority 2: Payment details (bank account or UPI)
-        if "payment_details" in missing_intel:
-            directives.append("""
-**EXTRACTION TARGET: PAYMENT DETAILS**
-We still need the bank account number or UPI ID.
-Ask naturally: "where should i send the money?" or "what is your upi?"
-""")
-
-        # Priority 3: Phone number
-        if "phone_number" in missing_intel:
-            directives.append("""
-**EXTRACTION TARGET: PHONE NUMBER**
-Ask for a contact number naturally: "what number can i call if i have problem?"
-""")
-
-        return "\n".join(directives)
+    def _parse_agent_json_response(self, response_text: str) -> AgentJsonResponse | None:
+        """Parse the JSON response from the agent. Returns None if parsing fails."""
+        try:
+            # Try to extract JSON from the response (handle markdown code blocks)
+            text = response_text.strip()
+            if text.startswith("```json"):
+                text = text[7:]
+            if text.startswith("```"):
+                text = text[3:]
+            if text.endswith("```"):
+                text = text[:-3]
+            text = text.strip()
+            
+            data = json.loads(text)
+            return AgentJsonResponse(**data)
+        except (json.JSONDecodeError, ValidationError) as e:
+            self.logger.warning(f"Failed to parse agent JSON response: {e}")
+            return None
 
     async def _generate_response(
         self,
         prompt: str,
         persona: Persona,
         fake_data_section: str = "",
-    ) -> str:
-        """Generate response using Gemini Pro with fallback to Gemini 2.5."""
-        # Format system instruction with persona context and fake data
+        extracted_intel: dict | None = None,
+        missing_intel: list[str] | None = None,
+    ) -> tuple[str, ExtractedIntelligence | None]:
+        """Generate response using Gemini Pro with fallback to Gemini 2.5.
+        
+        Returns:
+            Tuple of (response_text, extracted_intelligence)
+        """
+        
+        # Format extracted intelligence as JSON for the prompt
+        extracted_intel = extracted_intel or {}
+        extracted_intel_json = json.dumps(extracted_intel, indent=2) if extracted_intel else "None yet"
+        
+        # Format missing intelligence as a readable list
+        missing_intel = missing_intel or []
+        missing_intel_text = ", ".join(missing_intel) if missing_intel else "All intelligence collected!"
+        
+        # Format system instruction with state injection
         system_instruction = HONEYPOT_SYSTEM_PROMPT.format(
-            emotional_state=persona.emotional_state.value,
             turn_number=persona.engagement_turn,
-            scam_indicators="See conversation context",
+            extracted_intelligence=extracted_intel_json,
+            missing_intelligence=missing_intel_text,
             fake_data_section=fake_data_section or "(No fake data available)",
         )
         
         # Try primary model (Gemini 3 Pro) first, then fallback (Gemini 2.5 Pro)
         models_to_try = [self.model, self.fallback_model]
         response_text = None
+        timeout_seconds = self.settings.api_timeout_seconds
+        max_retries = self.settings.gemini_max_retries
+        retry_delay = self.settings.gemini_retry_delay_seconds
         
         for model_name in models_to_try:
-            try:
-                self.logger.debug(f"Trying model: {model_name}")
-                
-                # Gemini 3 Pro needs higher max_output_tokens because its
-                # internal "thinking" consumes output tokens. 256 is too small
-                # and causes MAX_TOKENS finish reason with empty text.
-                if "gemini-3" in model_name:
-                    max_tokens = 2048  # Gemini 3 needs more for thinking
-                    thinking_config = types.ThinkingConfig(
-                        thinking_level=types.ThinkingLevel.HIGH
-                    )
-                else:
-                    max_tokens = 512   # Gemini 2.5 is more efficient
-                    thinking_config = None
-                
-                # Build config with model-specific settings
-                config = types.GenerateContentConfig(
-                    system_instruction=system_instruction,
-                    thinking_config=thinking_config,
-                    temperature=self.settings.llm_temperature,
-                    max_output_tokens=max_tokens,
-                    safety_settings=HONEYPOT_SAFETY_SETTINGS,
-                )
-                
-                response = self.client.models.generate_content(
-                    model=model_name,
-                    contents=prompt,
-                    config=config,
-                )
-                
-                response_text = response.text
-                
-                # Check if we got a valid response
-                if response_text and len(response_text.strip()) > 0:
-                    self._last_model_used = model_name
-                    self.logger.info(
-                        "Response generated successfully",
-                        model=model_name,
-                        response_length=len(response_text)
-                    )
-                    break
-                else:
-                    self.logger.warning(
-                        "Empty response from model, trying fallback",
-                        model=model_name
+            # Retry loop for timeout handling
+            for attempt in range(max_retries + 1):
+                try:
+                    self.logger.debug(
+                        f"Trying model: {model_name}",
+                        attempt=attempt + 1,
+                        max_retries=max_retries,
+                        timeout=timeout_seconds,
                     )
                     
-            except Exception as e:
-                self.logger.warning(
-                    "Model failed, trying fallback",
-                    model=model_name,
-                    error=str(e)
-                )
-                continue
+                    # Gemini 3 Pro needs higher max_output_tokens because its
+                    # internal "thinking" consumes output tokens. 256 is too small
+                    # and causes MAX_TOKENS finish reason with empty text.
+                    # Thinking level is HIGH by default in Gemini 3
+                    max_tokens = 65536
+                    
+                    # Build config with model-specific settings
+                    config = types.GenerateContentConfig(
+                        system_instruction=system_instruction,
+                        temperature=self.settings.llm_temperature,
+                        max_output_tokens=max_tokens,
+                        safety_settings=HONEYPOT_SAFETY_SETTINGS,
+                    )
+                    
+                    # Wrap API call with timeout
+                    response = await asyncio.wait_for(
+                        asyncio.get_event_loop().run_in_executor(
+                            None,
+                            lambda: self.client.models.generate_content(
+                                model=model_name,
+                                contents=prompt,
+                                config=config,
+                            )
+                        ),
+                        timeout=timeout_seconds,
+                    )
+                    
+                    # Use helper to avoid thought_signature warning in Gemini 3
+                    response_text = _extract_text_from_response(response)
+                    
+                    # Check if we got a valid response
+                    if response_text and len(response_text.strip()) > 0:
+                        self._last_model_used = model_name
+                        self.logger.info(
+                            "Response generated successfully",
+                            model=model_name,
+                            response_length=len(response_text),
+                            attempt=attempt + 1,
+                        )
+                        break
+                    else:
+                        self.logger.warning(
+                            "Empty response from model, trying fallback",
+                            model=model_name,
+                        )
+                        break  # Don't retry on empty response, try fallback model
+                        
+                except asyncio.TimeoutError:
+                    self.logger.warning(
+                        "Gemini API timeout",
+                        model=model_name,
+                        attempt=attempt + 1,
+                        timeout_seconds=timeout_seconds,
+                    )
+                    if attempt < max_retries:
+                        self.logger.info(
+                            f"Retrying after {retry_delay}s delay",
+                            remaining_retries=max_retries - attempt,
+                        )
+                        await asyncio.sleep(retry_delay)
+                        continue
+                    else:
+                        self.logger.error(
+                            "Max retries exceeded for model",
+                            model=model_name,
+                        )
+                        break  # Try fallback model
+                        
+                except Exception as e:
+                    self.logger.warning(
+                        "Model failed, trying fallback",
+                        model=model_name,
+                        error=str(e),
+                    )
+                    break  # Don't retry on other errors, try fallback model
+            
+            # If we got a valid response, break out of model loop
+            if response_text and len(response_text.strip()) > 0:
+                break
         
         # Handle None response - use fallback response
         if not response_text:
             self._last_model_used = "fallback"
-            return self._get_fallback_response(None)
+            return self._get_fallback_response(None), None
 
-        # Add emotional modifier if appropriate
-        if persona.engagement_turn > 0:
-            modifier = persona.get_emotional_modifier()
-            if modifier and not response_text.startswith(modifier):
-                response_text = modifier + response_text
-
-        # Potentially add extraction question
-        if persona.should_ask_extraction_question():
-            question = random.choice(EXTRACTION_QUESTIONS)
-            if not any(q in response_text.lower() for q in ["account", "upi", "link", "number"]):
-                response_text = response_text.rstrip(".")
-                response_text += f" {question}"
-                persona.record_extraction()
-
-        return response_text
+        # Try to parse as JSON (One-Pass JSON architecture)
+        parsed = self._parse_agent_json_response(response_text)
+        if parsed:
+            self.logger.info(
+                "Successfully parsed JSON response from agent",
+                emotional_tone=parsed.emotional_tone,
+                intel_found=bool(
+                    parsed.extracted_intelligence.bankAccounts or
+                    parsed.extracted_intelligence.upiIds or
+                    parsed.extracted_intelligence.phoneNumbers or
+                    parsed.extracted_intelligence.phishingLinks
+                )
+            )
+            return parsed.reply_text, parsed.extracted_intelligence
+        
+        # Fallback: return raw response if JSON parsing fails
+        self.logger.debug("Using raw response (JSON parsing failed)")
+        return response_text, None
 
     def _get_fallback_response(self, detection: DetectionResult) -> str:
         """Get a fallback response if LLM fails."""
@@ -510,6 +547,7 @@ Ask for a contact number naturally: "what number can i call if i have problem?"
         persona: Persona,
         mode: EngagementMode,
         turn_number: int,
+        extracted_intel: ExtractedIntelligence | None = None,
     ) -> str:
         """Generate agent notes summarizing the engagement."""
         notes_parts = []
@@ -517,10 +555,9 @@ Ask for a contact number naturally: "what number can i call if i have problem?"
         # Engagement mode
         notes_parts.append(f"Mode: {mode.value}")
 
-        # Scam tactics detected
-        categories_used = list(set(m.category.value for m in detection.matched_patterns))
-        if categories_used:
-            notes_parts.append(f"Tactics: {', '.join(categories_used)}")
+        # Scam type if detected
+        if detection.scam_type:
+            notes_parts.append(f"Type: {detection.scam_type}")
 
         # Confidence
         notes_parts.append(f"Confidence: {detection.confidence:.0%}")
@@ -530,8 +567,72 @@ Ask for a contact number naturally: "what number can i call if i have problem?"
 
         # Emotional state
         notes_parts.append(f"Persona: {persona.emotional_state.value}")
+        
+        # Add intelligence extraction counts (only from scammer messages)
+        if extracted_intel:
+            intel_counts = []
+            if extracted_intel.bankAccounts:
+                intel_counts.append(f"{len(extracted_intel.bankAccounts)} Bank Account(s)")
+            if extracted_intel.upiIds:
+                intel_counts.append(f"{len(extracted_intel.upiIds)} UPI ID(s)")
+            if extracted_intel.phoneNumbers:
+                intel_counts.append(f"{len(extracted_intel.phoneNumbers)} Phone(s)")
+            if extracted_intel.phishingLinks:
+                intel_counts.append(f"{len(extracted_intel.phishingLinks)} URL(s)")
+            if extracted_intel.emails:
+                intel_counts.append(f"{len(extracted_intel.emails)} Email(s)")
+            if extracted_intel.ifscCodes:
+                intel_counts.append(f"{len(extracted_intel.ifscCodes)} IFSC Code(s)")
+            if extracted_intel.whatsappNumbers:
+                intel_counts.append(f"{len(extracted_intel.whatsappNumbers)} WhatsApp(s)")
+            if extracted_intel.beneficiaryNames:
+                intel_counts.append(f"{len(extracted_intel.beneficiaryNames)} Name(s)")
+            if extracted_intel.other_critical_info:
+                intel_counts.append(f"{len(extracted_intel.other_critical_info)} Other Intel")
+            
+            if intel_counts:
+                notes_parts.append(f"Extracted: {', '.join(intel_counts)}")
 
         return " | ".join(notes_parts)
+    
+    def _has_unextracted_urls(self, message_text: str, extracted_urls: list[str]) -> bool:
+        """
+        Check if message contains URLs that haven't been extracted yet.
+        
+        Args:
+            message_text: The scammer's message text
+            extracted_urls: List of URLs already extracted
+            
+        Returns:
+            True if message contains unextracted URLs
+        """
+        import re
+        
+        # Same pattern as extractor uses
+        URL_PATTERN = re.compile(
+            r"https?://[\w.-]+(?:\.[a-z]{2,10})+(?:/[^\s<>\"'{}|\\^`\[\]]*)?",
+            re.IGNORECASE,
+        )
+        
+        # Find all URLs in the message
+        urls_in_message = URL_PATTERN.findall(message_text)
+        
+        if not urls_in_message:
+            return False
+        
+        # Check if any URLs are new (not in extracted_urls)
+        extracted_set = set(url.rstrip(".,;:!?)") for url in extracted_urls)
+        for url in urls_in_message:
+            clean_url = url.rstrip(".,;:!?)")
+            if clean_url not in extracted_set:
+                self.logger.info(
+                    "Detected unextracted URL in message",
+                    url=clean_url,
+                    message_preview=message_text[:100]
+                )
+                return True
+        
+        return False
 
     def end_conversation(self, conversation_id: str) -> None:
         """Clean up persona and fake data when conversation ends."""

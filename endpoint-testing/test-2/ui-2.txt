@@ -1,0 +1,10 @@
+Agentic Honey-Pot – API Endpoint Tester
+This Honeypot API Endpoint Tester allows participants to validate whether their deployed honeypot service is reachable, secured, and responding correctly. The tester verifies authentication, endpoint availability, and response behavior using a simple request.
+
+Headers *
+x-api-key *
+test-api-key
+Honeypot API Endpoint URL *
+https://95c4-2401-4900-caee-82e1-e9eb-8c73-65ae-967e.ngrok-free.app/api/v1/analyze
+Test Result
+Error! INVALID_REQUEST_BODY

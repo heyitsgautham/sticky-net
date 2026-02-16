@@ -1,0 +1,205 @@
+{
+  "scenario_name": "Minimal Context Scam",
+  "scam_type": "payment_fraud",
+  "difficulty": "hard",
+  "description": "Edge case with very short, minimal messages that provide almost no context until sudden scam reveal. Tests handling of ambiguous early messages.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello",
+      "expected_extractions": [],
+      "response_time_seconds": 5.105,
+      "api_response": {
+        "status": "success",
+        "scamDetected": false,
+        "scamType": null,
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 0
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "No scam indicators detected",
+        "agentResponse": "Hello! How can I help you today?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir",
+      "expected_extractions": [],
+      "response_time_seconds": 6.875,
+      "api_response": {
+        "status": "success",
+        "scamDetected": false,
+        "scamType": null,
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 0
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "No scam indicators detected",
+        "agentResponse": "Hello! How can I help you today?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Account problem",
+      "expected_extractions": [],
+      "response_time_seconds": 12.382,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.85,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 85% | Turn: 3 | Persona: calm",
+        "agentResponse": "oh no beta what account problem? is it my pension bank account... i hope everything is okay pls tell me waht to do i am very worried"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Send money upi: fraud@ybl",
+      "expected_extractions": [
+        "fraud@ybl"
+      ],
+      "response_time_seconds": 12.398,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "fraud@ybl"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 UPI ID(s)",
+        "agentResponse": "ok beta i will try to send... i am typing fraud@ybl in my phone but i am scared of making mistake. what name will come on the screen so i know it is you? pls tell me teh name so i can be sure"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "fraud@ybl"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Fast",
+      "expected_extractions": [
+        "fraud@ybl"
+      ],
+      "response_time_seconds": 17.521,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm",
+        "agentResponse": "ok ok beta i am trying my hands are shaking. please just tell me the name to confirm. i am very scared to send to the wrong person. what name will it show?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "fraud@ybl"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 2,
+    "total_matched": 2,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 1
+  },
+  "started_at": "2026-02-04T05:11:09.311845Z",
+  "ended_at": "2026-02-04T05:12:03.594835Z",
+  "total_duration_seconds": 54.281000000000006
+}

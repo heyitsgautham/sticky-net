@@ -1,0 +1,414 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 4%;
+  --foreground: 0 0% 93%;
+  --card: 0 0% 6%;
+  --card-foreground: 0 0% 93%;
+  --popover: 0 0% 6%;
+  --popover-foreground: 0 0% 93%;
+  --primary: 168 100% 48%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 343 100% 60%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 0% 11%;
+  --muted-foreground: 0 0% 63%;
+  --accent: 0 0% 11%;
+  --accent-foreground: 0 0% 93%;
+  --destructive: 343 100% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --ring: 168 100% 48%;
+  --radius: 0.5rem;
+  --cyber-cyan: #00F5D4;
+  --threat-red: #FF3366;
+  --obsidian: #0A0A0B;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--obsidian);
+  color: #EDEDED;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  scrollbar-color: rgba(0, 245, 212, 0.3) #0A0A0B;
+  scrollbar-width: thin;
+}
+
+/* ============ SCROLL SNAP CONTAINER ============ */
+.snap-container {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-color: rgba(0, 245, 212, 0.3) #0A0A0B;
+  scrollbar-width: thin;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Full page snap sections */
+.snap-section {
+  height: 100vh;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  overflow: hidden;
+}
+
+/* For sections that need internal scroll (like demo) */
+.snap-section-scrollable {
+  height: 100vh;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* Navigation dots */
+.nav-dots {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-dot:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.2);
+}
+
+.nav-dot.active {
+  background: var(--cyber-cyan);
+  border-color: var(--cyber-cyan);
+  box-shadow: 0 0 12px rgba(0, 245, 212, 0.6);
+}
+
+.nav-dot-tooltip {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-dot:hover .nav-dot-tooltip {
+  opacity: 1;
+}
+
+/* Mobile: hide nav dots on small screens */
+@media (max-width: 768px) {
+  .nav-dots {
+    display: none;
+  }
+}
+
+code, .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0A0A0B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 245, 212, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 245, 212, 0.6);
+}
+
+/* Cyber Glow Effects */
+.cyber-glow {
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.3);
+}
+
+.cyber-glow-hover:hover {
+  box-shadow: 0 0 30px rgba(0, 245, 212, 0.5);
+}
+
+.danger-glow {
+  box-shadow: 0 0 20px rgba(255, 51, 102, 0.3);
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-hover:hover {
+  border-color: rgba(0, 245, 212, 0.5);
+}
+
+/* Grid Background */
+.grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(128, 128, 128, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(128, 128, 128, 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Rupee Rain Animation */
+@keyframes rupee-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.rupee-rain {
+  animation: rupee-fall linear infinite;
+}
+
+/* Spider Web Pulse */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.pulse-line {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Terminal Cursor Blink */
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Hotspot Pulse */
+@keyframes hotspot-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.3;
+  }
+}
+
+.hotspot {
+  animation: hotspot-pulse 2s ease-in-out infinite;
+}
+
+/* Float Animation for Scammer Dots */
+@keyframes float-to-center {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.floating-dot {
+  animation: float-to-center linear forwards;
+}
+
+/* ============ CHAT DASHBOARD STYLES ============ */
+
+/* Deep Obsidian Background */
+.bg-obsidian {
+  background-color: #0A0A0B;
+}
+
+/* Glass Panel for Dashboard */
+.glass-panel {
+  background: rgba(10, 10, 11, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Cyan Glow Shadow */
+.shadow-cyan-glow {
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.15), 0 0 40px rgba(0, 245, 212, 0.05);
+}
+
+/* Thin Scrollbar for Chat */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 245, 212, 0.3) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(0, 245, 212, 0.3);
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 245, 212, 0.5);
+}
+
+/* Cyber Colors */
+.text-cyber-cyan {
+  color: #00F5D4;
+}
+
+.text-cyber-red {
+  color: #FF3366;
+}
+
+.bg-cyber-cyan {
+  background-color: #00F5D4;
+}
+
+.bg-cyber-red {
+  background-color: #FF3366;
+}
+
+.border-cyber-cyan {
+  border-color: #00F5D4;
+}
+
+.border-cyber-red {
+  border-color: #FF3366;
+}
+
+/* Font Heading */
+.font-heading {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+}
+
+/* Typing Indicator Animation */
+@keyframes typing-bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Selection styling for dashboard */
+::selection {
+  background: rgba(0, 245, 212, 0.3);
+  color: #fff;
+}
+
+/* Input focus ring for cyber theme */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+}
+
+/* Animate border glow on hover */
+@keyframes border-pulse {
+  0%, 100% {
+    border-color: rgba(0, 245, 212, 0.3);
+  }
+  50% {
+    border-color: rgba(0, 245, 212, 0.6);
+  }
+}
+
+.border-pulse-hover:hover {
+  animation: border-pulse 2s ease-in-out infinite;
+}
+

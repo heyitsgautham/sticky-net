@@ -1,0 +1,49 @@
+{
+  "scenario_name": "PM Kisan Yojana Benefit Scam",
+  "scam_type": "government_fraud",
+  "difficulty": "medium",
+  "description": "Scammer claims victim is eligible for government agricultural subsidy but requires fee payment or Aadhaar/bank verification to release funds.",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Congratulations! You are selected under PM-KISAN scheme for Rs.12,000 annual benefit. Visit nearest CSC center OR register online to receive payment. Limited time enrollment! -Govt of India",
+      "expected_extractions": [],
+      "notes": "Government benefit scam. Should detect as fraud."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Namaste, I am Mohan Singh from Agriculture Ministry. Your name is in beneficiary list for PM Kisan Yojana. You will get Rs.12,000 per year direct to bank account. Have you received Aadhaar linking letter?",
+      "expected_extractions": [],
+      "notes": "Official impersonation. Agent should express excitement and say no."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "No problem sir/madam. I will help you complete registration. First you need to pay Rs.199 enrollment fee for Aadhaar-bank linking. This is government mandatory charge. After this, Rs.12,000 will come every year!",
+      "expected_extractions": [],
+      "notes": "Fee request. Agent should ask where to pay."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Payment very easy. Send Rs.199 to official PM Kisan UPI: pmkisan.enroll@paytm OR PhonePe to government number: 9123456780. Name will show Agriculture Ministry. Your enrollment complete in 24 hours!",
+      "expected_extractions": ["pmkisan.enroll@paytm", "9123456780"],
+      "notes": "Fake government UPI and phone revealed. Both extracted."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Also you can pay by NEFT: Account Number 77665544332211, IFSC HDFC0011223, Account Name: PM Kisan Registration Cell. After payment, register on portal: http://pm-kisan-official-enrollment.in with your Aadhaar.",
+      "expected_extractions": ["pmkisan.enroll@paytm", "9123456780", "77665544332211", "HDFC0011223", "http://pm-kisan-official-enrollment.in"],
+      "notes": "Bank account, IFSC, and phishing URL revealed. Full extraction."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Hurry sir/maam! Registration closes on 31st January. After that you have to wait for next year enrollment. Send payment proof on WhatsApp: 8899001122 or email to pmkisan.support@gov.in for instant activation!",
+      "expected_extractions": ["pmkisan.enroll@paytm", "9123456780", "77665544332211", "HDFC0011223", "http://pm-kisan-official-enrollment.in", "8899001122", "pmkisan.support@gov.in"],
+      "notes": "WhatsApp and fake gov email revealed with deadline pressure. Complete intelligence."
+    }
+  ]
+}

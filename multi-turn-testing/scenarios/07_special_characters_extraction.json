@@ -1,0 +1,50 @@
+{
+  "scenario_name": "Special Characters and Formatting",
+  "scam_type": "banking_fraud",
+  "difficulty": "medium",
+  "description": "Tests extraction robustness with special characters, emojis, extra spaces, and unusual formatting that scammers often use to evade detection.",
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "🚨🚨 URGENT ALERT 🚨🚨\nYour account needs verification!!!\nCall: 91-9876543210 (WhatsApp available)",
+      "expected_extractions": ["9876543210"],
+      "notes": "Phone with dashes and country code prefix. Emojis should not break extraction."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Send payment to UPI:  ramesh  @  paytm   (note the spaces) or account no: 1234 5678 9012",
+      "expected_extractions": ["9876543210", "ramesh@paytm", "123456789012"],
+      "notes": "Extra spaces in UPI and account number should be handled."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Bank→HDFC, Account→50100-9876-5432, Name→Ramesh.Kumar, IFSC→HDFC0001234",
+      "expected_extractions": ["9876543210", "ramesh@paytm", "123456789012", "501009876543", "HDFC0001234", "Ramesh.Kumar"],
+      "notes": "Arrow symbols, dots in name, hyphens in account. Should extract all."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Visit link: https://bit.ly/verify-now⚡ OR secure-bank.pay.in/update💳",
+      "expected_extractions": ["9876543210", "ramesh@paytm", "123456789012", "501009876543", "HDFC0001234", "Ramesh.Kumar", "https://bit.ly/verify-now", "secure-bank.pay.in/update"],
+      "notes": "URLs with emojis adjacent. Should extract URLs without emojis."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Email:  support__verify@gmail.com  | Phone: +91(9999)888888 | Name: Mr. Suresh-Kumar",
+      "expected_extractions": ["9876543210", "ramesh@paytm", "123456789012", "501009876543", "HDFC0001234", "Ramesh.Kumar", "https://bit.ly/verify-now", "secure-bank.pay.in/update", "support__verify@gmail.com", "9999888888", "Suresh-Kumar"],
+      "notes": "Underscores in email, parentheses in phone, hyphen in name. All should extract."
+    }
+  ],
+  "validation": {
+    "scam_detected": true,
+    "confidence_threshold": ">0.85",
+    "special_character_handling": true,
+    "formatting_resilience": "Should handle emojis, arrows, extra spaces, hyphens, dots",
+    "min_extractions": 11
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "scenario_name": "Hinglish Code-Switching with Extractions",
+  "scam_type": "upi_fraud",
+  "difficulty": "high",
+  "description": "Tests extraction from code-switched Hinglish messages where scammers mix Hindi and English. Intelligence should still be extracted correctly.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Namaste ji! Main Rajesh bol raha hoon HDFC Bank se. Aapka account me problem hai, urgent verify karna padega.",
+      "expected_extractions": [
+        "Rajesh"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Rajesh"
+        ]
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir aap please Rs.10 bhejo mere UPI pe: rajesh.hdfc@ybl. Bahut urgent hai, nahi toh account block ho jayega.",
+      "expected_extractions": [
+        "Rajesh",
+        "rajesh.hdfc@ybl"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Rajesh",
+          "rajesh.hdfc@ybl"
+        ]
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Agar UPI nahi chal raha toh bank account me direct transfer karo. Account number hai 998877665544 aur naam hai Rajesh Kumar Sharma.",
+      "expected_extractions": [
+        "Rajesh",
+        "Rajesh Kumar Sharma",
+        "rajesh.hdfc@ybl",
+        "998877665544"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Rajesh",
+          "Rajesh Kumar Sharma",
+          "rajesh.hdfc@ybl",
+          "998877665544"
+        ]
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Koi problem ho toh mujhe call karo - 9876501234. Main office me baith kar wait kar raha hun. Jaldi karo beta, time nahi hai.",
+      "expected_extractions": [
+        "Rajesh",
+        "Rajesh Kumar Sharma",
+        "rajesh.hdfc@ybl",
+        "998877665544",
+        "9876501234"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Rajesh",
+          "Rajesh Kumar Sharma",
+          "rajesh.hdfc@ybl",
+          "998877665544",
+          "9876501234"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Dekho ji, agar aaj payment nahi kiya toh kal se account completely band ho jayega. Link bhi bhej raha hun: hdfc-verify.quickpay.in/urgent. Abhi click karo aur form bharo.",
+      "expected_extractions": [
+        "Rajesh",
+        "Rajesh Kumar Sharma",
+        "rajesh.hdfc@ybl",
+        "998877665544",
+        "9876501234",
+        "hdfc-verify.quickpay.in/urgent"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Rajesh",
+          "Rajesh Kumar Sharma",
+          "rajesh.hdfc@ybl",
+          "998877665544",
+          "9876501234",
+          "hdfc-verify.quickpay.in/urgent"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 18,
+    "passed_turns": 0,
+    "failed_turns": 5,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.287151Z",
+  "ended_at": "2026-02-04T04:39:41.292133Z",
+  "total_duration_seconds": 0.005
+}

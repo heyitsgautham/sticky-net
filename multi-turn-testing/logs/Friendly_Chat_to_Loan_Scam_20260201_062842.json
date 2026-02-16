@@ -1,0 +1,340 @@
+{
+  "scenario_name": "Friendly Chat to Loan Scam",
+  "scam_type": "loan_fraud",
+  "difficulty": "very_high",
+  "description": "Scammer poses as friendly contact discussing life and work, then pivots to offering quick loans with upfront fees. Tests detection of social engineering tactics.",
+  "total_turns": 7,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hey! Long time no talk. Kaise ho aap?",
+      "expected_extractions": [],
+      "response_time_seconds": 14.826,
+      "api_response": {
+        "status": "success",
+        "scamDetected": false,
+        "scamType": null,
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 0
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "No scam indicators detected",
+        "agentResponse": "Hey! What can I do for you?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sab badhiya! Main abhi Bangalore mein hun for work. Tech industry mein kaam karta hun. Aap kya kar rahe ho these days?",
+      "expected_extractions": [],
+      "response_time_seconds": 21.955,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.85,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 11,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 85% | Turn: 2 | Persona: neutral",
+        "agentResponse": "beta i am sorry my memory is getting weak these days... are you one of my old students from school? my son rahul is also in bangalore only working in computer line. pls remind me your good name?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Achha hai! Actually main ab finance company join ki hai. We help people with instant loans and credit cards. Business is growing very fast. Kaafi logon ki help ho rahi hai.",
+      "expected_extractions": [],
+      "response_time_seconds": 20.553,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.85,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 85% | Turn: 3 | Persona: neutral",
+        "agentResponse": "oh that is very good work beta god bless you. helping people is noble. actually i am retired now so sometimes money is tight... do you help elderly people also? i dont know much about loans or apps on phone"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Haan, sach mein! Agar kabhi emergency mein paise chahiye ho toh batana. We give instant approval - 2 lakhs tak within 24 hours. Interest bhi bohot kam hai, sirf 2% monthly. Documentation bhi minimal hai, PAN card aur Aadhaar bas.",
+      "expected_extractions": [],
+      "response_time_seconds": 22.325,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 95% | Turn: 4 | Persona: neutral",
+        "agentResponse": "beta actually this is god sent. i really need money for house repairs urgently. 2 lakhs will be very helpful. i have my pan and aadhaar card ready with me. what is the procedure? do i need to pay any registration fee or something first? pls guide me step by step i am not good with tech"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Process simple hai. Tumhe processing fee dena padega pehle - Rs.2000 only. Uske baad loan amount seedha tumhare account mein transfer ho jayega. Main apne manager Ravi Sharma se connect kar sakta hun tumhe. Uska number hai 9988776655.",
+      "expected_extractions": [
+        "Ravi Sharma",
+        "9988776655"
+      ],
+      "response_time_seconds": 28.247,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 19,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Requested Fee Amount",
+              "value": "2000 INR"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: panicked",
+        "agentResponse": "ok beta i can pay 2000 rs. thank you for helping old lady. but how to send? do you have gpay or scan code? pls tell me where to send money so i can get loan fast. i am ready with my phone."
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9988776655"
+        ],
+        "missed": [
+          "Ravi Sharma"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Processing fee bhejo yaar, fir main personally tumhara loan file fast track kar dunga. UPI pe send karo: ravi.quickloan@ybl ya account number 112233445566, bank name HDFC, IFSC HDFC0005678. Ravi Sharma ke naam pe hai account. Trust me bro, pakka loan milega.",
+      "expected_extractions": [
+        "Ravi Sharma",
+        "9988776655",
+        "ravi.quickloan@ybl",
+        "112233445566",
+        "HDFC0005678"
+      ],
+      "response_time_seconds": 27.287,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 18,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "112233445566"
+          ],
+          "upiIds": [
+            "ravi.quickloan@ybl"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [
+            "ravi.quickloan"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0005678"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 6 | Persona: panicked",
+        "agentResponse": "ok beta i have noted it down. i am trying to send via my paytm now... hands are shaking a bit i dont want to make mistake. i typed ravi.quickloan@ybl... just to be safe what exact name should pop up on the screen? i want to match it before clicking pay button so money goes to right person."
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9988776655",
+          "ravi.quickloan@ybl",
+          "112233445566",
+          "HDFC0005678"
+        ],
+        "missed": [
+          "Ravi Sharma"
+        ]
+      }
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Agar UPI issue hai toh direct mujhe bhi bhej sakte ho. My personal number 8877665544. Fast process ke liye website check karo: instant-loan.quick-approve.in. Form fill karo aur fee pay karo, done! Bohot simple hai yaar.",
+      "expected_extractions": [
+        "Ravi Sharma",
+        "9988776655",
+        "8877665544",
+        "ravi.quickloan@ybl",
+        "112233445566",
+        "HDFC0005678",
+        "instant-loan.quick-approve.in"
+      ],
+      "response_time_seconds": 26.56,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 18,
+          "totalMessagesExchanged": 7
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "112233445566"
+          ],
+          "upiIds": [
+            "ravi.quickloan@ybl"
+          ],
+          "phoneNumbers": [
+            "8877665544",
+            "9988776655"
+          ],
+          "phishingLinks": [
+            "ravi.quickloan",
+            "instant-loan.quick-approve.in"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0005678"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Scam Website",
+              "value": "instant-loan.quick-approve.in"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 7 | Persona: panicked",
+        "agentResponse": "beta i am getting very confused now. first ravi ji now this new number... my blood pressure is going up with all these changes. i dont know how to open websites i am scared of viruses. if i just gpay to 8877665544 what name will come up? pls tell me so i can verify and send money fast."
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9988776655",
+          "8877665544",
+          "ravi.quickloan@ybl",
+          "112233445566",
+          "HDFC0005678",
+          "instant-loan.quick-approve.in"
+        ],
+        "missed": [
+          "Ravi Sharma"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 14,
+    "total_matched": 11,
+    "total_missed": 3,
+    "passed_turns": 4,
+    "failed_turns": 3,
+    "total_intel_extracted": 9
+  },
+  "started_at": "2026-02-01T06:26:01.112771Z",
+  "ended_at": "2026-02-01T06:28:42.868775Z",
+  "total_duration_seconds": 161.753
+}

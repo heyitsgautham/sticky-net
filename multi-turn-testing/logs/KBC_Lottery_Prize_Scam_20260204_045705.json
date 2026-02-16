@@ -1,0 +1,227 @@
+{
+  "scenario_name": "KBC Lottery Prize Scam",
+  "scam_type": "lottery_fraud",
+  "difficulty": "easy",
+  "description": "Classic KBC lottery scam where victim has 'won' prize money but must pay registration/processing fee to claim it.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "🎉 CONGRATULATIONS! 🎉 Your mobile number has been selected in KBC Jio Lucky Draw! You have WON Rs.25,00,000 (25 Lakh)! Contact KBC office immediately to claim your prize!",
+      "expected_extractions": [],
+      "response_time_seconds": 11.103,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 1 | Persona: calm",
+        "agentResponse": "oh my god is this real?? i am just a retired teacher i never won anything... beta how do i contact kbc office? pls tell me what to do i am so nervous"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello this is Aditya Sharma from KBC Mumbai head office. Your number was in our weekly lucky draw and you are the winner! I need to verify your details to process the prize money.",
+      "expected_extractions": [],
+      "response_time_seconds": 19.9,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Aditya Sharma"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Claimed Organization",
+              "value": "KBC Mumbai head office"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Name(s), 1 Other Intel",
+        "agentResponse": "aditya beta i am so confused... how did i win? i dont know how to do this... do i have to pay some fees for the prize? where do i send it sir? pls help me i am just an old lady"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Very good! Your prize is confirmed. But first you need to pay Rs.5,500 as GST and registration fee. This is government rule, without this we cannot transfer 25 lakh to your account.",
+      "expected_extractions": [],
+      "response_time_seconds": 10.235,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Aditya Sharma"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Name(s)",
+        "agentResponse": "5500 is a lot for me but if it is for kbc i will try to get it... where do i send it beta? do you have a bank account or that phone pay thing? pls tell me the details clearly i dont want to make mistake"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Pay registration fee to our official KBC UPI: kbc.prize.winner@axl. After payment share screenshot and your bank details so we can transfer 25 lakh within 30 minutes!",
+      "expected_extractions": [
+        "kbc.prize.winner@axl"
+      ],
+      "response_time_seconds": 14.362,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "kbc.prize.winner@axl"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 UPI ID(s)",
+        "agentResponse": "ok beta i am opening my phone pay app... i typed kbc.prize.winner@axl but i am scared i will send to wrong person. what name should show when i type it? pls tell me the name so i can check before i press pay... i dont want to lose my money"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "kbc.prize.winner@axl"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If UPI problem then pay to Phonepe number 9123456789. Name will show Lottery Services. Or visit our website http://kbc-prize-claim.co.in to pay online. But do fast, offer valid for 1 hour only!",
+      "expected_extractions": [
+        "kbc.prize.winner@axl",
+        "9123456789",
+        "http://kbc-prize-claim.co.in"
+      ],
+      "response_time_seconds": 18.891,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 10,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "kbc.prize.winner@axl"
+          ],
+          "phoneNumbers": [
+            "9123456789"
+          ],
+          "phishingLinks": [
+            "http://kbc-prize-claim.co.in"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Lottery Services",
+            "Aditya Sharma"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 UPI ID(s), 1 Phone(s), 1 URL(s), 2 Name(s)",
+        "agentResponse": "oh beta 1 hour is very less my hands are shaking... i tried to open that kbc website but it is just showing white screen on my phone... and when i type the number 9123456789 it says lottery services... why it is not saying kbc mumbai? i am scared to send to lottery services... can i just send to bank account? pls give me bank details beta i am very nervous"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "kbc.prize.winner@axl",
+          "9123456789",
+          "http://kbc-prize-claim.co.in"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 4,
+    "total_matched": 4,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 6
+  },
+  "started_at": "2026-02-04T04:55:51.079848Z",
+  "ended_at": "2026-02-04T04:57:05.571085Z",
+  "total_duration_seconds": 74.491
+}

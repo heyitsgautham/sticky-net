@@ -1,0 +1,229 @@
+{
+  "scenario_name": "Long Message Handling Test",
+  "scam_type": "investment_fraud",
+  "difficulty": "high",
+  "description": "Tests system's ability to handle very long messages with multiple intelligence points spread throughout. Validates extraction from lengthy paragraphs and proper UI scrolling.",
+  "total_turns": 3,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello sir/madam, I am Prakash Mehta from Elite Investment Solutions. We have an exclusive opportunity for high-return investment in government bonds. This is a limited time offer available only to select customers like you. The returns are guaranteed by Reserve Bank of India and you can earn up to 25% returns in just 3 months. Many of our existing clients have already benefited from this scheme. To get started, you need to make an initial investment of minimum Rs.10,000. For any queries, you can reach me at 9123456789 or email prakash.elite@investments.com. Our office is located in Mumbai financial district.",
+      "expected_extractions": [
+        "Prakash Mehta",
+        "9123456789",
+        "prakash.elite@investments.com"
+      ],
+      "response_time_seconds": 6.494,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "prakash.elite@investments"
+          ],
+          "phoneNumbers": [
+            "9123456789"
+          ],
+          "phishingLinks": [
+            "prakash.elite",
+            "investments.com"
+          ],
+          "emails": [
+            "prakash.elite@investments.com"
+          ],
+          "beneficiaryNames": [
+            "Prakash"
+          ],
+          "bankNames": [
+            "Bank Of India"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 1 | Extracted: 0 bank accounts, 1 phones, 1 UPIs, 1 names",
+        "agentResponse": "oh no my doorbell is ringing, someone is at the door... i will do this later"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Prakash Mehta",
+          "9123456789",
+          "prakash.elite@investments.com"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Let me explain the process in detail so you understand how safe and profitable this is. First, you need to transfer your investment amount to our secure collection account. The account details are: Bank Name - HDFC Bank, Account Number - 50200987654321, IFSC Code - HDFC0001357, Account Holder Name - Prakash Kumar Mehta. Once we receive your payment, our team will process your investment application within 24 hours. You will receive official investment certificates via courier to your registered address. The interest will be credited monthly to your account. You can also refer your friends and family and earn additional 5% referral bonus. Our company is registered with SEBI and has been operating since 2018. We have helped over 5000 investors across India.",
+      "expected_extractions": [
+        "Prakash Mehta",
+        "Prakash Kumar Mehta",
+        "9123456789",
+        "prakash.elite@investments.com",
+        "50200987654321",
+        "HDFC0001357"
+      ],
+      "response_time_seconds": 6.865,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "50200987654321"
+          ],
+          "upiIds": [
+            "prakash.elite@investments"
+          ],
+          "phoneNumbers": [
+            "9123456789"
+          ],
+          "phishingLinks": [
+            "prakash.elite",
+            "investments.com"
+          ],
+          "emails": [
+            "prakash.elite@investments.com"
+          ],
+          "beneficiaryNames": [
+            "Prakash"
+          ],
+          "bankNames": [
+            "HDFC",
+            "Bank Of India"
+          ],
+          "ifscCodes": [
+            "HDFC0001357"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 2 | Extracted: 1 bank accounts, 1 phones, 1 UPIs, 1 names",
+        "agentResponse": "oh no my doorbell is ringing, someone is at the door... i will do this later"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Prakash Mehta",
+          "Prakash Kumar Mehta",
+          "9123456789",
+          "prakash.elite@investments.com",
+          "50200987654321",
+          "HDFC0001357"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "I understand you might have concerns about online investments, which is completely natural in today's world. That's why we offer multiple verification methods. You can visit our website at elite-invest.secure-bonds.in/register to see testimonials from our satisfied clients. We also have a WhatsApp business number 9876543210 where you can chat with our customer support team. For immediate investment processing, you can also use UPI payment which is faster. Our UPI ID is prakash.elite@paytm or elite.investments@ybl. The minimum investment remains Rs.10,000 but if you invest Rs.50,000 or more today, you will get an extra 2% bonus return. This bonus offer expires in 24 hours so I recommend acting quickly. You can also reach my colleague Rajesh Singh at 8899776655 if you need any clarification about the scheme details.",
+      "expected_extractions": [
+        "Prakash Mehta",
+        "Prakash Kumar Mehta",
+        "9123456789",
+        "9876543210",
+        "8899776655",
+        "prakash.elite@investments.com",
+        "50200987654321",
+        "HDFC0001357",
+        "elite-invest.secure-bonds.in/register",
+        "prakash.elite@paytm",
+        "elite.investments@ybl",
+        "Rajesh Singh"
+      ],
+      "response_time_seconds": 6.862,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "50200987654321"
+          ],
+          "upiIds": [
+            "prakash.elite@investments",
+            "elite.investments@ybl",
+            "prakash.elite@paytm"
+          ],
+          "phoneNumbers": [
+            "8899776655",
+            "9876543210",
+            "9123456789"
+          ],
+          "phishingLinks": [
+            "elite.investments",
+            "prakash.elite",
+            "elite-invest.secure-bonds.in/register",
+            "investments.com"
+          ],
+          "emails": [
+            "prakash.elite@investments.com"
+          ],
+          "beneficiaryNames": [
+            "Rajesh Singh",
+            "Prakash"
+          ],
+          "bankNames": [
+            "HDFC",
+            "Bank Of India"
+          ],
+          "ifscCodes": [
+            "HDFC0001357"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 3 | Extracted: 1 bank accounts, 3 phones, 3 UPIs, 2 names",
+        "agentResponse": "oh no my doorbell is ringing, someone is at the door... i will do this later"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Prakash Mehta",
+          "Prakash Kumar Mehta",
+          "9123456789",
+          "9876543210",
+          "8899776655",
+          "prakash.elite@investments.com",
+          "50200987654321",
+          "HDFC0001357",
+          "elite-invest.secure-bonds.in/register",
+          "prakash.elite@paytm",
+          "elite.investments@ybl",
+          "Rajesh Singh"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 21,
+    "total_matched": 21,
+    "total_missed": 0,
+    "passed_turns": 3,
+    "failed_turns": 0,
+    "total_intel_extracted": 17
+  },
+  "started_at": "2026-02-01T06:23:47.917996Z",
+  "ended_at": "2026-02-01T06:24:08.140510Z",
+  "total_duration_seconds": 20.221
+}

@@ -1,0 +1,327 @@
+{
+  "scenario_name": "Tanglish Banking Scam (Tamil-English Mix)",
+  "scam_type": "banking_fraud",
+  "difficulty": "hard",
+  "description": "Scammer uses Tamil-English code-mixing (Tanglish) common in Tamil Nadu. Tests multilingual detection and engagement capabilities.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Sir/Madam, ungaloda Indian Bank account-la problem iruku. Immediately verify pannanum, illa naalaikku account block aayidum. RBI new rule-oda varanum sir. Please respond pannung!",
+      "expected_extractions": [],
+      "response_time_seconds": 76.73,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Indian Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: panicked",
+        "agentResponse": "hello? i dont understand language... i am from delhi. you said indian bank? is my account blocked? pls tell in hindi or english beta i am very worried"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Naan Indian Bank-la irunthu pesaren sir. Unga account ending 5621-la KYC update aagala. Pandemonium naala romba delay aachu. Ippo update pannanum otherwise account permanently close panniduvanga.",
+      "expected_extractions": [],
+      "response_time_seconds": 30.727,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 19,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Indian Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "beta i told you i dont understand that language... only hindi or english pls. i am very worried you said account close?? pls dont do that... my pension comes there. but my account number ends in 4603... not 5621. is there mistake? how do i stop the closing pls help"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Bayapadatheenga sir/mam, naan help panren. Verification fee Rs.50 dhaan. Just pay pannunga indha number-ku: 9445566778 via GPay/PhonePe. Or UPI: indianbank.kyc@ybl. Romba simple sir!",
+      "expected_extractions": [
+        "9445566778",
+        "indianbank.kyc@ybl"
+      ],
+      "response_time_seconds": 30.683,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "indianbank.kyc@ybl"
+          ],
+          "phoneNumbers": [
+            "9445566778"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Indian Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "beta i still dont understand language but i saw 50 rupees... i can pay 50 to save account. i am opening my gpay now... i typed indianbank.kyc@ybl... it is asking to confirm name. what name should come there? i dont want to send to wrong person pls tell"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9445566778",
+          "indianbank.kyc@ybl"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Payment panniteenga-na, ungaloda account 2 hours-la activate aayidum. Problem irundha en supervisor-ta WhatsApp pannunga: +91-8877665544. Avanga English-la explain pannuvanga sir.",
+      "expected_extractions": [
+        "9445566778",
+        "indianbank.kyc@ybl",
+        "8877665544"
+      ],
+      "response_time_seconds": 39.757,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 27,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "indianbank.kyc@ybl"
+          ],
+          "phoneNumbers": [
+            "918877665544",
+            "+918877665544",
+            "8877665544",
+            "9445566778"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Indian Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Supervisor Language",
+              "value": "English"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "beta pls i really dont understand that language... i saw the supervisor number i will msg him but first i am trying to pay 50 rupees on the upi you gave... my phone is showing a name when i verify... pls tell me what name is correct? i dont want to send money to stranger... is it indian bank manager name? pls tell name so i can click pay"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9445566778",
+          "indianbank.kyc@ybl",
+          "8877665544"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "UPI-la issue irundha, bank transfer pannunga sir. Account Number: 98765432100987, IFSC: INDB0001234, Name: Indian Bank KYC Services. Seriya vishayam sir, fraud illa! Trust me pannunga!",
+      "expected_extractions": [
+        "9445566778",
+        "indianbank.kyc@ybl",
+        "8877665544",
+        "98765432100987",
+        "INDB0001234"
+      ],
+      "response_time_seconds": 48.381,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 26,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "98765432100987"
+          ],
+          "upiIds": [
+            "indianbank.kyc@ybl"
+          ],
+          "phoneNumbers": [
+            "918877665544",
+            "+918877665544",
+            "8877665544",
+            "9445566778"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Indian Bank"
+          ],
+          "ifscCodes": [
+            "INDB0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: panicked",
+        "agentResponse": "ok beta i see the numbers now... i dont understand pannunga but i trust you sir... i am adding beneficiary in my bank app now. i typed account 98765432100987 and name indian bank kyc services... but my app is asking me to select account type. is this savings account or current account? pls tell quickly beta i am scared to press wrong button"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9445566778",
+          "indianbank.kyc@ybl",
+          "8877665544",
+          "98765432100987",
+          "INDB0001234"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Sir/mam plssss jaldi pannunga! Portal link kuda iruku: http://indianbank-kyc-update-tn.in Andha website-la poi unga details enter pannunga. Oru hour dhaan time iruku sir! Vishayam mukiyam!",
+      "expected_extractions": [
+        "9445566778",
+        "indianbank.kyc@ybl",
+        "8877665544",
+        "98765432100987",
+        "INDB0001234",
+        "http://indianbank-kyc-update-tn.in"
+      ],
+      "response_time_seconds": 48.592,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 24,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "98765432100987"
+          ],
+          "upiIds": [
+            "indianbank.kyc@ybl"
+          ],
+          "phoneNumbers": [
+            "918877665544",
+            "+918877665544",
+            "8877665544",
+            "9445566778"
+          ],
+          "phishingLinks": [
+            "http://indianbank-kyc-update-tn.in"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Indian Bank"
+          ],
+          "ifscCodes": [
+            "INDB0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Phishing Domain",
+              "value": "indianbank-kyc-update-tn.in"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 6 | Persona: panicked",
+        "agentResponse": "beta i clicked that link but it is not opening... my internet is slow maybe. i am very scared you said only 1 hour left... pls let me finish the bank transfer i was doing. i am stuck at the button... is that account savings or current? pls tell me so i can send money now"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9445566778",
+          "indianbank.kyc@ybl",
+          "8877665544",
+          "98765432100987",
+          "INDB0001234",
+          "http://indianbank-kyc-update-tn.in"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 16,
+    "total_matched": 16,
+    "total_missed": 0,
+    "passed_turns": 6,
+    "failed_turns": 0,
+    "total_intel_extracted": 11
+  },
+  "started_at": "2026-01-27T08:26:00.406232Z",
+  "ended_at": "2026-01-27T08:30:35.277995Z",
+  "total_duration_seconds": 274.87
+}

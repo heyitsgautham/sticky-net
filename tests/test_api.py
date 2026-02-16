@@ -37,17 +37,32 @@ class TestHealthEndpoint:
 class TestAuthentication:
     """Tests for API authentication."""
 
-    def test_missing_api_key_returns_401(self, client: TestClient):
+    @patch("src.api.middleware.get_settings")
+    def test_missing_api_key_returns_401(self, mock_settings, client: TestClient, sample_scam_message: dict):
         """Request without API key should return 401."""
-        response = client.post("/api/v1/analyze", json={})
+        # Mock settings to disable debug mode for this test
+        mock_settings_instance = MagicMock()
+        mock_settings_instance.debug = False  # Disable debug mode
+        mock_settings_instance.api_key = "test-api-key"
+        mock_settings.return_value = mock_settings_instance
+        
+        # Use a valid request body to avoid 422 from FastAPI validation
+        response = client.post("/api/v1/analyze", json=sample_scam_message)
         assert response.status_code == 401
         assert response.json()["error"] == "Missing API key"
 
-    def test_invalid_api_key_returns_403(self, client: TestClient):
+    @patch("src.api.middleware.get_settings")
+    def test_invalid_api_key_returns_403(self, mock_settings, client: TestClient, sample_scam_message: dict):
         """Request with invalid API key should return 403."""
+        # Mock settings for consistent behavior
+        mock_settings_instance = MagicMock()
+        mock_settings_instance.debug = False
+        mock_settings_instance.api_key = "test-api-key"
+        mock_settings.return_value = mock_settings_instance
+        
         response = client.post(
             "/api/v1/analyze",
-            json={},
+            json=sample_scam_message,
             headers={"x-api-key": "wrong-key"},
         )
         assert response.status_code == 403
@@ -57,6 +72,7 @@ class TestAuthentication:
 class TestAnalyzeEndpoint:
     """Tests for analyze endpoint."""
 
+    @patch("src.api.routes.get_agent")
     @patch("src.api.routes.ScamDetector")
     @patch("src.api.routes.HoneypotAgent")
     @patch("src.api.routes.IntelligenceExtractor")
@@ -65,6 +81,7 @@ class TestAnalyzeEndpoint:
         mock_extractor,
         mock_agent,
         mock_detector,
+        mock_get_agent,
         client: TestClient,
         auth_headers: dict,
         sample_scam_message: dict,
@@ -73,7 +90,10 @@ class TestAnalyzeEndpoint:
         # Setup mocks
         mock_detector_instance = mock_detector.return_value
         mock_detector_instance.analyze = AsyncMock(
-            return_value=type("Result", (), {"is_scam": True, "confidence": 0.95})()
+            return_value=type(
+                "Result", (), 
+                {"is_scam": True, "confidence": 0.95, "scam_type": "banking_fraud"}
+            )()
         )
 
         mock_agent_instance = mock_agent.return_value
@@ -85,9 +105,24 @@ class TestAnalyzeEndpoint:
                     "duration_seconds": 120,
                     "notes": "Urgency tactics detected",
                     "response": "Oh no, what should I do?",
+                    "extracted_intelligence": None,  # Agent may return extracted intel
+                    "conversation_id": "test-conv-123",
+                    "engagement_mode": "CAUTIOUS",
+                    "turn_number": 1,
+                    "should_continue": True,
+                    "exit_reason": None,
                 },
             )()
         )
+        # Mock the persona manager for notes generation
+        mock_agent_instance.persona_manager = MagicMock()
+        mock_agent_instance.persona_manager.get_or_create_persona = MagicMock(
+            return_value=MagicMock(name="TestPersona")
+        )
+        mock_agent_instance._generate_notes = MagicMock(return_value="Test agent notes")
+        
+        # Setup get_agent singleton mock to return the same mocked agent
+        mock_get_agent.return_value = mock_agent_instance
 
         mock_extractor_instance = mock_extractor.return_value
         # extract is synchronous, not async - use MagicMock
@@ -118,8 +153,9 @@ class TestAnalyzeEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "success"
-        assert data["scamDetected"] is True
-        assert "agentResponse" in data
+        # New simplified response format: just status and reply
+        assert "reply" in data
+        assert isinstance(data["reply"], str)
 
     @patch("src.api.routes.ScamDetector")
     def test_legitimate_message_returns_no_scam(
@@ -132,7 +168,10 @@ class TestAnalyzeEndpoint:
         """Legitimate message should not trigger engagement."""
         mock_detector_instance = mock_detector.return_value
         mock_detector_instance.analyze = AsyncMock(
-            return_value=type("Result", (), {"is_scam": False, "confidence": 0.1})()
+            return_value=type(
+                "Result", (), 
+                {"is_scam": False, "confidence": 0.1, "scam_type": None}
+            )()
         )
 
         response = client.post(
@@ -144,7 +183,9 @@ class TestAnalyzeEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "success"
-        assert data["scamDetected"] is False
+        # New simplified response format: just status and reply
+        assert "reply" in data
+        assert isinstance(data["reply"], str)
 
     def test_invalid_request_body_returns_422(
         self,

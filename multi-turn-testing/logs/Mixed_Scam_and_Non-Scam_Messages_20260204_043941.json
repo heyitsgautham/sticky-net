@@ -1,0 +1,128 @@
+{
+  "scenario_name": "Mixed Scam and Non-Scam Messages",
+  "scam_type": "mixed",
+  "difficulty": "high",
+  "description": "Tests system's ability to distinguish between scam and non-scam messages in the same conversation. Should respond normally to innocent messages and engage for scam messages.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "URGENT: Your bank account has been compromised! Verify immediately to avoid blocking.",
+      "expected_extractions": [],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "I am Suresh from State Bank. Call me at 9988776655 or pay Rs.10 to verify.kyc@paytm",
+      "expected_extractions": [
+        "Suresh",
+        "9988776655",
+        "verify.kyc@paytm"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Suresh",
+          "9988776655",
+          "verify.kyc@paytm"
+        ]
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Thanks for helping",
+      "expected_extractions": [
+        "Suresh",
+        "9988776655",
+        "verify.kyc@paytm"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Suresh",
+          "9988776655",
+          "verify.kyc@paytm"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Actually, quickly transfer to account 556677889900 under name Suresh Kumar before deadline",
+      "expected_extractions": [
+        "Suresh",
+        "Suresh Kumar",
+        "9988776655",
+        "verify.kyc@paytm",
+        "556677889900"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "Suresh",
+          "Suresh Kumar",
+          "9988776655",
+          "verify.kyc@paytm",
+          "556677889900"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 11,
+    "passed_turns": 0,
+    "failed_turns": 5,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.265419Z",
+  "ended_at": "2026-02-04T04:39:41.270694Z",
+  "total_duration_seconds": 0.005
+}

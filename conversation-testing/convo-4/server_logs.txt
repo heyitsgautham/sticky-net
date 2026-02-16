@@ -1,0 +1,30 @@
+INFO:     127.0.0.1:65246 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+2026-01-25T09:20:24.416503Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=0
+2026-01-25T09:20:24.442519Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=32
+2026-01-25T09:20:24.442786Z [info     ] Uncertain message, using AI classification [src.detection.detector] component=ScamDetector
+2026-01-25T09:20:24.442867Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=32
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-25T09:20:50.622647Z [info     ] Classification successful      [src.detection.classifier] component=ScamClassifier model=gemini-3-flash-preview response_length=552
+2026-01-25T09:20:50.623008Z [info     ] Message not detected as scam   [src.api.routes] channel=SMS history_length=0
+INFO:     127.0.0.1:65312 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+2026-01-25T09:22:00.155349Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=1
+2026-01-25T09:22:00.179770Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=58
+2026-01-25T09:22:00.180162Z [info     ] Uncertain message, using AI classification [src.detection.detector] component=ScamDetector
+2026-01-25T09:22:00.180289Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=58
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-25T09:22:06.428506Z [info     ] Classification successful      [src.detection.classifier] component=ScamClassifier model=gemini-3-flash-preview response_length=547
+2026-01-25T09:22:06.429916Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=1
+2026-01-25T09:22:06.430571Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=1 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=1 urls=0 whatsapp_numbers=0
+2026-01-25T09:22:06.454705Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=e44aa805-5295-423b-9fc2-6cc740344973 history_length=1 turn=2
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-25T09:22:17.570526Z [info     ] Response generated successfully [src.agents.honeypot_agent] component=HoneypotAgent model=gemini-3-pro-preview response_length=601
+2026-01-25T09:22:17.571055Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='nervous and compliant' intel_found=False
+2026-01-25T09:22:17.571298Z [info     ] Agent engagement complete      [src.api.routes] agent_response='ok beta i am trying... my hands are shaking a bit i am worried. i opened the paytm to send 5000. i typed sanjay@hdfc... what name should come up on the screen? i want to check before i click pay so money doesnt go to wrong place pls tell me' channel=SMS has_extracted_intel=True history_length=1
+2026-01-25T09:22:17.571418Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=1 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-25T09:22:17.571860Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-25T09:22:17.572003Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=1 total_urls=0
+2026-01-25T09:22:17.572092Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=1 other_info=0 phone_numbers=0 upi_ids=1
+INFO:     127.0.0.1:65334 - "POST /api/v1/analyze HTTP/1.1" 200 OK

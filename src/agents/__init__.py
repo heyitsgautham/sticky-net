@@ -5,7 +5,6 @@ from src.agents.persona import Persona, PersonaManager, PersonaTrait, EmotionalS
 from src.agents.policy import EngagementPolicy, EngagementMode, EngagementState
 from src.agents.prompts import (
     HONEYPOT_SYSTEM_PROMPT,
-    EXTRACTION_QUESTIONS,
     get_response_strategy,
 )
 
@@ -21,6 +20,5 @@ __all__ = [
     "EngagementMode",
     "EngagementState",
     "HONEYPOT_SYSTEM_PROMPT",
-    "EXTRACTION_QUESTIONS",
     "get_response_strategy",
 ]

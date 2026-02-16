@@ -687,10 +687,26 @@
         function updateIntelligence(intelligence) {
             const content = document.getElementById('intelligenceContent');
             
-            if (!intelligence || 
-                (!intelligence.bankAccounts?.length && 
-                 !intelligence.upiIds?.length && 
-                 !intelligence.phishingLinks?.length)) {
+            // DEBUG: Log received intelligence
+            console.log('updateIntelligence called with:', intelligence);
+            console.log('Intelligence type:', typeof intelligence);
+            console.log('Has bankAccounts?', intelligence?.bankAccounts);
+            console.log('Has upiIds?', intelligence?.upiIds);
+            
+            // Check if any intelligence exists
+            const hasIntel = intelligence && (
+                intelligence.bankAccounts?.length ||
+                intelligence.upiIds?.length ||
+                intelligence.phishingLinks?.length ||
+                intelligence.phoneNumbers?.length ||
+                intelligence.beneficiaryNames?.length ||
+                intelligence.whatsappNumbers?.length ||
+                intelligence.ifscCodes?.length ||
+                intelligence.cryptoAddresses?.length ||
+                intelligence.other_critical_info?.length
+            );
+            
+            if (!hasIntel) {
                 content.innerHTML = '<div class="empty-state"><p>No intelligence extracted yet.</p></div>';
                 return;
             }
@@ -723,6 +739,58 @@
                 `;
             }
             
+            if (intelligence.phoneNumbers?.length) {
+                html += `
+                    <div class="intel-section">
+                        <div class="intel-category">📞 Phone Numbers</div>
+                        <ul class="intel-list">
+                            ${intelligence.phoneNumbers.map(phone => 
+                                `<li class="intel-item">${escapeHtml(phone)}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (intelligence.whatsappNumbers?.length) {
+                html += `
+                    <div class="intel-section">
+                        <div class="intel-category">💬 WhatsApp Numbers</div>
+                        <ul class="intel-list">
+                            ${intelligence.whatsappNumbers.map(wa => 
+                                `<li class="intel-item">${escapeHtml(wa)}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (intelligence.beneficiaryNames?.length) {
+                html += `
+                    <div class="intel-section">
+                        <div class="intel-category">👤 Beneficiary Names</div>
+                        <ul class="intel-list">
+                            ${intelligence.beneficiaryNames.map(name => 
+                                `<li class="intel-item">${escapeHtml(name)}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (intelligence.ifscCodes?.length) {
+                html += `
+                    <div class="intel-section">
+                        <div class="intel-category">🏛️ IFSC Codes</div>
+                        <ul class="intel-list">
+                            ${intelligence.ifscCodes.map(code => 
+                                `<li class="intel-item">${escapeHtml(code)}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
             if (intelligence.phishingLinks?.length) {
                 html += `
                     <div class="intel-section">
@@ -730,6 +798,32 @@
                         <ul class="intel-list">
                             ${intelligence.phishingLinks.map(link => 
                                 `<li class="intel-item">${escapeHtml(link)}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (intelligence.cryptoAddresses?.length) {
+                html += `
+                    <div class="intel-section">
+                        <div class="intel-category">🪙 Crypto Addresses</div>
+                        <ul class="intel-list">
+                            ${intelligence.cryptoAddresses.map(addr => 
+                                `<li class="intel-item">${escapeHtml(addr)}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (intelligence.other_critical_info?.length) {
+                html += `
+                    <div class="intel-section">
+                        <div class="intel-category">📋 Other Critical Info</div>
+                        <ul class="intel-list">
+                            ${intelligence.other_critical_info.map(item => 
+                                `<li class="intel-item"><strong>${escapeHtml(item.label)}:</strong> ${escapeHtml(item.value)}</li>`
                             ).join('')}
                         </ul>
                     </div>
@@ -797,6 +891,12 @@
                 
                 const data = await response.json();
                 
+                // DEBUG: Log entire API response
+                console.log('=== API RESPONSE ===');
+                console.log('Full response:', data);
+                console.log('extractedIntelligence:', data.extractedIntelligence);
+                console.log('====================');
+                
                 // Add scammer message to history
                 conversationHistory.push({
                     sender: 'scammer',
@@ -815,8 +915,11 @@
                 }
                 
                 // Update UI
+                console.log('Calling updateMetrics...');
                 updateMetrics(data);
+                console.log('Calling updateIntelligence...');
                 updateIntelligence(data.extractedIntelligence);
+                console.log('UI update complete');
                 
             } catch (error) {
                 hideThinking();

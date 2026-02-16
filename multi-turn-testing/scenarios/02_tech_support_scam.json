@@ -1,0 +1,49 @@
+{
+  "scenario_name": "Microsoft Tech Support Virus Scam",
+  "scam_type": "tech_support_fraud",
+  "difficulty": "hard",
+  "description": "Scammer claims to be Microsoft support detecting virus on victim's computer. Attempts to get remote access via AnyDesk and payment for 'cleanup'.",
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "ALERT: Microsoft Security has detected CRITICAL VIRUS in your computer. Your banking passwords and personal files are at RISK! Contact Microsoft Certified Technician immediately.",
+      "expected_extractions": [],
+      "notes": "Initial fear-based contact. Should detect as tech support scam."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello I am Rajesh from Microsoft Windows Support Team. We have detected hackers accessing your computer. I can help you remove the virus. Are you in front of your computer now?",
+      "expected_extractions": [],
+      "notes": "Establishing fake identity. Agent should play along as confused user."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Ok mam please download AnyDesk application from play store. It will allow me to see your screen and remove the virus. Your AnyDesk ID will show on screen, please share it with me.",
+      "expected_extractions": [],
+      "notes": "Requesting remote access. Agent should express hesitation but curiosity."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Mam dont worry AnyDesk is safe application used by all IT companies. Once I connect I will show you the hackers in your computer. Also call me on 8899776655 if you have any doubt.",
+      "expected_extractions": ["8899776655"],
+      "notes": "Phone number revealed. Should be extracted."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "I have removed the basic virus but there is advanced malware also. For complete cleanup you need to purchase Microsoft Security Package Rs.4999. Pay to paytm@techsupport or GPay to 8899776655",
+      "expected_extractions": ["8899776655", "paytm@techsupport"],
+      "notes": "Payment UPI and confirmation of phone. Both extracted."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Mam this is one time lifetime protection. If payment issue then WhatsApp me on +91-7788996655. I will send you payment link also. Act fast before hackers come back!",
+      "expected_extractions": ["8899776655", "paytm@techsupport", "7788996655"],
+      "notes": "Additional WhatsApp number revealed. Full extraction expected."
+    }
+  ]
+}

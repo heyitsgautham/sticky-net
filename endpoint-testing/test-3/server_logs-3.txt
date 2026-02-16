@@ -1,0 +1,8 @@
+❯ uvicorn src.main:app --host 0.0.0.0 --port 8080 --reload                      
+INFO:     Will watch for changes in these directories: ['/Users/gauthamkrishna/Projects/sticky-net']
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+INFO:     Started reloader process [81421] using WatchFiles
+INFO:     Started server process [81423]
+INFO:     Waiting for application startup.
+2026-02-04T12:33:04.718693Z [info     ] Starting Sticky-Net            [src.main] debug=True llm_model=gemini-3-flash-preview
+INFO:     Application startup complete.

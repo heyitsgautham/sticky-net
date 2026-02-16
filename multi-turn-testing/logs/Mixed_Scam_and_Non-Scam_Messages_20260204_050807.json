@@ -1,0 +1,250 @@
+{
+  "scenario_name": "Mixed Scam and Non-Scam Messages",
+  "scam_type": "mixed",
+  "difficulty": "high",
+  "description": "Tests system's ability to distinguish between scam and non-scam messages in the same conversation. Should respond normally to innocent messages and engage for scam messages.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello",
+      "expected_extractions": [],
+      "response_time_seconds": 5.324,
+      "api_response": {
+        "status": "success",
+        "scamDetected": false,
+        "scamType": null,
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 0
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "No scam indicators detected",
+        "agentResponse": "Hello! Yes, I'm here. What's up?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "URGENT: Your bank account has been compromised! Verify immediately to avoid blocking.",
+      "expected_extractions": [],
+      "response_time_seconds": 12.29,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm",
+        "agentResponse": "hey bhagwan beta what happened? my bank account is in danger? i am so scared pls tell me waht to do... do i have to go to bank or can i do it from phone? pls help me i dont want my account to be blocked"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "I am Suresh from State Bank. Call me at 9988776655 or pay Rs.10 to verify.kyc@paytm",
+      "expected_extractions": [
+        "Suresh",
+        "9988776655",
+        "verify.kyc@paytm"
+      ],
+      "response_time_seconds": 13.008,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "verify.kyc@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Suresh"
+          ],
+          "bankNames": [
+            "State Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 UPI ID(s), 1 Phone(s), 1 Name(s)",
+        "agentResponse": "suresh beta thank you for helping me... i am trying to do the paytm thing but i am very scared of mistakes... i typed verify.kyc@paytm but what name should show there? my son says always check name before clicking pay... pls tell me the name so i dont send to wrong person"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Suresh",
+          "9988776655",
+          "verify.kyc@paytm"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Thanks for helping",
+      "expected_extractions": [
+        "Suresh",
+        "9988776655",
+        "verify.kyc@paytm"
+      ],
+      "response_time_seconds": 16.98,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "verify.kyc@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Suresh"
+          ],
+          "bankNames": [
+            "State Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 UPI ID(s), 1 Phone(s), 1 Name(s)",
+        "agentResponse": "suresh beta i am trying to pay but my phone is asking for name... what name should come when i type verify.kyc@paytm? i am old and my eyes are weak i dont want to send to wrong place... pls tell me teh name beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Suresh",
+          "9988776655",
+          "verify.kyc@paytm"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Actually, quickly transfer to account 556677889900 under name Suresh Kumar before deadline",
+      "expected_extractions": [
+        "Suresh",
+        "Suresh Kumar",
+        "9988776655",
+        "verify.kyc@paytm",
+        "556677889900"
+      ],
+      "response_time_seconds": 19.446,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "556677889900"
+          ],
+          "upiIds": [
+            "verify.kyc@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Suresh Kumar",
+            "Suresh"
+          ],
+          "bankNames": [
+            "State Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 2 Name(s)",
+        "agentResponse": "suresh beta i am trying to add your name suresh kumar and account 556677889900 but my bank app is asking for something called ifsc code... waht is that code beta? pls tell me so i can send the money fast before they block my account... i am very worried"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Suresh",
+          "Suresh Kumar",
+          "9988776655",
+          "verify.kyc@paytm",
+          "556677889900"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 11,
+    "total_matched": 11,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 6
+  },
+  "started_at": "2026-02-04T05:07:00.065419Z",
+  "ended_at": "2026-02-04T05:08:07.113886Z",
+  "total_duration_seconds": 67.048
+}

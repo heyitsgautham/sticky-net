@@ -1,0 +1,308 @@
+{
+  "scenario_name": "URL Detection Without Protocol",
+  "scam_type": "phishing",
+  "difficulty": "medium",
+  "description": "Tests enhanced URL detection that catches links without http/https prefix, including bank impersonation domains and suspicious patterns like 'sbi-bank.pay.in'.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Urgent! Your SBI account requires verification. Click here: sbi-bank.pay.in/xY7834 to update KYC immediately.",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834"
+      ],
+      "response_time_seconds": 20.344,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "sbi-bank.pay.in/xY7834"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: panicked",
+        "agentResponse": "hello beta... i just saw this msg on my phone about sbi bank... i am very scared my pension comes in this account only... i tried clicking teh blue link but nothing is opening... pls tell me what to do i am not good with mobile"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi-bank.pay.in/xY7834"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Alternative link if not working: hdfc-verify.secure.co.in/update123 or bit.ly/hdfc-kyc",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc"
+      ],
+      "response_time_seconds": 22.529,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "hdfc-verify.secure.co.in/update123",
+            "bit.ly/hdfc-kyc",
+            "sbi-bank.pay.in/xY7834"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC",
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "beta i am very confused... first msg said sbi now this link says hdfc? my account is in sbi only... will this still work? i am trying to click but my hands are shaking i am so worried about my pension... is there any number i can call you on? typing on this small screen is very hard for me"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "You can also use official link: https://bank-secure.co/form/verify or icici-update.verify.in/abc",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc",
+        "https://bank-secure.co/form/verify",
+        "icici-update.verify.in/abc"
+      ],
+      "response_time_seconds": 19.966,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "hdfc-verify.secure.co.in/update123",
+            "bit.ly/hdfc-kyc",
+            "sbi-bank.pay.in/xY7834",
+            "icici-update.verify.in/abc",
+            "https://bank-secure.co/form/verify"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Very"
+          ],
+          "bankNames": [
+            "ICICI",
+            "HDFC",
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "beta i am getting very scared now... first sbi then hdfc now icici?? i clicked teh link and my phone showed big red warning saying unsafe site... i quickly closed it... pls i beg you dont block my pension... can you just call me and tell me what to do? typing is taking too long and i cannot understand these links"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc",
+          "https://bank-secure.co/form/verify",
+          "icici-update.verify.in/abc"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "For payment issues visit: paytm-refund.claim.in/get-refund or aadhaar-update.gov-portal.in/verify",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc",
+        "https://bank-secure.co/form/verify",
+        "icici-update.verify.in/abc",
+        "paytm-refund.claim.in/get-refund",
+        "aadhaar-update.gov-portal.in/verify"
+      ],
+      "response_time_seconds": 27.751,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "aadhaar-update.gov-portal.in/verify",
+            "hdfc-verify.secure.co.in/update123",
+            "bit.ly/hdfc-kyc",
+            "sbi-bank.pay.in/xY7834",
+            "icici-update.verify.in/abc",
+            "https://bank-secure.co/form/verify",
+            "paytm-refund.claim.in/get-refund"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Very"
+          ],
+          "bankNames": [
+            "ICICI",
+            "HDFC",
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "beta nothing is working... i clicked paytm link but it is just spinning... i am very stressed my bp is high... can i just pay the verification charge directly to you?? pls give me your paytm number or bank account... i will send money right now to save my pension... pls beta help me ignore the links"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc",
+          "https://bank-secure.co/form/verify",
+          "icici-update.verify.in/abc",
+          "paytm-refund.claim.in/get-refund",
+          "aadhaar-update.gov-portal.in/verify"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Final reminder link: tinyurl.com/bank-verify or cutt.ly/verify-now. Act fast!",
+      "expected_extractions": [
+        "sbi-bank.pay.in/xY7834",
+        "hdfc-verify.secure.co.in/update123",
+        "bit.ly/hdfc-kyc",
+        "https://bank-secure.co/form/verify",
+        "icici-update.verify.in/abc",
+        "paytm-refund.claim.in/get-refund",
+        "aadhaar-update.gov-portal.in/verify",
+        "tinyurl.com/bank-verify",
+        "cutt.ly/verify-now"
+      ],
+      "response_time_seconds": 22.121,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "aadhaar-update.gov-portal.in/verify",
+            "hdfc-verify.secure.co.in/update123",
+            "bit.ly/hdfc-kyc",
+            "sbi-bank.pay.in/xY7834",
+            "tinyurl.com/bank-verify",
+            "cutt.ly/verify-now",
+            "icici-update.verify.in/abc",
+            "https://bank-secure.co/form/verify",
+            "paytm-refund.claim.in/get-refund"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Very"
+          ],
+          "bankNames": [
+            "ICICI",
+            "HDFC",
+            "SBI"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: panicked",
+        "agentResponse": "beta these links are not opening... my phone screen is showing 'virus alert' and blocking everything... i am crying now pls try to understand... i cannot fill forms... just tell me teh amount and where to send it... give me your upi id or bank account... i will ask my neighbor to send money to you right now... pls beta dont block my account i beg you"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "sbi-bank.pay.in/xY7834",
+          "hdfc-verify.secure.co.in/update123",
+          "bit.ly/hdfc-kyc",
+          "https://bank-secure.co/form/verify",
+          "icici-update.verify.in/abc",
+          "paytm-refund.claim.in/get-refund",
+          "aadhaar-update.gov-portal.in/verify",
+          "tinyurl.com/bank-verify",
+          "cutt.ly/verify-now"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 25,
+    "total_matched": 25,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 13
+  },
+  "started_at": "2026-02-01T05:36:13.984861Z",
+  "ended_at": "2026-02-01T05:38:06.698137Z",
+  "total_duration_seconds": 112.711
+}

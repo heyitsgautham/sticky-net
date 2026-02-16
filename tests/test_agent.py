@@ -5,16 +5,36 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from datetime import datetime
 
 from src.agents.honeypot_agent import HoneypotAgent, EngagementResult
+
+
+def create_mock_gemini_response(text: str) -> MagicMock:
+    """Create a mock Gemini response with proper candidates structure.
+    
+    Gemini 3 models return responses with candidates containing content parts.
+    This helper creates a properly structured mock for testing.
+    """
+    mock_part = MagicMock()
+    mock_part.text = text
+    
+    mock_content = MagicMock()
+    mock_content.parts = [mock_part]
+    
+    mock_candidate = MagicMock()
+    mock_candidate.content = mock_content
+    
+    mock_response = MagicMock()
+    mock_response.candidates = [mock_candidate]
+    mock_response.text = text  # Keep for backward compatibility
+    
+    return mock_response
 from src.agents.persona import Persona, PersonaManager, EmotionalState, PersonaTrait
 from src.agents.policy import EngagementPolicy, EngagementMode, EngagementState
 from src.agents.prompts import (
     get_response_strategy,
     format_scam_indicators,
-    EXTRACTION_QUESTIONS,
 )
 from src.api.schemas import Message, ConversationMessage, Metadata, SenderType
 from src.detection.detector import DetectionResult
-from src.detection.patterns import ScamCategory, PatternMatch
 
 
 class TestPersona:
@@ -28,22 +48,25 @@ class TestPersona:
         assert PersonaTrait.TRUSTING in persona.traits
 
     def test_emotional_state_updates_with_intensity(self):
-        """Emotional state should reflect scam intensity when scam_type provided."""
+        """Emotional state should reflect scam type and intensity."""
         persona = Persona()
 
-        # Without scam_type, high intensity = ANXIOUS (not PANICKED)
-        persona.update_emotional_state(0.9, scam_type=None)
-        assert persona.emotional_state == EmotionalState.ANXIOUS
-
-        # With banking scam and high intensity = PANICKED
+        # Banking fraud with high intensity -> PANICKED
         persona.update_emotional_state(0.9, scam_type="banking_fraud")
         assert persona.emotional_state == EmotionalState.PANICKED
 
-        # With banking scam and medium intensity = ANXIOUS
-        persona.update_emotional_state(0.6, scam_type="banking_fraud")
+        # Banking fraud with lower intensity -> ANXIOUS
+        persona.update_emotional_state(0.5, scam_type="banking_fraud")
         assert persona.emotional_state == EmotionalState.ANXIOUS
 
-        # Without scam_type, low intensity = CALM
+        # Job offer -> INTERESTED (not scared!)
+        persona.update_emotional_state(0.9, scam_type="job_offer")
+        assert persona.emotional_state == EmotionalState.INTERESTED
+
+        # Unknown/None scam type -> NEUTRAL/CALM
+        persona.update_emotional_state(0.9, scam_type=None)
+        assert persona.emotional_state == EmotionalState.NEUTRAL
+        
         persona.update_emotional_state(0.3, scam_type=None)
         assert persona.emotional_state == EmotionalState.CALM
 
@@ -57,34 +80,6 @@ class TestPersona:
 
         persona.increment_turn()
         assert persona.engagement_turn == 2
-
-    def test_record_extraction(self):
-        """Extraction count should track."""
-        persona = Persona()
-        assert persona.extracted_info_count == 0
-
-        persona.record_extraction()
-        assert persona.extracted_info_count == 1
-
-    def test_get_emotional_modifier(self):
-        """Should return varied modifiers for emotional states."""
-        persona = Persona()
-        
-        # CALM state returns one of several options (including empty string)
-        persona.emotional_state = EmotionalState.CALM
-        calm_options = ["", "ok so ", "let me understand ", "hmm "]
-        assert persona.get_emotional_modifier() in calm_options
-        
-        # PANICKED state returns one of several worried phrases
-        persona.emotional_state = EmotionalState.PANICKED
-        panicked_options = [
-            "ok ok i am scared ",
-            "please help me understand ",
-            "my hands are shaking ",
-            "what do i do ",
-            "i dont want trouble ",
-        ]
-        assert persona.get_emotional_modifier() in panicked_options
 
 
 class TestPersonaManager:
@@ -122,21 +117,29 @@ class TestPersonaManager:
         assert new_persona.engagement_turn == 0
 
     def test_update_persona(self):
-        """Should update persona state with scam type."""
+        """Should update persona state with scam type awareness."""
         manager = PersonaManager()
         
-        # Update with banking scam and high intensity
-        persona = manager.update_persona("conv-123", scam_intensity=0.9, scam_type="banking_fraud")
+        # Banking fraud should cause panic
+        persona = manager.update_persona(
+            "conv-123", 
+            scam_intensity=0.9,
+            scam_type="banking_fraud"
+        )
         
         assert persona.engagement_turn == 1
         assert persona.emotional_state == EmotionalState.PANICKED
         
-        # Update with no scam type should be less panicked
-        persona2 = manager.update_persona("conv-456", scam_intensity=0.9, scam_type=None)
-        assert persona2.emotional_state == EmotionalState.ANXIOUS
+        # Job offer should cause interest, not panic
+        persona2 = manager.update_persona(
+            "conv-456",
+            scam_intensity=0.9,
+            scam_type="job_offer"
+        )
+        assert persona2.emotional_state == EmotionalState.INTERESTED
 
     def test_get_persona_context(self):
-        """Should return context dict."""
+        """Should return context dict with emotional_state and engagement_turn only."""
         manager = PersonaManager()
         manager.get_or_create_persona("conv-123")
         
@@ -144,7 +147,9 @@ class TestPersonaManager:
         
         assert "emotional_state" in context
         assert "engagement_turn" in context
-        assert "emotional_modifier" in context
+        # These should NOT be in the context (removed hardcoded strings)
+        assert "emotional_modifier" not in context
+        assert "turn_guidance" not in context
 
 
 class TestEngagementPolicy:
@@ -315,12 +320,6 @@ class TestPrompts:
         assert "urgency" in result
         assert "authority" in result
 
-    def test_extraction_questions_exist(self):
-        """Should have extraction questions defined."""
-        assert len(EXTRACTION_QUESTIONS) > 0
-        assert any("account" in q.lower() for q in EXTRACTION_QUESTIONS)
-        assert any("upi" in q.lower() for q in EXTRACTION_QUESTIONS)
-
 
 class TestHoneypotAgent:
     """Tests for HoneypotAgent class."""
@@ -331,15 +330,7 @@ class TestHoneypotAgent:
         return DetectionResult(
             is_scam=True,
             confidence=0.85,
-            matched_patterns=[
-                PatternMatch(
-                    category=ScamCategory.URGENCY,
-                    matched_text="immediately",
-                    weight=0.7,
-                    description="Urgency tactics",
-                ),
-            ],
-            category_scores={ScamCategory.URGENCY: 0.7},
+            scam_type="banking_fraud",
             reasoning="Scam detected",
         )
 
@@ -369,8 +360,7 @@ class TestHoneypotAgent:
         """Agent engagement should return valid result."""
         # Setup mock Gemini client
         mock_client = MagicMock()
-        mock_response = MagicMock()
-        mock_response.text = "Oh no! What should I do?"
+        mock_response = create_mock_gemini_response("Oh no! What should I do?")
         mock_client.models.generate_content.return_value = mock_response
         mock_client_class.return_value = mock_client
 
@@ -398,8 +388,7 @@ class TestHoneypotAgent:
     ):
         """Agent should use conversation history."""
         mock_client = MagicMock()
-        mock_response = MagicMock()
-        mock_response.text = "I understand, please help me."
+        mock_response = create_mock_gemini_response("I understand, please help me.")
         mock_client.models.generate_content.return_value = mock_response
         mock_client_class.return_value = mock_client
 

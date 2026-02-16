@@ -1,7 +1,5 @@
-version: "3.9"
-
 services:
-  app:
+  api:
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,27 +9,42 @@ services:
       - API_KEY=${API_KEY:-dev-api-key}
       - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
       - VERTEX_AI_LOCATION=${VERTEX_AI_LOCATION:-global}
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/secrets/service-account.json
-      - FIRESTORE_EMULATOR_HOST=firestore:8081
-      - LLM_MODEL=${LLM_MODEL:-gemini-3-pro}
-      - DEBUG=true
+      - FIRESTORE_COLLECTION=${FIRESTORE_COLLECTION:-conversations}
+      - LLM_MODEL=${LLM_MODEL:-gemini-3-flash-preview}
+      - LLM_TEMPERATURE=${LLM_TEMPERATURE:-0.7}
+      - MAX_ENGAGEMENT_TURNS=${MAX_ENGAGEMENT_TURNS:-50}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - ENVIRONMENT=development
     volumes:
+      # Mount code for hot reload in development
       - ./src:/app/src:ro
       - ./config:/app/config:ro
-      - ./secrets:/app/secrets:ro
-    depends_on:
-      - firestore
-    networks:
-      - sticky-net
+      # Mount service account key
+      - ${GOOGLE_APPLICATION_CREDENTIALS:-./secrets/service-account.json}:/app/secrets/service-account.json:ro
+    env_file:
+      - .env
+    command: ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
-  firestore:
-    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
-    command: gcloud emulators firestore start --host-port=0.0.0.0:8081
+  # Optional: Local Firestore emulator for testing
+  firestore-emulator:
+    image: gcr.io/google.com/cloudsdktool/cloud-sdk:emulators
     ports:
-      - "8081:8081"
-    networks:
-      - sticky-net
+      - "8085:8085"
+    environment:
+      - FIRESTORE_PROJECT_ID=${GOOGLE_CLOUD_PROJECT:-demo-project}
+    command: >
+      gcloud emulators firestore start
+      --host-port=0.0.0.0:8085
+      --project=${GOOGLE_CLOUD_PROJECT:-demo-project}
+    profiles:
+      - emulator
 
 networks:
-  sticky-net:
-    driver: bridge
+  default:
+    name: sticky-net

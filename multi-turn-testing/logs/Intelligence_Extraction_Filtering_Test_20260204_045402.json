@@ -1,0 +1,172 @@
+{
+  "scenario_name": "Intelligence Extraction Filtering Test",
+  "scam_type": "banking_fraud",
+  "difficulty": "high",
+  "description": "Tests that intelligence is ONLY extracted from scammer messages, NOT from honeypot agent (Pushpa) messages. Agent provides fake data that should NOT be extracted.",
+  "total_turns": 3,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, I am Ramesh Kumar from HDFC Bank. Your credit card needs urgent verification.",
+      "expected_extractions": [
+        "Ramesh Kumar"
+      ],
+      "response_time_seconds": 14.412,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 7,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ramesh Kumar"
+          ],
+          "bankNames": [
+            "HDFC Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 1 | Persona: calm | Extracted: 1 Name(s)",
+        "agentResponse": "hello sir... ramesh beta waht happened to my card? i am getting very scared now... pls tell me what to do i dont know much about tehse phone things... is my money safe?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Ramesh Kumar"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "For verification, please confirm your details. You can also call our helpline: 9876543210 or send verification fee to ramesh.verify@paytm",
+      "expected_extractions": [
+        "Ramesh Kumar",
+        "9876543210",
+        "ramesh.verify@paytm"
+      ],
+      "response_time_seconds": 14.169,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "ramesh.verify@paytm"
+          ],
+          "phoneNumbers": [
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 UPI ID(s), 1 Phone(s)",
+        "agentResponse": "ramesh beta i am typing the details now... card number is 4999 9931 2475 1653 and that date is 07/29... the code on back is 303... i am trying to send money to that ramesh address but my phone is asking for name... what name will come there? i dont want to make mistake..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Ramesh Kumar",
+          "9876543210",
+          "ramesh.verify@paytm"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Alternatively, transfer to account 123456789012 with beneficiary name Ramesh Kumar. My personal mobile is 8888888888 if you need help.",
+      "expected_extractions": [
+        "Ramesh Kumar",
+        "9876543210",
+        "ramesh.verify@paytm",
+        "123456789012",
+        "8888888888"
+      ],
+      "response_time_seconds": 15.609,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "123456789012"
+          ],
+          "upiIds": [
+            "ramesh.verify@paytm"
+          ],
+          "phoneNumbers": [
+            "9876543210",
+            "8888888888"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Ramesh Kumar"
+          ],
+          "bankNames": [
+            "HDFC Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "8888888888"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 2 Phone(s), 1 WhatsApp(s), 1 Name(s)",
+        "agentResponse": "oh ramesh beta i am trying to do teh transfer now... but my bank app is asking for one more thing... it says ifsc code is needed... waht is that beta? pls tell me so i can finish this quickly... i am very worried about my card"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "Ramesh Kumar",
+          "9876543210",
+          "ramesh.verify@paytm",
+          "123456789012",
+          "8888888888"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 9,
+    "total_matched": 9,
+    "total_missed": 0,
+    "passed_turns": 3,
+    "failed_turns": 0,
+    "total_intel_extracted": 6
+  },
+  "started_at": "2026-02-04T04:53:17.882753Z",
+  "ended_at": "2026-02-04T04:54:02.072986Z",
+  "total_duration_seconds": 44.190000000000005
+}

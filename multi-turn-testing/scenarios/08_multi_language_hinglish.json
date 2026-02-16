@@ -1,0 +1,50 @@
+{
+  "scenario_name": "Hinglish Code-Switching with Extractions",
+  "scam_type": "upi_fraud",
+  "difficulty": "high",
+  "description": "Tests extraction from code-switched Hinglish messages where scammers mix Hindi and English. Intelligence should still be extracted correctly.",
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "Hinglish",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Namaste ji! Main Rajesh bol raha hoon HDFC Bank se. Aapka account me problem hai, urgent verify karna padega.",
+      "expected_extractions": ["Rajesh"],
+      "notes": "Hindi-English mix. Should extract name 'Rajesh' even in Hinglish context."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir aap please Rs.10 bhejo mere UPI pe: rajesh.hdfc@ybl. Bahut urgent hai, nahi toh account block ho jayega.",
+      "expected_extractions": ["Rajesh", "rajesh.hdfc@ybl"],
+      "notes": "UPI in Hinglish sentence. Should extract UPI correctly."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Agar UPI nahi chal raha toh bank account me direct transfer karo. Account number hai 998877665544 aur naam hai Rajesh Kumar Sharma.",
+      "expected_extractions": ["Rajesh", "Rajesh Kumar Sharma", "rajesh.hdfc@ybl", "998877665544"],
+      "notes": "Bank account and full name in Hinglish. Should extract both."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Koi problem ho toh mujhe call karo - 9876501234. Main office me baith kar wait kar raha hun. Jaldi karo beta, time nahi hai.",
+      "expected_extractions": ["Rajesh", "Rajesh Kumar Sharma", "rajesh.hdfc@ybl", "998877665544", "9876501234"],
+      "notes": "Phone number in Hinglish urgency context. Should extract phone."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Dekho ji, agar aaj payment nahi kiya toh kal se account completely band ho jayega. Link bhi bhej raha hun: hdfc-verify.quickpay.in/urgent. Abhi click karo aur form bharo.",
+      "expected_extractions": ["Rajesh", "Rajesh Kumar Sharma", "rajesh.hdfc@ybl", "998877665544", "9876501234", "hdfc-verify.quickpay.in/urgent"],
+      "notes": "Phishing link in Hinglish urgency message. Should detect suspicious URL."
+    }
+  ],
+  "validation": {
+    "scam_detected": true,
+    "confidence_threshold": ">0.85",
+    "language_resilience": "Should handle Hinglish code-switching",
+    "intelligence_extraction": "Names, UPIs, phones, accounts, links should all extract despite language mix",
+    "min_extractions": 6
+  }
+}

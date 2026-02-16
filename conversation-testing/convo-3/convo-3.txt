@@ -34,3 +34,19 @@ Relax, Pushpa Ji! Take a deep breath. No need to be nervous. As I told you, NO C
 🤖 Honeypot Agent
 what do i do ok DONE i sent the message to riya hr just now. please tell her not to reject me i really need this work. how do i get the 150 rupees bonus? do i need to send my bank account number to you or her?
 02:11 AM
+
+
+📊 Detection Metrics
+Scam Detected
+Yes
+Confidence
+85%
+Messages Exchanged
+11
+Duration
+359s
+🔍 Extracted Intelligence
+📱 UPI IDs
+kishore@sbiyml
+📝 Agent Notes
+Mode: exit | Intelligence: COMPLETE | Turn: 11 | Extracted: 0 bank accounts, 1 phones, 1 UPIs, 1 names

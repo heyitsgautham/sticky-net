@@ -1,5 +1,5 @@
 ---
-#applyTo: "**"
+applyTo: "**"
 ---
 
 # Milestone 6: Deployment

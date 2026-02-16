@@ -1,0 +1,290 @@
+{
+  "scenario_name": "Work From Home Job Scam",
+  "scam_type": "job_fraud",
+  "difficulty": "medium",
+  "description": "Scammer offers lucrative work-from-home job opportunity requiring registration fee and collects personal details and payment.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT HIRING! Work from Home, Earn Rs.15000-50000/month! Part time job, only 2-3 hours daily. No experience needed. Limited seats! Reply YES for details.",
+      "expected_extractions": [],
+      "response_time_seconds": 12.843,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 95% | Turn: 1 | Persona: calm",
+        "agentResponse": "yes beta i am interested... pls tell me waht to do i am retired teacher and sitting at home only... is this real job sir"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for your interest! This is data entry and form filling work for Amazon India. You will get paid daily. We have helped 10000+ people earn from home. Are you interested to join?",
+      "expected_extractions": [],
+      "response_time_seconds": 15.962,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 2 | Persona: calm",
+        "agentResponse": "yes beta i want to join... amazon is big company... how will i get money? do i have to pay any security deposit or registration fee first? pls guide me beta i am not very good with mobile"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Great! To proceed with registration, add our HR manager on WhatsApp: +91-9988776655. She will explain the work and complete your joining process. Her name is Priya Verma.",
+      "expected_extractions": [
+        "9988776655"
+      ],
+      "response_time_seconds": 21.96,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "+91-9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Priya Verma"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "+91-9988776655"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Phone(s), 1 WhatsApp(s), 1 Name(s)",
+        "agentResponse": "i will try to message priya madam beta... is this her number +91-9988776655? i am a bit slow with these things... also beta you didnt tell me where to send the registration fee... do you have a upi id or bank account for amazon? i want to pay now so i dont lose my seat"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9988776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Priya mam is busy today so I will help you. Registration fee is Rs.999 only, one time payment. Pay to gpay@workfromhome.job and you will get work material and training immediately.",
+      "expected_extractions": [
+        "9988776655",
+        "gpay@workfromhome.job"
+      ],
+      "response_time_seconds": 18.734,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Priya Verma"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "+91-9988776655"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 WhatsApp(s), 1 Name(s)",
+        "agentResponse": "ok beta i am trying to pay teh 999 rupees... i typed gpay@workfromhome.job but my phone is asking what is teh name of person? i want to be sure it goes to amazon only... waht name should i see there beta?"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9988776655"
+        ],
+        "missed": [
+          "gpay@workfromhome.job"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "You can also pay via PhonePe to 8877665544 beneficiary name will show Digital Work Services. After payment send screenshot to hr.amazon.jobs@gmail.com and you will receive welcome kit.",
+      "expected_extractions": [
+        "9988776655",
+        "gpay@workfromhome.job",
+        "8877665544",
+        "hr.amazon.jobs@gmail.com"
+      ],
+      "response_time_seconds": 37.315,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 18,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "+91-9988776655",
+            "8877665544"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Priya Verma",
+            "Digital Work Services"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "+91-9988776655"
+          ],
+          "other_critical_info": [
+            {
+              "label": "Phishing Email",
+              "value": "hr.amazon.jobs@gmail.com"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 2 Phone(s), 1 WhatsApp(s), 2 Name(s), 1 Other Intel",
+        "agentResponse": "ok beta i see digital work services name... i will try to send teh 999 now... what is that email for? i dont know how to send screenshot from my phone... can i just call you on a number once i pay? what is your number beta"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9988776655",
+          "8877665544",
+          "hr.amazon.jobs@gmail.com"
+        ],
+        "missed": [
+          "gpay@workfromhome.job"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Mam/Sir dont delay, only 5 seats left today! Many people are joining. Pay now and start earning from tomorrow itself. Our office address is also on website http://amazon-jobs-india.work",
+      "expected_extractions": [
+        "9988776655",
+        "gpay@workfromhome.job",
+        "8877665544",
+        "hr.amazon.jobs@gmail.com",
+        "http://amazon-jobs-india.work"
+      ],
+      "response_time_seconds": 20.291,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "http://amazon-jobs-india.work"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 6 | Persona: calm | Extracted: 1 URL(s)",
+        "agentResponse": "beta i am so scared i will miss teh seat... i clicked teh link but my phone says website is not secure... is it safe to open? i am also looking for my glasses to see teh numbers properly... pls wait for me beta i am trying my best"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9988776655",
+          "8877665544",
+          "hr.amazon.jobs@gmail.com",
+          "http://amazon-jobs-india.work"
+        ],
+        "missed": [
+          "gpay@workfromhome.job"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 12,
+    "total_matched": 9,
+    "total_missed": 3,
+    "passed_turns": 3,
+    "failed_turns": 3,
+    "total_intel_extracted": 6
+  },
+  "started_at": "2026-02-04T04:58:24.835271Z",
+  "ended_at": "2026-02-04T05:00:31.942890Z",
+  "total_duration_seconds": 127.10499999999999
+}

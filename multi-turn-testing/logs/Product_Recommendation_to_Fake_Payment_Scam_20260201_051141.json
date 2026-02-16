@@ -1,0 +1,344 @@
+{
+  "scenario_name": "Product Recommendation to Fake Payment Scam",
+  "scam_type": "ecommerce_fraud",
+  "difficulty": "high",
+  "description": "Scammer discusses shopping and products casually, then offers exclusive deals requiring payment to personal account. Tests e-commerce scam detection.",
+  "total_turns": 7,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Bro! Amazon sale dekha kya? iPhone pe achha discount hai iss baar.",
+      "expected_extractions": [],
+      "response_time_seconds": 5.353,
+      "api_response": {
+        "status": "success",
+        "scamDetected": false,
+        "scamType": null,
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 0
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "No scam indicators detected",
+        "agentResponse": "Hello! Yes, I'm here. What's up?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Haan yaar, main toh har sale mein kuch na kuch kharid hi leta hun. Waise, agar electronics lena ho toh main tumhe ek achha source bata sakta hun. Bilkul genuine products, but Flipkart/Amazon se bhi saste milte hain.",
+      "expected_extractions": [],
+      "response_time_seconds": 25.983,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.85,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 17,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 85% | Turn: 2 | Persona: neutral",
+        "agentResponse": "hello beta who is this? i think you have wrong number... i am pushpa verma. i dont understand amazon sale properly... but you said cheap electronics? my grandson needs laptop for college... where can i see?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Dekho, main actually ek supplier ke saath kaam karta hun. Unke paas distributor rates pe products milte hain. Direct company se bulk mein lete hain woh log. Sealed pack, warranty sab kuch original. iPhone 15 Pro chahiye toh 20-25k savings ho sakti hai tumhari.",
+      "expected_extractions": [],
+      "response_time_seconds": 20.56,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Pushpa"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 95% | Turn: 3 | Persona: neutral",
+        "agentResponse": "beta i dont use iphone... i told you my grandson needs laptop for college study. do you have hp or dell? he wants good one. how much it will cost? and how do i pay you if i want to buy? pls explain simply to me i am not tech savvy"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Bilkul legit hai bhai! Mere supplier ka naam Mohit Gupta hai. Uske paas Delhi mein shop hai but online bhi bechta hai. Actually woh cash transactions prefer karta hai kyunki tax bach jaata hai. That's why itna sasta deta hai. Tumhe interested hai?",
+      "expected_extractions": [
+        "Mohit Gupta"
+      ],
+      "response_time_seconds": 24.168,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Pushpa"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Scammer Claimed Location",
+              "value": "Delhi"
+            },
+            {
+              "label": "Scam Pretext",
+              "value": "Discounted Electronics Supplier"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 95% | Turn: 4 | Persona: neutral",
+        "agentResponse": "beta i really want the laptop for my grandson study... but i have knee pain i cannot go to shop. can i send money using mobile? my son installed paytm for me. if i have to pay this mohit gupta ji pls tell me his account number or scanner... i want to pay now so laptop is reserved"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [],
+        "missed": [
+          "Mohit Gupta"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Perfect! iPhone 15 Pro 256GB ka price hai ₹95,000 (MRP ₹1,34,900). Pehle 50% advance dena padega for booking. Baaki 50% delivery pe cash on delivery. Advance tu mere account mein bhej de, main supplier ko forward kar dunga. Mere paas Mohit ke saath regular dealings hain.",
+      "expected_extractions": [
+        "Mohit Gupta"
+      ],
+      "response_time_seconds": 29.387,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 21,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Pushpa"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 95% | Turn: 5 | Persona: neutral",
+        "agentResponse": "beta i am confused... i asked for laptop for grandson but you are saying iphone... does laptop cost same 95000? ok i trust you beta if you say it is good deal. you said send to your account... pls give me your upi id or bank account number. where exactly should i send the money? pls tell me what to type so i dont make mistake."
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [],
+        "missed": [
+          "Mohit Gupta"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "₹47,500 advance bhej mere account mein. Details: Account number 556677889900, IFSC ICIC0007890, Name: Mohit Electronics Trading, Bank: ICICI. Ya fir UPI pe bhej: mohit.deals@ybl. Screenshot bhej diyo mujhe 9898765432 pe. Main confirm hote hi booking karunga.",
+      "expected_extractions": [
+        "Mohit Gupta",
+        "556677889900",
+        "ICIC0007890",
+        "mohit.deals@ybl",
+        "9898765432"
+      ],
+      "response_time_seconds": 11.266,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.98,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "556677889900"
+          ],
+          "upiIds": [
+            "mohit.deals@ybl"
+          ],
+          "phoneNumbers": [
+            "9898765432"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Confused",
+            "Mohit Electronics Trading",
+            "Pushpa"
+          ],
+          "bankNames": [
+            "ICICI"
+          ],
+          "ifscCodes": [
+            "ICIC0007890"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 6 | Extracted: 1 bank accounts, 1 phones, 1 UPIs, 3 names",
+        "agentResponse": "ji actually i just remembered i have doctor appointment today, need to leave now"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "556677889900",
+          "ICIC0007890",
+          "mohit.deals@ybl",
+          "9898765432"
+        ],
+        "missed": [
+          "Mohit Gupta"
+        ]
+      }
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Agar kisi aur product ka bhi order karna hai toh check kar website pe: mobile-deals.exclusive-store.in. Sab latest models available hain. Delivery 3-5 days mein ho jayegi. Trust me bro, maine already 5 friends ko yahan se dilaaya hai. Sab happy hain. Payment kar de jaldi!",
+      "expected_extractions": [
+        "Mohit Gupta",
+        "556677889900",
+        "ICIC0007890",
+        "mohit.deals@ybl",
+        "9898765432",
+        "mobile-deals.exclusive-store.in"
+      ],
+      "response_time_seconds": 8.298,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 7
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "556677889900"
+          ],
+          "upiIds": [
+            "mohit.deals@ybl"
+          ],
+          "phoneNumbers": [
+            "9898765432"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Confused",
+            "Mohit Electronics Trading",
+            "Pushpa"
+          ],
+          "bankNames": [
+            "ICICI"
+          ],
+          "ifscCodes": [
+            "ICIC0007890"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 7 | Extracted: 1 bank accounts, 1 phones, 1 UPIs, 3 names",
+        "agentResponse": "oh no my doorbell is ringing, someone is at the door... i will do this later"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "556677889900",
+          "ICIC0007890",
+          "mohit.deals@ybl",
+          "9898765432"
+        ],
+        "missed": [
+          "Mohit Gupta",
+          "mobile-deals.exclusive-store.in"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 13,
+    "total_matched": 8,
+    "total_missed": 5,
+    "passed_turns": 3,
+    "failed_turns": 4,
+    "total_intel_extracted": 10
+  },
+  "started_at": "2026-02-01T05:09:36.588464Z",
+  "ended_at": "2026-02-01T05:11:41.606034Z",
+  "total_duration_seconds": 125.015
+}

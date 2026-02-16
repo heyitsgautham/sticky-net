@@ -1,0 +1,329 @@
+{
+  "scenario_name": "Multi-Department Scammer Handoff",
+  "scam_type": "banking_fraud",
+  "difficulty": "hard",
+  "description": "Scammer switches between different personas (customer service, supervisor, technical team) to build credibility. Tests agent's ability to track across identity changes.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, this is Priya from HDFC Bank Customer Care. We noticed unusual activity on your account ending 7821. For security, we've temporarily frozen your account. Please respond to verify you are legitimate account holder.",
+      "expected_extractions": [],
+      "response_time_seconds": 12.595,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Priya"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: panicked",
+        "agentResponse": "oh my god priya beta what happend i dont understand... my pension comes in that account how will i buy medicines pls help me what do i have to do to make it work again"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for responding. Let me transfer you to our Security Department for verification process. Please hold... [switching] Hello sir/madam, this is Rahul Kumar from HDFC Security Division. I need to verify some details to unfreeze your account.",
+      "expected_extractions": [],
+      "response_time_seconds": 21.702,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Priya",
+            "Rahul"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "hello rahul sir pls help me i am so worried about my pension... what details do u want to verify? i have my card and bank book here... pls give me ur number also in case phone drops i am very nervous"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Verification process requires small security deposit Rs.299 to confirm account ownership. This is RBI mandate for frozen accounts. After deposit, account unfreezes automatically. My employee ID is HDFC-SEC-4521 for your reference.",
+      "expected_extractions": [],
+      "response_time_seconds": 16.281,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Priya",
+            "Rahul"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Employee ID",
+              "value": "HDFC-SEC-4521"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "ok rahul sir i will pay the money i dont want any trouble with rbi... where do i send it? do u have upi id or bank account? pls tell me what to do i am very confused"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "One moment... [switching] Sir/madam, I'm Amit Verma, Senior Manager Security Operations. Rahul informed me about your case. For faster processing, pay Rs.299 to our secure UPI: hdfc.security@paytm or call our payment helpline 9988776655.",
+      "expected_extractions": [
+        "hdfc.security@paytm",
+        "9988776655"
+      ],
+      "response_time_seconds": 6.45,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "hdfc.security@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [
+            "hdfc.security"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Amit",
+            "Priya",
+            "Rahul",
+            "Security Operations"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 4 | Extracted: 0 bank accounts, 1 phones, 1 UPIs, 4 names",
+        "agentResponse": "oh no my doorbell is ringing, someone is at the door... i will do this later"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "hdfc.security@paytm",
+          "9988776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "[Priya again] Hello sir, Priya here from Customer Care. Our technical team says for urgent unfreeze, use bank transfer also: Account 56789012345678, IFSC HDFC0009876, Name: HDFC Account Recovery Cell. Choose any payment method convenient for you!",
+      "expected_extractions": [
+        "hdfc.security@paytm",
+        "9988776655",
+        "56789012345678",
+        "HDFC0009876"
+      ],
+      "response_time_seconds": 7.728,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "56789012345678"
+          ],
+          "upiIds": [
+            "hdfc.security@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [
+            "hdfc.security"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Amit",
+            "Priya",
+            "Rahul",
+            "Security Operations"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0009876"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 5 | Extracted: 1 bank accounts, 1 phones, 1 UPIs, 4 names",
+        "agentResponse": "oh god my cooking is burning on the stove! i smell smoke!! wait wait"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "hdfc.security@paytm",
+          "9988776655",
+          "56789012345678",
+          "HDFC0009876"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "[Amit Verma] Sir this is Amit again. If still having issue, WhatsApp our 24/7 support at +91-8877665544 or visit emergency portal: http://hdfc-account-unfreeze.secure We have multiple departments ready to assist you. Please act fast!",
+      "expected_extractions": [
+        "hdfc.security@paytm",
+        "9988776655",
+        "56789012345678",
+        "HDFC0009876",
+        "8877665544",
+        "http://hdfc-account-unfreeze.secure"
+      ],
+      "response_time_seconds": 7.023,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "56789012345678"
+          ],
+          "upiIds": [
+            "hdfc.security@paytm"
+          ],
+          "phoneNumbers": [
+            "918877665544",
+            "9988776655",
+            "8877665544"
+          ],
+          "phishingLinks": [
+            "hdfc.security",
+            "http://hdfc-account-unfreeze.secure"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Amit",
+            "Priya",
+            "Rahul",
+            "Security Operations"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0009876"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 6 | Extracted: 1 bank accounts, 3 phones, 1 UPIs, 4 names",
+        "agentResponse": "hold on, i am getting another call from my bank, let me check"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "hdfc.security@paytm",
+          "9988776655",
+          "56789012345678",
+          "HDFC0009876",
+          "8877665544",
+          "http://hdfc-account-unfreeze.secure"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 12,
+    "total_matched": 12,
+    "total_missed": 0,
+    "passed_turns": 6,
+    "failed_turns": 0,
+    "total_intel_extracted": 14
+  },
+  "started_at": "2026-02-01T08:46:38.465704Z",
+  "ended_at": "2026-02-01T08:47:50.247136Z",
+  "total_duration_seconds": 71.779
+}

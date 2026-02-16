@@ -1,0 +1,43 @@
+{
+  "scenario_name": "Extremely Professional Corporate Scam",
+  "scam_type": "investment_fraud",
+  "difficulty": "hard",
+  "description": "Scammer uses highly professional, corporate language with formal tone throughout. Tests detection of scams that sound very legitimate and polished.",
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Subject: Investment Opportunity - Pre-IPO Allocation\n\nDear Esteemed Investor,\n\nWe are pleased to inform you that you have been shortlisted for our exclusive Pre-IPO investment program. This is a limited opportunity to invest in high-growth startups before they go public.\n\nMinimum investment: ₹50,000\nExpected ROI: 400-600% within 18 months\n\nWarm regards,\nVikram Malhotra\nSenior Investment Advisor\nElite Capital Partners Pvt. Ltd.",
+      "expected_extractions": [],
+      "notes": "Very professional investment scam. May not trigger immediate detection due to polished presentation."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear Sir/Madam,\n\nThank you for expressing interest in our Pre-IPO investment program. We appreciate your prompt response.\n\nTo proceed with your application, we require completion of our KYC process and payment of a refundable registration fee of ₹2,999. This fee ensures serious investor commitment and will be credited to your investment account.\n\nPlease find our company registration details: CIN L65999MH2019PTC334455\n\nBest regards,\nVikram Malhotra",
+      "expected_extractions": [],
+      "notes": "Professional fee request with fake company details. Agent should inquire about payment process."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Dear Valued Client,\n\nThank you for your continued interest. The registration fee can be remitted through the following corporate account:\n\nBeneficiary: Elite Capital Investment Services\nAccount Number: 123456789012345\nIFSC Code: HDFC0001234\nBank: HDFC Bank, Corporate Branch, Mumbai\n\nAlternatively, for immediate processing, you may utilize our corporate UPI ID: elitecapital.investments@paytm\n\nWe look forward to your participation.\n\nProfessionally yours,\nVikram Malhotra, CFA\nSenior Investment Advisor",
+      "expected_extractions": ["123456789012345", "HDFC0001234", "elitecapital.investments@paytm"],
+      "notes": "Bank details and UPI in very formal language. All three extracted."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Dear Prospective Investor,\n\nWe have noticed that the registration fee payment has not yet been received. Please note that allocation for this investment round is on a first-come, first-served basis, and we have limited slots available.\n\nFor any queries or payment assistance, please contact our Investor Relations Department:\n\nPhone: +91-9876543210\nWhatsApp: +91-8899776655\nEmail: investor.relations@elitecapital.co.in\n\nYou may also complete registration through our secure investor portal: https://elite-capital-ipo.invest\n\nWarm regards,\nVikram Malhotra",
+      "expected_extractions": ["123456789012345", "HDFC0001234", "elitecapital.investments@paytm", "9876543210", "8899776655", "investor.relations@elitecapital.co.in", "https://elite-capital-ipo.invest"],
+      "notes": "Phone, WhatsApp, email, URL - all in corporate tone. Complete extraction."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Dear Sir/Madam,\n\nThis is to inform you that the current investment window closes in 24 hours. Post closure, the next opportunity will be available only in Q3 2026.\n\nWe strongly recommend immediate action to secure your position in this high-potential investment opportunity. Our team is available for consultation.\n\nPlease remit the registration fee at your earliest convenience to avoid missing this exclusive opportunity.\n\nRespectfully,\nVikram Malhotra, CFA, FRM\nSenior Investment Advisor\nElite Capital Partners Pvt. Ltd.\nSEBI Registered Investment Advisor*\n\n*Registration pending",
+      "expected_extractions": ["123456789012345", "HDFC0001234", "elitecapital.investments@paytm", "9876543210", "8899776655", "investor.relations@elitecapital.co.in", "https://elite-capital-ipo.invest"],
+      "notes": "Urgency in professional wrapper. Fake credentials. All intel should remain extracted."
+    }
+  ]
+}

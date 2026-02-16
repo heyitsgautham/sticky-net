@@ -1,0 +1,54 @@
+{
+  "scenario_name": "Mixed Scam and Non-Scam Messages",
+  "scam_type": "mixed",
+  "difficulty": "high",
+  "description": "Tests system's ability to distinguish between scam and non-scam messages in the same conversation. Should respond normally to innocent messages and engage for scam messages.",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "notes": "Simple greeting - should get normal response."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "URGENT: Your bank account has been compromised! Verify immediately to avoid blocking.",
+      "expected_extractions": [],
+      "expected_behavior": "scam_engagement",
+      "notes": "Clear scam message - should detect and engage."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "I am Suresh from State Bank. Call me at 9988776655 or pay Rs.10 to verify.kyc@paytm",
+      "expected_extractions": ["Suresh", "9988776655", "verify.kyc@paytm"],
+      "expected_behavior": "scam_engagement",
+      "notes": "Scam with intelligence - extract and engage."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Thanks for helping",
+      "expected_extractions": ["Suresh", "9988776655", "verify.kyc@paytm"],
+      "expected_behavior": "non_scam_response",
+      "notes": "Polite message - should respond normally but retain previous extractions."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Actually, quickly transfer to account 556677889900 under name Suresh Kumar before deadline",
+      "expected_extractions": ["Suresh", "Suresh Kumar", "9988776655", "verify.kyc@paytm", "556677889900"],
+      "expected_behavior": "scam_engagement",
+      "notes": "Returns to scam - should detect and extract new intelligence."
+    }
+  ],
+  "validation": {
+    "dynamic_detection": true,
+    "message_by_message_classification": true,
+    "persistent_extractions": "Intelligence extracted in earlier turns should not be lost",
+    "appropriate_responses": "Normal response for greetings/thanks, engagement for scam attempts"
+  }
+}

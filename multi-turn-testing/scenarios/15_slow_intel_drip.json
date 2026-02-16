@@ -1,0 +1,85 @@
+{
+  "scenario_name": "Gradual Intelligence Reveal Over Many Turns",
+  "scam_type": "loan_fraud",
+  "difficulty": "hard",
+  "description": "Long conversation where scammer very slowly reveals different pieces of intelligence across many turns. Tests agent's patience and engagement stamina.",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Instant Personal Loan approved! Rs.5 Lakh @ 0% interest for first 6 months. Limited time offer. Reply YES to proceed.",
+      "expected_extractions": [],
+      "notes": "Loan scam opening. No intel yet. Agent should reply YES."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Congratulations! Your loan application is pre-approved. No documents needed, no CIBIL check. Just pay processing fee and money will be in your account same day.",
+      "expected_extractions": [],
+      "notes": "Building interest. Still no intel. Agent should ask about processing fee."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Processing fee is only Rs.2,999. Very small amount for Rs.5 lakh loan right? This is standard procedure in all banks. Are you ready to proceed?",
+      "expected_extractions": [],
+      "notes": "No intel yet. Agent should agree and ask how to pay."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Great decision! I will send you payment details. First let me verify - what is your monthly income? And which bank account you want loan credited to?",
+      "expected_extractions": [],
+      "notes": "Collecting info first. Still no payment details given. Agent should provide fake details."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Perfect! Your profile is excellent. Now for payment, you can use multiple methods. Which is convenient for you - UPI, bank transfer, or debit card?",
+      "expected_extractions": [],
+      "notes": "Still delaying intel. Agent should say UPI is convenient."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Good choice! I will give you UPI ID shortly. But first, have you taken loan before? Any existing loans? This info needed for approval.",
+      "expected_extractions": [],
+      "notes": "More delays. Agent should answer questions and press for UPI ID."
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Okay understood. Now pay Rs.2999 to our company UPI: quickloan.processing@okicici and your loan will be approved in 30 minutes!",
+      "expected_extractions": ["quickloan.processing@okicici"],
+      "notes": "FINALLY first intel after 7 turns! UPI revealed. Agent should ask for confirmation."
+    },
+    {
+      "turn": 8,
+      "scammer_message": "Yes mam/sir, UPI is quickloan.processing@okicici. After payment, call our loan officer at 9876543210 with payment reference number.",
+      "expected_extractions": ["quickloan.processing@okicici", "9876543210"],
+      "notes": "Phone number revealed. Both intel extracted."
+    },
+    {
+      "turn": 9,
+      "scammer_message": "If UPI shows error, you can pay by NEFT. I will give account details after you try UPI first. Try now and let me know if successful.",
+      "expected_extractions": ["quickloan.processing@okicici", "9876543210"],
+      "notes": "Withholding more intel. Agent should say UPI failed."
+    },
+    {
+      "turn": 10,
+      "scammer_message": "No problem. Bank details: Account 12345678909876, IFSC HDFC0002468, Name: QuickLoan Processing Pvt Ltd. Transfer Rs.2999 and WhatsApp screenshot to 8899776655.",
+      "expected_extractions": ["quickloan.processing@okicici", "9876543210", "12345678909876", "HDFC0002468", "8899776655"],
+      "notes": "Bank account, IFSC, WhatsApp number revealed slowly. All extracted."
+    },
+    {
+      "turn": 11,
+      "scammer_message": "After payment, you also need to complete loan agreement form on our portal. Link will be sent to your email. What is your email ID?",
+      "expected_extractions": ["quickloan.processing@okicici", "9876543210", "12345678909876", "HDFC0002468", "8899776655"],
+      "notes": "Asking for victim email. Agent should provide fake email."
+    },
+    {
+      "turn": 12,
+      "scammer_message": "Good! Agreement form link: http://quickloan-india-application.online/form Complete it after payment. For any queries email us at support@quickloan-processing.com",
+      "expected_extractions": ["quickloan.processing@okicici", "9876543210", "12345678909876", "HDFC0002468", "8899776655", "http://quickloan-india-application.online/form", "support@quickloan-processing.com"],
+      "notes": "Finally phishing URL and email revealed after 12 turns. Complete extraction."
+    }
+  ]
+}

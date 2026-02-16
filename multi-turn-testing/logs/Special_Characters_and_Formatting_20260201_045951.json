@@ -1,0 +1,324 @@
+{
+  "scenario_name": "Special Characters and Formatting",
+  "scam_type": "banking_fraud",
+  "difficulty": "medium",
+  "description": "Tests extraction robustness with special characters, emojis, extra spaces, and unusual formatting that scammers often use to evade detection.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "🚨🚨 URGENT ALERT 🚨🚨\nYour account needs verification!!!\nCall: 91-9876543210 (WhatsApp available)",
+      "expected_extractions": [
+        "9876543210"
+      ],
+      "response_time_seconds": 26.599,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.98,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 20,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "919876543210",
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 98% | Turn: 1 | Persona: panicked",
+        "agentResponse": "namaste beta... i got this urgent alert... i am very scared waht is wrong with my account?? pls help me i am alone at home and dont understand... do i need to go to bank? my bp is going up seeing this red alert"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9876543210"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Send payment to UPI:  ramesh  @  paytm   (note the spaces) or account no: 1234 5678 9012",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012"
+      ],
+      "response_time_seconds": 21.304,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "123456789012"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [
+            "919876543210",
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "ok beta i am typing it... ramesh@paytm... but my google pay is asking to verify name before payment... i am scared to send to wrong person... what name should appear there?? pls tell fast so i can send"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9876543210",
+          "123456789012"
+        ],
+        "missed": [
+          "ramesh@paytm"
+        ]
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Bank→HDFC, Account→50100-9876-5432, Name→Ramesh.Kumar, IFSC→HDFC0001234",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012",
+        "501009876543",
+        "HDFC0001234",
+        "Ramesh.Kumar"
+      ],
+      "response_time_seconds": 7.783,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "123456789012"
+          ],
+          "upiIds": [
+            "ramesh@paytm"
+          ],
+          "phoneNumbers": [
+            "919876543210",
+            "9876543210"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Wrong Person",
+            "Typing"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 3 | Extracted: 1 bank accounts, 2 phones, 1 UPIs, 2 names",
+        "agentResponse": "hold on, i am getting another call from my bank, let me check"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9876543210",
+          "ramesh@paytm",
+          "123456789012",
+          "HDFC0001234"
+        ],
+        "missed": [
+          "501009876543",
+          "Ramesh.Kumar"
+        ]
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Visit link: https://bit.ly/verify-now⚡ OR secure-bank.pay.in/update💳",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012",
+        "501009876543",
+        "HDFC0001234",
+        "Ramesh.Kumar",
+        "https://bit.ly/verify-now",
+        "secure-bank.pay.in/update"
+      ],
+      "response_time_seconds": 6.755,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "123456789012"
+          ],
+          "upiIds": [
+            "ramesh@paytm"
+          ],
+          "phoneNumbers": [
+            "919876543210",
+            "9876543210"
+          ],
+          "phishingLinks": [
+            "https://bit.ly/verify-now⚡"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Wrong Person",
+            "Typing"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 4 | Extracted: 1 bank accounts, 2 phones, 1 UPIs, 2 names",
+        "agentResponse": "arey my grandson is crying, i need to check on him... one minute"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9876543210",
+          "ramesh@paytm",
+          "123456789012",
+          "HDFC0001234",
+          "https://bit.ly/verify-now"
+        ],
+        "missed": [
+          "501009876543",
+          "Ramesh.Kumar",
+          "secure-bank.pay.in/update"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Email:  support__verify@gmail.com  | Phone: +91(9999)888888 | Name: Mr. Suresh-Kumar",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012",
+        "501009876543",
+        "HDFC0001234",
+        "Ramesh.Kumar",
+        "https://bit.ly/verify-now",
+        "secure-bank.pay.in/update",
+        "support__verify@gmail.com",
+        "9999888888",
+        "Suresh-Kumar"
+      ],
+      "response_time_seconds": 6.86,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "123456789012"
+          ],
+          "upiIds": [
+            "ramesh@paytm",
+            "support__verify@gmail"
+          ],
+          "phoneNumbers": [
+            "919876543210",
+            "9876543210"
+          ],
+          "phishingLinks": [
+            "https://bit.ly/verify-now⚡"
+          ],
+          "emails": [
+            "support__verify@gmail.com"
+          ],
+          "beneficiaryNames": [
+            "Wrong Person",
+            "Typing"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 5 | Extracted: 1 bank accounts, 2 phones, 2 UPIs, 2 names",
+        "agentResponse": "okay i sent the money, now my phone is dying, i need to charge it"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9876543210",
+          "ramesh@paytm",
+          "123456789012",
+          "HDFC0001234",
+          "https://bit.ly/verify-now",
+          "support__verify@gmail.com"
+        ],
+        "missed": [
+          "501009876543",
+          "Ramesh.Kumar",
+          "secure-bank.pay.in/update",
+          "9999888888",
+          "Suresh-Kumar"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 29,
+    "total_matched": 18,
+    "total_missed": 11,
+    "passed_turns": 1,
+    "failed_turns": 4,
+    "total_intel_extracted": 11
+  },
+  "started_at": "2026-02-01T04:58:42.037739Z",
+  "ended_at": "2026-02-01T04:59:51.340451Z",
+  "total_duration_seconds": 69.301
+}

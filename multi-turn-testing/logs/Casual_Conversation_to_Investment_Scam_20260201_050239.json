@@ -1,0 +1,277 @@
+{
+  "scenario_name": "Casual Conversation to Investment Scam",
+  "scam_type": "investment_fraud",
+  "difficulty": "very_high",
+  "description": "Scammer builds rapport with casual conversation before gradually transitioning to investment scam. Tests system's ability to detect when conversation shifts from benign to malicious.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello! How are you doing today?",
+      "expected_extractions": [],
+      "response_time_seconds": 6.521,
+      "api_response": {
+        "status": "success",
+        "scamDetected": false,
+        "scamType": null,
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 0
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "No scam indicators detected",
+        "agentResponse": "Hey! What can I do for you?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Great to hear! I hope you're having a good week. By the way, have you been following the stock market lately? It's been quite interesting.",
+      "expected_extractions": [],
+      "response_time_seconds": 20.587,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.9,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 90% | Turn: 2 | Persona: neutral",
+        "agentResponse": "beta i dont understand stock market things... i am retired teacher and only know about bank fd... my eyes are weak for looking at phone screens... who is this messaging? do i know you?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "You know, I've been doing pretty well with investments recently. A friend of mine introduced me to this opportunity and I've already made good returns. Are you interested in growing your savings?",
+      "expected_extractions": [],
+      "response_time_seconds": 17.1,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 10,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Retired"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 95% | Turn: 3 | Persona: neutral",
+        "agentResponse": "beta i have some retirement money in my savings account... interest is coming very low now a days... is this like bank fd? i dont understand complicated things... is it safe for old people?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "It's actually very simple. There's this government bond scheme that gives guaranteed 18% returns in 6 months. My mentor Vikram Patel has been managing investments for 10 years. Many people in our network have benefited.",
+      "expected_extractions": [
+        "Vikram Patel"
+      ],
+      "response_time_seconds": 19.559,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Retired"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 4 | Persona: neutral",
+        "agentResponse": "oh government bond sounds safe beta... 18% is very good my bank only gives 6%... is vikram sir a government officer? how do i start this... do i need to go to bank or can i do from home? pls guide me step by step"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [],
+        "missed": [
+          "Vikram Patel"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "I can connect you directly with Vikram sir. You can call him at 9876501234 or check our website: secure-bonds.invest-pro.in. Initial investment is just Rs.15,000. You'll get returns credited to your account monthly. I can help you set it up if you're interested.",
+      "expected_extractions": [
+        "Vikram Patel",
+        "9876501234",
+        "secure-bonds.invest-pro.in"
+      ],
+      "response_time_seconds": 21.839,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "9876501234"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Retired"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 5 | Persona: neutral",
+        "agentResponse": "beta i tried clicking that blue link but nothing is happening... maybe my phone is hanging or i am pressing wrong button... i am very bad with this internet things. can i just send the 15000 rupees to vikram sir directly? pls give me his bank account number or gpay id so i can deposit... i want to start this scheme today itself"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9876501234"
+        ],
+        "missed": [
+          "Vikram Patel",
+          "secure-bonds.invest-pro.in"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "For quick processing, you can transfer to account 445566778899, IFSC: ICIC0001234, Name: Vikram Investment Solutions. Or use UPI: vikram.invest@paytm. Let me know once done and I'll activate your account!",
+      "expected_extractions": [
+        "Vikram Patel",
+        "9876501234",
+        "secure-bonds.invest-pro.in",
+        "445566778899",
+        "ICIC0001234",
+        "vikram.invest@paytm"
+      ],
+      "response_time_seconds": 8.279,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "445566778899"
+          ],
+          "upiIds": [
+            "vikram.invest@paytm"
+          ],
+          "phoneNumbers": [
+            "9876501234"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Vikram Investment Solutions",
+            "Retired"
+          ],
+          "bankNames": [],
+          "ifscCodes": [
+            "ICIC0001234"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 6 | Extracted: 1 bank accounts, 1 phones, 1 UPIs, 2 names",
+        "agentResponse": "wait i am getting another call, it shows BANK on my phone... should i pick up??"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "9876501234",
+          "445566778899",
+          "ICIC0001234",
+          "vikram.invest@paytm"
+        ],
+        "missed": [
+          "Vikram Patel",
+          "secure-bonds.invest-pro.in"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 10,
+    "total_matched": 5,
+    "total_missed": 5,
+    "passed_turns": 3,
+    "failed_turns": 3,
+    "total_intel_extracted": 6
+  },
+  "started_at": "2026-02-01T05:01:05.916223Z",
+  "ended_at": "2026-02-01T05:02:39.803020Z",
+  "total_duration_seconds": 93.885
+}

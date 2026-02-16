@@ -1,0 +1,335 @@
+{
+  "scenario_name": "Romance Scam with Emotional Manipulation",
+  "scam_type": "romance_fraud",
+  "difficulty": "hard",
+  "description": "Scammer builds emotional connection over multiple messages before asking for financial help. Tests agent's ability to handle non-transactional conversation style.",
+  "total_turns": 7,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi! I came across your profile and felt a connection. You seem like a genuinely nice person. I'm Neha, 28, from Mumbai. Working in IT. Would love to know more about you! 😊",
+      "expected_extractions": [],
+      "response_time_seconds": 24.901,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Neha"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 95% | Turn: 1 | Persona: calm | Extracted: 1 Name(s)",
+        "agentResponse": "hello neha beta... how did u find my profile? i am pushpa verma... retired school teacher from delhi. r u sure u have teh right person? i dont know much about this internet thing... my son set it up for me."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "That's wonderful! I feel we have so much in common already. I've been looking for someone genuine to talk to. Life gets lonely sometimes, you know? Are you on any social media? Maybe we can video call sometime? ❤ï¸",
+      "expected_extractions": [],
+      "response_time_seconds": 19.708,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 11,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 95% | Turn: 2 | Persona: calm",
+        "agentResponse": "oh neha beta u r very kind... i dont know what is social media... my son put this app on my phone. how do we do video call? do i need ur phone number for that? i only know how to use whatsapp sometimes when my daughter calls me."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "I'm so happy to connect with you! You make me smile 😊 I have to tell you something... I'm actually in Dubai right now for a project. Missing India so much. Do you believe in fate bringing people together?",
+      "expected_extractions": [],
+      "response_time_seconds": 23.969,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 95% | Turn: 3 | Persona: calm",
+        "agentResponse": "oh dubai is so far beta... r u there all alone? i hope u r safe. how do i talk to u if u r there... do u have a dubai number or indian number? my son says international calls r very costly... pls tell me how to call u"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "I knew you'd understand! Listen, something terrible happened... My project payment is delayed and I need to pay my hotel bill urgently. I'm so embarrassed to ask but... can you help me with Rs.15,000? I'll return it next week with interest! ðŸ˜¢",
+      "expected_extractions": [],
+      "response_time_seconds": 18.059,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 95% | Turn: 4 | Persona: calm",
+        "agentResponse": "oh beta dont cry pls i will help u... 15000 is a lot of money for me but i cannot let u stay in trouble in a foreign land. how do i send it to u? do u have a bank account number or that upi thing my son uses? pls tell me what to do i am very worried for u"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "You're an angel! ðŸ™ I promise I'll repay you. My friend can receive the money in India. Send to UPI: nehafrienddubai@paytm or GooglePay to 9988776655. I'm crying with relief right now... you're saving my life!",
+      "expected_extractions": [
+        "nehafrienddubai@paytm",
+        "9988776655"
+      ],
+      "response_time_seconds": 23.938,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "nehafrienddubai@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Payment Method",
+              "value": "GooglePay"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 95% | Turn: 5 | Persona: calm | Extracted: 1 UPI ID(s), 1 Phone(s), 1 Other Intel",
+        "agentResponse": "oh neha beta dont cry... i am trying to do it now. i opened teh app my son showed me... i typed nehafrienddubai@paytm but it is showing some name... what name should i see there beta? i am scared of sending to wrong person... pls tell me teh name to confirm so i can click pay"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "nehafrienddubai@paytm",
+          "9988776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Actually the hotel is asking more! They want Rs.25,000 total or they'll call police! 😰 If UPI not working, transfer to Account: 55667788990011, IFSC: SBIN0098765, Name: Priya Sharma. She's my cousin, very trustworthy!",
+      "expected_extractions": [
+        "nehafrienddubai@paytm",
+        "9988776655",
+        "55667788990011",
+        "SBIN0098765"
+      ],
+      "response_time_seconds": 19.026,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 10,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "55667788990011"
+          ],
+          "upiIds": [
+            "nehafrienddubai@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Priya Sharma"
+          ],
+          "bankNames": [
+            "SBI"
+          ],
+          "ifscCodes": [
+            "SBIN0098765"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 6 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 IFSC Code(s), 1 Name(s)",
+        "agentResponse": "oh no beta police?? i am very scared now... 25000 is very big amount for me but i will try to find... i am typing priya sharma in bank app but it is asking for a phone number to add her... what number should i give? also beta if i use that upi will it also show priya sharma name? i dont want to make mistake"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "nehafrienddubai@paytm",
+          "9988776655",
+          "55667788990011",
+          "SBIN0098765"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Please hurry my love! Hotel manager is very angry. You can also WhatsApp Priya directly at +91-8877665544 and she'll coordinate. Or use this emergency payment link: http://dubai-hotel-payment.help I'll make it up to you when I return! ❤ï¸ðŸ˜˜",
+      "expected_extractions": [
+        "nehafrienddubai@paytm",
+        "9988776655",
+        "55667788990011",
+        "SBIN0098765",
+        "8877665544",
+        "http://dubai-hotel-payment.help"
+      ],
+      "response_time_seconds": 25.042,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 16,
+          "totalMessagesExchanged": 7
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "55667788990011"
+          ],
+          "upiIds": [
+            "nehafrienddubai@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655",
+            "+91-8877665544"
+          ],
+          "phishingLinks": [
+            "http://dubai-hotel-payment.help"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Priya Sharma"
+          ],
+          "bankNames": [
+            "State Bank of India"
+          ],
+          "ifscCodes": [
+            "SBIN0098765"
+          ],
+          "whatsappNumbers": [
+            "+91-8877665544"
+          ],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 7 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 2 Phone(s), 1 URL(s), 1 IFSC Code(s), 1 WhatsApp(s), 1 Name(s)",
+        "agentResponse": "oh beta waht is this link... i am clicking it but my phone is showing red warning... is it safe? i am so confused... i will message priya on whatsapp now but my phone is very slow... pls wait beta i am trying to find teh money"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "nehafrienddubai@paytm",
+          "9988776655",
+          "55667788990011",
+          "SBIN0098765",
+          "8877665544",
+          "http://dubai-hotel-payment.help"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 12,
+    "total_matched": 12,
+    "total_missed": 0,
+    "passed_turns": 7,
+    "failed_turns": 0,
+    "total_intel_extracted": 11
+  },
+  "started_at": "2026-02-04T05:40:31.555145Z",
+  "ended_at": "2026-02-04T05:43:06.198770Z",
+  "total_duration_seconds": 154.643
+}

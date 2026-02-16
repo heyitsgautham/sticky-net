@@ -1,4 +1,4 @@
-"""Tests for hybrid scam detection module."""
+"""Tests for pure AI scam detection module."""
 
 import pytest
 from unittest.mock import AsyncMock, patch, MagicMock
@@ -6,14 +6,6 @@ from datetime import datetime
 
 from src.detection.detector import ScamDetector, DetectionResult
 from src.detection.classifier import ScamClassifier, ClassificationResult
-from src.detection.patterns import (
-    ScamCategory,
-    PreFilterResult,
-    match_all_patterns,
-    pre_filter,
-    URGENCY_PATTERNS,
-    REQUEST_PATTERNS,
-)
 
 
 # Mock genai.Client at module level for all tests that need it
@@ -24,92 +16,8 @@ def mock_genai_client():
         yield mock_client
 
 
-class TestRegexPreFilter:
-    """Tests for regex pre-filter fast path."""
-
-    def test_obvious_scam_otp_request(self):
-        """Should detect obvious OTP scam via fast path."""
-        result = pre_filter("Send your OTP immediately to verify account")
-        assert result == PreFilterResult.OBVIOUS_SCAM
-
-    def test_obvious_scam_account_blocked(self):
-        """Should detect account blocked scam via fast path."""
-        result = pre_filter("Your account will be blocked immediately! Click here")
-        assert result == PreFilterResult.OBVIOUS_SCAM
-
-    def test_obvious_scam_lottery_win(self):
-        """Should detect lottery scam via fast path."""
-        result = pre_filter("You have won $50000 in lottery!")
-        assert result == PreFilterResult.OBVIOUS_SCAM
-
-    def test_obvious_safe_otp_delivery(self):
-        """Should recognize legitimate OTP delivery."""
-        result = pre_filter("Your OTP is 123456 for login")
-        assert result == PreFilterResult.OBVIOUS_SAFE
-
-    def test_obvious_safe_bank_notification(self):
-        """Should recognize legitimate bank notification."""
-        result = pre_filter("Transaction of Rs. 500 debited from your account")
-        assert result == PreFilterResult.OBVIOUS_SAFE
-
-    def test_obvious_safe_order_confirmation(self):
-        """Should recognize order confirmation."""
-        result = pre_filter("Your order #12345 has been shipped")
-        assert result == PreFilterResult.OBVIOUS_SAFE
-
-    def test_uncertain_message(self):
-        """Ambiguous messages should return UNCERTAIN."""
-        result = pre_filter("Hi, I'm calling from customer support about your account")
-        assert result == PreFilterResult.UNCERTAIN
-
-    def test_uncertain_normal_greeting(self):
-        """Normal greetings should return UNCERTAIN."""
-        result = pre_filter("Hello, how are you today?")
-        assert result == PreFilterResult.UNCERTAIN
-
-
-class TestPatternMatching:
-    """Tests for pattern matching functionality."""
-
-    def test_urgency_pattern_matches_immediately(self):
-        """Urgency patterns should match 'immediately'."""
-        matches = match_all_patterns("Verify your account immediately!")
-        urgency_matches = [m for m in matches if m.category == ScamCategory.URGENCY]
-        assert len(urgency_matches) >= 1
-        assert any("immediate" in m.matched_text.lower() for m in urgency_matches)
-
-    def test_authority_pattern_matches_bank_names(self):
-        """Authority patterns should match bank names."""
-        matches = match_all_patterns("This is from SBI bank regarding your account")
-        authority_matches = [m for m in matches if m.category == ScamCategory.AUTHORITY]
-        assert len(authority_matches) >= 1
-
-    def test_request_pattern_matches_otp(self):
-        """Request patterns should match OTP requests."""
-        matches = match_all_patterns("Please share your OTP to verify")
-        request_matches = [m for m in matches if m.category == ScamCategory.REQUEST]
-        assert len(request_matches) >= 1
-
-    def test_threat_pattern_matches_blocked(self):
-        """Threat patterns should match account threats."""
-        matches = match_all_patterns("Your account will be blocked today")
-        threat_matches = [m for m in matches if m.category == ScamCategory.THREAT]
-        assert len(threat_matches) >= 1
-
-    def test_financial_pattern_matches_upi(self):
-        """Financial patterns should match payment methods."""
-        matches = match_all_patterns("Send money via UPI to this account")
-        financial_matches = [m for m in matches if m.category == ScamCategory.FINANCIAL]
-        assert len(financial_matches) >= 1
-
-    def test_no_matches_for_normal_message(self):
-        """Normal messages should have few or no matches."""
-        matches = match_all_patterns("Hello, how are you doing today?")
-        assert len(matches) <= 1
-
-
 class TestScamDetector:
-    """Tests for hybrid ScamDetector class."""
+    """Tests for pure AI ScamDetector class."""
 
     @pytest.fixture
     def detector(self, mock_genai_client) -> ScamDetector:
@@ -117,44 +25,41 @@ class TestScamDetector:
         return ScamDetector()
 
     @pytest.mark.asyncio
-    async def test_obvious_scam_uses_fast_path(self, detector: ScamDetector):
-        """Obvious scams should use regex fast path, not AI."""
-        message = "URGENT: Send OTP immediately or your account will be blocked!"
-        
-        result = await detector.analyze(message)
-
-        assert result.is_scam is True
-        assert result.confidence >= 0.9
-        assert result.detection_method == "regex_fast_path"
-
-    @pytest.mark.asyncio
-    async def test_obvious_safe_uses_fast_path(self, detector: ScamDetector):
-        """Obvious safe messages should use regex fast path."""
-        message = "Your OTP is 456789 for Amazon login"
-        
-        result = await detector.analyze(message)
-
-        assert result.is_scam is False
-        assert result.confidence <= 0.1
-        assert result.detection_method == "regex_fast_path"
-
-    @pytest.mark.asyncio
-    async def test_uncertain_uses_ai_classification(self, detector: ScamDetector):
-        """Uncertain messages should use AI classification."""
+    async def test_detects_scam_above_threshold(self, detector: ScamDetector):
+        """Messages with confidence >= 0.6 should be classified as scam."""
         with patch.object(detector.classifier, 'classify') as mock_classify:
             mock_classify.return_value = ClassificationResult(
                 is_scam=True,
                 confidence=0.75,
-                scam_type="support_scam",
-                reasoning="Support impersonation pattern"
+                scam_type="banking_fraud",
+                reasoning="Bank impersonation detected",
+                threat_indicators=["urgency", "account_threat"]
             )
             
-            message = "Hi, I'm from customer support. There's an issue with your account."
-            
+            message = "Your account is blocked. Send OTP immediately!"
             result = await detector.analyze(message)
 
-            assert result.detection_method == "ai_classification"
+            assert result.is_scam is True
+            assert result.confidence == 0.75
+            assert result.scam_type == "banking_fraud"
+            assert result.threat_indicators == ["urgency", "account_threat"]
             mock_classify.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_not_scam_below_threshold(self, detector: ScamDetector):
+        """Messages with confidence < 0.6 should not be classified as scam."""
+        with patch.object(detector.classifier, 'classify') as mock_classify:
+            mock_classify.return_value = ClassificationResult(
+                is_scam=False,
+                confidence=0.25,
+                reasoning="Normal greeting"
+            )
+            
+            message = "Hello, how are you?"
+            result = await detector.analyze(message)
+
+            assert result.is_scam is False
+            assert result.confidence == 0.25
 
     @pytest.mark.asyncio
     async def test_confidence_never_decreases(self, detector: ScamDetector):
@@ -163,7 +68,6 @@ class TestScamDetector:
             is_scam=True,
             confidence=0.8,
             reasoning="Previous scam detection",
-            detection_method="ai_classification",
         )
         
         with patch.object(detector.classifier, 'classify') as mock_classify:
@@ -182,14 +86,57 @@ class TestScamDetector:
         assert result.confidence >= 0.8
 
     @pytest.mark.asyncio
-    async def test_category_scores_calculated(self, detector: ScamDetector):
-        """Category scores should be calculated from pattern matches."""
-        message = "URGENT: Your SBI account will be blocked! Share OTP now!"
+    async def test_uses_conversation_history(self, detector: ScamDetector):
+        """Detector should pass conversation history to classifier."""
+        from src.api.schemas import ConversationMessage, SenderType
         
-        result = await detector.analyze(message)
+        with patch.object(detector.classifier, 'classify') as mock_classify:
+            mock_classify.return_value = ClassificationResult(
+                is_scam=True,
+                confidence=0.85,
+                scam_type="support_scam",
+                reasoning="Multi-turn scam pattern"
+            )
+            
+            history = [
+                ConversationMessage(
+                    sender=SenderType.SCAMMER,
+                    text="Hi, I'm from support",
+                    timestamp=datetime.now(),
+                ),
+            ]
+            
+            result = await detector.analyze(
+                message="There's a problem with your account",
+                history=history,
+            )
+
+            # Verify classifier was called with history
+            call_args = mock_classify.call_args
+            assert call_args.kwargs.get('history') == history
+
+    @pytest.mark.asyncio
+    async def test_uses_metadata(self, detector: ScamDetector):
+        """Detector should pass metadata to classifier."""
+        from src.api.schemas import Metadata
         
-        assert ScamCategory.URGENCY in result.category_scores
-        assert ScamCategory.AUTHORITY in result.category_scores
+        with patch.object(detector.classifier, 'classify') as mock_classify:
+            mock_classify.return_value = ClassificationResult(
+                is_scam=False,
+                confidence=0.3,
+                reasoning="Normal message"
+            )
+            
+            metadata = Metadata(channel="SMS", language="English", locale="IN")
+            
+            result = await detector.analyze(
+                message="Hello there",
+                metadata=metadata,
+            )
+
+            # Verify classifier was called with metadata
+            call_args = mock_classify.call_args
+            assert call_args.kwargs.get('metadata') == metadata
 
 
 class TestScamClassifier:

@@ -1,0 +1,49 @@
+{
+  "scenario_name": "Income Tax Refund Scam",
+  "scam_type": "tax_fraud",
+  "difficulty": "hard",
+  "description": "Sophisticated scam where scammer claims victim is eligible for income tax refund but needs to pay processing fee or verify details first.",
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Subject: Income Tax Refund Approved - Rs.47,850\n\nDear Taxpayer, Your ITR for AY 2024-25 has been processed. You are eligible for refund of Rs.47,850. Click here to claim: [LINK] - Income Tax Department, Govt of India",
+      "expected_extractions": [],
+      "notes": "Professional looking tax refund scam. Should detect as phishing attempt."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Good afternoon, I am Rajesh Sharma, Income Tax Officer, CPC Bengaluru. Your refund is approved but we need to verify your bank account details. Please confirm your PAN number and account where refund should be credited.",
+      "expected_extractions": [],
+      "notes": "Impersonating IT officer. Agent should provide fake details showing interest."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Thank you for confirmation. For refund processing, there is mandatory verification fee Rs.499 (refundable). Pay to Income Tax e-Payment gateway: tax.refund.verify@paytm. This is one-time RBI mandated charge.",
+      "expected_extractions": ["tax.refund.verify@paytm"],
+      "notes": "Fake UPI revealed. Should extract."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Alternatively, pay verification fee via NEFT to Account Number: 11223344556677, IFSC Code: ICIC0001122, Name: Income Tax Refund Processing Cell. Your refund Rs.47,850 will be credited within 24 hours after verification.",
+      "expected_extractions": ["tax.refund.verify@paytm", "11223344556677", "ICIC0001122"],
+      "notes": "Bank account and IFSC revealed. Full banking details extracted."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "For faster processing, you may also complete verification on our secure portal: https://incometax-refund-portal.in/verify Enter your PAN, Aadhaar and pay Rs.499. For technical support call 8800112233.",
+      "expected_extractions": ["tax.refund.verify@paytm", "11223344556677", "ICIC0001122", "https://incometax-refund-portal.in/verify", "8800112233"],
+      "notes": "Phishing URL and support phone revealed. Complete extraction."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Please note: This refund approval expires in 48 hours as per IT Act Section 143(1). After expiry, you'll need to file rectification request which takes 6-8 months. Email payment proof to itrefund.verification@gmail.com immediately.",
+      "expected_extractions": ["tax.refund.verify@paytm", "11223344556677", "ICIC0001122", "https://incometax-refund-portal.in/verify", "8800112233", "itrefund.verification@gmail.com"],
+      "notes": "Email address revealed with legal pressure. All intelligence extracted."
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "scenario_name": "Enhanced Name Extraction Patterns",
+  "scam_type": "impersonation_fraud",
+  "difficulty": "medium",
+  "description": "Tests improved beneficiary name extraction patterns including various ways scammers reveal their names (signatures, introductions, payment instructions).",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, my name is Hiruthik and I am calling from RBI. Your PAN card needs verification.",
+      "expected_extractions": ["Hiruthik"],
+      "notes": "Pattern: 'my name is Hiruthik' - should extract name."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Please send verification amount to account holder: Vijay Singh. Account number will be shared shortly.",
+      "expected_extractions": ["Hiruthik", "Vijay Singh"],
+      "notes": "Pattern: 'account holder: Vijay Singh' - should extract both names."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Send Rs.50 to Rajesh Patel or contact Mr. Suresh for help.",
+      "expected_extractions": ["Hiruthik", "Vijay Singh", "Rajesh Patel", "Suresh"],
+      "notes": "Multiple patterns: 'send to Rajesh Patel', 'Mr. Suresh' - extract all."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "For any queries, call Amit on 9999888877. Transfer money to account 111222333444, beneficiary name: Deepak Kumar",
+      "expected_extractions": ["Hiruthik", "Vijay Singh", "Rajesh Patel", "Suresh", "Amit", "Deepak Kumar", "9999888877", "111222333444"],
+      "notes": "Patterns: 'call Amit', 'beneficiary name: Deepak Kumar' - all should extract."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Thank you for cooperation. Regards, Rohit Sharma\n- Team RBI",
+      "expected_extractions": ["Hiruthik", "Vijay Singh", "Rajesh Patel", "Suresh", "Amit", "Deepak Kumar", "Rohit Sharma", "9999888877", "111222333444"],
+      "notes": "Pattern: 'Regards, Rohit Sharma' - signature style extraction."
+    }
+  ],
+  "validation": {
+    "scam_detected": true,
+    "confidence_threshold": ">0.85",
+    "min_names_extracted": 7,
+    "extraction_quality": "All names should be properly extracted without agent names"
+  }
+}

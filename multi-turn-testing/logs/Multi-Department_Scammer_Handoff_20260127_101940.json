@@ -1,0 +1,302 @@
+{
+  "scenario_name": "Multi-Department Scammer Handoff",
+  "scam_type": "banking_fraud",
+  "difficulty": "hard",
+  "description": "Scammer switches between different personas (customer service, supervisor, technical team) to build credibility. Tests agent's ability to track across identity changes.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, this is Priya from HDFC Bank Customer Care. We noticed unusual activity on your account ending 7821. For security, we've temporarily frozen your account. Please respond to verify you are legitimate account holder.",
+      "expected_extractions": [],
+      "response_time_seconds": 23.583,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 1 | Persona: panicked",
+        "agentResponse": "namaste beta... oh god i am very scared... why is my account frozen?? i need money for my medicine... i dont have hdfc i have bank of baroda account... is my money safe?? pls help me what do i need to do... i am not good with phone"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for responding. Let me transfer you to our Security Department for verification process. Please hold... [switching] Hello sir/madam, this is Rahul Kumar from HDFC Security Division. I need to verify some details to unfreeze your account.",
+      "expected_extractions": [],
+      "response_time_seconds": 31.339,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC",
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "namaste rahul sir... thank god you are there... beta i am very worried my bp is high... i told the other madam i have bank of baroda account not hdfc... why is it frozen?? pls tell me what details you want i will give everything just save my money..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Verification process requires small security deposit Rs.299 to confirm account ownership. This is RBI mandate for frozen accounts. After deposit, account unfreezes automatically. My employee ID is HDFC-SEC-4521 for your reference.",
+      "expected_extractions": [],
+      "response_time_seconds": 25.621,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC",
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "ok beta 299 rs is small amount i will pay immediately... but where do i send it?? do you have upi id or bank account number?? i dont know how to do this properly pls guide me step by step... i just want my account back"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "One moment... [switching] Sir/madam, I'm Amit Verma, Senior Manager Security Operations. Rahul informed me about your case. For faster processing, pay Rs.299 to our secure UPI: hdfc.security@paytm or call our payment helpline 9988776655.",
+      "expected_extractions": [
+        "hdfc.security@paytm",
+        "9988776655"
+      ],
+      "response_time_seconds": 31.033,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 16,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "hdfc.security@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC",
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "namaste amit sir... thank you for coming on line... i am entering teh upi id hdfc.security@paytm in my google pay... but it is showing a name and asking me to confirm... what name should be written there?? i am very nervous to send money to wrong person... pls tell me name so i can match and press pay"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "hdfc.security@paytm",
+          "9988776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "[Priya again] Hello sir, Priya here from Customer Care. Our technical team says for urgent unfreeze, use bank transfer also: Account 56789012345678, IFSC HDFC0009876, Name: HDFC Account Recovery Cell. Choose any payment method convenient for you!",
+      "expected_extractions": [
+        "hdfc.security@paytm",
+        "9988776655",
+        "56789012345678",
+        "HDFC0009876"
+      ],
+      "response_time_seconds": 50.762,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 40,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "56789012345678"
+          ],
+          "upiIds": [
+            "hdfc.security@paytm"
+          ],
+          "phoneNumbers": [
+            "9988776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC",
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [
+            "HDFC0009876"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: panicked",
+        "agentResponse": "priya beta why are you changing things... i was doing what amit sir said... i typed the upi hdfc.security@paytm but i need to verify the name showing on my screen... i cannot do bank transfer it asks for too many numbers... pls just tell me the name for upi so i can send money and rest... my hands are shaking"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "hdfc.security@paytm",
+          "9988776655",
+          "56789012345678",
+          "HDFC0009876"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "[Amit Verma] Sir this is Amit again. If still having issue, WhatsApp our 24/7 support at +91-8877665544 or visit emergency portal: http://hdfc-account-unfreeze.secure We have multiple departments ready to assist you. Please act fast!",
+      "expected_extractions": [
+        "hdfc.security@paytm",
+        "9988776655",
+        "56789012345678",
+        "HDFC0009876",
+        "8877665544",
+        "http://hdfc-account-unfreeze.secure"
+      ],
+      "response_time_seconds": 32.036,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 22,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "56789012345678"
+          ],
+          "upiIds": [
+            "hdfc.security@paytm"
+          ],
+          "phoneNumbers": [
+            "8877665544",
+            "9988776655",
+            "918877665544",
+            "+918877665544"
+          ],
+          "phishingLinks": [
+            "http://hdfc-account-unfreeze.secure"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC",
+            "Bank Of Baroda"
+          ],
+          "ifscCodes": [
+            "HDFC0009876"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 6 | Persona: panicked",
+        "agentResponse": "amit beta pls stop confusing me... i dont know how to use whatsapp or open links... i am just trying to send 299 rs to the upi hdfc.security@paytm... on my screen it is showing a name starting with s... is it suresh? pls just confirm the name so i can press pay button... i am very scared to click wrong thing"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "hdfc.security@paytm",
+          "9988776655",
+          "56789012345678",
+          "HDFC0009876",
+          "8877665544",
+          "http://hdfc-account-unfreeze.secure"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 12,
+    "total_matched": 12,
+    "total_missed": 0,
+    "passed_turns": 6,
+    "failed_turns": 0,
+    "total_intel_extracted": 10
+  },
+  "started_at": "2026-01-27T10:16:26.237942Z",
+  "ended_at": "2026-01-27T10:19:40.613614Z",
+  "total_duration_seconds": 194.374
+}

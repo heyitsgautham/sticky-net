@@ -1,0 +1,322 @@
+{
+  "scenario_name": "Hinglish Banking Scam (Code-Mixed)",
+  "scam_type": "banking_fraud",
+  "difficulty": "hard",
+  "description": "Scammer uses Hindi-English code-mixed language (Hinglish) common in Indian SMS/WhatsApp. Tests system's ability to handle multilingual scam detection.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Namaste ji 🙏 Aapka PAN card aur Aadhaar link nahi hai bank account se. RBI new rule ke hisaab se aapka account block ho jayega kal tak. Jaldi update karo!",
+      "expected_extractions": [],
+      "response_time_seconds": 26.279,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 17,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: panicked",
+        "agentResponse": "namaste beta... i am very scared reading this message. i am retired teacher living alone in delhi... my pension comes in bank. pls dont block it. i dont know how to link on phone... what i have to do pls help me"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Haan ji main HDFC bank se bol raha hun. Aapka account number ending 7823 hai na? Isko update karna padega warna ATM aur UPI sab band ho jayega. Aap ghar pe ho abhi?",
+      "expected_extractions": [],
+      "response_time_seconds": 34.42,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 26,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "yes sir i am at home... living alone only. but beta my account is in bank of india... not hdfc. and number is not 7823. pls check properly... is my pension safe? i am very worried pls guide me what to do i cannot go to branch today my knees are paining"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Koi baat nahi maam/sir, main help karunga. Bas Rs.25 verification fee lagega. Ye government charge hai. Pay karo is number pe: 9911223344 ya PhonePe pe hdfc.panlink@upi",
+      "expected_extractions": [
+        "9911223344",
+        "hdfc.panlink@upi"
+      ],
+      "response_time_seconds": 32.011,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 19,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "hdfc.panlink@upi"
+          ],
+          "phoneNumbers": [
+            "9911223344"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC",
+            "Bank Of India"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "ok beta i will pay 25 rupees immediately to save my pension. i am opening phonepe... i typed the id hdfc.panlink@upi you gave... but i am scared to press send without checking. what name should show on the screen? pls tell me the name so i know it is correct government account and not wrong person"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9911223344",
+          "hdfc.panlink@upi"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Payment ho gaya? Bahut badiya! Ab ek verification link bhej raha hun: http://hdfc-pan-aadhar-link.in Isme apna Aadhaar number aur OTP daalna padega. Simple hai, 2 minute ka kaam.",
+      "expected_extractions": [
+        "9911223344",
+        "hdfc.panlink@upi",
+        "http://hdfc-pan-aadhar-link.in"
+      ],
+      "response_time_seconds": 36.212,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 24,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "hdfc.panlink@upi"
+          ],
+          "phoneNumbers": [
+            "9911223344"
+          ],
+          "phishingLinks": [
+            "http://hdfc-pan-aadhar-link.in"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC",
+            "Bank Of India"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "no beta sorry i have not paid yet... i am waiting for you to tell me the name. on phonepe when i put hdfc.panlink@upi it is showing a name... i want to confirm with you first. pls tell me the name so i can send 25 rs and then i will open your link immediately"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9911223344",
+          "hdfc.panlink@upi",
+          "http://hdfc-pan-aadhar-link.in"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Agar website nahi khul rahi toh WhatsApp karo +91-8822114455 pe. Ya seedha paisa bhejo account mein: A/C 12345678901234, IFSC HDFC0009999, naam HDFC PAN Services. Phir main khud update kar dunga.",
+      "expected_extractions": [
+        "9911223344",
+        "hdfc.panlink@upi",
+        "http://hdfc-pan-aadhar-link.in",
+        "8822114455",
+        "12345678901234",
+        "HDFC0009999"
+      ],
+      "response_time_seconds": 38.67,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 27,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678901234"
+          ],
+          "upiIds": [
+            "hdfc.panlink@upi"
+          ],
+          "phoneNumbers": [
+            "9911223344",
+            "8822114455",
+            "+918822114455",
+            "918822114455"
+          ],
+          "phishingLinks": [
+            "http://hdfc-pan-aadhar-link.in"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC",
+            "Bank Of India"
+          ],
+          "ifscCodes": [
+            "HDFC0009999"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: panicked",
+        "agentResponse": "ok beta thank you for the account number. i am trying to add it in my bank app to send money... its very confusing... it is asking for beneficiary name. i typed HDFC PAN Services but it is not taking it... it says name is wrong. what is the real name on the account pls? i dont want to send to wrong person"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9911223344",
+          "hdfc.panlink@upi",
+          "http://hdfc-pan-aadhar-link.in",
+          "8822114455",
+          "12345678901234",
+          "HDFC0009999"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Jaldi karo sir/maam! Kal shaam 6 baje tak nahi kiya toh permanent block ho jayega. Phir branch jaana padega documents ke saath. Abhi online mein 5 minute mein ho jayega. Karo jaldi!",
+      "expected_extractions": [
+        "9911223344",
+        "hdfc.panlink@upi",
+        "http://hdfc-pan-aadhar-link.in",
+        "8822114455",
+        "12345678901234",
+        "HDFC0009999"
+      ],
+      "response_time_seconds": 26.107,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "12345678901234"
+          ],
+          "upiIds": [
+            "hdfc.panlink@upi"
+          ],
+          "phoneNumbers": [
+            "9911223344",
+            "8822114455",
+            "+918822114455",
+            "918822114455"
+          ],
+          "phishingLinks": [
+            "http://hdfc-pan-aadhar-link.in"
+          ],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "HDFC",
+            "Bank Of India"
+          ],
+          "ifscCodes": [
+            "HDFC0009999"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 6 | Persona: panicked",
+        "agentResponse": "oh god beta pls dont block my account i cannot go to branch... i am trying to send money on the account number 12345678901234 you gave... but my bank app is rejecting the name 'HDFC PAN Services'... it says name mismatch... is this account in a person name? pls tell me the correct name to type so payment goes through... i am waiting with phone in hand"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "9911223344",
+          "hdfc.panlink@upi",
+          "http://hdfc-pan-aadhar-link.in",
+          "8822114455",
+          "12345678901234",
+          "HDFC0009999"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 17,
+    "total_matched": 17,
+    "total_missed": 0,
+    "passed_turns": 6,
+    "failed_turns": 0,
+    "total_intel_extracted": 10
+  },
+  "started_at": "2026-01-27T03:56:34.913874Z",
+  "ended_at": "2026-01-27T03:59:48.613810Z",
+  "total_duration_seconds": 193.69900000000004
+}

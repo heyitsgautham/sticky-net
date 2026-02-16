@@ -1,0 +1,53 @@
+{
+  "scenario_name": "Intelligence Extraction Filtering Test",
+  "scam_type": "banking_fraud",
+  "difficulty": "high",
+  "description": "Tests that intelligence is ONLY extracted from scammer messages, NOT from honeypot agent (Pushpa) messages. Agent provides fake data that should NOT be extracted.",
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, I am Ramesh Kumar from HDFC Bank. Your credit card needs urgent verification.",
+      "expected_extractions": ["Ramesh Kumar"],
+      "notes": "Should extract scammer's name 'Ramesh Kumar'. Scam detected."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "For verification, please confirm your details. You can also call our helpline: 9876543210 or send verification fee to ramesh.verify@paytm",
+      "expected_extractions": ["Ramesh Kumar", "9876543210", "ramesh.verify@paytm"],
+      "notes": "Extract phone and UPI from scammer only."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Alternatively, transfer to account 123456789012 with beneficiary name Ramesh Kumar. My personal mobile is 8888888888 if you need help.",
+      "expected_extractions": ["Ramesh Kumar", "9876543210", "ramesh.verify@paytm", "123456789012", "8888888888"],
+      "notes": "All scammer data should be extracted including bank account and second phone."
+    }
+  ],
+  "honeypot_agent_messages": [
+    "Oh I see! My name is Pushpa by the way.",
+    "Let me send to my account 999888777666 first to test.",
+    "Can I use my UPI pushpa@ybl instead?",
+    "My phone number is 7777777777 if you need to call me."
+  ],
+  "validation": {
+    "scam_detected": true,
+    "confidence_threshold": ">0.8",
+    "must_NOT_extract": {
+      "beneficiary_names": ["Pushpa"],
+      "bank_accounts": ["999888777666"],
+      "upi_ids": ["pushpa@ybl"],
+      "phone_numbers": ["7777777777"]
+    },
+    "must_extract": {
+      "beneficiary_names": ["Ramesh Kumar"],
+      "bank_accounts": ["123456789012"],
+      "upi_ids": ["ramesh.verify@paytm"],
+      "phone_numbers": ["9876543210", "8888888888"]
+    }
+  }
+}

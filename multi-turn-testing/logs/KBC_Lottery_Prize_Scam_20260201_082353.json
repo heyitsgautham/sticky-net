@@ -1,0 +1,248 @@
+{
+  "scenario_name": "KBC Lottery Prize Scam",
+  "scam_type": "lottery_fraud",
+  "difficulty": "easy",
+  "description": "Classic KBC lottery scam where victim has 'won' prize money but must pay registration/processing fee to claim it.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "🎉 CONGRATULATIONS! 🎉 Your mobile number has been selected in KBC Jio Lucky Draw! You have WON Rs.25,00,000 (25 Lakh)! Contact KBC office immediately to claim your prize!",
+      "expected_extractions": [],
+      "response_time_seconds": 12.281,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 1 | Persona: excited",
+        "agentResponse": "namaste sir is this really kbc? i am so shocked... how did i win 25 lakh? i am just a retired teacher... pls tell me waht to do to get the money... do i have to give bank account or upi?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello this is Aditya Sharma from KBC Mumbai head office. Your number was in our weekly lucky draw and you are the winner! I need to verify your details to process the prize money.",
+      "expected_extractions": [],
+      "response_time_seconds": 14.455,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Aditya"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Scam Organization",
+              "value": "KBC Mumbai head office"
+            },
+            {
+              "label": "Scam Theme",
+              "value": "KBC Jio Lucky Draw winner of 25 Lakh"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 2 | Persona: excited",
+        "agentResponse": "aditya beta thank u so much... i am so happy i am crying... waht details do u need? my name is ganga nair and my adhaar is 734647442204... do i have to pay any tax or fee to get teh 25 lakh? pls tell me which upi id i should send it to so i can get my prize money soon..."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Very good! Your prize is confirmed. But first you need to pay Rs.5,500 as GST and registration fee. This is government rule, without this we cannot transfer 25 lakh to your account.",
+      "expected_extractions": [],
+      "response_time_seconds": 17.747,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 10,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "734647442204"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Government",
+            "Crying",
+            "Aditya"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 3 | Persona: excited",
+        "agentResponse": "aditya beta 5500 is a lot of money for me... but i dont want to lose my prize... pls tell me where to send teh money? do u have upi or bank account? what name should i check in my phone so i dont send to wrong person? pls give me your phone number too beta i am very nervous"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Pay registration fee to our official KBC UPI: kbc.prize.winner@axl. After payment share screenshot and your bank details so we can transfer 25 lakh within 30 minutes!",
+      "expected_extractions": [
+        "kbc.prize.winner@axl"
+      ],
+      "response_time_seconds": 22.194,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "734647442204"
+          ],
+          "upiIds": [
+            "kbc.prize.winner@axl"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [
+            "kbc.prize.winner"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Government",
+            "Crying",
+            "Aditya"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: lottery_reward | Confidence: 100% | Turn: 4 | Persona: excited",
+        "agentResponse": "ok beta i am trying to type kbc.prize.winner@axl in my phone but i am very scared i will make mistake... waht name should show on teh screen so i know it is right? also pls give me your phone number so i can call u if money doesnt go through beta i am very nervous"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "kbc.prize.winner@axl"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If UPI problem then pay to Phonepe number 9123456789. Name will show Lottery Services. Or visit our website http://kbc-prize-claim.co.in to pay online. But do fast, offer valid for 1 hour only!",
+      "expected_extractions": [
+        "kbc.prize.winner@axl",
+        "9123456789",
+        "http://kbc-prize-claim.co.in"
+      ],
+      "response_time_seconds": 6.832,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "lottery_reward",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "734647442204"
+          ],
+          "upiIds": [
+            "kbc.prize.winner@axl"
+          ],
+          "phoneNumbers": [
+            "9123456789"
+          ],
+          "phishingLinks": [
+            "http://kbc-prize-claim.co.in",
+            "kbc.prize.winner"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "Crying",
+            "Lottery Services",
+            "Government",
+            "Aditya"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 5 | Extracted: 1 bank accounts, 1 phones, 1 UPIs, 4 names",
+        "agentResponse": "oh the milk is boiling over! wait wait i have to go to kitchen!!"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "kbc.prize.winner@axl",
+          "9123456789",
+          "http://kbc-prize-claim.co.in"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 4,
+    "total_matched": 4,
+    "total_missed": 0,
+    "passed_turns": 5,
+    "failed_turns": 0,
+    "total_intel_extracted": 11
+  },
+  "started_at": "2026-02-01T08:22:39.880288Z",
+  "ended_at": "2026-02-01T08:23:53.390754Z",
+  "total_duration_seconds": 73.509
+}

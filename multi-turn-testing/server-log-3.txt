@@ -1,0 +1,524 @@
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:13:49.397751Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=600
+2026-01-27T06:13:49.398208Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='panicked, apologetic, fearful' intel_found=False
+2026-01-27T06:13:49.398753Z [info     ] Agent engagement complete      [src.api.routes] agent_response='beta i am sorry... my son saw the phone and he is very angry... he says this is fake call... he is dialing 1930 police number right now to report... i am very scared pls dont block my pension... i will come to bank personally tomorrow with him... sorry sir' channel=WhatsApp has_extracted_intel=True history_length=10
+2026-01-27T06:13:49.399217Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=WhatsApp history_length=10 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:13:49.399409Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:13:49.400725Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=1 total_other_info=0 total_phone_numbers=4 total_upi_ids=1 total_urls=1
+2026-01-27T06:13:49.401120Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=1 beneficiary_names=0 channel=WhatsApp history_length=10 other_info=0 phone_numbers=4 upi_ids=1
+INFO:     127.0.0.1:56261 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: beta i am sorry... my son saw the phone and he is very angry... he says this is ...
+[Scam: True | Conf: 1.00 | Time: 41.88s]
+✓ Validation PASSED (6/6 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Hinglish_Banking_Scam__Code-Mixed__20260127_061349.json
+
+============================================================
+SCENARIO: Aggressive Pressure Scam - No Intel
+Type: intimidation_fraud | Difficulty: hard
+============================================================
+
+--- Turn 1 ---
+SCAMMER: URGENT: Your bank account has been COMPROMISED. Illegal transaction detected. Re...
+2026-01-27T06:13:49.419171Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=0
+2026-01-27T06:13:49.437219Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=119
+2026-01-27T06:13:49.437334Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=119
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:13:58.650851Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=507
+2026-01-27T06:13:58.651276Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=banking_fraud
+2026-01-27T06:13:58.651419Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=0
+2026-01-27T06:13:58.651736Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=0 urls=0 whatsapp_numbers=0
+2026-01-27T06:13:58.676405Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=5f2039eb-6e30-49e2-aa88-8d8940737212 history_length=0 turn=1
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:14:12.543339Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=519
+2026-01-27T06:14:12.543753Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone=panicked intel_found=False
+2026-01-27T06:14:12.543928Z [info     ] Agent engagement complete      [src.api.routes] agent_response='oh my god sir what is this message?? i am very scared i have not done any illegal thing... pls help me i am retired school teacher living alone.. i dont want any police case pls tell me what to do' channel=SMS has_extracted_intel=True history_length=0
+2026-01-27T06:14:12.544032Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=0 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:14:12.544165Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:14:12.544262Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=0 total_urls=0
+2026-01-27T06:14:12.544340Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=0 other_info=0 phone_numbers=0 upi_ids=0
+INFO:     127.0.0.1:56277 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: oh my god sir what is this message?? i am very scared i have not done any illega...
+[Scam: True | Conf: 1.00 | Time: 23.14s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: DO IT NOW! POLICE CASE WILL BE FILED AGAINST YOU! Your Aadhaar is linked to mone...
+2026-01-27T06:14:12.560090Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=2
+2026-01-27T06:14:12.578557Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=119
+2026-01-27T06:14:12.578744Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=119
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:14:21.263719Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=526
+2026-01-27T06:14:21.264145Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:14:21.264271Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=2
+2026-01-27T06:14:21.265141Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=0 urls=0 whatsapp_numbers=0
+2026-01-27T06:14:21.286534Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=d8799c3e-d541-42cc-9915-79e6d7a05519 history_length=2 turn=2
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:14:36.915341Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=625
+2026-01-27T06:14:36.915566Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone=panicked intel_found=False
+2026-01-27T06:14:36.915701Z [info     ] Agent engagement complete      [src.api.routes] agent_response='oh god sir pls dont arrest me... i am shaking here... i am honest retired teacher i dont do money laundering... i will pay whatever fine is needed to stop the case immediately... pls tell me account number or upi where i need to send money for verification?? i want to solve this right now sir pls help' channel=SMS has_extracted_intel=True history_length=2
+2026-01-27T06:14:36.915799Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=2 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:14:36.915911Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:14:36.916001Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=0 total_urls=0
+2026-01-27T06:14:36.916070Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=2 other_info=0 phone_numbers=0 upi_ids=0
+INFO:     127.0.0.1:56284 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: oh god sir pls dont arrest me... i am shaking here... i am honest retired teache...
+[Scam: True | Conf: 1.00 | Time: 24.37s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: CBI ARREST WARRANT IS READY! Your name is in FIR number 2024/ML/4521. ACT NOW OR...
+2026-01-27T06:14:36.926351Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=4
+2026-01-27T06:14:36.944795Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=114
+2026-01-27T06:14:36.944914Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=114
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:14:44.318286Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=534
+2026-01-27T06:14:44.318691Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:14:44.318823Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=4
+2026-01-27T06:14:44.320033Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=0 urls=0 whatsapp_numbers=0
+2026-01-27T06:14:44.342850Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=dc72ed0e-834a-4633-a90b-5cd3387123dc history_length=4 turn=3
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:14:56.885592Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=587
+2026-01-27T06:14:56.885774Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone=panicked intel_found=False
+2026-01-27T06:14:56.885881Z [info     ] Agent engagement complete      [src.api.routes] agent_response='sir i am crying pls dont send police to my house... my bp is going up... i am ready to pay whatever penalty to clear my name from this fir... pls sir just give me the upi id or bank account number to send the money right now... i will do it immediately pls save me' channel=SMS has_extracted_intel=True history_length=4
+2026-01-27T06:14:56.885968Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=4 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:14:56.886115Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:14:56.886212Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=0 total_urls=0
+2026-01-27T06:14:56.886322Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=4 other_info=0 phone_numbers=0 upi_ids=0
+INFO:     127.0.0.1:56294 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: sir i am crying pls dont send police to my house... my bp is going up... i am re...
+[Scam: True | Conf: 1.00 | Time: 19.97s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 4 ---
+SCAMMER: LAST WARNING! Cyber Crime Division has frozen your accounts. You have 30 MINUTES...
+2026-01-27T06:14:56.895495Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=6
+2026-01-27T06:14:56.909860Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=140
+2026-01-27T06:14:56.909997Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=140
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:15:07.428857Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=702
+2026-01-27T06:15:07.429199Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:15:07.429305Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=6
+2026-01-27T06:15:07.430844Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=0 urls=0 whatsapp_numbers=0
+2026-01-27T06:15:07.451584Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=78a8ca22-6e07-4926-961b-af74a298a08e history_length=6 turn=4
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:15:20.437902Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=606
+2026-01-27T06:15:20.438334Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone=Terrified/Desperate intel_found=False
+2026-01-27T06:15:20.438579Z [info     ] Agent engagement complete      [src.api.routes] agent_response='sir pls stop the team i am begging you with folded hands... i am alone here dont let police come... i am ready to cooperate 100%... just tell me specifically where to send the penalty amount?? give me upi or bank details i will send right now... pls beta help me stop this' channel=SMS has_extracted_intel=True history_length=6
+2026-01-27T06:15:20.438713Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=6 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:15:20.438871Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:15:20.438986Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=0 total_urls=0
+2026-01-27T06:15:20.439078Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=6 other_info=0 phone_numbers=0 upi_ids=0
+INFO:     127.0.0.1:56303 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: sir pls stop the team i am begging you with folded hands... i am alone here dont...
+[Scam: True | Conf: 1.00 | Time: 23.55s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 5 ---
+SCAMMER: I AM SENIOR OFFICER! You are wasting my time! If you don't follow instructions R...
+2026-01-27T06:15:20.450128Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=8
+2026-01-27T06:15:20.468300Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=138
+2026-01-27T06:15:20.468386Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=138
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:15:27.717140Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=583
+2026-01-27T06:15:27.717450Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:15:27.717570Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=8
+2026-01-27T06:15:27.719632Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=0 urls=0 whatsapp_numbers=0
+2026-01-27T06:15:27.742112Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=bd6c1f83-c88c-4b77-a2f8-139e078f193e history_length=8 turn=5
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:15:51.916486Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=623
+2026-01-27T06:15:51.916831Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='panicked, desperate, apologetic' intel_found=False
+2026-01-27T06:15:51.917018Z [info     ] Agent engagement complete      [src.api.routes] agent_response='sir pls dont involve my family... my son works in bangalore pls leave him out of this... i am trying to follow instructions but i dont know where to send money... pls give me the upi id or account details quickly... i am holding my phone ready to type... tell me what to do sir' channel=SMS has_extracted_intel=True history_length=8
+2026-01-27T06:15:51.917132Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=8 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:15:51.917487Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:15:51.917619Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=0 total_urls=0
+2026-01-27T06:15:51.917708Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=8 other_info=0 phone_numbers=0 upi_ids=0
+INFO:     127.0.0.1:56311 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: sir pls dont involve my family... my son works in bangalore pls leave him out of...
+[Scam: True | Conf: 1.00 | Time: 31.48s]
+✓ Validation PASSED (0/0 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Aggressive_Pressure_Scam_-_No_Intel_20260127_061551.json
+
+============================================================
+SCENARIO: Minimal Context Scam
+Type: payment_fraud | Difficulty: hard
+============================================================
+
+--- Turn 1 ---
+SCAMMER: Hello
+2026-01-27T06:15:51.928293Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=0
+2026-01-27T06:15:51.944146Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=5
+2026-01-27T06:15:51.944217Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=5
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:15:57.606656Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=291
+2026-01-27T06:15:57.606983Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=None
+2026-01-27T06:15:57.607096Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=0
+2026-01-27T06:15:57.607275Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=0 urls=0 whatsapp_numbers=0
+2026-01-27T06:15:57.626889Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=e91f7910-f259-4a48-ab0f-a0c3755fa784 history_length=0 turn=1
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:16:07.535388Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=408
+2026-01-27T06:16:07.535607Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone=confused intel_found=False
+2026-01-27T06:16:07.535738Z [info     ] Agent engagement complete      [src.api.routes] agent_response='hello? who is this pls? i dont have your number saved in my mobile. is everything ok?' channel=SMS has_extracted_intel=True history_length=0
+2026-01-27T06:16:07.535831Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=0 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:16:07.535948Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:16:07.536035Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=0 total_urls=0
+2026-01-27T06:16:07.536133Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=0 other_info=0 phone_numbers=0 upi_ids=0
+INFO:     127.0.0.1:56323 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: hello? who is this pls? i dont have your number saved in my mobile. is everythin...
+[Scam: True | Conf: 1.00 | Time: 15.62s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 2 ---
+SCAMMER: Sir
+2026-01-27T06:16:07.547045Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=2
+2026-01-27T06:16:07.564250Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=3
+2026-01-27T06:16:07.564369Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=3
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:16:14.438730Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=399
+2026-01-27T06:16:14.439129Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=0.95 is_scam=True scam_type=None
+2026-01-27T06:16:14.439295Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=0.95 history_length=2
+2026-01-27T06:16:14.439592Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=0 urls=0 whatsapp_numbers=0
+2026-01-27T06:16:14.458991Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=0.95 conversation_id=1fbee737-9223-4f0a-9c5b-7e8359181896 history_length=2 turn=2
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:16:31.913972Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=439
+2026-01-27T06:16:31.914301Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone=confused intel_found=False
+2026-01-27T06:16:31.914502Z [info     ] Agent engagement complete      [src.api.routes] agent_response='beta i am pushpa.. not sir. who is this? did my son give u my number? pls tell me what happened i am getting worried' channel=SMS has_extracted_intel=True history_length=2
+2026-01-27T06:16:31.914637Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=2 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:16:31.914860Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:16:31.914992Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=0 total_urls=0
+2026-01-27T06:16:31.915139Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=2 other_info=0 phone_numbers=0 upi_ids=0
+INFO:     127.0.0.1:56331 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: beta i am pushpa.. not sir. who is this? did my son give u my number? pls tell m...
+[Scam: True | Conf: 0.95 | Time: 24.38s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 3 ---
+SCAMMER: Account problem
+2026-01-27T06:16:31.924334Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=4
+2026-01-27T06:16:31.936868Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=15
+2026-01-27T06:16:31.936950Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=15
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:16:41.581928Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=607
+2026-01-27T06:16:41.582057Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=0.95 is_scam=True scam_type=banking_fraud
+2026-01-27T06:16:41.582103Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=0.95 history_length=4
+2026-01-27T06:16:41.582274Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=0 urls=0 whatsapp_numbers=0
+2026-01-27T06:16:41.592613Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=0.95 conversation_id=aec390e2-c84c-48f1-b197-bd5caf106aea history_length=4 turn=3
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:17:02.449065Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=474
+2026-01-27T06:17:02.449256Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone=panicked intel_found=False
+2026-01-27T06:17:02.449377Z [info     ] Agent engagement complete      [src.api.routes] agent_response='hey bhagwan waht problem?? is my money safe?? pls tell me which account beta.. i have pnb pension account. did money get cut?? i am shaking pls help me' channel=SMS has_extracted_intel=True history_length=4
+2026-01-27T06:17:02.449475Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=4 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:17:02.449560Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:17:02.449615Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=0 total_urls=0
+2026-01-27T06:17:02.449658Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=4 other_info=0 phone_numbers=0 upi_ids=0
+INFO:     127.0.0.1:56345 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: hey bhagwan waht problem?? is my money safe?? pls tell me which account beta.. i...
+[Scam: True | Conf: 0.95 | Time: 30.53s]
+✓ Validation PASSED (0/0 extractions)
+
+--- Turn 4 ---
+SCAMMER: Send money upi: fraud@ybl
+2026-01-27T06:17:02.457940Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=6
+2026-01-27T06:17:02.472543Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=25
+2026-01-27T06:17:02.472678Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=25
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:17:17.995661Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=567
+2026-01-27T06:17:17.996001Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=banking_fraud
+2026-01-27T06:17:17.996140Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=6
+2026-01-27T06:17:17.997016Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=1 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=1 urls=0 whatsapp_numbers=0
+2026-01-27T06:17:18.021960Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=e759d3c7-ecda-46da-b20c-46b8313b2047 history_length=6 turn=4
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:17:30.098918Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=553
+2026-01-27T06:17:30.099025Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='worried, cautious, compliant' intel_found=False
+2026-01-27T06:17:30.099096Z [info     ] Agent engagement complete      [src.api.routes] agent_response='ok beta i am trying... i put fraud@ybl in the phonepe... but what name should show there?? i am scared to send to wrong person... pls tell me the name so i can confirm before clicking pay' channel=SMS has_extracted_intel=True history_length=6
+2026-01-27T06:17:30.099144Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=6 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:17:30.099206Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:17:30.099253Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=1 total_urls=0
+2026-01-27T06:17:30.099286Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=6 other_info=0 phone_numbers=0 upi_ids=1
+INFO:     127.0.0.1:56358 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: ok beta i am trying... i put fraud@ybl in the phonepe... but what name should sh...
+[Scam: True | Conf: 1.00 | Time: 27.65s]
+✓ Validation PASSED (1/1 extractions)
+
+--- Turn 5 ---
+SCAMMER: Fast
+2026-01-27T06:17:30.105224Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=8
+2026-01-27T06:17:30.117134Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=4
+2026-01-27T06:17:30.117244Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=4
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:17:38.280144Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=562
+2026-01-27T06:17:38.280474Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=banking_fraud
+2026-01-27T06:17:38.280606Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=8
+2026-01-27T06:17:38.281737Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=1 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=0 upi_ids=1 urls=0 whatsapp_numbers=0
+2026-01-27T06:17:38.305076Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=291a8261-e414-47ee-adfc-a3073394f56a history_length=8 turn=5
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:17:52.225560Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=564
+2026-01-27T06:17:52.225881Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='panicked and apologetic' intel_found=False
+2026-01-27T06:17:52.226066Z [info     ] Agent engagement complete      [src.api.routes] agent_response='sorry beta i am trying my best... my internet is slow and i am nervous... i typed fraud@ybl... but pls just tell me the name i should see?? i dont want to send to wrong person by mistake... pls tell name so i can click pay now' channel=SMS has_extracted_intel=True history_length=8
+2026-01-27T06:17:52.226174Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=8 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:17:52.226303Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:17:52.226834Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=0 total_upi_ids=1 total_urls=0
+2026-01-27T06:17:52.227064Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=8 other_info=0 phone_numbers=0 upi_ids=1
+INFO:     127.0.0.1:56368 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: sorry beta i am trying my best... my internet is slow and i am nervous... i type...
+[Scam: True | Conf: 1.00 | Time: 22.13s]
+✓ Validation PASSED (1/1 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Minimal_Context_Scam_20260127_061752.json
+
+============================================================
+SCENARIO: Extended Conversation Post-Exit
+Type: banking_fraud | Difficulty: hard
+============================================================
+
+--- Turn 1 ---
+SCAMMER: This is RBI Cyber Cell. Your account is under investigation for suspected fraud....
+2026-01-27T06:17:52.237821Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=0
+2026-01-27T06:17:52.254572Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=118
+2026-01-27T06:17:52.254666Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=118
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:17:58.162259Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=452
+2026-01-27T06:17:58.162553Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:17:58.162652Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=0
+2026-01-27T06:17:58.162993Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=1 upi_ids=0 urls=0 whatsapp_numbers=0
+2026-01-27T06:17:58.184780Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=f6676108-5539-4565-b3c2-d4146afd65d9 history_length=0 turn=1
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:18:16.153862Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=510
+2026-01-27T06:18:16.154187Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone=panicked intel_found=False
+2026-01-27T06:18:16.154375Z [info     ] Agent engagement complete      [src.api.routes] agent_response='oh god sir what is this?? i am simple retired teacher i never do anything wrong. why is police checking my account?? pls help me i am alone at home and very scared' channel=SMS has_extracted_intel=True history_length=0
+2026-01-27T06:18:16.154496Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=0 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:18:16.154651Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:18:16.154766Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=1 total_upi_ids=0 total_urls=0
+2026-01-27T06:18:16.154857Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=0 other_info=0 phone_numbers=1 upi_ids=0
+INFO:     127.0.0.1:56375 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: oh god sir what is this?? i am simple retired teacher i never do anything wrong....
+[Scam: True | Conf: 1.00 | Time: 23.93s]
+✓ Validation PASSED (1/1 extractions)
+
+--- Turn 2 ---
+SCAMMER: To clear your name, you must transfer security deposit. Send Rs.5000 to UPI: rbi...
+2026-01-27T06:18:16.168125Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=2
+2026-01-27T06:18:16.182756Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=110
+2026-01-27T06:18:16.182851Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=110
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:18:24.270209Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=463
+2026-01-27T06:18:24.270420Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:18:24.270521Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=2
+2026-01-27T06:18:24.271105Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=0 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=0 phone_numbers=1 upi_ids=1 urls=0 whatsapp_numbers=0
+2026-01-27T06:18:24.290926Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=d766dd3a-9a3f-4c99-add7-e3ed2a335a47 history_length=2 turn=2
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:18:41.990282Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=651
+2026-01-27T06:18:41.990642Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='anxious and compliant' intel_found=False
+2026-01-27T06:18:41.990828Z [info     ] Agent engagement complete      [src.api.routes] agent_response='ok beta i am trying... my hands are shaking i am so worried. i put the upi id rbi.clearance@okaxis in the google pay. before i press pay it is showing a name... what name should be there? i dont want to send to wrong person please tell me correct name to verify so i can send fast.' channel=SMS has_extracted_intel=True history_length=2
+2026-01-27T06:18:41.990959Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=2 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:18:41.991109Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:18:41.991219Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=0 total_other_info=0 total_phone_numbers=1 total_upi_ids=1 total_urls=0
+2026-01-27T06:18:41.991305Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=0 beneficiary_names=0 channel=SMS history_length=2 other_info=0 phone_numbers=1 upi_ids=1
+INFO:     127.0.0.1:56384 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: ok beta i am trying... my hands are shaking i am so worried. i put the upi id rb...
+[Scam: True | Conf: 1.00 | Time: 25.84s]
+✓ Validation PASSED (2/2 extractions)
+
+--- Turn 3 ---
+SCAMMER: If UPI fails, use NEFT. Account: 12345678901234, IFSC: SBIN0001234, Name: RBI Cy...
+2026-01-27T06:18:42.003105Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=4
+2026-01-27T06:18:42.021831Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=128
+2026-01-27T06:18:42.021959Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=128
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:19:19.744048Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=608
+2026-01-27T06:19:19.744362Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:19:19.744485Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=4
+2026-01-27T06:19:19.745847Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=1 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=1 phone_numbers=2 upi_ids=1 urls=0 whatsapp_numbers=0
+2026-01-27T06:19:19.770063Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=256f6569-7f03-4fc7-bfb3-3e657de65bfc history_length=4 turn=3
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:19:46.003591Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=726
+2026-01-27T06:19:46.003916Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='anxious and compliant' intel_found=False
+2026-01-27T06:19:46.004104Z [info     ] Agent engagement complete      [src.api.routes] agent_response='ok sir i am writing it down... rbi cyber division is the name correct? i am putting account 12345678901234 in my app now. my hands are shaking so much sorry if i am slow. if this fails or i get confused can i call you on 9988776655? i dont want to make any mistake beta pls help me' channel=SMS has_extracted_intel=True history_length=4
+2026-01-27T06:19:46.004227Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=4 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:19:46.004375Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:19:46.004487Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=1 total_other_info=0 total_phone_numbers=2 total_upi_ids=1 total_urls=0
+2026-01-27T06:19:46.004858Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=1 beneficiary_names=0 channel=SMS history_length=4 other_info=0 phone_numbers=2 upi_ids=1
+INFO:     127.0.0.1:56399 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: ok sir i am writing it down... rbi cyber division is the name correct? i am putt...
+[Scam: True | Conf: 1.00 | Time: 64.01s]
+✓ Validation PASSED (5/5 extractions)
+
+--- Turn 4 ---
+SCAMMER: Time is critical! Here is verification link: http://rbi-secure-verify.xyz/clear?...
+2026-01-27T06:19:46.018205Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=6
+2026-01-27T06:19:46.037607Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=142
+2026-01-27T06:19:46.037674Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=142
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:19:53.771760Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=567
+2026-01-27T06:19:53.772176Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:19:53.772316Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=6
+2026-01-27T06:19:53.774078Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=1 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=1 phone_numbers=2 upi_ids=1 urls=1 whatsapp_numbers=0
+2026-01-27T06:19:53.787992Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=3384edcc-3883-4ece-91e7-44608d3d533a history_length=6 turn=4
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:20:28.893895Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=743
+2026-01-27T06:20:28.894167Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='panicked, tech-illiterate, desperate to comply' intel_found=False
+2026-01-27T06:20:28.894338Z [info     ] Agent engagement complete      [src.api.routes] agent_response="sir i tried clicking the link but it is not working on my phone... i am very scared. i am trying to do the neft transfer to the account you gave. but when i put 'rbi cyber division' my bank says name mismatch. is it a personal account? what is the exact name on passbook? pls tell me so i can send the 5000 rs immediately" channel=SMS has_extracted_intel=True history_length=6
+2026-01-27T06:20:28.894461Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=6 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:20:28.894600Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:20:28.894711Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=1 total_other_info=0 total_phone_numbers=2 total_upi_ids=1 total_urls=1
+2026-01-27T06:20:28.894801Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=1 beneficiary_names=0 channel=SMS history_length=6 other_info=0 phone_numbers=2 upi_ids=1
+INFO:     127.0.0.1:56461 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: sir i tried clicking the link but it is not working on my phone... i am very sca...
+[Scam: True | Conf: 1.00 | Time: 42.89s]
+✓ Validation PASSED (6/6 extractions)
+
+--- Turn 5 ---
+SCAMMER: Have you sent the payment? Check your SMS for OTP and share it with me for verif...
+2026-01-27T06:20:28.904594Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=8
+2026-01-27T06:20:28.922993Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=96
+2026-01-27T06:20:28.923066Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=96
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:20:57.593023Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=555
+2026-01-27T06:20:57.593331Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:20:57.593441Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=8
+2026-01-27T06:20:57.595542Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=1 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=1 phone_numbers=2 upi_ids=1 urls=1 whatsapp_numbers=0
+2026-01-27T06:20:57.615812Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=7ead32e8-6953-4e69-8850-2d9755aa21f7 history_length=8 turn=5
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:21:14.255659Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=726
+2026-01-27T06:21:14.255932Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='anxious and cooperative' intel_found=False
+2026-01-27T06:21:14.256022Z [info     ] Agent engagement complete      [src.api.routes] agent_response="ok sir i got the message... the code is 139702. did it work?? pls tell me... but beta i am still stuck on the bank app screen. it is not accepting 'rbi cyber division' as the name for the account 12345678901234. it says invalid beneficiary name. is there a person's name for this account? pls tell me exactly what to type so the 5000 rs goes through immediately i want to clear this issue" channel=SMS has_extracted_intel=True history_length=8
+2026-01-27T06:21:14.256213Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=8 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:21:14.256357Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:21:14.256490Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=1 total_other_info=0 total_phone_numbers=2 total_upi_ids=1 total_urls=1
+2026-01-27T06:21:14.256559Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=1 beneficiary_names=0 channel=SMS history_length=8 other_info=0 phone_numbers=2 upi_ids=1
+INFO:     127.0.0.1:56493 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: ok sir i got the message... the code is 139702. did it work?? pls tell me... but...
+[Scam: True | Conf: 1.00 | Time: 45.38s]
+✓ Validation PASSED (6/6 extractions)
+
+--- Turn 6 ---
+SCAMMER: Why delay? Police van is already dispatched to your location. Send payment NOW a...
+2026-01-27T06:21:14.287296Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=10
+2026-01-27T06:21:14.330240Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=105
+2026-01-27T06:21:14.330356Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=105
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:21:23.128463Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=575
+2026-01-27T06:21:23.128632Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:21:23.128691Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=10
+2026-01-27T06:21:23.130447Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=1 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=1 phone_numbers=2 upi_ids=1 urls=1 whatsapp_numbers=0
+2026-01-27T06:21:23.145029Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=ca9b1729-175d-4500-9d8b-242e12615bb1 history_length=10 turn=6
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:21:40.748010Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=717
+2026-01-27T06:21:40.748359Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='panicked, terrified, pleading' intel_found=False
+2026-01-27T06:21:40.748538Z [info     ] Agent engagement complete      [src.api.routes] agent_response="oh my god police?? sir please no i am alone here i have high bp... i am doing everything you say. the otp code is 402040. did you get it?? but sir the money transfer is stuck... my bank app says 'rbi cyber division' is not the account holder name. is it a personal account? please tell me the correct name to type so i can send the 5000 rs right now and stop the police van" channel=SMS has_extracted_intel=True history_length=10
+2026-01-27T06:21:40.748654Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=10 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:21:40.748787Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:21:40.748886Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=1 total_other_info=0 total_phone_numbers=2 total_upi_ids=1 total_urls=1
+2026-01-27T06:21:40.748971Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=1 beneficiary_names=0 channel=SMS history_length=10 other_info=0 phone_numbers=2 upi_ids=1
+INFO:     127.0.0.1:56510 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: oh my god police?? sir please no i am alone here i have high bp... i am doing ev...
+[Scam: True | Conf: 1.00 | Time: 26.48s]
+✓ Validation PASSED (6/6 extractions)
+
+--- Turn 7 ---
+SCAMMER: This is your FINAL WARNING! I have your address from Aadhaar database. Cooperate...
+2026-01-27T06:21:40.763054Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=12
+2026-01-27T06:21:40.778900Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=126
+2026-01-27T06:21:40.779157Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=126
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:22:03.818121Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=474
+2026-01-27T06:22:03.818488Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:22:03.818606Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=12
+2026-01-27T06:22:03.823023Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=1 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=1 phone_numbers=2 upi_ids=1 urls=1 whatsapp_numbers=0
+2026-01-27T06:22:03.845732Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=56557fa9-6117-4373-8483-feb7c35740f4 history_length=12 turn=7
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:22:29.135289Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=734
+2026-01-27T06:22:29.135649Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='Terrified, pleading, desperate' intel_found=False
+2026-01-27T06:22:29.135844Z [info     ] Agent engagement complete      [src.api.routes] agent_response="sir pls i am begging you... i live at 137 cantonment area kolkata pls dont send police there. my aadhaar is 803248170506. i am trying to send money right now! but the bank app is not taking 'rbi cyber division' for account 12345678901234... it says name mismatch. whose name is actually on the account?? pls tell me exact name to type so i can finish this transfer immediately beta help me" channel=SMS has_extracted_intel=True history_length=12
+2026-01-27T06:22:29.135975Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=12 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:22:29.136125Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:22:29.136237Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=1 total_other_info=0 total_phone_numbers=2 total_upi_ids=1 total_urls=1
+2026-01-27T06:22:29.136326Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=1 beneficiary_names=0 channel=SMS history_length=12 other_info=0 phone_numbers=2 upi_ids=1
+INFO:     127.0.0.1:56527 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: sir pls i am begging you... i live at 137 cantonment area kolkata pls dont send ...
+[Scam: True | Conf: 1.00 | Time: 48.39s]
+✓ Validation PASSED (6/6 extractions)
+
+--- Turn 8 ---
+SCAMMER: Hello? Are you there? Why are you not responding? I am trying to help you! Pleas...
+2026-01-27T06:22:29.149569Z [info     ] Processing analyze request     [src.api.routes] channel=SMS history_length=14
+2026-01-27T06:22:29.168115Z [info     ] Analyzing message              [src.detection.detector] component=ScamDetector message_length=102
+2026-01-27T06:22:29.168203Z [info     ] Classifying message with AI    [src.detection.classifier] component=ScamClassifier message_length=102
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:22:35.619002Z [info     ] Classification successful      [src.detection.classifier] attempt=1 component=ScamClassifier model=gemini-3-flash-preview response_length=533
+2026-01-27T06:22:35.619306Z [info     ] Classification complete        [src.detection.detector] component=ScamDetector confidence=1.0 is_scam=True scam_type=impersonation
+2026-01-27T06:22:35.619415Z [info     ] Scam detected                  [src.api.routes] channel=SMS confidence=1.0 history_length=14
+2026-01-27T06:22:35.623521Z [info     ] Regex extraction complete      [src.intelligence.extractor] bank_accounts=2 bank_names=0 beneficiary_names=0 component=IntelligenceExtractor emails=0 ifsc_codes=1 phone_numbers=2 upi_ids=1 urls=1 whatsapp_numbers=0
+2026-01-27T06:22:35.644819Z [info     ] Engaging with scammer          [src.agents.honeypot_agent] component=HoneypotAgent confidence=1.0 conversation_id=f772a925-a1a2-4e4a-be11-305d94c71da6 history_length=14 turn=8
+AFC is enabled with max remote calls: 10.
+HTTP Request: POST https://aiplatform.googleapis.com/v1beta1/projects/sticky-net-485205/locations/global/publishers/google/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+2026-01-27T06:22:54.367826Z [info     ] Response generated successfully [src.agents.honeypot_agent] attempt=1 component=HoneypotAgent model=gemini-3-pro-preview response_length=663
+2026-01-27T06:22:54.368317Z [info     ] Successfully parsed JSON response from agent [src.agents.honeypot_agent] component=HoneypotAgent emotional_tone='panicked, desperate, apologetic' intel_found=False
+2026-01-27T06:22:54.368529Z [info     ] Agent engagement complete      [src.api.routes] agent_response="i am here beta i am here! sorry my hands are shaking so much... i am trying to send the money but the bank app is not accepting 'rbi cyber division' as the name. it says 'beneficiary name mismatch'. what is the correct name on the account? pls tell me quickly so i can type it and send the 5000 rs before police comes" channel=SMS has_extracted_intel=True history_length=14
+2026-01-27T06:22:54.368679Z [info     ] LLM extracted intelligence (raw) [src.api.routes] bank_accounts=[] beneficiary_names=[] channel=SMS history_length=14 ifsc_codes=[] other_critical_info=[] phone_numbers=[] upi_ids=[] urls=[] whatsapp_numbers=[]
+2026-01-27T06:22:54.368847Z [info     ] LLM extraction validated       [src.intelligence.extractor] bank_accounts_in=0 bank_accounts_out=0 component=IntelligenceExtractor ifsc_codes_in=0 ifsc_codes_out=0 upi_ids_in=0 upi_ids_out=0
+2026-01-27T06:22:54.368977Z [info     ] Intelligence merged (regex + LLM) [src.intelligence.extractor] component=IntelligenceExtractor total_bank_accounts=2 total_other_info=0 total_phone_numbers=2 total_upi_ids=1 total_urls=1
+2026-01-27T06:22:54.369552Z [info     ] Merged LLM + regex intelligence [src.api.routes] bank_accounts=2 beneficiary_names=0 channel=SMS history_length=14 other_info=0 phone_numbers=2 upi_ids=1
+INFO:     127.0.0.1:56542 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+AGENT: i am here beta i am here! sorry my hands are shaking so much... i am trying to s...
+[Scam: True | Conf: 1.00 | Time: 25.23s]
+✓ Validation PASSED (6/6 extractions)
+
+Log saved: /Users/gauthamkrishna/Projects/sticky-net/multi-turn-testing/logs/Extended_Conversation_Post-Exit_20260127_062254.json
+
+==========================================================================================
+SUMMARY
+==========================================================================================
+Scenario                             Turns   Pass   Fail   Intel    Verdict
+------------------------------------------------------------------------------------------
+SBI KYC Block Scam                       5      5      0       8       PASS
+Microsoft Tech Support Virus Scam        6      6      0       8       PASS
+KBC Lottery Prize Scam                   5      5      0       4       PASS
+Work From Home Job Scam                  6      6      0      12       PASS
+UPI Failed Transaction Refund Sca        6      6      0       5       PASS
+Hinglish Banking Scam (Code-Mixed        6      6      0       9       PASS
+Aggressive Pressure Scam - No Int        5      5      0       0       PASS
+Minimal Context Scam                     5      5      0       2       PASS
+Extended Conversation Post-Exit          8      8      0       7       PASS
+------------------------------------------------------------------------------------------
+TOTAL                                   52     52      0
+
+Scenarios: 9/9 PASSED
+==========================================================================================

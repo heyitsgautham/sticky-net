@@ -1,5 +1,5 @@
 ---
-applyTo: "**"
+#applyTo: "**"
 ---
 
 # Milestone 5: Intelligence Extraction (Hybrid Approach)

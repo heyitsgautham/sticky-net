@@ -1,0 +1,10 @@
+Agentic Honey-Pot – API Endpoint Tester
+This Honeypot API Endpoint Tester allows participants to validate whether their deployed honeypot service is reachable, secured, and responding correctly. The tester verifies authentication, endpoint availability, and response behavior using a simple request.
+
+Headers *
+x-api-key *
+test-api-key
+Honeypot API Endpoint URL *
+https://sticky-net-140367184766.asia-south1.run.app/api/v1/simple
+Test Result
+Error! INVALID_REQUEST_BODY

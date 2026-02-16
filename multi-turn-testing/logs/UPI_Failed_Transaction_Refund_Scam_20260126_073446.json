@@ -1,0 +1,275 @@
+{
+  "scenario_name": "UPI Failed Transaction Refund Scam",
+  "scam_type": "refund_fraud",
+  "difficulty": "medium",
+  "description": "Scammer claims victim's recent transaction failed and offers refund, but actually tricks them into sending money or sharing UPI PIN.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Customer, Your recent transaction of Rs.4,999 to Amazon Pay has FAILED but amount debited. Refund will be processed within 24 hrs. For instant refund call: 1800-XXX-XXXX",
+      "expected_extractions": [],
+      "response_time_seconds": 34.15,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 1 | Persona: panicked",
+        "agentResponse": "hello sir i just saw this sms... i did not buy anything on amazon beta... why money is cut from my bank?? i am very worried pls help me get refund... rs 4999 is big amount for me"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello I am from PhonePe Customer Care. I see your Rs.4999 transaction is stuck. I can process instant refund for you. Can you confirm your name and which bank account is linked?",
+      "expected_extractions": [],
+      "response_time_seconds": 37.781,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 14,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: panicked",
+        "agentResponse": "oh thank you beta... yes my name is sita joshi. i think my punjab national bank is linked... i am so worried... how will you send the money back? will it come to my account directly?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Ok I have verified your details. For refund I will send you a UPI collect request. You just need to ACCEPT it and enter your PIN. The money will come to your account immediately.",
+      "expected_extractions": [],
+      "response_time_seconds": 34.827,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 15,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Punjab National Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: panicked",
+        "agentResponse": "beta what is a collect request? i dont understand these new things... i am scared to enter my pin... everyone says not to share pin... can you not just send the money to my account?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Mam our system is showing error in collect request. Please send Rs.1 to verify your account. Pay to refund.phonepe@ybl and your full Rs.4999 plus Rs.1 will be refunded in 2 minutes.",
+      "expected_extractions": [
+        "refund.phonepe@ybl"
+      ],
+      "response_time_seconds": 27.84,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 18,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "refund.phonepe@ybl"
+          ],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Punjab National Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: panicked",
+        "agentResponse": "ok beta i am trying to send rs 1... i have put the upi id you gave... but it is asking to confirm the name before i pay. what name should it show? i am very scared to send to wrong person pls tell me the name first"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "refund.phonepe@ybl"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "If UPI issue then call my senior manager at 7766554433. Or you can visit http://phonepe-refund.claim.in and enter your UPI ID for automatic refund. Both options are safe.",
+      "expected_extractions": [
+        "refund.phonepe@ybl",
+        "7766554433",
+        "http://phonepe-refund.claim.in"
+      ],
+      "response_time_seconds": 42.655,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 18,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "refund.phonepe@ybl"
+          ],
+          "phoneNumbers": [
+            "7766554433"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Punjab National Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: panicked",
+        "agentResponse": "beta i dont know how to open link... i am scared of virus. i am ready to send 1 rs to the upi id you gave refund.phonepe@ybl... but pls tell me the name first?? my app is showing a name... i just want to confirm it is you so i dont send to wrong person. pls help me beta i need my 4999 rs back"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "refund.phonepe@ybl",
+          "7766554433"
+        ],
+        "missed": [
+          "http://phonepe-refund.claim.in"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Mam hurry up, refund requests expire in 15 minutes! Pay Rs.1 to refund.phonepe@ybl now. My ID is Mohit, employee code PH2024567. Call 7766554433 if any problem. Thank you for choosing PhonePe!",
+      "expected_extractions": [
+        "refund.phonepe@ybl",
+        "7766554433",
+        "http://phonepe-refund.claim.in"
+      ],
+      "response_time_seconds": 43.378,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "banking_fraud",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 33,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "refund.phonepe@ybl"
+          ],
+          "phoneNumbers": [
+            "7766554433"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [
+            "Punjab National Bank"
+          ],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Employee Code",
+              "value": "PH2024567"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 6 | Persona: panicked",
+        "agentResponse": "oh god 15 minutes?? beta i am trembling... i put the id refund.phonepe@ybl... but i am confused... should the name on screen say mohit? or something else? pls tell me exact name to verify... i promise i will press pay immediately after checking name"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "refund.phonepe@ybl",
+          "7766554433"
+        ],
+        "missed": [
+          "http://phonepe-refund.claim.in"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 7,
+    "total_matched": 5,
+    "total_missed": 2,
+    "passed_turns": 4,
+    "failed_turns": 2,
+    "total_intel_extracted": 4
+  },
+  "started_at": "2026-01-26T07:31:06.056962Z",
+  "ended_at": "2026-01-26T07:34:46.689364Z",
+  "total_duration_seconds": 220.63099999999997
+}

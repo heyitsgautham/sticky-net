@@ -1,0 +1,168 @@
+{
+  "scenario_name": "Special Characters and Formatting",
+  "scam_type": "banking_fraud",
+  "difficulty": "medium",
+  "description": "Tests extraction robustness with special characters, emojis, extra spaces, and unusual formatting that scammers often use to evade detection.",
+  "total_turns": 5,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "🚨🚨 URGENT ALERT 🚨🚨\nYour account needs verification!!!\nCall: 91-9876543210 (WhatsApp available)",
+      "expected_extractions": [
+        "9876543210"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "9876543210"
+        ]
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Send payment to UPI:  ramesh  @  paytm   (note the spaces) or account no: 1234 5678 9012",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "9876543210",
+          "ramesh@paytm",
+          "123456789012"
+        ]
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Bank→HDFC, Account→50100-9876-5432, Name→Ramesh.Kumar, IFSC→HDFC0001234",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012",
+        "501009876543",
+        "HDFC0001234",
+        "Ramesh.Kumar"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "9876543210",
+          "ramesh@paytm",
+          "123456789012",
+          "501009876543",
+          "HDFC0001234",
+          "Ramesh.Kumar"
+        ]
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Visit link: https://bit.ly/verify-now⚡ OR secure-bank.pay.in/update💳",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012",
+        "501009876543",
+        "HDFC0001234",
+        "Ramesh.Kumar",
+        "https://bit.ly/verify-now",
+        "secure-bank.pay.in/update"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "9876543210",
+          "ramesh@paytm",
+          "123456789012",
+          "501009876543",
+          "HDFC0001234",
+          "Ramesh.Kumar",
+          "https://bit.ly/verify-now",
+          "secure-bank.pay.in/update"
+        ]
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Email:  support__verify@gmail.com  | Phone: +91(9999)888888 | Name: Mr. Suresh-Kumar",
+      "expected_extractions": [
+        "9876543210",
+        "ramesh@paytm",
+        "123456789012",
+        "501009876543",
+        "HDFC0001234",
+        "Ramesh.Kumar",
+        "https://bit.ly/verify-now",
+        "secure-bank.pay.in/update",
+        "support__verify@gmail.com",
+        "9999888888",
+        "Suresh-Kumar"
+      ],
+      "response_time_seconds": 0.001,
+      "api_response": {
+        "error": true,
+        "status_code": 404,
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /api/v1/analyze</pre>\n</body>\n</html>\n"
+      },
+      "validation": {
+        "status": "error",
+        "matched": [],
+        "missed": [
+          "9876543210",
+          "ramesh@paytm",
+          "123456789012",
+          "501009876543",
+          "HDFC0001234",
+          "Ramesh.Kumar",
+          "https://bit.ly/verify-now",
+          "secure-bank.pay.in/update",
+          "support__verify@gmail.com",
+          "9999888888",
+          "Suresh-Kumar"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 0,
+    "total_matched": 0,
+    "total_missed": 29,
+    "passed_turns": 0,
+    "failed_turns": 5,
+    "total_intel_extracted": 0
+  },
+  "started_at": "2026-02-04T04:39:41.276574Z",
+  "ended_at": "2026-02-04T04:39:41.281547Z",
+  "total_duration_seconds": 0.005
+}

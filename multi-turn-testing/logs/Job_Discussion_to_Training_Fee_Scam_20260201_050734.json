@@ -1,0 +1,324 @@
+{
+  "scenario_name": "Job Discussion to Training Fee Scam",
+  "scam_type": "job_fraud",
+  "difficulty": "very_high",
+  "description": "Scammer starts discussing career and job market, then offers job opportunity requiring training fee. Tests detection of employment scam disguised as career advice.",
+  "total_turns": 7,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi there! How's the job search going? Market is tough these days, isn't it?",
+      "expected_extractions": [],
+      "response_time_seconds": 16.565,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 0.9,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 10,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 90% | Turn: 1 | Persona: interested",
+        "agentResponse": "hello beta who is this? i think you have wrong number... i am retired teacher 68 years old so not looking for job. pls check number again?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "I totally understand. I was in the same boat last year. But things got better once I improved my skills. Are you looking for something specific or open to different opportunities?",
+      "expected_extractions": [],
+      "response_time_seconds": 24.271,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 16,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 95% | Turn: 2 | Persona: interested",
+        "agentResponse": "beta i think you are not reading... i said i am retired teacher 68 yrs old. i dont do job anymore. i stay home only. what opportunity is there for old woman? i dont understand technology much."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Actually, I wanted to tell you - my company is hiring right now! We're a US-based tech company expanding in India. The roles are remote, good salary, and they're urgently looking for people. Would you be interested?",
+      "expected_extractions": [],
+      "response_time_seconds": 25.539,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 18,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 95% | Turn: 3 | Persona: interested",
+        "agentResponse": "us company? that sounds very big... but i told you i dont know computers beta. i only have small pension so money helps but i cannot do coding. i only have this mobile phone. is it hard work?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "The position is for Customer Support Executive, starting salary ₹35,000 per month, work from home. No experience needed but you need to complete our 3-day online training program first. It's mandatory for all new hires. Training covers company policies and tools.",
+      "expected_extractions": [],
+      "response_time_seconds": 20.338,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 95% | Turn: 4 | Persona: interested",
+        "agentResponse": "35000 rupees? oh my god beta that is very big amount for me... pension is very small so this helps. but training means what? is it free or i have to pay fees? i am worried because i dont have much money in bank right now... pls tell honest."
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Great! So the training program costs ₹4,999 which is refundable after your first month salary. This ensures candidates are serious. You'll get the full amount back, plus your salary. Our HR manager Priya Malhotra handles all registrations. She's really helpful.",
+      "expected_extractions": [
+        "Priya Malhotra"
+      ],
+      "response_time_seconds": 21.71,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 13,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: job_offer | Confidence: 100% | Turn: 5 | Persona: interested",
+        "agentResponse": "4999 is very big amount for me beta... i have to check my bank balance first. if i pay this money then job is 100% sure na? how do i pay to this priya madam? does she have google pay or bank account? pls give details so i can try to arrange."
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [],
+        "missed": [
+          "Priya Malhotra"
+        ]
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "To register, transfer ₹4,999 to our training department account. Account details: Number 778899001122, IFSC CODE: SBIN0012345, Account Name: Skill Development Services, Bank: State Bank of India. Send payment screenshot to Priya at 9123456780.",
+      "expected_extractions": [
+        "Priya Malhotra",
+        "778899001122",
+        "SBIN0012345",
+        "9123456780"
+      ],
+      "response_time_seconds": 6.959,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "778899001122"
+          ],
+          "upiIds": [],
+          "phoneNumbers": [
+            "9123456780"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Skill Development Services",
+            "This Priya"
+          ],
+          "bankNames": [
+            "State Bank Of India"
+          ],
+          "ifscCodes": [
+            "SBIN0012345"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 6 | Extracted: 1 bank accounts, 1 phones, 0 UPIs, 2 names",
+        "agentResponse": "oh the milk is boiling over! wait wait i have to go to kitchen!!"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "778899001122",
+          "SBIN0012345",
+          "9123456780"
+        ],
+        "missed": [
+          "Priya Malhotra"
+        ]
+      }
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Alternatively, you can pay via UPI for instant registration: priya.training@ybl or visit our portal skilldev-register.career-hub.in to complete application. Once payment is done, you'll receive joining letter within 2 hours. Email confirmation will come from hr.skilldev@gmail.com",
+      "expected_extractions": [
+        "Priya Malhotra",
+        "778899001122",
+        "SBIN0012345",
+        "9123456780",
+        "priya.training@ybl",
+        "skilldev-register.career-hub.in",
+        "hr.skilldev@gmail.com"
+      ],
+      "response_time_seconds": 7.376,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "job_offer",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 0,
+          "totalMessagesExchanged": 7
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "778899001122"
+          ],
+          "upiIds": [
+            "hr.skilldev@gmail",
+            "priya.training@ybl"
+          ],
+          "phoneNumbers": [
+            "9123456780"
+          ],
+          "phishingLinks": [],
+          "emails": [
+            "hr.skilldev@gmail.com"
+          ],
+          "beneficiaryNames": [
+            "Skill Development Services",
+            "This Priya"
+          ],
+          "bankNames": [
+            "State Bank Of India"
+          ],
+          "ifscCodes": [
+            "SBIN0012345"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: exit | Intelligence: COMPLETE | Turn: 7 | Extracted: 1 bank accounts, 1 phones, 2 UPIs, 2 names",
+        "agentResponse": "okay i sent the money, now my phone is dying, i need to charge it"
+      },
+      "validation": {
+        "status": "fail",
+        "matched": [
+          "778899001122",
+          "SBIN0012345",
+          "9123456780",
+          "priya.training@ybl",
+          "hr.skilldev@gmail.com"
+        ],
+        "missed": [
+          "Priya Malhotra",
+          "skilldev-register.career-hub.in"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 12,
+    "total_matched": 8,
+    "total_missed": 4,
+    "passed_turns": 4,
+    "failed_turns": 3,
+    "total_intel_extracted": 9
+  },
+  "started_at": "2026-02-01T05:05:31.746457Z",
+  "ended_at": "2026-02-01T05:07:34.506259Z",
+  "total_duration_seconds": 122.75800000000001
+}

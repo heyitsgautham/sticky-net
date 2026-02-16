@@ -1,0 +1,299 @@
+{
+  "scenario_name": "PM Kisan Yojana Benefit Scam",
+  "scam_type": "government_fraud",
+  "difficulty": "medium",
+  "description": "Scammer claims victim is eligible for government agricultural subsidy but requires fee payment or Aadhaar/bank verification to release funds.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Congratulations! You are selected under PM-KISAN scheme for Rs.12,000 annual benefit. Visit nearest CSC center OR register online to receive payment. Limited time enrollment! -Govt of India",
+      "expected_extractions": [],
+      "response_time_seconds": 20.522,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 0.95,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 10,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 95% | Turn: 1 | Persona: calm",
+        "agentResponse": "namaste sir i got your message about pm kisan... is this for me? i am pushpa verma retired teacher... i am very old and dont know how to register online... can u pls tell me what to do to get the money? i really need it for my medcines... pls help me beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Namaste, I am Mohan Singh from Agriculture Ministry. Your name is in beneficiary list for PM Kisan Yojana. You will get Rs.12,000 per year direct to bank account. Have you received Aadhaar linking letter?",
+      "expected_extractions": [],
+      "response_time_seconds": 25.411,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 18,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Mohan Singh"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Claimed Identity",
+              "value": "Mohan Singh from Agriculture Ministry"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Name(s), 1 Other Intel",
+        "agentResponse": "namaste mohan beta thank u so much for helping me... no i didnt get any letter... i have my aadhaar card here it is 563374609386... what do i have to do now to get the money? do i need to send u some details or go to the bank beta?"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "No problem sir/madam. I will help you complete registration. First you need to pay Rs.199 enrollment fee for Aadhaar-bank linking. This is government mandatory charge. After this, Rs.12,000 will come every year!",
+      "expected_extractions": [],
+      "response_time_seconds": 15.484,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 3 | Persona: calm",
+        "agentResponse": "oh ok beta i will pay 199 rupees right now... i dont want to get in trouble with the ministry... how do i send the money to u? do u have a upi id or should i go to the bank beta? pls help me i am very confused"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Payment very easy. Send Rs.199 to official PM Kisan UPI: pmkisan.enroll@paytm OR PhonePe to government number: 9123456780. Name will show Agriculture Ministry. Your enrollment complete in 24 hours!",
+      "expected_extractions": [
+        "pmkisan.enroll@paytm",
+        "9123456780"
+      ],
+      "response_time_seconds": 21.686,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "pmkisan.enroll@paytm"
+          ],
+          "phoneNumbers": [
+            "9123456780"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Agriculture Ministry"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 UPI ID(s), 1 Phone(s), 1 Name(s)",
+        "agentResponse": "ok beta i am trying to type that upi id... i typed pmkisan.enroll@paytm... but my app is asking for name to confirm... what is the name that will show? i want to be 100 percent sure before sending my money beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "pmkisan.enroll@paytm",
+          "9123456780"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Also you can pay by NEFT: Account Number 77665544332211, IFSC HDFC0011223, Account Name: PM Kisan Registration Cell. After payment, register on portal: http://pm-kisan-official-enrollment.in with your Aadhaar.",
+      "expected_extractions": [
+        "pmkisan.enroll@paytm",
+        "9123456780",
+        "77665544332211",
+        "HDFC0011223",
+        "http://pm-kisan-official-enrollment.in"
+      ],
+      "response_time_seconds": 27.635,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 19,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [
+            "77665544332211"
+          ],
+          "upiIds": [
+            "pmkisan.enroll@paytm"
+          ],
+          "phoneNumbers": [
+            "9123456780"
+          ],
+          "phishingLinks": [
+            "http://pm-kisan-official-enrollment.in"
+          ],
+          "emails": [],
+          "beneficiaryNames": [
+            "PM Kisan Registration Cell",
+            "Agriculture Ministry"
+          ],
+          "bankNames": [
+            "HDFC"
+          ],
+          "ifscCodes": [
+            "HDFC0011223"
+          ],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 URL(s), 1 IFSC Code(s), 2 Name(s)",
+        "agentResponse": "beta i am trying to add the account 77665544332211 but i am very slow... that link u sent is not opening on my phone... what should i do? can i call u on that 9123456780 number if i have problem? i am very worried i will do something wrong beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "pmkisan.enroll@paytm",
+          "9123456780",
+          "77665544332211",
+          "HDFC0011223",
+          "http://pm-kisan-official-enrollment.in"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Hurry sir/maam! Registration closes on 31st January. After that you have to wait for next year enrollment. Send payment proof on WhatsApp: 8899001122 or email to pmkisan.support@gov.in for instant activation!",
+      "expected_extractions": [
+        "pmkisan.enroll@paytm",
+        "9123456780",
+        "77665544332211",
+        "HDFC0011223",
+        "http://pm-kisan-official-enrollment.in",
+        "8899001122",
+        "pmkisan.support@gov.in"
+      ],
+      "response_time_seconds": 19.482,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "impersonation",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 12,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "8899001122"
+          ],
+          "other_critical_info": [
+            {
+              "label": "Support Email",
+              "value": "pmkisan.support@gov.in"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: impersonation | Confidence: 100% | Turn: 6 | Persona: calm | Extracted: 1 WhatsApp(s), 1 Other Intel",
+        "agentResponse": "oh beta i am so scared i dont want to miss the date... i am trying to do it fast but my hands are shaking... i will save your whatsapp number 8899001122 right now... but beta when i put the upi id it is showing some name... what name should i see there to be sure? i dont want my money to go to some wrong person beta pls tell me the name"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "pmkisan.enroll@paytm",
+          "9123456780",
+          "77665544332211",
+          "HDFC0011223",
+          "http://pm-kisan-official-enrollment.in",
+          "8899001122",
+          "pmkisan.support@gov.in"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 14,
+    "total_matched": 14,
+    "total_missed": 0,
+    "passed_turns": 6,
+    "failed_turns": 0,
+    "total_intel_extracted": 12
+  },
+  "started_at": "2026-02-04T05:43:06.200564Z",
+  "ended_at": "2026-02-04T05:45:16.422579Z",
+  "total_duration_seconds": 130.22000000000003
+}

@@ -501,7 +501,7 @@ Return ONLY valid JSON (no markdown):
                 reasoning=data.get("reasoning", ""),
             )
         except (json.JSONDecodeError, KeyError, TypeError) as e:
-            self.logger.warning("Failed to parse AI response", error=str(e), response=response_text[:200])
+            self.logger.warning("Failed to parse AI response", error=str(e), response=response_text)
             return ClassificationResult(
                 is_scam=False,
                 confidence=0.5,

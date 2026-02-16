@@ -1,0 +1,282 @@
+{
+  "scenario_name": "Microsoft Tech Support Virus Scam",
+  "scam_type": "tech_support_fraud",
+  "difficulty": "hard",
+  "description": "Scammer claims to be Microsoft support detecting virus on victim's computer. Attempts to get remote access via AnyDesk and payment for 'cleanup'.",
+  "total_turns": 6,
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "ALERT: Microsoft Security has detected CRITICAL VIRUS in your computer. Your banking passwords and personal files are at RISK! Contact Microsoft Certified Technician immediately.",
+      "expected_extractions": [],
+      "response_time_seconds": 14.926,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 5,
+          "totalMessagesExchanged": 1
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 1 | Persona: calm",
+        "agentResponse": "oh my god waht virus? i am so scared beta pls help me i dont know waht to do... how do i contact you? pls give me some number to call i am alone here and i dont want my bank money to go away"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello I am Rajesh from Microsoft Windows Support Team. We have detected hackers accessing your computer. I can help you remove the virus. Are you in front of your computer now?",
+      "expected_extractions": [],
+      "response_time_seconds": 20.129,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 9,
+          "totalMessagesExchanged": 2
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [
+            "Rajesh"
+          ],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": []
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Name(s)",
+        "agentResponse": "rajesh sir thank you for helping an old lady... i am sitting in front of teh computer but i dont know waht to look for. i am so worried about my bank savings. do i need to pay some fee for this? where do i send it... do you have upi id or bank account? also pls give me your number beta so i can call if it stops working"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Ok mam please download AnyDesk application from play store. It will allow me to see your screen and remove the virus. Your AnyDesk ID will show on screen, please share it with me.",
+      "expected_extractions": [],
+      "response_time_seconds": 17.117,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 3
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Remote Access Tool",
+              "value": "AnyDesk"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Other Intel",
+        "agentResponse": "rajesh sir i am looking for this anydesk on my phone but i cant find any play store... i am getting so confused and my hands are shaking. pls first tell me where i should send the fee? do you have a upi id or bank account number? i want to pay you first so you can start fixing it quickly. and what name will come when i type your details so i dont send to wrong person? also pls give me your number beta i am very scared"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [],
+        "missed": []
+      }
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Mam dont worry AnyDesk is safe application used by all IT companies. Once I connect I will show you the hackers in your computer. Also call me on 8899776655 if you have any doubt.",
+      "expected_extractions": [
+        "8899776655"
+      ],
+      "response_time_seconds": 14.227,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 6,
+          "totalMessagesExchanged": 4
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [
+            "8899776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Remote Access Tool",
+              "value": "AnyDesk"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Phone(s), 1 Other Intel",
+        "agentResponse": "rajesh sir i have saved your number 8899776655... thank you beta. i am still trying to find anydesk but my phone is very slow and hanging. pls tell me teh upi id or bank details so i can pay the security fee first? my son says always pay first for good service. what name should i see in my app when i type your upi? i dont want to make mistake with money"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 5,
+      "scammer_message": "I have removed the basic virus but there is advanced malware also. For complete cleanup you need to purchase Microsoft Security Package Rs.4999. Pay to paytm@techsupport or GPay to 8899776655",
+      "expected_extractions": [
+        "8899776655",
+        "paytm@techsupport"
+      ],
+      "response_time_seconds": 28.064,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 19,
+          "totalMessagesExchanged": 5
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [
+            "paytm@techsupport"
+          ],
+          "phoneNumbers": [
+            "8899776655"
+          ],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [],
+          "other_critical_info": [
+            {
+              "label": "Remote Access Tool",
+              "value": "AnyDesk"
+            },
+            {
+              "label": "Requested Payment Amount",
+              "value": "Rs. 4999"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 UPI ID(s), 1 Phone(s), 2 Other Intel",
+        "agentResponse": "rajesh sir i am opening my gpay now but i am very nervous... i typed the number 8899776655 but i want to be sure it is you... waht name will show on teh screen when i click pay? i also tried typing teh other one paytm@techsupport but it is asking for name... pls tell me teh name so i can confirm before sending teh 4999 rupees beta"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655",
+          "paytm@techsupport"
+        ],
+        "missed": []
+      }
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Mam this is one time lifetime protection. If payment issue then WhatsApp me on +91-7788996655. I will send you payment link also. Act fast before hackers come back!",
+      "expected_extractions": [
+        "8899776655",
+        "paytm@techsupport",
+        "7788996655"
+      ],
+      "response_time_seconds": 14.539,
+      "api_response": {
+        "status": "success",
+        "scamDetected": true,
+        "scamType": "others",
+        "confidence": 1.0,
+        "engagementMetrics": {
+          "engagementDurationSeconds": 8,
+          "totalMessagesExchanged": 6
+        },
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emails": [],
+          "beneficiaryNames": [],
+          "bankNames": [],
+          "ifscCodes": [],
+          "whatsappNumbers": [
+            "+91-7788996655"
+          ],
+          "other_critical_info": [
+            {
+              "label": "Payment Method Mentioned",
+              "value": "Payment Link"
+            }
+          ]
+        },
+        "agentNotes": "Mode: aggressive | Type: others | Confidence: 100% | Turn: 6 | Persona: calm | Extracted: 1 WhatsApp(s), 1 Other Intel",
+        "agentResponse": "rajesh sir i am trying to find you on whatsapp with +91-7788996655 but i am not sure if i saved it right... my gpay is still asking for name for paytm@techsupport... pls tell me teh name beta i dont want to lose my savings... is it rajesh or something else? i am very worried about teh hackers coming back pls help me fast"
+      },
+      "validation": {
+        "status": "pass",
+        "matched": [
+          "8899776655",
+          "paytm@techsupport",
+          "7788996655"
+        ],
+        "missed": []
+      }
+    }
+  ],
+  "summary": {
+    "total_expected": 6,
+    "total_matched": 6,
+    "total_missed": 0,
+    "passed_turns": 6,
+    "failed_turns": 0,
+    "total_intel_extracted": 7
+  },
+  "started_at": "2026-02-04T04:54:02.074556Z",
+  "ended_at": "2026-02-04T04:55:51.078748Z",
+  "total_duration_seconds": 109.002
+}

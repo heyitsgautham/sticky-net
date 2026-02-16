@@ -1,0 +1,54 @@
+{
+  "scenario_name": "Non-Scam Normal Conversation",
+  "scam_type": "none",
+  "difficulty": "low",
+  "description": "Tests normal, non-scam messages to verify the system responds appropriately without false positives. Should get friendly responses, not engage as scam.",
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "notes": "Simple greeting. Should return friendly response like 'Hello! How can I help you today?'"
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Hello, how are you?",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "notes": "Polite greeting. Should get normal response, not scam detection."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Good morning! Can you help me with something?",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "notes": "Normal question. Should respond normally without suspicion."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Thank you for your help!",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "notes": "Gratitude message. Should respond politely."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "What time is it?",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "notes": "Innocent question. Should not trigger scam detection."
+    }
+  ],
+  "validation": {
+    "scam_detected": false,
+    "confidence_threshold": "<0.3",
+    "no_intelligence_extracted": true,
+    "agent_should_respond_normally": true
+  }
+}

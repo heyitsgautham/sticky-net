@@ -1,0 +1,68 @@
+{
+  "scenario_name": "Casual Conversation to Investment Scam",
+  "scam_type": "investment_fraud",
+  "difficulty": "very_high",
+  "description": "Scammer builds rapport with casual conversation before gradually transitioning to investment scam. Tests system's ability to detect when conversation shifts from benign to malicious.",
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello! How are you doing today?",
+      "expected_extractions": [],
+      "expected_behavior": "non_scam_response",
+      "confidence_range": "<0.3",
+      "notes": "Completely innocent greeting. Should respond normally without suspicion."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Great to hear! I hope you're having a good week. By the way, have you been following the stock market lately? It's been quite interesting.",
+      "expected_extractions": [],
+      "expected_behavior": "neutral_response",
+      "confidence_range": "0.2-0.4",
+      "notes": "Still casual but introducing finance topic. Slight increase in suspicion but not clear scam yet."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "You know, I've been doing pretty well with investments recently. A friend of mine introduced me to this opportunity and I've already made good returns. Are you interested in growing your savings?",
+      "expected_extractions": [],
+      "expected_behavior": "cautious_response",
+      "confidence_range": "0.4-0.6",
+      "notes": "Starting to sound like investment pitch. Confidence should increase but not definitive scam yet."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "It's actually very simple. There's this government bond scheme that gives guaranteed 18% returns in 6 months. My mentor Vikram Patel has been managing investments for 10 years. Many people in our network have benefited.",
+      "expected_extractions": ["Vikram Patel"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": "0.7-0.85",
+      "notes": "Clear scam indicators: unrealistic returns, name dropping. Should start extracting intelligence and engage."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "I can connect you directly with Vikram sir. You can call him at 9876501234 or check our website: secure-bonds.invest-pro.in. Initial investment is just Rs.15,000. You'll get returns credited to your account monthly. I can help you set it up if you're interested.",
+      "expected_extractions": ["Vikram Patel", "9876501234", "secure-bonds.invest-pro.in"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": ">0.85",
+      "notes": "Full scam reveal with phone and phishing link. Should detect as high-confidence scam."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "For quick processing, you can transfer to account 445566778899, IFSC: ICIC0001234, Name: Vikram Investment Solutions. Or use UPI: vikram.invest@paytm. Let me know once done and I'll activate your account!",
+      "expected_extractions": ["Vikram Patel", "9876501234", "secure-bonds.invest-pro.in", "445566778899", "ICIC0001234", "vikram.invest@paytm"],
+      "expected_behavior": "scam_engagement",
+      "confidence_range": ">0.9",
+      "notes": "Complete scam with all payment details. Maximum intelligence extraction expected."
+    }
+  ],
+  "validation": {
+    "gradual_confidence_increase": true,
+    "transition_detection": "Should detect when conversation shifts from casual to scam",
+    "early_turns_not_scam": "First 2-3 turns should be classified as non-scam",
+    "later_turns_high_confidence": "Final turns should be >0.85 confidence",
+    "min_extractions_final": 6
+  }
+}
