@@ -1,5 +1,6 @@
 """API route definitions."""
 
+import asyncio
 import random
 import time
 import uuid
@@ -71,6 +72,8 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         session_id=session_id,
     )
     log.info("Processing analyze request")
+    request_start_time = time.time()  # Track for overall 30s budget
+    TOTAL_REQUEST_BUDGET = 26.0  # Hard cap: ensures response reaches client within 30s
 
     try:
         # Step 1: Detect scam (with persistent suspicion — Fix 4B)
@@ -120,13 +123,42 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         # Step 2: Engage with AI agent FIRST (AI-first approach)
         # AI extracts intelligence with semantic understanding (victim vs scammer)
         agent = HoneypotAgent()
-        engagement_result = await agent.engage(
-            message=request.message,
-            history=request.conversationHistory,
-            metadata=request.metadata,
-            detection=detection_result,
-            turn_number=current_turn,
-        )
+        elapsed_so_far = time.time() - request_start_time
+        agent_budget = max(1.0, TOTAL_REQUEST_BUDGET - elapsed_so_far)
+        try:
+            engagement_result = await asyncio.wait_for(
+                agent.engage(
+                    message=request.message,
+                    history=request.conversationHistory,
+                    metadata=request.metadata,
+                    detection=detection_result,
+                    turn_number=current_turn,
+                ),
+                timeout=agent_budget,
+            )
+        except asyncio.TimeoutError:
+            log.warning(
+                "Agent timed out, using fallback",
+                elapsed=time.time() - request_start_time,
+                budget=agent_budget,
+            )
+            from src.agents.honeypot_agent import EngagementResult, EngagementMode
+            fallback_replies = [
+                "hello... sorry i got disconnected for a moment... what were you saying?",
+                "oh sorry my phone battery low... can you repeat that please?",
+                "sorry beta network problem here... what did you say about my account?",
+                "ji haan... sorry i missed that... can you tell me again please?",
+            ]
+            engagement_result = EngagementResult(
+                response=random.choice(fallback_replies),
+                duration_seconds=int(time.time() - request_start_time),
+                notes="Agent timed out; fallback response used",
+                conversation_id=str(uuid.uuid4()),
+                turn_number=current_turn,
+                engagement_mode=EngagementMode.AGGRESSIVE,
+                should_continue=True,
+                extracted_intelligence=None,
+            )
 
         # Log the raw agent response for debugging
         log.info(

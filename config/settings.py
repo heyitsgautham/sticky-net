@@ -37,9 +37,12 @@ class Settings(BaseSettings):
     llm_temperature: float = 0.7
 
     # API Timeout and Retry
-    api_timeout_seconds: int = 22  # Must stay under evaluator's 30s limit
-    gemini_max_retries: int = 1  # Single retry to stay within timeout budget
-    gemini_retry_delay_seconds: float = 0.5  # Fast retry
+    # Budget: 30s hard limit from evaluator
+    # Strategy: one attempt per model, then fallback to next model
+    # Worst case: pro_model(20s timeout) + flash_fallback(~3s) = ~23s ✓
+    api_timeout_seconds: int = 20  # Per-model timeout; must allow fallback within 30s
+    gemini_max_retries: int = 0  # No retry per model – fall to next model immediately
+    gemini_retry_delay_seconds: float = 0.5  # Kept for compatibility (unused when retries=0)
 
     # Engagement Policy
     max_engagement_turns_cautious: int = 10

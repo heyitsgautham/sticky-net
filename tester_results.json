@@ -1,0 +1,86 @@
+{
+  "results": [
+    {
+      "scenario_key": "bank_fraud",
+      "scenario_name": "Bank Fraud Detection",
+      "weight": 35,
+      "session_id": "913e2904-935e-4908-b5d7-ad3baae1cc6f",
+      "turns_completed": 3,
+      "total_messages": 6,
+      "duration_seconds": 63,
+      "avg_response_time": 19.11619488398234,
+      "max_response_time": 25.30249333381653,
+      "final_output": {
+        "sessionId": "913e2904-935e-4908-b5d7-ad3baae1cc6f",
+        "scamDetected": true,
+        "totalMessagesExchanged": 6,
+        "engagementDurationSeconds": 63,
+        "extractedIntelligence": {
+          "bankAccounts": [],
+          "upiIds": [],
+          "phoneNumbers": [],
+          "phishingLinks": [],
+          "emailAddresses": []
+        },
+        "agentNotes": "Scammer engaged across multiple turns",
+        "scamType": "bank_fraud",
+        "confidenceLevel": 0.9
+      },
+      "fake_data": {
+        "phoneNumbers": [
+          "+91-9867543210"
+        ],
+        "bankAccounts": [
+          "482100009012"
+        ],
+        "upiIds": [
+          "sbi.secure@fraudbank"
+        ],
+        "emailAddresses": [],
+        "phishingLinks": []
+      },
+      "conversation": [
+        {
+          "sender": "scammer",
+          "text": "URGENT: Your SBI account #4821-XXXX-XXXX-9012 has been compromised. Immediate verification required. Call our fraud helpline +91-9867543210 and share your OTP to secure your account.",
+          "timestamp": 1771567300500
+        },
+        {
+          "sender": "user",
+          "text": "beta i am very scared is my money gone? i am calling now but what is your name... also is there any website i should check? pls help me i am alone at home",
+          "timestamp": 1771567300600
+        },
+        {
+          "sender": "scammer",
+          "text": "I understand your concern. My employee ID is verified - SBI-FR-4421. Trust me.",
+          "timestamp": 1771567328753
+        },
+        {
+          "sender": "user",
+          "text": "oh thank you beta for telling me id... i was so worried my pension is gone... is there any website i can check to see if my account is safe now? i dont want to trouble my son in bangalore... also what is your good name beta so i can write it down in my diary",
+          "timestamp": 1771567328853
+        },
+        {
+          "sender": "scammer",
+          "text": "You can call our helpline at +91-9867543210 to verify. But we need to act NOW.",
+          "timestamp": 1771567351478
+        },
+        {
+          "sender": "user",
+          "text": "ji beta i am calling but it is not going through... my hands are shaking... pls tell me your name i am writing in my diary. do i have to transfer money to keep it safe? give me account number or upi where i should send... i dont want to lose my savings pls help me",
+          "timestamp": 1771567351578
+        }
+      ],
+      "scores": {
+        "scam_detection": 20,
+        "intel_extraction": 0,
+        "conversation_quality": 11,
+        "engagement_quality": 8,
+        "response_structure": 10,
+        "total": 49
+      }
+    }
+  ],
+  "weighted_scenario_score": 49.0,
+  "final_score_estimate": 52.1
+}
