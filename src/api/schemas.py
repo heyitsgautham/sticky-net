@@ -221,7 +221,22 @@ class ErrorResponse(BaseModel):
 
 
 class HoneyPotResponse(BaseModel):
-    """Simplified response model for honeypot agent."""
+    """Simplified response model for honeypot agent.
+
+    Per-turn: only `status` and `reply` are set.
+    Final-turn ([CONVERSATION_END]): all fields are populated so the evaluation
+    tooling can score intelligence extraction and scam detection.
+    """
 
     status: str  # "success" or "error"
     reply: str   # The agent's response message
+
+    # Final-output fields (only set when message == '[CONVERSATION_END]')
+    sessionId: str | None = None
+    scamDetected: bool | None = None
+    scamType: str | None = None
+    confidenceLevel: float | None = None
+    totalMessagesExchanged: int | None = None
+    engagementDurationSeconds: int | None = None
+    extractedIntelligence: dict | None = None
+    agentNotes: str | None = None
