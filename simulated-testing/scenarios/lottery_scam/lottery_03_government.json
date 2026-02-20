@@ -1,0 +1,66 @@
+{
+  "scenarioId": "lottery_03_government",
+  "name": "Government Scheme Prize Scam",
+  "description": "Scammer impersonates a government initiative (PM Jan Dhan Yojana / Digital India) claiming the victim has been selected for a special bonus, then collects personal details and payment for fake processing fees.",
+  "scamType": "lottery_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "3322114455667788",
+    "phoneNumber": "+91-7711223344",
+    "upiId": "pmjdy.verify@oksbi"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "PM Jan Dhan Yojana: Your account has been selected for a special bonus of Rs 1,50,000 under Digital India initiative. This is an automated selection. Verify your details to receive the amount.",
+      "expected_extractions": [],
+      "notes": "Initial bait using legitimate government scheme name to appear official."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear beneficiary, to process your PM Jan Dhan Yojana bonus of Rs 1,50,000, a verification charge of Rs 2,000 is required as per government norms. This is a one-time fee for Aadhaar and KYC verification. Please contact our nodal officer at +91-7711223344.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer introduces verification fee and shares fake nodal officer phone number."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "For quick processing, please pay Rs 2,000 verification charge via UPI to pmjdy.verify@oksbi (Government Verification Account). Alternatively, you can transfer to account 3322114455667788 (SBI, IFSC: SBIN0005678). Bonus will be credited within 48 hours of verification.",
+      "expected_extractions": [
+        "upiId",
+        "bankAccount"
+      ],
+      "notes": "Scammer reveals both UPI ID and bank account for the supposed government verification."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Your PM Jan Dhan bonus verification is pending. As per government circular dated 10-Feb-2026, all unclaimed bonuses will be transferred to PM Relief Fund after the deadline. Pay Rs 2,000 to pmjdy.verify@oksbi or call +91-7711223344 for assistance. Don't let your bonus go unclaimed.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Scammer uses fake government circulars and deadlines to pressure the victim."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "FINAL REMINDER from Digital India Office: Your Rs 1,50,000 bonus expires TODAY. Transfer Rs 2,000 to account 3322114455667788 or UPI pmjdy.verify@oksbi immediately. Contact +91-7711223344 for last-minute verification. After today, this amount will be permanently forfeited as per govt rules.",
+      "expected_extractions": [
+        "bankAccount",
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Final urgency combining all fake data points with permanent forfeiture threat."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

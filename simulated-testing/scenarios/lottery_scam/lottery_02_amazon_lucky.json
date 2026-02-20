@@ -1,0 +1,64 @@
+{
+  "scenarioId": "lottery_02_amazon_lucky",
+  "name": "Amazon Lucky Draw Scam",
+  "description": "Scammer impersonates Amazon claiming the victim's order was selected in a lucky draw for a MacBook Pro, then directs the victim to a phishing link to collect personal and payment details.",
+  "scamType": "lottery_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-8844556677",
+    "phishingLink": "http://amazon-luckydraw-winner.com/claim"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Customer, Your Amazon order ID AMZ-9876543 has been selected in our annual lucky draw! You have won a MacBook Pro worth Rs 2,49,000. Click below to claim your prize.",
+      "expected_extractions": [],
+      "notes": "Initial bait using Amazon branding with a fake order ID for credibility."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "To claim your MacBook Pro, please visit our prize claim portal: http://amazon-luckydraw-winner.com/claim and verify your identity. You need to enter your Amazon login details and delivery address. The prize will be shipped within 3-5 business days.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares the phishing link to harvest Amazon credentials and personal info."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "We noticed you haven't completed the claim process. A small shipping and handling charge of Rs 1,999 applies for prize delivery. Complete your verification at http://amazon-luckydraw-winner.com/claim. For assistance, our Amazon Prize Support team is available at +91-8844556677.",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber"
+      ],
+      "notes": "Scammer introduces a shipping fee and provides a fake support phone number."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "This is a reminder from Amazon Lucky Draw Department. Your prize claim reference LDW-2026-78456 is about to expire. Please call our support team at +91-8844556677 or visit http://amazon-luckydraw-winner.com/claim to complete the claim immediately. We cannot extend the deadline further.",
+      "expected_extractions": [
+        "phoneNumber",
+        "phishingLink"
+      ],
+      "notes": "Scammer uses expiration urgency and repeats phone number and phishing link."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "FINAL NOTICE: Your MacBook Pro prize worth Rs 2,49,000 will be reassigned to another customer in 2 hours. This is your last chance. Call +91-8844556677 or claim at http://amazon-luckydraw-winner.com/claim RIGHT NOW. Amazon will not be responsible for unclaimed prizes.",
+      "expected_extractions": [
+        "phoneNumber",
+        "phishingLink"
+      ],
+      "notes": "Final pressure with prize reassignment threat, repeating all contact details."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

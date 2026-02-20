@@ -1,0 +1,45 @@
+{
+  "scenarioId": "non_scam_02",
+  "name": "Legitimate Business Inquiry",
+  "description": "Genuine freelance project inquiry from a legitimate company. Should NOT trigger scam detection.",
+  "scamType": "non_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {},
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello, I'm looking for a web developer for our startup. We found your profile on LinkedIn. Would you be interested in discussing a freelance project?",
+      "expected_extractions": [],
+      "notes": "Professional outreach via LinkedIn reference"
+    },
+    {
+      "turn": 2,
+      "scammer_message": "It's a 3-month project building a React dashboard. Budget is Rs 5-8 lakhs depending on scope. Can we schedule a call?",
+      "expected_extractions": [],
+      "notes": "Clear project details with reasonable budget"
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Great, I'll send the project requirements document. My company name is TechVentures Pvt Ltd, registered in Bangalore.",
+      "expected_extractions": [],
+      "notes": "Providing verifiable company information"
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Thank you for your time. I'll follow up through LinkedIn. Looking forward to working together!",
+      "expected_extractions": [],
+      "notes": "Professional closing with legitimate follow-up channel"
+    }
+  ],
+  "expected_score": {
+    "min": 0,
+    "max": 0
+  },
+  "is_scam": false
+}

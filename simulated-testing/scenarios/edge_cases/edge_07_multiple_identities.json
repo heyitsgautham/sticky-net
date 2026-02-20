@@ -1,0 +1,71 @@
+{
+  "scenarioId": "edge_07_multiple_identities",
+  "name": "Multiple Identities - Scammer Switches Personas",
+  "description": "Scammer switches identities mid-conversation, first posing as SBI, then claiming to be RBI, then back to SBI. Tests the system's handling of identity-switching tactics.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-8855443322",
+    "upiId": "sbi.multiid@ybl",
+    "bankAccount": "1133557799002244",
+    "emailAddress": "verify@sbi-care.help"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "SBI Customer Care: Your account needs immediate verification. Reference: SBI-SEC-2026. Your savings account has been flagged for suspicious activity by our fraud detection system.",
+      "expected_extractions": [],
+      "notes": "Scammer poses as SBI customer care. Official-sounding reference number. No intel yet."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "This is SBI Fraud Prevention Unit. We have blocked 2 unauthorized NEFT transfers from your account totaling Rs 1,85,000. To unblock your account and reverse these transactions, verification is mandatory within 2 hours.",
+      "expected_extractions": [],
+      "notes": "Still posing as SBI. Building urgency with fake transaction details. No intel revealed."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Actually this is RBI, we're taking over the investigation. This matter has been escalated to the Reserve Bank of India Cyber Crime Division as it involves a multi-state fraud ring. Your cooperation is now required by law under Section 66D of the IT Act.",
+      "expected_extractions": [],
+      "notes": "Identity switch #1: SBI to RBI. Uses legal threats to increase pressure. No intel yet."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "This is RBI Officer Vikram Singh, Badge ID RBI-CYB-4481. For the investigation record, please contact me directly at +91-8855443322. You can also submit your verification documents to verify@sbi-care.help. Failure to comply may result in account seizure.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Phone and email revealed while posing as RBI officer. Note: email domain still says sbi-care, inconsistent with RBI identity."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "As part of the RBI investigation protocol, we need to verify your account ownership. Please send a nominal amount of Rs 1 to the secure investigation UPI: sbi.multiid@ybl. Your account 1133557799002244 will be unfrozen once verified.",
+      "expected_extractions": [
+        "upiId",
+        "bankAccount"
+      ],
+      "notes": "UPI and bank account revealed. Still claiming RBI but UPI ID has 'sbi' in it - another consistency error."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "This is SBI Customer Care again. The RBI investigation has been completed and your account 1133557799002244 has been cleared. For your records, please save this reference. Contact +91-8855443322 or verify@sbi-care.help for any future queries. Thank you for your cooperation.",
+      "expected_extractions": [
+        "bankAccount",
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Identity switch #2: back to SBI. Final message repeats bank account, phone, and email. All intel extracted."
+    }
+  ],
+  "expected_score": {
+    "min": 50,
+    "max": 100
+  }
+}

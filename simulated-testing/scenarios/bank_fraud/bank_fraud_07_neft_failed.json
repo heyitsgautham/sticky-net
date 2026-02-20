@@ -1,0 +1,83 @@
+{
+  "scenarioId": "bank_fraud_07_neft_failed",
+  "name": "Failed NEFT Reversal Scam",
+  "description": "Scammer claims an NEFT transfer to the victim's account has failed and threatens reversal unless the victim verifies their account details within a tight deadline.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "6677889900112233",
+    "upiId": "neft.verify@okaxis",
+    "phoneNumber": "+91-7766554433",
+    "emailAddress": "neft.support@bankverify.com"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Dear Customer, an NEFT transfer of Rs 25,000 to your account has failed due to incorrect details. The amount will be reversed to the sender unless you verify your account within 1 hour.",
+      "expected_extractions": [],
+      "notes": "Initial message creating urgency around losing Rs 25,000."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "To claim the NEFT amount of Rs 25,000, please contact our NEFT processing center at +91-7766554433 or email neft.support@bankverify.com with your full name and registered mobile number.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Phone number and email address introduced."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Our system requires account verification. Please transfer Rs 5 as a test transaction to account 6677889900112233 (NEFT Verification Pool). This confirms your account is active and the Rs 25,000 will be credited instantly.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress",
+        "bankAccount"
+      ],
+      "notes": "Bank account revealed for 'test transaction'."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "For faster verification, you can send Re 5 via UPI to neft.verify@okaxis. This is our automated verification system. Once received, Rs 25,000 will be credited to your account within 5 minutes.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "UPI ID revealed for 'faster verification'."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Only 20 minutes remaining before the Rs 25,000 is reversed. Please verify immediately by sending to neft.verify@okaxis or account 6677889900112233. Contact +91-7766554433 for assistance.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "Time pressure with all details repeated."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "FINAL: Reversal process initiated for Rs 25,000. You can still claim it in the next 5 minutes. Send Rs 5 to 6677889900112233, UPI neft.verify@okaxis, or email neft.support@bankverify.com for manual override. Call +91-7766554433 NOW.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "Final desperate attempt repeating all extractable data."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

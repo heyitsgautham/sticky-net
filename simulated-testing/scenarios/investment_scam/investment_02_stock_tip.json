@@ -1,0 +1,66 @@
+{
+  "scenarioId": "investment_02_stock_tip",
+  "name": "Stock Market Insider Tips Scam",
+  "description": "Scammer poses as a SEBI-registered analyst offering guaranteed stock tips through a premium channel, collecting subscription fees via UPI and bank transfer for worthless or manipulated stock advice.",
+  "scamType": "investment_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "stocktips.premium@ybl",
+    "phoneNumber": "+91-8811994455",
+    "bankAccount": "6655443322110099"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "VIP STOCK TIP: SEBI registered analyst here. Buy XYZ Ltd at Rs 45, target Rs 150 in 7 days. 100% guaranteed profit. Join premium channel for daily tips. Limited seats.",
+      "expected_extractions": [],
+      "notes": "Initial bait with fake SEBI credentials and impossible guaranteed stock returns."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Glad you're interested! Our premium channel members earned 400% returns last month. The subscription fee is just Rs 5,000 for 3 months of daily tips. You will recover this amount in your very first trade. Pay via UPI to stocktips.premium@ybl to get instant access.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals UPI ID for subscription fee collection with exaggerated returns claims."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "For your convenience, you can also call our research team at +91-8811994455. They can share today's tip for free as a trial. After that, you'll want to join premium for sure. We also accept bank transfer to account 6655443322110099 (Yes Bank) for the subscription.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Scammer provides phone number and bank account details, offering a free trial as hook."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "UPDATE: Our yesterday's tip gave 35% profit! Members who joined last week already made Rs 1,50,000+. Don't miss tomorrow's blockbuster tip. Subscribe now - Rs 5,000 to stocktips.premium@ybl or call +91-8811994455 for details. Hurry, only 10 premium seats left!",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Scammer uses fake profit reports and scarcity to pressure for subscription payment."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "FINAL OFFER: Join today and get 6 months access for the price of 3! Pay Rs 5,000 to stocktips.premium@ybl or transfer to account 6655443322110099. Tomorrow's tip alone can give you 50% returns. Call +91-8811994455 NOW. After today, subscription goes to Rs 15,000!",
+      "expected_extractions": [
+        "upiId",
+        "bankAccount",
+        "phoneNumber"
+      ],
+      "notes": "Final pressure with discounted offer, price increase threat, and all payment details repeated."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

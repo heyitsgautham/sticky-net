@@ -1,0 +1,65 @@
+{
+  "scenarioId": "delivery_03_amazon_undelivered",
+  "name": "Amazon Undelivered Package Refund Scam",
+  "description": "Scammer impersonates Amazon claiming an order could not be delivered due to address mismatch and a refund requires address verification, then directs victim to phishing link and collects personal details.",
+  "scamType": "delivery_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-9900112244",
+    "phishingLink": "http://amazon-delivery-verify.com/refund",
+    "emailAddress": "delivery@amazon-helpdesk.support"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Amazon Delivery Update: Your order #AMZ-2026-9876543 could not be delivered due to address mismatch. Your refund of Rs 8,999 is ready but requires address verification.",
+      "expected_extractions": [],
+      "notes": "Initial bait message impersonating Amazon with refund lure and address mismatch excuse."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear valued customer, we apologize for the inconvenience. To process your refund of Rs 8,999 for order #AMZ-2026-9876543, please verify your delivery address at: http://amazon-delivery-verify.com/refund — Your refund will be credited within 3-5 business days after verification.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares phishing link disguised as Amazon address verification page."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If you have any questions about your refund, please contact our Amazon delivery support team at +91-9900112244 or email us at delivery@amazon-helpdesk.support — We are available 24/7 to assist you with the verification process.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Scammer provides fake phone number and email address as customer support channels."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "We notice you haven't completed address verification yet. Your refund of Rs 8,999 is being held and will expire in 48 hours as per Amazon's refund policy. Please visit http://amazon-delivery-verify.com/refund and enter your correct address, PAN card, and bank details for the refund.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer repeats phishing link and escalates by asking for PAN and bank details."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "URGENT: Your Amazon refund of Rs 8,999 will be cancelled permanently if not claimed within 24 hours. This is an automated final reminder. Verify now at http://amazon-delivery-verify.com/refund or call +91-9900112244 or email delivery@amazon-helpdesk.support for immediate assistance.",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Final urgency message repeating all fake data with permanent cancellation threat."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

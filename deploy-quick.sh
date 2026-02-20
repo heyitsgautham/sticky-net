@@ -14,9 +14,9 @@ gcloud run deploy sticky-net \
   --set-secrets "API_KEY=sticky-net-api-key:latest" \
   --memory 1Gi \
   --cpu 1 \
-  --min-instances 0 \
+  --min-instances 1 \
   --max-instances 10 \
-  --timeout 60s \
+  --timeout 300s \
   --concurrency 80
 
 echo ""

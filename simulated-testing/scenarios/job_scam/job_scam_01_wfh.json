@@ -1,0 +1,64 @@
+{
+  "scenarioId": "job_scam_01_wfh",
+  "name": "Work-From-Home Data Entry Scam",
+  "description": "Scammer lures victim with a high-paying work-from-home data entry job requiring no experience, then asks for a registration fee via UPI before sharing any real job details.",
+  "scamType": "job_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "wfh.jobs.recruit@paytm",
+    "phoneNumber": "+91-9988112233",
+    "emailAddress": "hr@wfh-careers-india.com"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi! We have an excellent work-from-home opportunity for you. Earn Rs 50,000-1,00,000 per month doing simple data entry. No experience needed. Interested?",
+      "expected_extractions": [],
+      "notes": "Initial bait message offering a too-good-to-be-true WFH data entry job with high salary."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Great to hear your interest! This is a genuine opportunity from a reputed MNC. We have limited seats available. To discuss further details, please call our HR coordinator at +91-9988112233. She will explain the role and salary structure.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer shares a fake phone number for the supposed HR coordinator."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "To secure your position, you need to complete a one-time registration. The registration fee is Rs 2,500 which is fully refundable after your first assignment. Please pay via UPI to wfh.jobs.recruit@paytm and share the screenshot for confirmation.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer asks for a registration fee via UPI, classic job scam tactic."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "I understand your hesitation. Let me share our official HR email for verification: hr@wfh-careers-india.com. You can write to them for any queries. But please hurry, only 3 seats left and many candidates are waiting. Pay Rs 2,500 to wfh.jobs.recruit@paytm today itself.",
+      "expected_extractions": [
+        "emailAddress",
+        "upiId"
+      ],
+      "notes": "Scammer shares a fake email address for legitimacy and repeats UPI ID with urgency."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Sir/Madam, this is the final reminder. Registration closes today at 6 PM. Pay Rs 2,500 to wfh.jobs.recruit@paytm or call +91-9988112233 immediately. After registration, you will receive your first assignment within 24 hours. Don't miss this life-changing opportunity!",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Final pressure message repeating UPI ID and phone number with deadline urgency."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

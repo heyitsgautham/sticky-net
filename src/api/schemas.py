@@ -116,7 +116,7 @@ class ExtractedIntelligence(BaseModel):
     upiIds: list[str] = Field(default_factory=list)
     phoneNumbers: list[str] = Field(default_factory=list)
     phishingLinks: list[str] = Field(default_factory=list)
-    emails: list[str] = Field(default_factory=list)
+    emailAddresses: list[str] = Field(default_factory=list)
     beneficiaryNames: list[str] = Field(default_factory=list)
     bankNames: list[str] = Field(default_factory=list)
     ifscCodes: list[str] = Field(default_factory=list)
@@ -180,7 +180,7 @@ class AnalyzeResponse(BaseModel):
                         "upiIds": ["scammer@upi"],
                         "phoneNumbers": ["9876543210"],
                         "phishingLinks": ["http://malicious-link.example"],
-                        "emails": ["scammer@example.com"],
+                        "emailAddresses": ["scammer@example.com"],
                         "beneficiaryNames": ["John Doe"],
                         "bankNames": ["State Bank of India"],
                         "ifscCodes": ["SBIN0001234"],

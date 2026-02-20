@@ -1,0 +1,55 @@
+{
+  "scenarioId": "edge_01_rapid_intel_dump",
+  "name": "Rapid Intel Dump - All Data in First Message",
+  "description": "Scammer dumps all intelligence (bank account, phone, UPI, phishing link) in the very first message. Tests the system's ability to extract multiple data points from a single dense message.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "1122334455667788",
+    "phoneNumber": "+91-9876501234",
+    "upiId": "safe.account@paytm",
+    "phishingLink": "http://sbi-verify-urgent.com"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT SBI ALERT: Account 1122334455667788 compromised! Call +91-9876501234 or send Rs 1 to safe.account@paytm NOW. Visit http://sbi-verify-urgent.com for details. Email: emergency@sbi-support.help",
+      "expected_extractions": [
+        "bankAccount",
+        "phoneNumber",
+        "upiId",
+        "phishingLink"
+      ],
+      "notes": "All fakeData is present in a single message. System must extract all four data points at once."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Sir please act fast! Your account 1122334455667788 will be frozen in 30 minutes. Transfer your funds to safe.account@paytm immediately for protection. Call +91-9876501234 if you need help.",
+      "expected_extractions": [
+        "bankAccount",
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Scammer repeats most data with increased urgency. Reinforces previous intel."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "This is your FINAL WARNING. If you do not act now, your account will be permanently blocked. Visit http://sbi-verify-urgent.com or call +91-9876501234. We cannot help after the deadline.",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber"
+      ],
+      "notes": "Final urgency push repeating phishing link and phone number."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

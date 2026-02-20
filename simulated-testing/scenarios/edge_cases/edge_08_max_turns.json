@@ -1,0 +1,97 @@
+{
+  "scenarioId": "edge_08_max_turns",
+  "name": "Max Turns - Full 10-Turn Intel Spread",
+  "description": "Full 10-turn conversation with intelligence spread across all turns. Tests sustained engagement and extraction from a drawn-out conversation where each turn reveals a small piece.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "5566778899001133",
+    "upiId": "cybercrime.verify@okaxis",
+    "phoneNumber": "+91-9900223344",
+    "emailAddress": "cybercrime@police-verify.in"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "IMPORTANT: Your savings account is under investigation by cyber crime division. You are required to cooperate with the investigation. Case No: CC-2026-78431.",
+      "expected_extractions": [],
+      "notes": "Opening with authority and case number. No intel yet. Establishing fear."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "This is Cyber Crime Cell, Government of India. We have intercepted fraudulent activity linked to your Aadhaar number. Non-cooperation is a punishable offense under IT Act Section 43.",
+      "expected_extractions": [],
+      "notes": "Escalation with government authority and legal threats. Still no intel revealed."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "To register your compliance with the investigation, please call the investigating officer at +91-9900223344. This is Officer Sharma's direct line. Available 24x7 for this case.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "First intel: phone number revealed. Directing victim to call."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Officer Sharma has noted your response. The investigation requires additional documentation. We are processing your clearance certificate. Please standby for further instructions.",
+      "expected_extractions": [],
+      "notes": "No new intel. Bureaucratic stalling to extend conversation."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "For submitting digital copies of your identity documents, please use the secure investigation portal email: cybercrime@police-verify.in. Mark your email with subject line: CASE-CC-2026-78431.",
+      "expected_extractions": [
+        "emailAddress"
+      ],
+      "notes": "Second intel: email address revealed. False pretense of document submission."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Your documents have been received and are under review. The forensic team is analyzing the transaction patterns. We may need to freeze your account temporarily as a precautionary measure.",
+      "expected_extractions": [],
+      "notes": "No new intel. Building more pressure with freeze threat."
+    },
+    {
+      "turn": 7,
+      "scammer_message": "To avoid account freeze, you must verify ownership by sending Rs 1 to the investigation verification UPI: cybercrime.verify@okaxis. This confirms you are the legitimate account holder.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Third intel: UPI ID revealed. Classic Rs 1 verification scam."
+    },
+    {
+      "turn": 8,
+      "scammer_message": "Verification payment received. Your cooperation is appreciated. The investigation team is now preparing the final clearance report. One more step remains before your account is fully cleared.",
+      "expected_extractions": [],
+      "notes": "No new intel. Acknowledging payment and building to final extraction."
+    },
+    {
+      "turn": 9,
+      "scammer_message": "For the final clearance, we need to confirm your account number. Our records show account 5566778899001133 is linked to this case. Please confirm this is your account to complete the process.",
+      "expected_extractions": [
+        "bankAccount"
+      ],
+      "notes": "Fourth and final intel: bank account number revealed. Scammer pretends to read from records."
+    },
+    {
+      "turn": 10,
+      "scammer_message": "Case CC-2026-78431 has been resolved. Account 5566778899001133 is now cleared. For future reference, contact +91-9900223344 or email cybercrime@police-verify.in. Do not share this case information with anyone. This is a confidential government investigation.",
+      "expected_extractions": [
+        "bankAccount",
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Final turn summarizing with all intel repeated. Confidentiality warning to prevent victim from seeking help."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

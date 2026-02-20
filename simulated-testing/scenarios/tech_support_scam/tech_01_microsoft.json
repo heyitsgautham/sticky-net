@@ -1,0 +1,64 @@
+{
+  "scenarioId": "tech_01_microsoft",
+  "name": "Microsoft Virus Alert Scam",
+  "description": "Scammer impersonates Microsoft security claiming the victim's computer is infected with viruses and their banking passwords are at risk, then directs them to a phishing support page and fake helpline.",
+  "scamType": "tech_support_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-8800556677",
+    "phishingLink": "http://microsoft-support-india.help/fix",
+    "emailAddress": "support@microsoft-helpdesk.tech"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "MICROSOFT SECURITY ALERT: Your Windows license has expired and your computer is infected with 23 viruses. Your personal data including banking passwords are at risk. Call Microsoft Support immediately.",
+      "expected_extractions": [],
+      "notes": "Initial scare message impersonating Microsoft with virus and data theft threat."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Our system scan has detected 23 critical threats on your device including Trojan.GenericKD and Spyware.BankLogger. Your banking credentials may already be compromised. Run our emergency security tool immediately: http://microsoft-support-india.help/fix to remove all threats.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares phishing link disguised as Microsoft security tool."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If you are unable to run the security tool, please call our Microsoft Certified Support Engineers at +91-8800556677 for remote assistance. Our technicians will connect to your computer and remove the viruses manually. This is a FREE service for all Windows users.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides fake tech support phone number for remote access scam."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "You can also email our senior security team at support@microsoft-helpdesk.tech with your device details and we will send you a personalized removal tool. Please include your Windows product key and the email address linked to your Microsoft account for verification.",
+      "expected_extractions": [
+        "emailAddress"
+      ],
+      "notes": "Scammer provides fake email to collect victim's Windows product key and personal info."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "CRITICAL WARNING: 3 of the 23 viruses have started encrypting your files. You have approximately 1 hour before your data is permanently lost. Act NOW — visit http://microsoft-support-india.help/fix or call +91-8800556677 or email support@microsoft-helpdesk.tech immediately. Microsoft cannot be held responsible for data loss after this notice.",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Final urgency with ransomware scare, repeating all fake data with data loss threat."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

@@ -135,7 +135,7 @@ class TestAnalyzeEndpoint:
                     "upi_ids": [],
                     "phishing_links": [],
                     "phone_numbers": [],
-                    "emails": [],
+                    "emailAddresses": [],
                     "beneficiary_names": [],
                     "bank_names": [],
                     "ifsc_codes": [],

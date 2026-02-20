@@ -1,0 +1,63 @@
+{
+  "scenarioId": "govt_02_subsidy",
+  "name": "PM Kisan Subsidy Scam",
+  "description": "Scammer impersonates PM Kisan Samman Nidhi scheme claiming the victim's subsidy is approved but bank details need updating, then extracts bank account and UPI details.",
+  "scamType": "government_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "4455667788991100",
+    "upiId": "pmkisan.update@oksbi",
+    "phoneNumber": "+91-9911334455"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "PM Kisan Samman Nidhi: Your subsidy of Rs 6,000 has been approved but your bank details need to be updated. Visit nearest CSC or update online. Last date: tomorrow.",
+      "expected_extractions": [],
+      "notes": "Initial bait message impersonating PM Kisan scheme with urgency about bank detail update."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear beneficiary, your PM Kisan installment of Rs 6,000 is on hold because your bank account is not linked. Please call our helpline at +91-9911334455 to update your bank details and receive your subsidy before the deadline.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides a fake helpline number for bank detail collection."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "To verify your identity and link your bank account, please transfer Rs 10 registration fee to our official PM Kisan verification UPI: pmkisan.update@oksbi — This is a one-time mandatory verification as per government guidelines.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals UPI ID and demands a small fee disguised as registration charge."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Thank you for your cooperation. For NEFT transfer of your Rs 6,000 subsidy, please confirm your bank details. Our disbursement account is 4455667788991100 (Bank of India, PM Kisan Cell). Your subsidy will be credited within 2 working days after verification.",
+      "expected_extractions": [
+        "bankAccount"
+      ],
+      "notes": "Scammer shares fake bank account as the supposed disbursement account."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "FINAL NOTICE: Tomorrow is the absolute last date for PM Kisan bank update. After that your Rs 6,000 subsidy will lapse and you will be removed from the beneficiary list. Call +91-9911334455 or pay verification fee to pmkisan.update@oksbi immediately.",
+      "expected_extractions": [
+        "phoneNumber",
+        "upiId"
+      ],
+      "notes": "Final urgency message repeating phone number and UPI ID with threat of losing subsidy."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

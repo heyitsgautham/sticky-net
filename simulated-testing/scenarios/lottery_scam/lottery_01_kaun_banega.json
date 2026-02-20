@@ -1,0 +1,63 @@
+{
+  "scenarioId": "lottery_01_kaun_banega",
+  "name": "KBC Lottery Winner Scam",
+  "description": "Scammer impersonates Kaun Banega Crorepati show claiming the victim's mobile number won a lottery prize, then demands processing fees via UPI or bank transfer to release the winnings.",
+  "scamType": "lottery_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "5566339922887711",
+    "upiId": "kbc.prize@ybl",
+    "phoneNumber": "+91-9922334455"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "CONGRATULATIONS! Your mobile number has won Rs 25,00,000 in Kaun Banega Crorepati Season 15 Lucky Draw! Ref No: KBC-2026-IN-78901. Contact our office to claim your prize.",
+      "expected_extractions": [],
+      "notes": "Initial bait message using KBC brand with a fake reference number for credibility."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear winner, to process your prize of Rs 25,00,000, a one-time processing fee of Rs 5,500 is required as per RBI regulations. This covers tax clearance and prize verification. Please arrange the payment to claim your winnings.",
+      "expected_extractions": [],
+      "notes": "Scammer introduces the processing fee using fake regulatory requirements."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Please pay the processing fee of Rs 5,500 via UPI to kbc.prize@ybl for instant processing. For any assistance, contact KBC Prize Department head office at +91-9922334455. Your prize will be credited within 24 hours of payment confirmation.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Scammer reveals UPI ID and phone number for the fake prize department."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "If UPI is not available, you can transfer Rs 5,500 to our official KBC Prize Account: 5566339922887711 (State Bank of India, IFSC: SBIN0001234). Reference: KBC-2026-IN-78901. Payment must be completed today as per lottery commission guidelines.",
+      "expected_extractions": [
+        "bankAccount"
+      ],
+      "notes": "Scammer provides bank account as alternative and adds urgency with commission guidelines."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "URGENT: Your KBC prize of Rs 25,00,000 will be FORFEITED if processing fee is not received by 8 PM today! Pay Rs 5,500 to kbc.prize@ybl or account 5566339922887711. Call +91-9922334455 NOW. This is your FINAL notice as per lottery commission rules!",
+      "expected_extractions": [
+        "upiId",
+        "bankAccount",
+        "phoneNumber"
+      ],
+      "notes": "Final urgency with threat of prize forfeiture, repeating all contact and payment details."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

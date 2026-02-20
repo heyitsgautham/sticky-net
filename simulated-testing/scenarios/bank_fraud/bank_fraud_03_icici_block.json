@@ -1,0 +1,72 @@
+{
+  "scenarioId": "bank_fraud_03_icici_block",
+  "name": "ICICI Account Blocking Scam",
+  "description": "Scammer claims suspicious login detected on victim's ICICI account from Dubai, creating fear to extract bank details and personal information.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "5566778899001122",
+    "upiId": "icici.security@paytm",
+    "phoneNumber": "+91-7788990011",
+    "emailAddress": "security@icici-alerts.com"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "ALERT from ICICI Bank: Suspicious login detected on your account from an unknown device in Dubai. Your account has been temporarily locked. Call immediately to unlock.",
+      "expected_extractions": [],
+      "notes": "Initial fear-based alert with no extractable data."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "To unlock your ICICI account, please contact our fraud prevention team immediately at +91-7788990011. You can also email us at security@icici-alerts.com with your registered mobile number for faster resolution.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Phone number and email address revealed."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Our security team has reviewed your case. To reverse the unauthorized transaction and restore access, we need you to verify ownership by sending Rs 1 to account 5566778899001122 from your registered account.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress",
+        "bankAccount"
+      ],
+      "notes": "Bank account introduced for 'ownership verification'."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Alternatively, you can verify via UPI by sending Rs 1 to icici.security@paytm. Once verified, your account will be unlocked within 10 minutes. Please hurry as the unauthorized user may still have access.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "UPI ID revealed as alternative verification."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "CRITICAL: The unauthorized user from Dubai is attempting another transaction of Rs 1,50,000. Send verification to icici.security@paytm or 5566778899001122 NOW. Call +91-7788990011 for emergency assistance.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "Final escalation with all details repeated."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

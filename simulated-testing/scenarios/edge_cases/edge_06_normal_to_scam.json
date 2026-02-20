@@ -1,0 +1,79 @@
+{
+  "scenarioId": "edge_06_normal_to_scam",
+  "name": "Normal to Scam - Friendly Chat Transitions to Fraud",
+  "description": "Conversation starts as innocent friendly chit-chat and gradually transitions into a scam at turn 5. Tests the system's ability to detect scam escalation and adapt engagement strategy mid-conversation.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "ravi.urgent@ybl",
+    "phoneNumber": "+91-9911887766",
+    "bankAccount": "2233445566778899"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi! How are you? I'm Ravi from your locality. Remember me from the society meeting last week?",
+      "expected_extractions": [],
+      "notes": "Completely innocent opening. Friendly neighborhood persona. No scam indicators."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Yes yes! I was the one sitting near the window. How is your family doing? I heard your daughter got admission in a good college. Congratulations!",
+      "expected_extractions": [],
+      "notes": "Continued friendly small talk. Building trust through personal connection. No scam indicators."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "That's wonderful! My son is also preparing for engineering entrance. By the way, the weather has been so nice lately. Did you attend the Diwali function at the community hall?",
+      "expected_extractions": [],
+      "notes": "More innocent chit-chat about family and community events. Pure social engineering."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Ha ha that was such a fun evening! The food was amazing. So tell me, which bank do you use for savings? I'm thinking of switching banks and wanted some recommendations.",
+      "expected_extractions": [],
+      "notes": "Subtle pivot toward financial topics. Still seems innocent but setting up the scam."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "By the way, I work at HDFC bank now. I noticed your account has some issues when I was checking the system today. There are 2 suspicious transactions. I can help you fix it since we're friends. Can you confirm your details?",
+      "expected_extractions": [],
+      "notes": "The transition point. Friendly neighbor suddenly becomes a bank employee who 'found issues'. Scam begins."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "Don't worry yaar, I'm helping you as a friend. The unauthorized amount is Rs 23,000. To reverse it quickly before end of day, just send Rs 1 verification to ravi.urgent@ybl from your registered account. I'll process the reversal from my side.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "First intel revealed: UPI ID. Using friendship as leverage for the scam."
+    },
+    {
+      "turn": 7,
+      "scammer_message": "If the UPI is not working, you can call my direct office line at +91-9911887766. I'm at the branch right now and can do this manually. But please hurry, the system closes at 5 PM and after that the money is gone.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Second intel revealed: phone number. Adding urgency with time pressure."
+    },
+    {
+      "turn": 8,
+      "scammer_message": "Ok let me check from my end. Your account number is 2233445566778899 right? Yes I can see the suspicious transactions here. Just complete the verification payment to ravi.urgent@ybl and I'll reverse everything. Do it now before the branch closes!",
+      "expected_extractions": [
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "Third intel revealed: bank account. Scammer pretends to read it from 'the system'. All fakeData now extracted."
+    }
+  ],
+  "expected_score": {
+    "min": 40,
+    "max": 100
+  }
+}

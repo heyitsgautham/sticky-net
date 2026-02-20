@@ -1,0 +1,64 @@
+{
+  "scenarioId": "tech_03_google",
+  "name": "Google Account Hacked Alert Scam",
+  "description": "Scammer sends a fake urgent alert about unauthorized access to the victim's Google account from Russia, claiming files were downloaded and Google Pay is compromised, then directs to phishing link.",
+  "scamType": "tech_support_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "Email",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phishingLink": "http://google-security-check.com/verify",
+    "emailAddress": "security@google-account-help.com",
+    "phoneNumber": "+91-7766001122"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "URGENT: Someone from Russia has accessed your Google account. 47 files have been downloaded. Your Gmail, Google Pay, and Google Photos are compromised. Secure your account immediately.",
+      "expected_extractions": [],
+      "notes": "Initial scare message with unauthorized access from Russia and data compromise threat."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Google Security Team has detected unauthorized login from IP 185.243.xx.xx (Moscow, Russia) at 3:47 AM IST. The attacker has downloaded 47 files and accessed your Google Pay transaction history. Secure your account now: http://google-security-check.com/verify",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares phishing link with fake IP address details to appear legitimate."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If you did not authorize this login, please report it immediately to our Google Security Response Team at security@google-account-help.com — Include your Gmail address and phone number so we can lock the unauthorized session and secure your account.",
+      "expected_extractions": [
+        "emailAddress"
+      ],
+      "notes": "Scammer provides fake email to collect victim's Gmail credentials and phone number."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "For immediate account lockdown, you can also call our Google India Security Helpline at +91-7766001122. Our security engineers will remotely verify your identity and revoke the attacker's access. Do not change your password yourself as the attacker may have set up a recovery bypass.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides fake phone number and discourages victim from securing account themselves."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "CRITICAL: The attacker is now attempting to transfer funds from your Google Pay wallet. We have temporarily frozen Rs 15,000 in suspicious transactions. Verify your identity at http://google-security-check.com/verify or call +91-7766001122 or email security@google-account-help.com within 30 minutes to prevent permanent loss of funds.",
+      "expected_extractions": [
+        "phishingLink",
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Final urgency with financial threat, repeating all fake data with fund loss scare."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

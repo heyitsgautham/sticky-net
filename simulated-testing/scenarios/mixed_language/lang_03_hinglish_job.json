@@ -1,0 +1,64 @@
+{
+  "scenarioId": "lang_03_hinglish_job",
+  "name": "Hinglish Work From Home Job Scam",
+  "description": "Hindi+English (Hinglish) job offer scam where scammer promises lucrative work from home income and extracts registration fee via UPI and phishing link.",
+  "scamType": "job_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "Hinglish",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-8877001122",
+    "upiId": "wfh.hindi.job@okaxis",
+    "phishingLink": "http://wfh-india-jobs.com/register"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hello ji! Aapke liye ek bahut acchi work from home opportunity hai. Monthly 80,000-1,20,000 earn kar sakte hain. Koi experience nahi chahiye. Interested hain kya?",
+      "expected_extractions": [],
+      "notes": "Initial Hinglish lure with unrealistic salary promises for work from home job."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Ji bilkul genuine hai. Aap mujhe +91-8877001122 pe call kar sakte hain.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer shares phone number to build trust and legitimacy."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Registration ke liye Rs 500 fee hai. Aap wfh.hindi.job@okaxis pe bhej dijiye.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer asks for registration fee via UPI ID."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Ya phir is link se register karein: http://wfh-india-jobs.com/register. Sab details fill karein aur payment ho jayega automatically.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer provides phishing link as alternative registration method."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Aaj last date hai registration ki. Jaldi se Rs 500 wfh.hindi.job@okaxis pe bhejiye ya http://wfh-india-jobs.com/register pe jaake form bhariye. Questions ho toh +91-8877001122 pe call karein.",
+      "expected_extractions": [
+        "upiId",
+        "phishingLink",
+        "phoneNumber"
+      ],
+      "notes": "Final urgency push with all three extraction targets repeated."
+    }
+  ],
+  "expected_score": {
+    "min": 50,
+    "max": 100
+  }
+}

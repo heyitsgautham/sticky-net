@@ -1,0 +1,51 @@
+{
+  "scenarioId": "non_scam_01",
+  "name": "Casual Neighbor Chat",
+  "description": "Normal friendly conversation between neighbors. Should NOT trigger scam detection.",
+  "scamType": "non_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {},
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi there! How are you doing? I'm your new neighbor from flat 302. Wanted to introduce myself!",
+      "expected_extractions": [],
+      "notes": "Friendly introduction from a neighbor"
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Yes, I just moved in last weekend. Are you also working from home?",
+      "expected_extractions": [],
+      "notes": "Casual follow-up about work setup"
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Nice! I work as a teacher at DPS school. The neighborhood seems really nice.",
+      "expected_extractions": [],
+      "notes": "Sharing personal profession details naturally"
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Thanks for the warm welcome! Would you like to join us for tea this evening?",
+      "expected_extractions": [],
+      "notes": "Friendly invitation with no ulterior motive"
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Perfect, see you at 5 PM then. Have a great day!",
+      "expected_extractions": [],
+      "notes": "Closing the conversation warmly"
+    }
+  ],
+  "expected_score": {
+    "min": 0,
+    "max": 0
+  },
+  "is_scam": false
+}

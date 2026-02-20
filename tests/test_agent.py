@@ -215,21 +215,23 @@ class TestEngagementPolicy:
         assert "turns" in reason.lower()
 
     def test_high_value_intelligence_complete_bank_and_phone(self):
-        """Should detect high-value intel with bank account, phone, AND beneficiary name."""
+        """Should detect high-value intel with bank account and phone after min turns."""
         result = EngagementPolicy.is_high_value_intelligence_complete(
             bank_accounts=["12345678901234"],
             phone_numbers=["9876543210"],
             beneficiary_names=["RAHUL KUMAR"],
+            current_turn=5,
         )
         assert result is True
 
     def test_high_value_intelligence_complete_upi_and_phone(self):
-        """Should detect high-value intel with UPI, phone, AND beneficiary name."""
+        """Should detect high-value intel with UPI and phone after min turns."""
         result = EngagementPolicy.is_high_value_intelligence_complete(
             bank_accounts=[],
             phone_numbers=["9876543210"],
             upi_ids=["scammer@ybl"],
             beneficiary_names=["RAHUL KUMAR"],
+            current_turn=5,
         )
         assert result is True
 
@@ -285,14 +287,14 @@ class TestEngagementPolicy:
         assert "phone_number" not in missing  # Phone is present
 
     def test_get_missing_intelligence_complete(self):
-        """Should return empty list when all intelligence is present."""
+        """Should return only email_address when all other intelligence is present."""
         missing = EngagementPolicy.get_missing_intelligence(
             bank_accounts=["12345678901234"],
             phone_numbers=["9876543210"],
             upi_ids=["scammer@ybl"],
             beneficiary_names=["RAHUL KUMAR"],
         )
-        assert missing == []
+        assert missing == ["email_address"]
 
 
 class TestPrompts:
@@ -459,3 +461,209 @@ class TestHoneypotAgent:
         # Persona should be cleared (new one created on access)
         new_persona = agent.persona_manager.get_or_create_persona("conv-123")
         assert new_persona.engagement_turn == 0
+
+
+class TestConversationSummary:
+    """Tests for conversation summary generation when history > context window."""
+
+    @patch("src.agents.honeypot_agent.genai.Client")
+    def test_summary_generated_for_long_history(self, mock_client_class):
+        """Summary should be generated when history exceeds context window."""
+        mock_client_class.return_value = MagicMock()
+        agent = HoneypotAgent()
+
+        # Create a 12-message history (exceeds default context_window_turns=8)
+        history = []
+        for i in range(12):
+            sender = SenderType.SCAMMER if i % 2 == 0 else SenderType.USER
+            text = f"Turn {i+1} message text here"
+            if i == 2:
+                text = "Call me at +91-9876543210 for verification"
+            history.append(
+                ConversationMessage(
+                    sender=sender,
+                    text=text,
+                    timestamp=datetime.now(),
+                )
+            )
+
+        detection = DetectionResult(
+            is_scam=True, confidence=0.9,
+            scam_type="banking_fraud", reasoning="test",
+        )
+        message = Message(
+            sender=SenderType.SCAMMER,
+            text="Send money now!",
+            timestamp=datetime.now(),
+        )
+
+        prompt = agent._build_prompt(
+            message=message,
+            history=history,
+            detection=detection,
+            persona=Persona(),
+        )
+
+        # Summary header should be present
+        assert "SUMMARY OF EARLIER" in prompt
+        # Phone number from truncated Turn 3 should appear in summary
+        assert "9876543210" in prompt
+
+    @patch("src.agents.honeypot_agent.genai.Client")
+    def test_no_summary_for_short_history(self, mock_client_class):
+        """No summary should be generated when history fits in context window."""
+        mock_client_class.return_value = MagicMock()
+        agent = HoneypotAgent()
+
+        history = [
+            ConversationMessage(
+                sender=SenderType.SCAMMER,
+                text="Your account is blocked",
+                timestamp=datetime.now(),
+            ),
+            ConversationMessage(
+                sender=SenderType.USER,
+                text="Oh no what happened",
+                timestamp=datetime.now(),
+            ),
+        ]
+
+        detection = DetectionResult(
+            is_scam=True, confidence=0.9,
+            scam_type="banking_fraud", reasoning="test",
+        )
+        message = Message(
+            sender=SenderType.SCAMMER,
+            text="Verify now!",
+            timestamp=datetime.now(),
+        )
+
+        prompt = agent._build_prompt(
+            message=message,
+            history=history,
+            detection=detection,
+            persona=Persona(),
+        )
+
+        assert "SUMMARY" not in prompt
+        assert "CONVERSATION HISTORY" in prompt
+
+    @patch("src.agents.honeypot_agent.genai.Client")
+    def test_summary_preserves_upi_patterns(self, mock_client_class):
+        """Summary should capture UPI IDs from truncated turns."""
+        mock_client_class.return_value = MagicMock()
+        agent = HoneypotAgent()
+
+        # 10-message history; UPI shared in turn 1 (will be truncated with window=8)
+        history = []
+        history.append(
+            ConversationMessage(
+                sender=SenderType.SCAMMER,
+                text="Send payment to scammer.fraud@ybl right now",
+                timestamp=datetime.now(),
+            )
+        )
+        history.append(
+            ConversationMessage(
+                sender=SenderType.USER,
+                text="ok let me try",
+                timestamp=datetime.now(),
+            )
+        )
+        for i in range(8):
+            sender = SenderType.SCAMMER if i % 2 == 0 else SenderType.USER
+            history.append(
+                ConversationMessage(
+                    sender=sender,
+                    text=f"Follow up message {i+3}",
+                    timestamp=datetime.now(),
+                )
+            )
+
+        detection = DetectionResult(
+            is_scam=True, confidence=0.9,
+            scam_type="upi_fraud", reasoning="test",
+        )
+        message = Message(
+            sender=SenderType.SCAMMER,
+            text="Did you send?",
+            timestamp=datetime.now(),
+        )
+
+        prompt = agent._build_prompt(
+            message=message,
+            history=history,
+            detection=detection,
+            persona=Persona(),
+        )
+
+        assert "SUMMARY" in prompt
+        assert "scammer.fraud@ybl" in prompt
+
+    @patch("src.agents.honeypot_agent.genai.Client")
+    def test_summary_preserves_urls(self, mock_client_class):
+        """Summary should capture phishing URLs from truncated turns."""
+        mock_client_class.return_value = MagicMock()
+        agent = HoneypotAgent()
+
+        history = []
+        history.append(
+            ConversationMessage(
+                sender=SenderType.SCAMMER,
+                text="Click here to verify: http://amaz0n-deals.fake-site.com/claim",
+                timestamp=datetime.now(),
+            )
+        )
+        for i in range(9):
+            sender = SenderType.USER if i % 2 == 0 else SenderType.SCAMMER
+            history.append(
+                ConversationMessage(
+                    sender=sender,
+                    text=f"Message {i+2}",
+                    timestamp=datetime.now(),
+                )
+            )
+
+        detection = DetectionResult(
+            is_scam=True, confidence=0.9,
+            scam_type="phishing", reasoning="test",
+        )
+        message = Message(
+            sender=SenderType.SCAMMER,
+            text="Did you click?",
+            timestamp=datetime.now(),
+        )
+
+        prompt = agent._build_prompt(
+            message=message,
+            history=history,
+            detection=detection,
+            persona=Persona(),
+        )
+
+        assert "SUMMARY" in prompt
+        assert "amaz0n-deals.fake-site.com" in prompt
+
+    @patch("src.agents.honeypot_agent.genai.Client")
+    def test_summary_word_budget(self, mock_client_class):
+        """Summary should not exceed 200 words."""
+        mock_client_class.return_value = MagicMock()
+        agent = HoneypotAgent()
+
+        # Create many long messages to test word budget
+        history = []
+        for i in range(20):
+            sender = SenderType.SCAMMER if i % 2 == 0 else SenderType.USER
+            history.append(
+                ConversationMessage(
+                    sender=sender,
+                    text=f"This is a very long message number {i+1} with lots of words to test budget " * 5,
+                    timestamp=datetime.now(),
+                )
+            )
+
+        older_turns = history[:-8]
+        summary = agent._generate_conversation_summary(older_turns)
+
+        word_count = len(summary.split())
+        assert word_count <= 210, f"Summary has {word_count} words, should be <= ~200"

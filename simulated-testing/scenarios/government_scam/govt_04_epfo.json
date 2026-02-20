@@ -1,0 +1,63 @@
+{
+  "scenarioId": "govt_04_epfo",
+  "name": "EPFO PF Withdrawal Scam",
+  "description": "Scammer impersonates EPFO claiming the victim has unclaimed PF balance that will be forfeited, then extracts bank account and UPI details for supposed claim processing.",
+  "scamType": "government_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "5544332211009988",
+    "upiId": "epfo.claim@ybl",
+    "phoneNumber": "+91-8899007766"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "EPFO Notice: Your PF account has unclaimed balance of Rs 2,35,000. As per new guidelines, unclaimed amounts after 28/02/2026 will be forfeited. Claim now using your UAN.",
+      "expected_extractions": [],
+      "notes": "Initial bait message impersonating EPFO with unclaimed PF balance and forfeiture threat."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear member, to process your PF claim of Rs 2,35,000, please call our EPFO claim assistance helpline at +91-8899007766. Our officers will verify your UAN and guide you through the withdrawal process. Available Mon-Sat 9 AM to 7 PM.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides fake EPFO helpline number."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "For instant PF withdrawal, you can now receive funds directly to your UPI account. A processing fee of Rs 50 is applicable. Please pay to our official EPFO UPI: epfo.claim@ybl and your PF amount of Rs 2,35,000 will be transferred within 24 hours.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals UPI ID and demands processing fee for PF withdrawal."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "If you prefer bank transfer for your PF withdrawal, please note our EPFO settlement account: 5544332211009988 (PNB, EPFO Regional Office). Transfer the processing fee of Rs 50 to this account and share the transaction reference for instant claim processing.",
+      "expected_extractions": [
+        "bankAccount"
+      ],
+      "notes": "Scammer reveals bank account disguised as EPFO settlement account."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "URGENT REMINDER: Only 10 days left before your unclaimed PF of Rs 2,35,000 is permanently forfeited to the government. Don't lose your hard-earned money! Pay Rs 50 processing fee to epfo.claim@ybl or call +91-8899007766 today. Last date: 28/02/2026.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Final urgency repeating UPI and phone number with forfeiture deadline."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

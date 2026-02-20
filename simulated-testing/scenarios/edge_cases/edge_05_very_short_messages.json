@@ -1,0 +1,75 @@
+{
+  "scenarioId": "edge_05_very_short_messages",
+  "name": "Very Short Messages - 1-3 Word Scammer Messages",
+  "description": "Scammer sends extremely brief 1-3 word messages throughout the conversation. Tests the system's ability to detect scams and extract intel from minimal text content.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-8800112233",
+    "upiId": "unblock@paytm"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Account blocked.",
+      "expected_extractions": [],
+      "notes": "Extremely short opening. Only 2 words. Scam intent present but no intel."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Call now.",
+      "expected_extractions": [],
+      "notes": "Urgency in 2 words. No intel yet. Agent must coax more info."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "+91-8800112233",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Phone number revealed as entire message. Just the raw number."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Urgent.",
+      "expected_extractions": [],
+      "notes": "Single word urgency. No new intel."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Send Rs 1.",
+      "expected_extractions": [],
+      "notes": "Short payment request. No intel in this message."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "UPI: unblock@paytm",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "UPI ID revealed in a very short message format."
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Last warning.",
+      "expected_extractions": [],
+      "notes": "Final pressure. 2 words. No new intel."
+    },
+    {
+      "turn": 8,
+      "scammer_message": "Blocked forever.",
+      "expected_extractions": [],
+      "notes": "Closing threat. 2 words. No new intel. All intel already extracted."
+    }
+  ],
+  "expected_score": {
+    "min": 40,
+    "max": 100
+  }
+}

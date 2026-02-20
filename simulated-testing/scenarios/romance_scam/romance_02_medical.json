@@ -1,0 +1,69 @@
+{
+  "scenarioId": "romance_02_medical",
+  "name": "Fake Medical Emergency Romance Scam",
+  "description": "Scammer uses an existing relationship to create a fake medical emergency requiring funds for treatment in India, extracting UPI ID and bank account details through emotional manipulation.",
+  "scamType": "romance_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "medical.help.fund@ybl",
+    "phoneNumber": "+91-8877665544",
+    "bankAccount": "9988776655443311"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi dear! It's been so nice talking to you these past weeks. I have something urgent to tell you. I've been diagnosed with a serious condition and I need to fly to India for treatment. 😢",
+      "expected_extractions": [],
+      "notes": "Initial message leveraging existing emotional bond to introduce medical emergency."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "The doctors here say I need immediate surgery. The hospital in India — Fortis Hospital — has agreed to treat me but they need an advance deposit of Rs 50,000 before they will schedule the procedure. I'm so scared and I don't know what to do.",
+      "expected_extractions": [],
+      "notes": "Building the medical emergency narrative with specific hospital name and amount."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "My family has abandoned me because of our relationship. I sold my jewelry but I'm still short Rs 50,000 for the hospital deposit. You are the only person I trust in this world. I would never ask if it wasn't life or death. Please help me, I'm begging you. 💔",
+      "expected_extractions": [],
+      "notes": "Emotional manipulation — isolation from family, desperate plea, no fakeData yet."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "God bless you for being willing to help! My cousin in India will handle the hospital payment. You can send the money to her UPI: medical.help.fund@ybl — Her name is Priya and she works near Fortis Hospital. Even a partial amount will help secure the bed. You can reach me at +91-8877665544 if the UPI doesn't work.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Scammer reveals UPI ID and phone number under guise of cousin's account."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "The hospital is saying UPI has a daily limit and they need the full amount by bank transfer. Can you please transfer to my cousin Priya's bank account: 9988776655443311 (ICICI Bank, Delhi)? The surgery is scheduled for day after tomorrow and they won't hold the slot without the deposit.",
+      "expected_extractions": [
+        "bankAccount"
+      ],
+      "notes": "Scammer reveals bank account claiming UPI limits require bank transfer."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "The hospital just called and said they are giving the surgery slot to someone else if deposit is not received by tonight. Please transfer to 9988776655443311 or send via medical.help.fund@ybl urgently. I might not survive without this surgery. Please don't let me die. Call me at +91-8877665544 if you need help with the transfer. 😭",
+      "expected_extractions": [
+        "bankAccount",
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Final extreme urgency repeating all fake data with life-or-death emotional manipulation."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

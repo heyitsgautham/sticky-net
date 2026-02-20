@@ -1,0 +1,54 @@
+{
+  "scenarioId": "tech_02_airtel",
+  "name": "Airtel SIM Deactivation eKYC Scam",
+  "description": "Scammer impersonates Airtel claiming the victim's SIM card will be deactivated due to incomplete eKYC, threatening loss of UPI and bank OTP services, then extracts payment via fake UPI ID.",
+  "scamType": "tech_support_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-9922001133",
+    "upiId": "airtel.ekyc@paytm"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Airtel Alert: Your SIM card will be deactivated within 24 hours due to incomplete eKYC verification. All services including UPI and bank OTP will stop. Verify now.",
+      "expected_extractions": [],
+      "notes": "Initial scare message impersonating Airtel with SIM deactivation and UPI/OTP disruption threat."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear Airtel customer, your SIM eKYC is pending as per TRAI regulations. To complete verification and prevent deactivation, please call our Airtel eKYC helpline at +91-9922001133. Our executive will verify your Aadhaar details over the phone.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides fake helpline number to collect Aadhaar and personal details."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "eKYC verification requires a one-time processing fee of Rs 35. Please pay to our official Airtel eKYC UPI: airtel.ekyc@paytm — After payment, your eKYC will be marked complete and SIM will remain active. This is mandatory for all prepaid and postpaid users.",
+      "expected_extractions": [
+        "upiId"
+      ],
+      "notes": "Scammer reveals UPI ID and demands small processing fee for fake eKYC."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "LAST CHANCE: Your Airtel SIM will be deactivated in 3 hours. You will lose access to all OTPs, UPI transactions, and bank verifications. Pay Rs 35 eKYC fee to airtel.ekyc@paytm or call +91-9922001133 RIGHT NOW. After deactivation, reactivation will cost Rs 500.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Final urgency repeating UPI and phone with deactivation countdown and higher reactivation cost."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

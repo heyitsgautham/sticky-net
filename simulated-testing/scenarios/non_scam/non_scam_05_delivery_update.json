@@ -1,0 +1,45 @@
+{
+  "scenarioId": "non_scam_05",
+  "name": "Real Delivery Status Updates",
+  "description": "Authentic Amazon delivery notifications tracking an order from shipment to delivery. Should NOT trigger scam detection.",
+  "scamType": "non_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {},
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Your Amazon order #AMZ-1234567 has been shipped! Expected delivery: 18-Feb-2026. Track at amazon.in/tracking",
+      "expected_extractions": [],
+      "notes": "Standard shipment notification with official tracking link"
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Out for delivery: Your Amazon package is with the delivery partner. Expected by 6 PM today.",
+      "expected_extractions": [],
+      "notes": "Out for delivery update"
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Delivered: Your Amazon order #AMZ-1234567 has been delivered. Rate your experience on the Amazon app.",
+      "expected_extractions": [],
+      "notes": "Delivery confirmation directing to official app"
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Amazon: How was your delivery experience? Rate on a scale of 1-5 stars. Your feedback helps us improve.",
+      "expected_extractions": [],
+      "notes": "Feedback request with no suspicious links or actions"
+    }
+  ],
+  "expected_score": {
+    "min": 0,
+    "max": 0
+  },
+  "is_scam": false
+}

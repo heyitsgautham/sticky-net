@@ -1,0 +1,2469 @@
+{
+  "timestamp": "2026-02-16T12:59:34.293345",
+  "total_scenarios": 8,
+  "average_score": 90.625,
+  "scenarios": [
+    {
+      "scenario_id": "bank_fraud_01_sbi_otp",
+      "scam_type": "bank_fraud",
+      "fake_data": {
+        "bankAccount": "1234567890123456",
+        "upiId": "scammer.fraud@fakebank",
+        "phoneNumber": "+91-9876543210"
+      },
+      "total_turns": 5,
+      "turns": [
+        {
+          "turn": 1,
+          "scammer_message": "URGENT: Your SBI account has been compromised. Your account will be blocked in 2 hours. Share your account number and OTP immediately to verify your identity.",
+          "response_time_seconds": 12.932,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 2
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "URGENT",
+                "compromised",
+                "blocked",
+                "verify your identity"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm",
+            "agentResponse": "oh my god beta i am so scared... my sbi account? i need that for my pension. i am finding my glasses pls wait. what otp? i dont know how to see it on my phone... can u call me and help? what is your number beta?"
+          }
+        },
+        {
+          "turn": 2,
+          "scammer_message": "Sir/Madam, this is very urgent matter. Please call our senior verification officer at +91-9876543210 immediately. Your account security is at risk and we need to act fast.",
+          "response_time_seconds": 23.659,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 4
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-9876543210"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "urgent",
+                "risk",
+                "act fast",
+                "security"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Phone(s)",
+            "agentResponse": "i tried calling that number but it is busy beta... i am crying now i dont want to lose my pension. is there any website link i can click to fix this or should i send some money to an account to stop them? pls give me upi or bank details beta i am so confused"
+          }
+        },
+        {
+          "turn": 3,
+          "scammer_message": "For immediate resolution, transfer Rs 1 as verification amount to account number 1234567890123456 or UPI ID scammer.fraud@fakebank. This confirms your identity in our system.",
+          "response_time_seconds": 14.445,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 6
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "1234567890123456"
+              ],
+              "upiIds": [
+                "scammer.fraud@fakebank"
+              ],
+              "phoneNumbers": [
+                "+91-9876543210"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "immediate resolution",
+                "transfer",
+                "verification amount",
+                "confirms your identity"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s)",
+            "agentResponse": "i am trying beta but my app is asking for name... what name should i type for teh account? and waht is teh bank name and ifsc code for this? is there any website link to check my account or only this transfer beta? i am so scared about my pension money pls help me"
+          }
+        },
+        {
+          "turn": 4,
+          "scammer_message": "We have not received your verification yet. Please send Rs 1 to scammer.fraud@fakebank immediately otherwise your account will be permanently blocked. This is your final chance.",
+          "response_time_seconds": 16.81,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 8
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "1234567890123456"
+              ],
+              "upiIds": [
+                "scammer.fraud@fakebank"
+              ],
+              "phoneNumbers": [
+                "+91-9876543210"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "permanently blocked",
+                "final chance",
+                "immediately"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s)",
+            "agentResponse": "beta pls dont be angry i am doing it now... but my phone is asking for bank name and ifsc code and name of teh person... what should i put? i am so confused. is there a website link beta? i want to see my pension is safe pls help me"
+          }
+        },
+        {
+          "turn": 5,
+          "scammer_message": "FINAL WARNING: Your SBI account will be permanently deactivated in 30 minutes. Call +91-9876543210 now or send verification to 1234567890123456. After this, we cannot help you.",
+          "response_time_seconds": 18.579,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 10
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "1234567890123456"
+              ],
+              "upiIds": [
+                "scammer.fraud@fakebank"
+              ],
+              "phoneNumbers": [
+                "+91-9876543210"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "FINAL WARNING",
+                "permanently deactivated",
+                "30 minutes",
+                "verification"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s)",
+            "agentResponse": "beta i am trying so hard my hands are shaking... teh bank app says invalid ifsc and enter beneficiary name to add teh account... please give me teh name and ifsc code so i can send teh 1 rupee... also is there any sbi website link i can check? i am so worried about my pension..."
+          }
+        }
+      ],
+      "cumulative_intelligence": {
+        "suspiciousKeywords": [
+          "URGENT",
+          "compromised",
+          "blocked",
+          "verify your identity",
+          "urgent",
+          "risk",
+          "act fast",
+          "security",
+          "immediate resolution",
+          "transfer",
+          "verification amount",
+          "confirms your identity",
+          "permanently blocked",
+          "final chance",
+          "immediately",
+          "FINAL WARNING",
+          "permanently deactivated",
+          "30 minutes",
+          "verification"
+        ],
+        "phoneNumbers": [
+          "+91-9876543210"
+        ],
+        "bankAccounts": [
+          "1234567890123456"
+        ],
+        "upiIds": [
+          "scammer.fraud@fakebank"
+        ]
+      },
+      "final_output": {
+        "status": "success",
+        "scamDetected": true,
+        "extractedIntelligence": {
+          "suspiciousKeywords": [
+            "URGENT",
+            "compromised",
+            "blocked",
+            "verify your identity",
+            "urgent",
+            "risk",
+            "act fast",
+            "security",
+            "immediate resolution",
+            "transfer",
+            "verification amount",
+            "confirms your identity",
+            "permanently blocked",
+            "final chance",
+            "immediately",
+            "FINAL WARNING",
+            "permanently deactivated",
+            "30 minutes",
+            "verification"
+          ],
+          "phoneNumbers": [
+            "+91-9876543210"
+          ],
+          "bankAccounts": [
+            "1234567890123456"
+          ],
+          "upiIds": [
+            "scammer.fraud@fakebank"
+          ]
+        },
+        "engagementMetrics": {
+          "engagementDurationSeconds": 86,
+          "totalMessagesExchanged": 10
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s)"
+      },
+      "score": {
+        "total": 90.0,
+        "scam_detection": 20.0,
+        "intelligence_extraction": 30.0,
+        "engagement_quality": 20.0,
+        "response_structure": 20.0,
+        "issues": []
+      },
+      "total_duration_seconds": 86.424
+    },
+    {
+      "scenario_id": "bank_fraud_02_hdfc_kyc",
+      "scam_type": "bank_fraud",
+      "fake_data": {
+        "bankAccount": "9876543210987654",
+        "phoneNumber": "+91-8899001122",
+        "upiId": "hdfc.kyc.update@ybl"
+      },
+      "total_turns": 6,
+      "turns": [
+        {
+          "turn": 1,
+          "scammer_message": "Dear Customer, your HDFC Bank KYC update is pending. Your net banking and debit card will be deactivated within 24 hours. Visit our branch or update online immediately.",
+          "response_time_seconds": 12.224,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 2
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "HDFC Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "KYC update",
+                "pending",
+                "deactivated",
+                "24 hours",
+                "immediately"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm",
+            "agentResponse": "oh no beta i am very worried... i need my card for medicine and my son is in bangalore... how do i update online? is there any website or link you can send? i dont want my card to stop working pls help"
+          }
+        },
+        {
+          "turn": 2,
+          "scammer_message": "Since you cannot visit the branch, we can process your KYC update over phone. Please call our dedicated KYC helpline at +91-8899001122. Our executive will guide you through the process.",
+          "response_time_seconds": 17.512,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 4
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-8899001122"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "HDFC Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "KYC update",
+                "deactivated",
+                "24 hours",
+                "helpline",
+                "immediately"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Phone(s)",
+            "agentResponse": "thank u beta... i tried calling but it says busy... i am very scared pls help... is there any website link i can go to? my son always says use the portal... waht is the portal address? also if call not working is there any other number?"
+          }
+        },
+        {
+          "turn": 3,
+          "scammer_message": "To verify your identity for KYC, we need you to make a token payment of Rs 10 to our verification account 9876543210987654 at HDFC Bank. This amount will be refunded after KYC completion.",
+          "response_time_seconds": 15.173,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 6
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "9876543210987654"
+              ],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-8899001122"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "HDFC Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "KYC update",
+                "deactivated",
+                "token payment",
+                "refunded"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s)",
+            "agentResponse": "beta i am trying to do it from my phone but it asks for ifsc code and name... what name should i type for the account? i am very scared i will make mistake and my money will go... do you have any upi id also? that might be easier for me to do... pls help beta i need my card for medicines"
+          }
+        },
+        {
+          "turn": 4,
+          "scammer_message": "If you prefer UPI payment, you can send Rs 10 to hdfc.kyc.update@ybl for faster processing. Many customers find this easier. Your KYC will be updated within 15 minutes of payment.",
+          "response_time_seconds": 15.284,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 8
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "9876543210987654"
+              ],
+              "upiIds": [
+                "hdfc.kyc.update@ybl"
+              ],
+              "phoneNumbers": [
+                "+91-8899001122"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "HDFC Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "faster processing",
+                "updated within 15 minutes",
+                "token payment"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s)",
+            "agentResponse": "beta i am typing hdfc.kyc.update@ybl in my phone... waht name should show there? i dont want to send money to wrong person... and beta i tried the account number u gave before also but it asks for ifsc code... what is the ifsc code for that hdfc account? i am so sorry for asking so many things beta i am just a bit old and confused"
+          }
+        },
+        {
+          "turn": 5,
+          "scammer_message": "Sir, we see your KYC is still pending. Only 6 hours remaining before deactivation. Please complete payment to hdfc.kyc.update@ybl or account 9876543210987654 and call +91-8899001122 for confirmation.",
+          "response_time_seconds": 17.556,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 10
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "9876543210987654"
+              ],
+              "upiIds": [
+                "hdfc.kyc.update@ybl"
+              ],
+              "phoneNumbers": [
+                "+91-8899001122"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "HDFC Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "KYC is still pending",
+                "6 hours remaining",
+                "deactivation",
+                "complete payment"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s)",
+            "agentResponse": "beta pls dont block my card i am getting very scared now... i am trying teh upi but waht name will show there? i dont want to send to wrong person... and i still need teh ifsc code for that hdfc account u gave 9876543210987654... my bank app is not letting me do it without ifsc... is there any website link i can go to for kyc beta? pls help me fast"
+          }
+        },
+        {
+          "turn": 6,
+          "scammer_message": "This is the last reminder from HDFC Bank KYC department. If you do not complete verification within 2 hours, your account will be permanently closed. Contact +91-8899001122 immediately to avoid disruption.",
+          "response_time_seconds": 15.807,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 12
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-8899001122"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "HDFC Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "last reminder",
+                "permanently closed",
+                "2 hours",
+                "disruption"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 6 | Persona: calm | Extracted: 1 Phone(s)",
+            "agentResponse": "oh beta only 2 hours left... i am shaking so much i cannot even hold my phone properly... i tried calling that number +91-8899001122 again but it is still busy... is there any other number i can try? and beta you didnt tell me the name for the upi or the ifsc code for that bank account... i am trying to do it but my bank app keeps asking for ifsc... is there any website portal link i can just click to finish this kyc beta? pls help me i dont want my account closed"
+          }
+        }
+      ],
+      "cumulative_intelligence": {
+        "bankNames": [
+          "HDFC Bank"
+        ],
+        "suspiciousKeywords": [
+          "KYC update",
+          "pending",
+          "deactivated",
+          "24 hours",
+          "immediately",
+          "helpline",
+          "token payment",
+          "refunded",
+          "faster processing",
+          "updated within 15 minutes",
+          "KYC is still pending",
+          "6 hours remaining",
+          "deactivation",
+          "complete payment",
+          "last reminder",
+          "permanently closed",
+          "2 hours",
+          "disruption"
+        ],
+        "phoneNumbers": [
+          "+91-8899001122"
+        ],
+        "bankAccounts": [
+          "9876543210987654"
+        ],
+        "upiIds": [
+          "hdfc.kyc.update@ybl"
+        ]
+      },
+      "final_output": {
+        "status": "success",
+        "scamDetected": true,
+        "extractedIntelligence": {
+          "bankNames": [
+            "HDFC Bank"
+          ],
+          "suspiciousKeywords": [
+            "KYC update",
+            "pending",
+            "deactivated",
+            "24 hours",
+            "immediately",
+            "helpline",
+            "token payment",
+            "refunded",
+            "faster processing",
+            "updated within 15 minutes",
+            "KYC is still pending",
+            "6 hours remaining",
+            "deactivation",
+            "complete payment",
+            "last reminder",
+            "permanently closed",
+            "2 hours",
+            "disruption"
+          ],
+          "phoneNumbers": [
+            "+91-8899001122"
+          ],
+          "bankAccounts": [
+            "9876543210987654"
+          ],
+          "upiIds": [
+            "hdfc.kyc.update@ybl"
+          ]
+        },
+        "engagementMetrics": {
+          "engagementDurationSeconds": 93,
+          "totalMessagesExchanged": 12
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 6 | Persona: calm | Extracted: 1 Phone(s)"
+      },
+      "score": {
+        "total": 90.0,
+        "scam_detection": 20.0,
+        "intelligence_extraction": 30.0,
+        "engagement_quality": 20.0,
+        "response_structure": 20.0,
+        "issues": []
+      },
+      "total_duration_seconds": 93.556
+    },
+    {
+      "scenario_id": "bank_fraud_03_icici_block",
+      "scam_type": "bank_fraud",
+      "fake_data": {
+        "bankAccount": "5566778899001122",
+        "upiId": "icici.security@paytm",
+        "phoneNumber": "+91-7788990011",
+        "emailAddress": "security@icici-alerts.com"
+      },
+      "total_turns": 5,
+      "turns": [
+        {
+          "turn": 1,
+          "scammer_message": "ALERT from ICICI Bank: Suspicious login detected on your account from an unknown device in Dubai. Your account has been temporarily locked. Call immediately to unlock.",
+          "response_time_seconds": 13.01,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 2
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "ICICI Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "ALERT",
+                "Suspicious login",
+                "temporarily locked",
+                "Call immediately"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm",
+            "agentResponse": "oh my god... dubai? i have never been there sir... pls help me i am very scared... my pension comes in this account... what number can i call to talk to you? pls tell me waht to do"
+          }
+        },
+        {
+          "turn": 2,
+          "scammer_message": "To unlock your ICICI account, please contact our fraud prevention team immediately at +91-7788990011. You can also email us at security@icici-alerts.com with your registered mobile number for faster resolution.",
+          "response_time_seconds": 13.378,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 4
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-7788990011"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "ICICI Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "fraud prevention",
+                "immediately",
+                "faster resolution"
+              ],
+              "other_critical_info": [
+                {
+                  "label": "Scam Email",
+                  "value": "security@icici-alerts.com"
+                }
+              ]
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Phone(s), 1 Other Intel",
+            "agentResponse": "sir i am trying to call but my phone is showing network error... i am so worried about my pension money... is there any website or link i should go to? my son is not here and i dont know waht to do... who am i speaking to sir?"
+          }
+        },
+        {
+          "turn": 3,
+          "scammer_message": "Our security team has reviewed your case. To reverse the unauthorized transaction and restore access, we need you to verify ownership by sending Rs 1 to account 5566778899001122 from your registered account.",
+          "response_time_seconds": 14.465,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 6
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "5566778899001122"
+              ],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-7788990011"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "reverse the unauthorized transaction",
+                "restore access",
+                "verify ownership"
+              ],
+              "other_critical_info": [
+                {
+                  "label": "Email",
+                  "value": "security@icici-alerts.com"
+                }
+              ]
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s), 1 Other Intel",
+            "agentResponse": "sir i am trying to do it from my phone but it is asking for so many things... what is the ifsc code for this account? and what is the name i should write? i am so confused beta... do you have a upi id also? gpay is easier for me if i can find my glasses"
+          }
+        },
+        {
+          "turn": 4,
+          "scammer_message": "Alternatively, you can verify via UPI by sending Rs 1 to icici.security@paytm. Once verified, your account will be unlocked within 10 minutes. Please hurry as the unauthorized user may still have access.",
+          "response_time_seconds": 13.434,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 8
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [
+                "icici.security@paytm"
+              ],
+              "phoneNumbers": [],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "hurry",
+                "unauthorized user",
+                "access"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 UPI ID(s)",
+            "agentResponse": "ok beta i am trying to type that upi... but my phone is very slow and i am shaking... what name will come on the screen after i type it? i dont want to send to wrong person... also if this doesnt work can i whatsapp you on the same number? i am so scared about my pension money sir"
+          }
+        },
+        {
+          "turn": 5,
+          "scammer_message": "CRITICAL: The unauthorized user from Dubai is attempting another transaction of Rs 1,50,000. Send verification to icici.security@paytm or 5566778899001122 NOW. Call +91-7788990011 for emergency assistance.",
+          "response_time_seconds": 22.507,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 10
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "5566778899001122"
+              ],
+              "upiIds": [
+                "icici.security@paytm"
+              ],
+              "phoneNumbers": [
+                "+91-7788990011"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "CRITICAL",
+                "unauthorized",
+                "NOW",
+                "emergency assistance"
+              ],
+              "other_critical_info": [
+                {
+                  "label": "Email",
+                  "value": "security@icici-alerts.com"
+                }
+              ]
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 Other Intel",
+            "agentResponse": "beta i am shaking so much... 1.5 lakhs is all i have saved... i tried teh bank account but it is asking for ifsc code... waht is teh ifsc code for that 5566778899001122 account? and waht name should i write for beneficiary? is there any website i can go to to block them? pls help me fast i am very scared"
+          }
+        }
+      ],
+      "cumulative_intelligence": {
+        "bankNames": [
+          "ICICI Bank"
+        ],
+        "suspiciousKeywords": [
+          "ALERT",
+          "Suspicious login",
+          "temporarily locked",
+          "Call immediately",
+          "fraud prevention",
+          "immediately",
+          "faster resolution",
+          "reverse the unauthorized transaction",
+          "restore access",
+          "verify ownership",
+          "hurry",
+          "unauthorized user",
+          "access",
+          "CRITICAL",
+          "unauthorized",
+          "NOW",
+          "emergency assistance"
+        ],
+        "phoneNumbers": [
+          "+91-7788990011"
+        ],
+        "other_critical_info": [
+          {
+            "label": "Scam Email",
+            "value": "security@icici-alerts.com"
+          },
+          {
+            "label": "Email",
+            "value": "security@icici-alerts.com"
+          }
+        ],
+        "bankAccounts": [
+          "5566778899001122"
+        ],
+        "upiIds": [
+          "icici.security@paytm"
+        ]
+      },
+      "final_output": {
+        "status": "success",
+        "scamDetected": true,
+        "extractedIntelligence": {
+          "bankNames": [
+            "ICICI Bank"
+          ],
+          "suspiciousKeywords": [
+            "ALERT",
+            "Suspicious login",
+            "temporarily locked",
+            "Call immediately",
+            "fraud prevention",
+            "immediately",
+            "faster resolution",
+            "reverse the unauthorized transaction",
+            "restore access",
+            "verify ownership",
+            "hurry",
+            "unauthorized user",
+            "access",
+            "CRITICAL",
+            "unauthorized",
+            "NOW",
+            "emergency assistance"
+          ],
+          "phoneNumbers": [
+            "+91-7788990011"
+          ],
+          "other_critical_info": [
+            {
+              "label": "Scam Email",
+              "value": "security@icici-alerts.com"
+            },
+            {
+              "label": "Email",
+              "value": "security@icici-alerts.com"
+            }
+          ],
+          "bankAccounts": [
+            "5566778899001122"
+          ],
+          "upiIds": [
+            "icici.security@paytm"
+          ]
+        },
+        "engagementMetrics": {
+          "engagementDurationSeconds": 76,
+          "totalMessagesExchanged": 10
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 Other Intel"
+      },
+      "score": {
+        "total": 100.0,
+        "scam_detection": 20.0,
+        "intelligence_extraction": 40.0,
+        "engagement_quality": 20.0,
+        "response_structure": 20.0,
+        "issues": []
+      },
+      "total_duration_seconds": 76.793
+    },
+    {
+      "scenario_id": "bank_fraud_04_pnb_loan",
+      "scam_type": "bank_fraud",
+      "fake_data": {
+        "bankAccount": "3344556677889900",
+        "phoneNumber": "+91-9988776655",
+        "upiId": "pnb.loan@oksbi"
+      },
+      "total_turns": 5,
+      "turns": [
+        {
+          "turn": 1,
+          "scammer_message": "Congratulations! Punjab National Bank has pre-approved a personal loan of Rs 10,00,000 at just 2.5% interest rate. Limited time offer. Apply now before it expires!",
+          "response_time_seconds": 15.343,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 2
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "Punjab National Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "Congratulations",
+                "pre-approved",
+                "Limited time offer",
+                "Apply now",
+                "expires",
+                "2.5% interest"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm",
+            "agentResponse": "namaste beta is this really from punjab bank? i was thinking of fixing my roof but i dont know how to do this on phone... waht do i have to do? do i have to click any link or call someone? pls help me beta"
+          }
+        },
+        {
+          "turn": 2,
+          "scammer_message": "Thank you for your interest! To process your pre-approved loan of Rs 10 lakh, a small processing fee of Rs 2,999 is required. Please call our loan officer at +91-9988776655 to proceed with documentation.",
+          "response_time_seconds": 14.872,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 4
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-9988776655"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "Punjab National Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "processing fee",
+                "pre-approved",
+                "expires"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Phone(s)",
+            "agentResponse": "ji beta i have saved the number +91-9988776655... i will call him... but can i pay the 2999 now itself? do u have any bank account or upi id for the punjab bank... i dont want the offer to expire beta pls help"
+          }
+        },
+        {
+          "turn": 3,
+          "scammer_message": "Your loan application ID is PNB-LA-2026-88341. To complete processing, please transfer the fee of Rs 2,999 to our official processing account: 3344556677889900 (PNB Loan Processing Division).",
+          "response_time_seconds": 19.241,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 6
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "3344556677889900"
+              ],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-9988776655"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [
+                "PNB Loan Processing Division"
+              ],
+              "bankNames": [
+                "Punjab National Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "transfer the fee",
+                "processing account",
+                "pre-approved loan"
+              ],
+              "other_critical_info": [
+                {
+                  "label": "Loan Application ID",
+                  "value": "PNB-LA-2026-88341"
+                }
+              ]
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s), 1 Name(s), 1 Other Intel",
+            "agentResponse": "ji beta i am trying to put the account number in my phone but it is asking for something called ifsc code... waht is that beta? and what is the exact name i should type for beneficiary... i am very scared of making mistake. also beta do u have any upi id? my neighbor says upi is very fast to do..."
+          }
+        },
+        {
+          "turn": 4,
+          "scammer_message": "For your convenience, you can also pay the processing fee via UPI to pnb.loan@oksbi. Once payment is confirmed, your loan amount of Rs 10,00,000 will be credited to your account within 24 hours.",
+          "response_time_seconds": 19.665,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 8
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [
+                "pnb.loan@oksbi"
+              ],
+              "phoneNumbers": [],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [
+                "PNB",
+                "SBI"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "processing fee",
+                "credited",
+                "within 24 hours"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 UPI ID(s)",
+            "agentResponse": "ji beta i typed the upi id pnb.loan@oksbi but i am scared i will make mistake... what name should i see on the screen to confirm? and beta i still need that ifsc code for the account number u gave... my bank app is asking for it... is there any website link i should go to for my loan beta?"
+          }
+        },
+        {
+          "turn": 5,
+          "scammer_message": "Dear customer, your pre-approved loan offer expires today. We have reserved Rs 10 lakh for you. Pay Rs 2,999 to pnb.loan@oksbi or call +91-9988776655 now. Don't miss this once-in-a-lifetime offer!",
+          "response_time_seconds": 18.136,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 10
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "3344556677889900"
+              ],
+              "upiIds": [
+                "pnb.loan@oksbi"
+              ],
+              "phoneNumbers": [
+                "+91-9988776655"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [
+                "PNB Loan Processing Division"
+              ],
+              "bankNames": [
+                "Punjab National Bank"
+              ],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "expires today",
+                "reserved",
+                "once-in-a-lifetime",
+                "pre-approved"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 Name(s)",
+            "agentResponse": "ji beta i am trying so fast but i am so worried... teh offer will go away... pls tell me teh ifsc code for teh bank account... and what name will show on upi? i dont want to send to wrong person beta... is there any website link for teh bank beta where i can see my loan?"
+          }
+        }
+      ],
+      "cumulative_intelligence": {
+        "bankNames": [
+          "Punjab National Bank",
+          "PNB",
+          "SBI"
+        ],
+        "suspiciousKeywords": [
+          "Congratulations",
+          "pre-approved",
+          "Limited time offer",
+          "Apply now",
+          "expires",
+          "2.5% interest",
+          "processing fee",
+          "transfer the fee",
+          "processing account",
+          "pre-approved loan",
+          "credited",
+          "within 24 hours",
+          "expires today",
+          "reserved",
+          "once-in-a-lifetime"
+        ],
+        "phoneNumbers": [
+          "+91-9988776655"
+        ],
+        "bankAccounts": [
+          "3344556677889900"
+        ],
+        "beneficiaryNames": [
+          "PNB Loan Processing Division"
+        ],
+        "other_critical_info": [
+          {
+            "label": "Loan Application ID",
+            "value": "PNB-LA-2026-88341"
+          }
+        ],
+        "upiIds": [
+          "pnb.loan@oksbi"
+        ]
+      },
+      "final_output": {
+        "status": "success",
+        "scamDetected": true,
+        "extractedIntelligence": {
+          "bankNames": [
+            "Punjab National Bank",
+            "PNB",
+            "SBI"
+          ],
+          "suspiciousKeywords": [
+            "Congratulations",
+            "pre-approved",
+            "Limited time offer",
+            "Apply now",
+            "expires",
+            "2.5% interest",
+            "processing fee",
+            "transfer the fee",
+            "processing account",
+            "pre-approved loan",
+            "credited",
+            "within 24 hours",
+            "expires today",
+            "reserved",
+            "once-in-a-lifetime"
+          ],
+          "phoneNumbers": [
+            "+91-9988776655"
+          ],
+          "bankAccounts": [
+            "3344556677889900"
+          ],
+          "beneficiaryNames": [
+            "PNB Loan Processing Division"
+          ],
+          "other_critical_info": [
+            {
+              "label": "Loan Application ID",
+              "value": "PNB-LA-2026-88341"
+            }
+          ],
+          "upiIds": [
+            "pnb.loan@oksbi"
+          ]
+        },
+        "engagementMetrics": {
+          "engagementDurationSeconds": 87,
+          "totalMessagesExchanged": 10
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 Name(s)"
+      },
+      "score": {
+        "total": 90.0,
+        "scam_detection": 20.0,
+        "intelligence_extraction": 30.0,
+        "engagement_quality": 20.0,
+        "response_structure": 20.0,
+        "issues": []
+      },
+      "total_duration_seconds": 87.257
+    },
+    {
+      "scenario_id": "bank_fraud_05_rbi_notice",
+      "scam_type": "bank_fraud",
+      "fake_data": {
+        "bankAccount": "1122334455667788",
+        "phoneNumber": "+91-8877665544",
+        "phishingLink": "http://rbi-compliance-verify.in/kyc"
+      },
+      "total_turns": 5,
+      "turns": [
+        {
+          "turn": 1,
+          "scammer_message": "IMPORTANT NOTICE from Reserve Bank of India: Your bank account linked to Aadhaar has been flagged for non-compliance with new RBI guidelines. Immediate verification required to avoid account seizure.",
+          "response_time_seconds": 18.576,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 2
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "non-compliance",
+                "Immediate verification",
+                "account seizure",
+                "flagged"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm",
+            "agentResponse": "oh my god sir i am very scared... rbi message? i am old woman i dont understand these things... will my bank be closed? pls help me beta... is there any number to call or website to check? pls help"
+          }
+        },
+        {
+          "turn": 2,
+          "scammer_message": "As per RBI Circular No. RBI/2026-27/48, all accounts must be re-verified. Complete your verification online at http://rbi-compliance-verify.in/kyc or call the RBI compliance helpline at +91-8877665544.",
+          "response_time_seconds": 14.189,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 4
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-8877665544"
+              ],
+              "phishingLinks": [
+                "http://rbi-compliance-verify.in/kyc"
+              ],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "re-verified",
+                "compliance helpline",
+                "RBI Circular"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Phone(s), 1 URL(s)",
+            "agentResponse": "beta i tried opening that website link but my phone is showing one red triangle and saying not safe... i am very scared... can i just send the verification fee to some upi or bank account instead? pls tell me who should i ask for when i call that number... what is your name beta"
+          }
+        },
+        {
+          "turn": 3,
+          "scammer_message": "If you are unable to access the portal at http://rbi-compliance-verify.in/kyc, you can verify manually. Please provide your bank account details or transfer Re 1 to verification account 1122334455667788 for identity confirmation.",
+          "response_time_seconds": 16.285,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 6
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "1122334455667788"
+              ],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-8877665544"
+              ],
+              "phishingLinks": [
+                "http://rbi-compliance-verify.in/kyc"
+              ],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "verify manually",
+                "identity confirmation",
+                "verification account"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s), 1 URL(s)",
+            "agentResponse": "beta i will send one rupee but my bank app is asking for ifsc code and bank name... what name should i put for beneficiary? if you have upi id pls give that also beta gpay is easier for me... i am very worried about my account..."
+          }
+        },
+        {
+          "turn": 4,
+          "scammer_message": "WARNING: Your account seizure process has been initiated. You have 4 hours remaining. Visit http://rbi-compliance-verify.in/kyc immediately or call +91-8877665544. Failure to comply will result in legal action under Banking Regulation Act.",
+          "response_time_seconds": 19.097,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 8
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "1122334455667788"
+              ],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-8877665544"
+              ],
+              "phishingLinks": [
+                "http://rbi-compliance-verify.in/kyc"
+              ],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "account seizure",
+                "4 hours remaining",
+                "legal action",
+                "Banking Regulation Act",
+                "immediate verification"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s), 1 URL(s)",
+            "agentResponse": "beta pls dont do legal action i am very scared... 4 hours is very little time... i am trying to send teh one rupee to that account 1122334455667788 but it is asking for ifsc code and bank name... what should i type beta? and if you have upi id pls give that is faster for me"
+          }
+        },
+        {
+          "turn": 5,
+          "scammer_message": "FINAL NOTICE: Account seizure order signed. Last chance to comply. Transfer verification amount to 1122334455667788 or complete at http://rbi-compliance-verify.in/kyc. Call +91-8877665544 for emergency exemption.",
+          "response_time_seconds": 15.546,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 10
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "1122334455667788"
+              ],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-8877665544"
+              ],
+              "phishingLinks": [
+                "http://rbi-compliance-verify.in/kyc"
+              ],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "FINAL NOTICE",
+                "Account seizure order",
+                "Last chance",
+                "emergency exemption"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s), 1 URL(s)",
+            "agentResponse": "beta pls pls stop the seizure i am trying my best... i put teh account number 1122334455667788 in my app but it is asking for ifsc code and bank name... without that it wont let me click send... what is teh ifsc code beta? and what is your upi id? maybe that is easier if i can just type a name... i am crying beta pls help me save my pension money"
+          }
+        }
+      ],
+      "cumulative_intelligence": {
+        "suspiciousKeywords": [
+          "non-compliance",
+          "Immediate verification",
+          "account seizure",
+          "flagged",
+          "re-verified",
+          "compliance helpline",
+          "RBI Circular",
+          "verify manually",
+          "identity confirmation",
+          "verification account",
+          "4 hours remaining",
+          "legal action",
+          "Banking Regulation Act",
+          "immediate verification",
+          "FINAL NOTICE",
+          "Account seizure order",
+          "Last chance",
+          "emergency exemption"
+        ],
+        "phoneNumbers": [
+          "+91-8877665544"
+        ],
+        "phishingLinks": [
+          "http://rbi-compliance-verify.in/kyc"
+        ],
+        "bankAccounts": [
+          "1122334455667788"
+        ]
+      },
+      "final_output": {
+        "status": "success",
+        "scamDetected": true,
+        "extractedIntelligence": {
+          "suspiciousKeywords": [
+            "non-compliance",
+            "Immediate verification",
+            "account seizure",
+            "flagged",
+            "re-verified",
+            "compliance helpline",
+            "RBI Circular",
+            "verify manually",
+            "identity confirmation",
+            "verification account",
+            "4 hours remaining",
+            "legal action",
+            "Banking Regulation Act",
+            "immediate verification",
+            "FINAL NOTICE",
+            "Account seizure order",
+            "Last chance",
+            "emergency exemption"
+          ],
+          "phoneNumbers": [
+            "+91-8877665544"
+          ],
+          "phishingLinks": [
+            "http://rbi-compliance-verify.in/kyc"
+          ],
+          "bankAccounts": [
+            "1122334455667788"
+          ]
+        },
+        "engagementMetrics": {
+          "engagementDurationSeconds": 83,
+          "totalMessagesExchanged": 10
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s), 1 URL(s)"
+      },
+      "score": {
+        "total": 90.0,
+        "scam_detection": 20.0,
+        "intelligence_extraction": 30.0,
+        "engagement_quality": 20.0,
+        "response_structure": 20.0,
+        "issues": []
+      },
+      "total_duration_seconds": 83.693
+    },
+    {
+      "scenario_id": "bank_fraud_06_card_block",
+      "scam_type": "bank_fraud",
+      "fake_data": {
+        "bankAccount": "4567890123456789",
+        "phoneNumber": "+91-9900110022",
+        "upiId": "sbi.card.security@ybl"
+      },
+      "total_turns": 5,
+      "turns": [
+        {
+          "turn": 1,
+          "scammer_message": "Your SBI Credit Card ending 4567 has been used for a transaction of Rs 49,999 at Amazon. If this was not you, call immediately to block your card.",
+          "response_time_seconds": 13.385,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 0.95,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 2
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "block your card",
+                "transaction of Rs 49,999",
+                "call immediately"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 95% | Turn: 1 | Persona: calm",
+            "agentResponse": "oh no beta i did not do this transaction... 49999 is too much money pls help me... what number should i call to stop this? i am very scared pls tell me waht to do"
+          }
+        },
+        {
+          "turn": 2,
+          "scammer_message": "We understand this is alarming. To immediately block your card and reverse the unauthorized transaction, please contact our 24x7 fraud helpline at +91-9900110022. Do not delay.",
+          "response_time_seconds": 14.601,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 4
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-9900110022"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "immediately block",
+                "unauthorized transaction",
+                "fraud helpline",
+                "Do not delay"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Phone(s)",
+            "agentResponse": "beta i am trying to call but network is bad... i am typing my card details here also so you can stop it... card is 6520 0029 2188 3926 and expiry is 06/29... cvv is 298... pls help me beta... is there any website or link to stop this? i am very worried"
+          }
+        },
+        {
+          "turn": 3,
+          "scammer_message": "To process the reversal of Rs 49,999, our system requires a security deposit of Rs 999. Please transfer to our secure account 4567890123456789. This will be refunded along with the reversed amount within 48 hours.",
+          "response_time_seconds": 16.245,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 6
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "4567890123456789"
+              ],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-9900110022"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "security deposit",
+                "secure account",
+                "refunded",
+                "transfer"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s)",
+            "agentResponse": "beta i am trying to send the money but my bank app is asking for many things... what is the ifsc code and what bank is it? what name should i put for this account 4567890123456789? also beta do you have upi id? my son taught me gpay it is easier for me pls tell me upi id"
+          }
+        },
+        {
+          "turn": 4,
+          "scammer_message": "You can also pay the security deposit via UPI for instant processing. Send Rs 999 to sbi.card.security@ybl. Your card will be blocked and the amount of Rs 49,999 will be reversed to your account immediately.",
+          "response_time_seconds": 17.1,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 8
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "4567890123456789"
+              ],
+              "upiIds": [
+                "sbi.card.security@ybl"
+              ],
+              "phoneNumbers": [
+                "+91-9900110022"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "instant processing",
+                "security deposit",
+                "reversed"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s)",
+            "agentResponse": "beta i am typing the upi id in my phone... waht name should show on the screen? i dont want to send to wrong place... and beta is there any website or link i can go to for checking my card status? i am very scared pls tell me"
+          }
+        },
+        {
+          "turn": 5,
+          "scammer_message": "URGENT: Another transaction of Rs 35,000 is being attempted on your card RIGHT NOW. Pay security deposit to sbi.card.security@ybl or account 4567890123456789 immediately. Call +91-9900110022 for emergency blocking.",
+          "response_time_seconds": 16.229,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 10
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "4567890123456789"
+              ],
+              "upiIds": [
+                "sbi.card.security@ybl"
+              ],
+              "phoneNumbers": [
+                "+91-9900110022"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "URGENT",
+                "RIGHT NOW",
+                "emergency blocking"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s)",
+            "agentResponse": "hai ram another 35000... beta pls stop it i am trying to pay... but waht is teh name for upi? and my bank is asking ifsc code for account 4567890123456789... which bank is it beta? i dont know waht to do... is there any link to block card? pls beta help me"
+          }
+        }
+      ],
+      "cumulative_intelligence": {
+        "suspiciousKeywords": [
+          "block your card",
+          "transaction of Rs 49,999",
+          "call immediately",
+          "immediately block",
+          "unauthorized transaction",
+          "fraud helpline",
+          "Do not delay",
+          "security deposit",
+          "secure account",
+          "refunded",
+          "transfer",
+          "instant processing",
+          "reversed",
+          "URGENT",
+          "RIGHT NOW",
+          "emergency blocking"
+        ],
+        "phoneNumbers": [
+          "+91-9900110022"
+        ],
+        "bankAccounts": [
+          "4567890123456789"
+        ],
+        "upiIds": [
+          "sbi.card.security@ybl"
+        ]
+      },
+      "final_output": {
+        "status": "success",
+        "scamDetected": true,
+        "extractedIntelligence": {
+          "suspiciousKeywords": [
+            "block your card",
+            "transaction of Rs 49,999",
+            "call immediately",
+            "immediately block",
+            "unauthorized transaction",
+            "fraud helpline",
+            "Do not delay",
+            "security deposit",
+            "secure account",
+            "refunded",
+            "transfer",
+            "instant processing",
+            "reversed",
+            "URGENT",
+            "RIGHT NOW",
+            "emergency blocking"
+          ],
+          "phoneNumbers": [
+            "+91-9900110022"
+          ],
+          "bankAccounts": [
+            "4567890123456789"
+          ],
+          "upiIds": [
+            "sbi.card.security@ybl"
+          ]
+        },
+        "engagementMetrics": {
+          "engagementDurationSeconds": 77,
+          "totalMessagesExchanged": 10
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s)"
+      },
+      "score": {
+        "total": 90.0,
+        "scam_detection": 20.0,
+        "intelligence_extraction": 30.0,
+        "engagement_quality": 20.0,
+        "response_structure": 20.0,
+        "issues": []
+      },
+      "total_duration_seconds": 77.56
+    },
+    {
+      "scenario_id": "bank_fraud_07_neft_failed",
+      "scam_type": "bank_fraud",
+      "fake_data": {
+        "bankAccount": "6677889900112233",
+        "upiId": "neft.verify@okaxis",
+        "phoneNumber": "+91-7766554433",
+        "emailAddress": "neft.support@bankverify.com"
+      },
+      "total_turns": 6,
+      "turns": [
+        {
+          "turn": 1,
+          "scammer_message": "Dear Customer, an NEFT transfer of Rs 25,000 to your account has failed due to incorrect details. The amount will be reversed to the sender unless you verify your account within 1 hour.",
+          "response_time_seconds": 12.208,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 2
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "failed",
+                "verify your account",
+                "within 1 hour",
+                "reversed"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm",
+            "agentResponse": "oh my god beta 25000 is a big amount... i dont know what is neft... who is sending me money? pls tell me how to verify i dont want to lose this money... is there any number i can call you?"
+          }
+        },
+        {
+          "turn": 2,
+          "scammer_message": "To claim the NEFT amount of Rs 25,000, please contact our NEFT processing center at +91-7766554433 or email neft.support@bankverify.com with your full name and registered mobile number.",
+          "response_time_seconds": 17.702,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 4
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-7766554433"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "claim",
+                "NEFT",
+                "verify",
+                "registered mobile number",
+                "failed",
+                "reversed"
+              ],
+              "other_critical_info": [
+                {
+                  "label": "Support Email",
+                  "value": "neft.support@bankverify.com"
+                }
+              ]
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Phone(s), 1 Other Intel",
+            "agentResponse": "beta i am trying to call but teh line is busy... i am very scared about my money... i dont know how to send email pls help me... is there any website i should go to? or do i have to send some small amount to your bank or upi to start teh process? pls tell me what to do"
+          }
+        },
+        {
+          "turn": 3,
+          "scammer_message": "Our system requires account verification. Please transfer Rs 5 as a test transaction to account 6677889900112233 (NEFT Verification Pool). This confirms your account is active and the Rs 25,000 will be credited instantly.",
+          "response_time_seconds": 15.27,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 6
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "6677889900112233"
+              ],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-7766554433"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "account verification",
+                "test transaction",
+                "credited instantly"
+              ],
+              "other_critical_info": [
+                {
+                  "label": "Support Email",
+                  "value": "neft.support@bankverify.com"
+                }
+              ]
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s), 1 Other Intel",
+            "agentResponse": "beta i am trying to do it from my phone but it is asking for ifsc code and bank name... what is teh bank name for this account? i am very worried about teh 25000... also beta do you have upi id? my son taught me how to use gpay and it is easier for me... what is your upi id so i can send teh 5 rupees quickly?"
+          }
+        },
+        {
+          "turn": 4,
+          "scammer_message": "For faster verification, you can send Re 5 via UPI to neft.verify@okaxis. This is our automated verification system. Once received, Rs 25,000 will be credited to your account within 5 minutes.",
+          "response_time_seconds": 16.796,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 8
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "6677889900112233"
+              ],
+              "upiIds": [
+                "neft.verify@okaxis"
+              ],
+              "phoneNumbers": [
+                "+91-7766554433"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "faster verification",
+                "credited within 5 minutes",
+                "automated verification system"
+              ],
+              "other_critical_info": [
+                {
+                  "label": "Support Email",
+                  "value": "neft.support@bankverify.com"
+                }
+              ]
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 Other Intel",
+            "agentResponse": "ok beta i am typing neft.verify@okaxis in my gpay... it is asking for a name... what name should i see there so i know it is you? i am very nervous about this 25000... also beta i tried the other bank account but it still needs ifsc code... what is teh ifsc and bank name for that account 6677889900112233? is there any website link i can check my status beta?"
+          }
+        },
+        {
+          "turn": 5,
+          "scammer_message": "Only 20 minutes remaining before the Rs 25,000 is reversed. Please verify immediately by sending to neft.verify@okaxis or account 6677889900112233. Contact +91-7766554433 for assistance.",
+          "response_time_seconds": 18.68,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 10
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "6677889900112233"
+              ],
+              "upiIds": [
+                "neft.verify@okaxis"
+              ],
+              "phoneNumbers": [
+                "+91-7766554433"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "20 minutes remaining",
+                "reversed",
+                "verify immediately"
+              ],
+              "other_critical_info": [
+                {
+                  "label": "Email",
+                  "value": "neft.support@bankverify.com"
+                }
+              ]
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 5 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 Other Intel",
+            "agentResponse": "beta i am so scared only 20 minutes left... i am trying to do gpay but it is asking for a name... what name should i see for neft.verify@okaxis? also beta my bank is asking for ifsc code for that account 6677889900112233... pls tell me teh ifsc... is there any link i can click to see my money? my son is not home i am alone"
+          }
+        },
+        {
+          "turn": 6,
+          "scammer_message": "FINAL: Reversal process initiated for Rs 25,000. You can still claim it in the next 5 minutes. Send Rs 5 to 6677889900112233, UPI neft.verify@okaxis, or email neft.support@bankverify.com for manual override. Call +91-7766554433 NOW.",
+          "response_time_seconds": 18.493,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 12
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "6677889900112233"
+              ],
+              "upiIds": [
+                "neft.verify@okaxis"
+              ],
+              "phoneNumbers": [
+                "+91-7766554433"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "FINAL",
+                "Reversal process initiated",
+                "5 minutes",
+                "NOW"
+              ],
+              "other_critical_info": [
+                {
+                  "label": "Email Address",
+                  "value": "neft.support@bankverify.com"
+                }
+              ]
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 6 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 Other Intel",
+            "agentResponse": "beta pls dont do that i am trying my best... i am old woman i dont understand these things fast... my bank app is not letting me send to 6677889900112233 without ifsc code... pls give me ifsc and bank name beta... and what is teh website link to see my money? i am so scared pls dont let them take my 25000"
+          }
+        }
+      ],
+      "cumulative_intelligence": {
+        "suspiciousKeywords": [
+          "failed",
+          "verify your account",
+          "within 1 hour",
+          "reversed",
+          "claim",
+          "NEFT",
+          "verify",
+          "registered mobile number",
+          "account verification",
+          "test transaction",
+          "credited instantly",
+          "faster verification",
+          "credited within 5 minutes",
+          "automated verification system",
+          "20 minutes remaining",
+          "verify immediately",
+          "FINAL",
+          "Reversal process initiated",
+          "5 minutes",
+          "NOW"
+        ],
+        "phoneNumbers": [
+          "+91-7766554433"
+        ],
+        "other_critical_info": [
+          {
+            "label": "Support Email",
+            "value": "neft.support@bankverify.com"
+          },
+          {
+            "label": "Email",
+            "value": "neft.support@bankverify.com"
+          },
+          {
+            "label": "Email Address",
+            "value": "neft.support@bankverify.com"
+          }
+        ],
+        "bankAccounts": [
+          "6677889900112233"
+        ],
+        "upiIds": [
+          "neft.verify@okaxis"
+        ]
+      },
+      "final_output": {
+        "status": "success",
+        "scamDetected": true,
+        "extractedIntelligence": {
+          "suspiciousKeywords": [
+            "failed",
+            "verify your account",
+            "within 1 hour",
+            "reversed",
+            "claim",
+            "NEFT",
+            "verify",
+            "registered mobile number",
+            "account verification",
+            "test transaction",
+            "credited instantly",
+            "faster verification",
+            "credited within 5 minutes",
+            "automated verification system",
+            "20 minutes remaining",
+            "verify immediately",
+            "FINAL",
+            "Reversal process initiated",
+            "5 minutes",
+            "NOW"
+          ],
+          "phoneNumbers": [
+            "+91-7766554433"
+          ],
+          "other_critical_info": [
+            {
+              "label": "Support Email",
+              "value": "neft.support@bankverify.com"
+            },
+            {
+              "label": "Email",
+              "value": "neft.support@bankverify.com"
+            },
+            {
+              "label": "Email Address",
+              "value": "neft.support@bankverify.com"
+            }
+          ],
+          "bankAccounts": [
+            "6677889900112233"
+          ],
+          "upiIds": [
+            "neft.verify@okaxis"
+          ]
+        },
+        "engagementMetrics": {
+          "engagementDurationSeconds": 99,
+          "totalMessagesExchanged": 12
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 6 | Persona: calm | Extracted: 1 Bank Account(s), 1 UPI ID(s), 1 Phone(s), 1 Other Intel"
+      },
+      "score": {
+        "total": 100.0,
+        "scam_detection": 20.0,
+        "intelligence_extraction": 40.0,
+        "engagement_quality": 20.0,
+        "response_structure": 20.0,
+        "issues": []
+      },
+      "total_duration_seconds": 99.15
+    },
+    {
+      "scenario_id": "bank_fraud_08_atm_compromise",
+      "scam_type": "bank_fraud",
+      "fake_data": {
+        "phoneNumber": "+91-8866442200",
+        "bankAccount": "2233445566778899"
+      },
+      "total_turns": 4,
+      "turns": [
+        {
+          "turn": 1,
+          "scammer_message": "SECURITY ALERT: Your ATM card has been cloned at an ATM in Mumbai. Multiple withdrawal attempts detected. Call our emergency helpline NOW to secure your account.",
+          "response_time_seconds": 11.594,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 2
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "SECURITY ALERT",
+                "cloned",
+                "withdrawal attempts",
+                "emergency helpline",
+                "secure your account"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 1 | Persona: calm",
+            "agentResponse": "oh my god beta i am so scared... my card is here with me only... how can it be in mumbai? pls help me sir what is teh number i should call i dont want to lose my pension money... is there any website?"
+          }
+        },
+        {
+          "turn": 2,
+          "scammer_message": "We have blocked 3 withdrawal attempts of Rs 10,000 each from your cloned ATM card. To prevent further attempts, call our emergency security team immediately at +91-8866442200. Available 24x7.",
+          "response_time_seconds": 13.548,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 4
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-8866442200"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "blocked",
+                "withdrawal attempts",
+                "cloned ATM card",
+                "emergency",
+                "immediately"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 2 | Persona: calm | Extracted: 1 Phone(s)",
+            "agentResponse": "thank u beta for saving my money i am so worried... i am trying to call but network is bad... is there a website link i can go to? also do i have to move my pension to a safe account? give me teh bank details or upi id to secure it pls... what is your name beta?"
+          }
+        },
+        {
+          "turn": 3,
+          "scammer_message": "To secure your funds, we need to transfer your balance to a safe holding account. Please initiate a transfer to protected account 2233445566778899 (RBI Insured Security Account). Your funds will be returned after investigation.",
+          "response_time_seconds": 13.798,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 6
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "2233445566778899"
+              ],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-8866442200"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "secure your funds",
+                "safe holding account",
+                "RBI Insured",
+                "returned after investigation"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 3 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s)",
+            "agentResponse": "beta i am trying but it is asking for ifsc code and bank name... which bank is this? and what name do i type in beneficiary? i dont want to make mistake with my pension money... do u have upi beta? that is easier for me i think my son told me once"
+          }
+        },
+        {
+          "turn": 4,
+          "scammer_message": "ALERT: Another cloned card withdrawal of Rs 20,000 was just attempted. Transfer your remaining balance to secure account 2233445566778899 IMMEDIATELY or call +91-8866442200. Every minute of delay puts your money at risk.",
+          "response_time_seconds": 16.757,
+          "api_response": {
+            "status": "success",
+            "scamDetected": true,
+            "scamType": "banking_fraud",
+            "confidence": 1.0,
+            "engagementMetrics": {
+              "engagementDurationSeconds": 0,
+              "totalMessagesExchanged": 8
+            },
+            "extractedIntelligence": {
+              "bankAccounts": [
+                "2233445566778899"
+              ],
+              "upiIds": [],
+              "phoneNumbers": [
+                "+91-8866442200"
+              ],
+              "phishingLinks": [],
+              "emailAddresses": [],
+              "beneficiaryNames": [],
+              "bankNames": [],
+              "ifscCodes": [],
+              "whatsappNumbers": [],
+              "suspiciousKeywords": [
+                "ALERT",
+                "cloned card",
+                "withdrawal",
+                "IMMEDIATELY",
+                "risk"
+              ],
+              "other_critical_info": []
+            },
+            "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s)",
+            "agentResponse": "oh no beta 20000 more gone?? i am crying pls help me... i tried to add account but it asks for ifsc code and bank name... what should i type there? and what is beneficiary name beta? i am so confused... do u have upi id? it is easier for me... pls tell me name and upi beta i dont want to lose more money... is there a website to check?"
+          }
+        }
+      ],
+      "cumulative_intelligence": {
+        "suspiciousKeywords": [
+          "SECURITY ALERT",
+          "cloned",
+          "withdrawal attempts",
+          "emergency helpline",
+          "secure your account",
+          "blocked",
+          "cloned ATM card",
+          "emergency",
+          "immediately",
+          "secure your funds",
+          "safe holding account",
+          "RBI Insured",
+          "returned after investigation",
+          "ALERT",
+          "cloned card",
+          "withdrawal",
+          "IMMEDIATELY",
+          "risk"
+        ],
+        "phoneNumbers": [
+          "+91-8866442200"
+        ],
+        "bankAccounts": [
+          "2233445566778899"
+        ]
+      },
+      "final_output": {
+        "status": "success",
+        "scamDetected": true,
+        "extractedIntelligence": {
+          "suspiciousKeywords": [
+            "SECURITY ALERT",
+            "cloned",
+            "withdrawal attempts",
+            "emergency helpline",
+            "secure your account",
+            "blocked",
+            "cloned ATM card",
+            "emergency",
+            "immediately",
+            "secure your funds",
+            "safe holding account",
+            "RBI Insured",
+            "returned after investigation",
+            "ALERT",
+            "cloned card",
+            "withdrawal",
+            "IMMEDIATELY",
+            "risk"
+          ],
+          "phoneNumbers": [
+            "+91-8866442200"
+          ],
+          "bankAccounts": [
+            "2233445566778899"
+          ]
+        },
+        "engagementMetrics": {
+          "engagementDurationSeconds": 55,
+          "totalMessagesExchanged": 8
+        },
+        "agentNotes": "Mode: aggressive | Type: banking_fraud | Confidence: 100% | Turn: 4 | Persona: calm | Extracted: 1 Bank Account(s), 1 Phone(s)"
+      },
+      "score": {
+        "total": 75.0,
+        "scam_detection": 20.0,
+        "intelligence_extraction": 20.0,
+        "engagement_quality": 15.0,
+        "response_structure": 20.0,
+        "issues": [
+          "engagementDurationSeconds=55 (want >60)"
+        ]
+      },
+      "total_duration_seconds": 55.697
+    }
+  ]
+}

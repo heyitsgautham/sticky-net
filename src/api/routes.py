@@ -1,6 +1,7 @@
 """API route definitions."""
 
 import random
+import time
 import uuid
 import structlog
 from fastapi import APIRouter, HTTPException, Request
@@ -18,6 +19,11 @@ from src.api.schemas import (
     SenderType,
     StatusType,
 )
+from src.api.session_store import (
+    accumulate_intel as _accumulate_intel,
+    init_session_start_time,
+    get_session_start_time,
+)
 from src.detection.detector import ScamDetector
 from src.agents.honeypot_agent import HoneypotAgent, get_agent
 from src.agents.policy import EngagementPolicy
@@ -27,6 +33,8 @@ from src.exceptions import StickyNetError
 logger = structlog.get_logger()
 
 router = APIRouter(prefix="/api/v1", tags=["analyze"])
+
+# Session state is managed by src.api.session_store (Firestore-backed)
 
 
 @router.post(
@@ -53,6 +61,9 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
     """
     # Get or generate session ID
     session_id = request.sessionId or str(uuid.uuid4())
+    
+    # Track session start time for engagement duration (Firestore-backed)
+    init_session_start_time(session_id)
     
     log = logger.bind(
         channel=request.metadata.channel,
@@ -160,6 +171,46 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
             validated_intel = ExtractedIntelligence()
             log.warning("No AI extraction available")
 
+        # Step 3b: Regex backup extraction from scammer messages
+        # Scan the current scammer message + all history scammer messages
+        all_messages = [
+            {"sender": m.sender.value if hasattr(m.sender, 'value') else str(m.sender), "text": m.text}
+            for m in request.conversationHistory
+        ]
+        all_messages.append({"sender": "scammer", "text": request.message.text})
+        
+        regex_result = extractor.extract_from_conversation(all_messages)
+        
+        if regex_result.has_intelligence:
+            log.info(
+                "Regex backup found additional intel",
+                phones=len(regex_result.phone_numbers),
+                accounts=len(regex_result.bank_accounts),
+                upi=len(regex_result.upi_ids),
+                urls=len(regex_result.phishing_links),
+                emails=len(regex_result.emails),
+            )
+            # Merge regex finds into validated_intel
+            merged_accounts = list(set(validated_intel.bankAccounts + regex_result.bank_accounts))
+            merged_upi = list(set(validated_intel.upiIds + regex_result.upi_ids))
+            merged_phones = list(set(validated_intel.phoneNumbers + regex_result.phone_numbers))
+            merged_links = list(set(validated_intel.phishingLinks + regex_result.phishing_links))
+            merged_emails = list(set((validated_intel.emailAddresses or []) + regex_result.emails))
+            
+            validated_intel = ExtractedIntelligence(
+                bankAccounts=merged_accounts,
+                upiIds=merged_upi,
+                phoneNumbers=merged_phones,
+                phishingLinks=merged_links,
+                emailAddresses=merged_emails,
+                beneficiaryNames=validated_intel.beneficiaryNames,
+                bankNames=validated_intel.bankNames,
+                ifscCodes=validated_intel.ifscCodes,
+                whatsappNumbers=validated_intel.whatsappNumbers,
+                suspiciousKeywords=validated_intel.suspiciousKeywords,
+                other_critical_info=validated_intel.other_critical_info,
+            )
+
         # Step 4: Check exit condition AFTER getting AI extraction
         policy = EngagementPolicy()
         high_value_complete = policy.is_high_value_intelligence_complete(
@@ -167,6 +218,7 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
             phone_numbers=validated_intel.phoneNumbers,
             upi_ids=validated_intel.upiIds,
             beneficiary_names=validated_intel.beneficiaryNames,
+            current_turn=current_turn,
         )
         
         if high_value_complete:
@@ -208,15 +260,16 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         # Calculate totalMessagesExchanged: history + current message + agent reply
         total_messages_exchanged = len(request.conversationHistory) + 2
         
-        # Step 6: Send intelligence to GUVI callback endpoint
-        # Build intelligence dict for callback
-        callback_intelligence = {
-            "bankAccounts": validated_intel.bankAccounts,
-            "upiIds": validated_intel.upiIds,
-            "phishingLinks": validated_intel.phishingLinks,
-            "phoneNumbers": validated_intel.phoneNumbers,
-            "suspiciousKeywords": validated_intel.suspiciousKeywords,
-        }
+        # Step 6: Accumulate intelligence across turns
+        accumulated_intel = _accumulate_intel(session_id, validated_intel)
+        
+        # Calculate engagement duration from session start
+        session_start = get_session_start_time(session_id) or time.time()
+        engagement_duration = int(time.time() - session_start)
+        
+        # Step 7: Send intelligence to GUVI callback endpoint
+        # Build intelligence dict for callback with accumulated data
+        callback_intelligence = accumulated_intel
         
         # Fire callback asynchronously (don't wait for response)
         try:
@@ -226,6 +279,7 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
                 total_messages=total_messages_exchanged,
                 intelligence=callback_intelligence,
                 agent_notes=final_notes,
+                engagement_duration=engagement_duration,
             )
             log.info(
                 "GUVI callback sent",
@@ -277,6 +331,9 @@ async def analyze_message_detailed(request: AnalyzeRequest) -> AnalyzeResponse:
     Intended for frontend demo/testing, not for hackathon evaluation.
     """
     session_id = request.sessionId or str(uuid.uuid4())
+
+    # Track session start time for engagement duration
+    init_session_start_time(session_id)
     
     log = logger.bind(
         channel=request.metadata.channel,
@@ -330,6 +387,46 @@ async def analyze_message_detailed(request: AnalyzeRequest) -> AnalyzeResponse:
         else:
             validated_intel = ExtractedIntelligence()
 
+        # Step 3b: Regex backup extraction from scammer messages
+        # (Same as /analyze endpoint — ensures fakeData like bank accounts,
+        #  phishing links, and emails are captured even when the LLM misses them)
+        all_messages = [
+            {"sender": m.sender.value if hasattr(m.sender, 'value') else str(m.sender), "text": m.text}
+            for m in request.conversationHistory
+        ]
+        all_messages.append({"sender": "scammer", "text": request.message.text})
+
+        regex_result = extractor.extract_from_conversation(all_messages)
+
+        if regex_result.has_intelligence:
+            log.info(
+                "Regex backup found additional intel (detailed)",
+                phones=len(regex_result.phone_numbers),
+                accounts=len(regex_result.bank_accounts),
+                upi=len(regex_result.upi_ids),
+                urls=len(regex_result.phishing_links),
+                emails=len(regex_result.emails),
+            )
+            merged_accounts = list(set(validated_intel.bankAccounts + regex_result.bank_accounts))
+            merged_upi = list(set(validated_intel.upiIds + regex_result.upi_ids))
+            merged_phones = list(set(validated_intel.phoneNumbers + regex_result.phone_numbers))
+            merged_links = list(set(validated_intel.phishingLinks + regex_result.phishing_links))
+            merged_emails = list(set((validated_intel.emailAddresses or []) + regex_result.emails))
+
+            validated_intel = ExtractedIntelligence(
+                bankAccounts=merged_accounts,
+                upiIds=merged_upi,
+                phoneNumbers=merged_phones,
+                phishingLinks=merged_links,
+                emailAddresses=merged_emails,
+                beneficiaryNames=validated_intel.beneficiaryNames,
+                bankNames=validated_intel.bankNames,
+                ifscCodes=validated_intel.ifscCodes,
+                whatsappNumbers=validated_intel.whatsappNumbers,
+                suspiciousKeywords=validated_intel.suspiciousKeywords,
+                other_critical_info=validated_intel.other_critical_info,
+            )
+
         # Step 4: Build full response
         scam_type_enum = None
         if detection_result.scam_type:
@@ -351,13 +448,17 @@ async def analyze_message_detailed(request: AnalyzeRequest) -> AnalyzeResponse:
 
         total_messages_exchanged = len(request.conversationHistory) + 2
 
+        # Calculate engagement duration from session start
+        session_start = get_session_start_time(session_id) or time.time()
+        engagement_duration = int(time.time() - session_start)
+
         return AnalyzeResponse(
             status=StatusType.SUCCESS,
             scamDetected=True,
             scamType=scam_type_enum,
             confidence=detection_result.confidence,
             engagementMetrics=EngagementMetrics(
-                engagementDurationSeconds=0,
+                engagementDurationSeconds=engagement_duration,
                 totalMessagesExchanged=total_messages_exchanged,
             ),
             extractedIntelligence=validated_intel,

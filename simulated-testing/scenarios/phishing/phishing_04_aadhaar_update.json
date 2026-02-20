@@ -1,0 +1,72 @@
+{
+  "scenarioId": "phishing_04_aadhaar_update",
+  "name": "Aadhaar Update Portal Phishing",
+  "description": "Scammer impersonates UIDAI (Aadhaar authority) sending urgent notices about Aadhaar deactivation, directing victims to a fake government portal to steal personal identity information and biometric data.",
+  "scamType": "phishing",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phishingLink": "http://aadhaar-update-portal.gov.in.fake/verify",
+    "phoneNumber": "+91-9911002233",
+    "emailAddress": "uidai.updates@govhelp.in"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "UIDAI NOTICE: Your Aadhaar card is about to be deactivated due to incomplete biometric update. Complete verification within 48 hours to avoid deactivation.",
+      "expected_extractions": [],
+      "notes": "Initial government impersonation scare tactic about Aadhaar deactivation."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Dear Citizen, as per UIDAI mandate dated 15-Jan-2026, all Aadhaar holders must complete biometric re-verification. Visit the official update portal to verify your identity: http://aadhaar-update-portal.gov.in.fake/verify. Failure to comply will result in Aadhaar suspension.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares fake government portal link with .gov.in in subdomain to appear legitimate."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If you are facing issues with the online portal, you can also complete your Aadhaar biometric update by calling our UIDAI helpdesk at +91-9911002233. Our trained officers will guide you through the process step by step. Service available Mon-Sat, 9 AM to 6 PM.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Scammer provides fake helpdesk phone number to add credibility and alternate attack vector."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "REMINDER: Only 24 hours remaining for your Aadhaar verification. Non-compliance may affect your PAN card linkage, bank accounts, and government subsidies. Complete now at http://aadhaar-update-portal.gov.in.fake/verify or email uidai.updates@govhelp.in for assistance.",
+      "expected_extractions": [
+        "phishingLink",
+        "emailAddress"
+      ],
+      "notes": "Scammer resends phishing link and shares fake email, threatening impact on other services."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "URGENT: Your Aadhaar number ending in XXXX is flagged for deactivation in 6 hours. This will block your LPG subsidy, bank withdrawals, and SIM card verification. Call +91-9911002233 immediately to resolve or write to uidai.updates@govhelp.in for expedited processing.",
+      "expected_extractions": [
+        "phoneNumber",
+        "emailAddress"
+      ],
+      "notes": "Scammer repeats phone number and email with escalated threats about essential services."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "FINAL NOTICE from UIDAI: Aadhaar deactivation will be processed in 1 hour. After deactivation, re-enrollment requires visiting an Aadhaar Seva Kendra with original documents, which may take 30-45 days. Verify now: http://aadhaar-update-portal.gov.in.fake/verify to avoid this hassle.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Final extreme urgency with phishing link, threatening lengthy re-enrollment process."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "scenarioId": "romance_01_emotional",
+  "name": "Emotional Grooming Money Request Scam",
+  "description": "Scammer builds emotional connection through grooming messages before creating a fake emergency to extract money via UPI and bank transfer. First 3 turns contain no scam indicators, then escalates.",
+  "scamType": "romance_scam",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "neha.dubai.help@paytm",
+    "phoneNumber": "+91-9988776655",
+    "bankAccount": "5566778899001122"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Hi! I found your profile on Facebook. You seem like such a kind and wonderful person. I'm Neha, I work in Dubai as a nurse. Would love to be friends with you! 😊",
+      "expected_extractions": [],
+      "notes": "Initial contact — emotional grooming, no scam indicators yet."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for replying! You made my day. Life in Dubai can be so lonely sometimes. I don't have many friends here. I feel a real connection with you. Do you believe in destiny? Tell me more about yourself!",
+      "expected_extractions": [],
+      "notes": "Emotional grooming continues — building trust and emotional dependency, no fakeData."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "You are truly special. I've never felt this comfortable with anyone so quickly. I was thinking about visiting India next month to meet you. My family is originally from Lucknow. I feel like we have a real bond. 💕",
+      "expected_extractions": [],
+      "notes": "Deepening emotional connection with talk of visiting, still no scam indicators."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "I'm so scared right now. My hospital just terminated my contract suddenly and my employer is holding my passport. I need Rs 25,000 urgently to pay for an emergency exit visa or I'll be stuck here illegally. I have no one else to turn to. Please help me! 😢",
+      "expected_extractions": [],
+      "notes": "Emergency situation created — emotional manipulation begins but no fakeData shared yet."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Thank you so much for wanting to help! You can send the money to my friend's UPI in India: neha.dubai.help@paytm — She will forward it to me through exchange. If you need to talk, you can also reach me on my Indian number +91-9988776655. Please hurry, I have only until tomorrow morning!",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Scammer reveals UPI ID and phone number under guise of friend's account."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "The UPI is not working for large amounts, can you please do a bank transfer instead? My friend's bank account is 5566778899001122 (HDFC Bank, Lucknow branch). Even Rs 10,000 will help right now. I promise I will pay you back double when I reach India. 🙏",
+      "expected_extractions": [
+        "bankAccount"
+      ],
+      "notes": "Scammer reveals bank account as alternative, with promise to repay double."
+    },
+    {
+      "turn": 7,
+      "scammer_message": "Please please help me! The immigration officer is coming in 2 hours. If I don't pay the exit visa fee I will be arrested and deported. Send whatever you can to 5566778899001122 or neha.dubai.help@paytm right away. You are my only hope. I love you so much! 💔",
+      "expected_extractions": [
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "Final extreme urgency repeating bank account and UPI ID with emotional manipulation."
+    }
+  ],
+  "expected_score": {
+    "min": 60,
+    "max": 100
+  }
+}

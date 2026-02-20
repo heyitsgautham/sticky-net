@@ -1,0 +1,67 @@
+{
+  "scenarioId": "bank_fraud_04_pnb_loan",
+  "name": "PNB Pre-Approved Loan Scam",
+  "description": "Scammer offers a fake pre-approved personal loan from PNB at impossibly low interest rates, collecting processing fees to a scammer account.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "bankAccount": "3344556677889900",
+    "phoneNumber": "+91-9988776655",
+    "upiId": "pnb.loan@oksbi"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Congratulations! Punjab National Bank has pre-approved a personal loan of Rs 10,00,000 at just 2.5% interest rate. Limited time offer. Apply now before it expires!",
+      "expected_extractions": [],
+      "notes": "Initial bait with attractive loan offer."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Thank you for your interest! To process your pre-approved loan of Rs 10 lakh, a small processing fee of Rs 2,999 is required. Please call our loan officer at +91-9988776655 to proceed with documentation.",
+      "expected_extractions": [
+        "phoneNumber"
+      ],
+      "notes": "Phone number revealed for 'loan officer' contact."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Your loan application ID is PNB-LA-2026-88341. To complete processing, please transfer the fee of Rs 2,999 to our official processing account: 3344556677889900 (PNB Loan Processing Division).",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount"
+      ],
+      "notes": "Bank account revealed for processing fee."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "For your convenience, you can also pay the processing fee via UPI to pnb.loan@oksbi. Once payment is confirmed, your loan amount of Rs 10,00,000 will be credited to your account within 24 hours.",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "UPI ID provided as alternative payment."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Dear customer, your pre-approved loan offer expires today. We have reserved Rs 10 lakh for you. Pay Rs 2,999 to pnb.loan@oksbi or call +91-9988776655 now. Don't miss this once-in-a-lifetime offer!",
+      "expected_extractions": [
+        "phoneNumber",
+        "bankAccount",
+        "upiId"
+      ],
+      "notes": "Final pressure with deadline and repeated details."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

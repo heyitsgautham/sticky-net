@@ -37,9 +37,9 @@ class Settings(BaseSettings):
     llm_temperature: float = 0.7
 
     # API Timeout and Retry
-    api_timeout_seconds: int = 90  # Increased from 60s to handle slow LLM responses
-    gemini_max_retries: int = 2  # Number of retries on timeout
-    gemini_retry_delay_seconds: float = 1.0  # Delay between retries
+    api_timeout_seconds: int = 22  # Must stay under evaluator's 30s limit
+    gemini_max_retries: int = 1  # Single retry to stay within timeout budget
+    gemini_retry_delay_seconds: float = 0.5  # Fast retry
 
     # Engagement Policy
     max_engagement_turns_cautious: int = 10

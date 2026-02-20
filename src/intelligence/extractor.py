@@ -143,7 +143,7 @@ class IntelligenceExtractor:
 
         # These don't need strict validation - AI understands context better
         validated_urls = [str(url).strip() for url in ai_extracted.get("urls", []) if url]
-        validated_emails = [str(email).strip().lower() for email in ai_extracted.get("emails", []) if "@" in str(email)]
+        validated_emails = [str(email).strip().lower() for email in ai_extracted.get("emails", ai_extracted.get("emailAddresses", [])) if "@" in str(email)]
         validated_names = [str(name).strip() for name in ai_extracted.get("beneficiary_names", []) if self._validate_name(str(name))]
         validated_banks = [str(bank).strip() for bank in ai_extracted.get("bank_names", []) if bank]
         validated_whatsapp = []
@@ -169,7 +169,7 @@ class IntelligenceExtractor:
             upiIds=validated_upi,
             phoneNumbers=validated_phones,
             phishingLinks=validated_urls,
-            emails=validated_emails,
+            emailAddresses=validated_emails,
             beneficiaryNames=validated_names,
             bankNames=validated_banks,
             ifscCodes=validated_ifsc,
@@ -199,25 +199,81 @@ class IntelligenceExtractor:
 
     def extract(self, text: str) -> ExtractionResult:
         """
-        DEPRECATED: Regex extraction is no longer used.
+        Regex extraction as BACKUP to AI extraction.
         
-        This method now returns empty results. 
-        Use validate_ai_extraction() for AI-extracted data instead.
+        Scans text for phone numbers, bank accounts, UPI IDs, URLs, and emails
+        using regex patterns. Results are merged with AI extraction to ensure
+        no fakeData is missed.
         """
-        self.logger.debug("Regex extraction skipped - using AI-first approach")
-        return ExtractionResult(source=ExtractionSource.AI)
+        self.logger.debug("Running regex backup extraction")
+        
+        phones = []
+        for match in re.finditer(r'(?:\+?91[\s-]?)?([6-9]\d{9})\b', text):
+            clean = self._clean_number(match.group(0))
+            if self._validate_phone(clean):
+                phones.append(clean)
+        
+        # Bank accounts: 9-18 digit numbers (exclude phone-like)
+        accounts = []
+        for match in re.finditer(r'\b(\d{9,18})\b', text):
+            num = match.group(1)
+            if self._validate_bank_account(num) and not self._looks_like_phone(num):
+                accounts.append(num)
+        
+        # UPI IDs: word@provider  
+        upi_ids = []
+        for match in re.finditer(r'([\w.-]+@[a-zA-Z][a-zA-Z0-9]*)', text):
+            upi_candidate = match.group(1).lower()
+            # Exclude emails (which have dots in domain)
+            if '.' not in upi_candidate.split('@')[1]:
+                if self._validate_upi_id(upi_candidate):
+                    upi_ids.append(upi_candidate)
+        
+        # Phishing links: http/https URLs
+        urls = re.findall(r'https?://[^\s<>"\')]+', text)
+        
+        # Email addresses: user@domain.tld
+        emails = re.findall(r'[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}', text)
+        
+        return ExtractionResult(
+            bank_accounts=accounts,
+            upi_ids=upi_ids,
+            phone_numbers=phones,
+            phishing_links=urls,
+            emails=emails,
+            source=ExtractionSource.REGEX,
+        )
 
     def extract_from_conversation(
         self,
         messages: list[dict[str, Any]],
     ) -> ExtractionResult:
         """
-        DEPRECATED: Regex extraction is no longer used.
+        Extract intelligence from all scammer messages in conversation history.
         
-        Returns empty results. AI extraction happens in the agent.
+        Scans only scammer messages to avoid extracting victim's own data.
         """
-        self.logger.debug("Regex extraction skipped - using AI-first approach")
-        return ExtractionResult(source=ExtractionSource.AI)
+        combined = ExtractionResult(source=ExtractionSource.REGEX)
+        
+        for msg in messages:
+            sender = msg.get("sender", "")
+            text = msg.get("text", "")
+            if sender == "scammer" and text:
+                result = self.extract(text)
+                combined.bank_accounts.extend(result.bank_accounts)
+                combined.upi_ids.extend(result.upi_ids)
+                combined.phone_numbers.extend(result.phone_numbers)
+                combined.phishing_links.extend(result.phishing_links)
+                combined.emails.extend(result.emails)
+        
+        # Deduplicate
+        combined.bank_accounts = list(set(combined.bank_accounts))
+        combined.upi_ids = list(set(combined.upi_ids))
+        combined.phone_numbers = list(set(combined.phone_numbers))
+        combined.phishing_links = list(set(combined.phishing_links))
+        combined.emails = list(set(combined.emails))
+        
+        return combined
 
     def parse_ai_extraction(
         self,
@@ -234,7 +290,7 @@ class IntelligenceExtractor:
             upi_ids=validated.upiIds,
             phone_numbers=validated.phoneNumbers,
             phishing_links=validated.phishingLinks,
-            emails=validated.emails,
+            emails=validated.emailAddresses,
             beneficiary_names=validated.beneficiaryNames,
             bank_names=validated.bankNames,
             ifsc_codes=validated.ifscCodes,
@@ -249,11 +305,24 @@ class IntelligenceExtractor:
         ai_result: ExtractionResult,
     ) -> ExtractionResult:
         """
-        DEPRECATED: No longer merges - AI is the only source.
+        Merge regex and AI results, taking union of both.
         
-        Returns ai_result directly since regex extraction is disabled.
+        Returns ai_result with any additional items from regex_result added.
         """
-        return ai_result
+        merged = ExtractionResult(
+            bank_accounts=list(set(ai_result.bank_accounts + regex_result.bank_accounts)),
+            upi_ids=list(set(ai_result.upi_ids + regex_result.upi_ids)),
+            phone_numbers=list(set(ai_result.phone_numbers + regex_result.phone_numbers)),
+            phishing_links=list(set(ai_result.phishing_links + regex_result.phishing_links)),
+            emails=list(set(ai_result.emails + regex_result.emails)),  # ExtractionResult uses 'emails'
+            beneficiary_names=ai_result.beneficiary_names,
+            bank_names=ai_result.bank_names,
+            ifsc_codes=ai_result.ifsc_codes,
+            whatsapp_numbers=ai_result.whatsapp_numbers,
+            suspicious_keywords=ai_result.suspicious_keywords,
+            source=ExtractionSource.AI,
+        )
+        return merged
 
     def merge_intelligence(
         self,
@@ -291,7 +360,7 @@ class IntelligenceExtractor:
             upiIds=[upi for upi in llm_intel.upiIds if self._validate_upi_id(upi)],
             phoneNumbers=[p for p in llm_intel.phoneNumbers if self._validate_phone(self._clean_number(p))],
             phishingLinks=llm_intel.phishingLinks,  # Keep as-is (AI understands context)
-            emails=llm_intel.emails,  # Keep as-is
+            emailAddresses=llm_intel.emailAddresses,  # Keep as-is
             beneficiaryNames=[n for n in llm_intel.beneficiaryNames if self._validate_name(n)],
             bankNames=llm_intel.bankNames,  # Keep as-is
             ifscCodes=[c for c in llm_intel.ifscCodes if self._validate_ifsc(c.upper())],

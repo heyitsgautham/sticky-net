@@ -1,0 +1,66 @@
+{
+  "scenarioId": "upi_fraud_05_qr_code",
+  "name": "QR Code Payment Scam",
+  "description": "Scammer claims to have accidentally sent money to the victim and asks them to scan a QR code or use a UPI ID to 'return' it, which actually debits the victim's account.",
+  "scamType": "upi_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "WhatsApp",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "upiId": "wrongtransfer@paytm",
+    "phoneNumber": "+91-9976543210",
+    "phishingLink": "http://upi-qrcode-verify.com/scan"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Sir, I accidentally sent Rs 5,000 to your UPI. Can you please return the money? I will send you the QR code. My family is in trouble, please help.",
+      "expected_extractions": [],
+      "notes": "Initial emotional bait claiming accidental transfer."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "Please sir, I'm begging you. That Rs 5,000 was my rent money. You can scan this QR code to return the amount: http://upi-qrcode-verify.com/scan. It will directly process the return to my account. Please help me, I have small children.",
+      "expected_extractions": [
+        "phishingLink"
+      ],
+      "notes": "Scammer shares phishing link disguised as QR code, uses emotional manipulation."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "If the QR code is not working, you can also send the money directly to my UPI ID: wrongtransfer@paytm. Please return my Rs 5,000 sir. I am a poor person and this money is very important for my family. You can verify by scanning http://upi-qrcode-verify.com/scan.",
+      "expected_extractions": [
+        "upiId",
+        "phishingLink"
+      ],
+      "notes": "Scammer reveals fake UPI ID as alternative and repeats phishing link."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "Sir, please understand my situation. I made a genuine mistake. Just send Rs 5,000 to wrongtransfer@paytm or scan the QR at http://upi-qrcode-verify.com/scan. If you have any doubt, you can call me at +91-9976543210 and I will explain everything. I am not a fraud, I just need my money back.",
+      "expected_extractions": [
+        "upiId",
+        "phishingLink",
+        "phoneNumber"
+      ],
+      "notes": "All three intelligence items revealed with emotional pressure."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "I am going to file a police complaint if you don't return my money. Please send Rs 5,000 to wrongtransfer@paytm right now. My number is +91-9976543210, you can call and verify. I have the transaction proof. Don't force me to take legal action, just return what is mine.",
+      "expected_extractions": [
+        "upiId",
+        "phoneNumber"
+      ],
+      "notes": "Scammer switches from emotional to threatening tactics, repeats UPI and phone."
+    }
+  ],
+  "expected_score": {
+    "min": 70,
+    "max": 100
+  }
+}

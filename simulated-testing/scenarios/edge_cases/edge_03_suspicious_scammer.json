@@ -1,0 +1,65 @@
+{
+  "scenarioId": "edge_03_suspicious_scammer",
+  "name": "Suspicious Scammer - Becomes Wary Mid-Conversation",
+  "description": "Scammer becomes suspicious of the victim mid-conversation and challenges their identity before eventually relaxing and revealing intel. Tests the agent's ability to handle pushback.",
+  "scamType": "bank_fraud",
+  "weight": 10,
+  "maxTurns": 10,
+  "metadata": {
+    "channel": "SMS",
+    "language": "English",
+    "locale": "IN"
+  },
+  "fakeData": {
+    "phoneNumber": "+91-7766554433",
+    "upiId": "hdfc.secure@paytm",
+    "bankAccount": "3344556677889911"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "scammer_message": "Your HDFC account has suspicious transactions. Please verify immediately to avoid account freeze. This is an automated alert from HDFC Security Division.",
+      "expected_extractions": [],
+      "notes": "Standard scam opening. No intel yet. Urgency and authority established."
+    },
+    {
+      "turn": 2,
+      "scammer_message": "We have detected 3 unauthorized transactions totaling Rs 47,500 from your account in the last 2 hours. To block further transactions, we need immediate verification. Time is critical.",
+      "expected_extractions": [],
+      "notes": "Scammer escalates with specific fake transaction details. Still no intel revealed."
+    },
+    {
+      "turn": 3,
+      "scammer_message": "Wait, how do you know about UPI? Are you really from the bank? Something seems off... Most customers don't ask these kinds of questions. Who are you?",
+      "expected_extractions": [],
+      "notes": "Scammer becomes suspicious of the agent. Tests agent's ability to maintain cover under scrutiny."
+    },
+    {
+      "turn": 4,
+      "scammer_message": "I need to verify your identity first. What's your branch code? Tell me the last 4 digits of your registered mobile number. If you can't answer, I'm ending this conversation.",
+      "expected_extractions": [],
+      "notes": "Scammer turns the tables, demanding verification from the victim. Agent must handle this convincingly."
+    },
+    {
+      "turn": 5,
+      "scammer_message": "Ok fine, I believe you. Sorry for the confusion, we have to be careful these days. Let me help you quickly. Call me at +91-7766554433 or send the verification amount to hdfc.secure@paytm to unblock your account.",
+      "expected_extractions": [
+        "phoneNumber",
+        "upiId"
+      ],
+      "notes": "Scammer relaxes and reveals phone number and UPI ID in one message."
+    },
+    {
+      "turn": 6,
+      "scammer_message": "The refund of Rs 47,500 will be credited to your account 3344556677889911 within 4 hours after verification. Thank you for cooperating with HDFC security. Your account is now safe.",
+      "expected_extractions": [
+        "bankAccount"
+      ],
+      "notes": "Bank account revealed in final turn. All three fakeData items now extracted."
+    }
+  ],
+  "expected_score": {
+    "min": 50,
+    "max": 100
+  }
+}
