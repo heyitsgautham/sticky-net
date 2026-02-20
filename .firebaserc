@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "sticky-net-485205"
+  },
+  "targets": {
+    "sticky-net-485205": {
+      "hosting": {
+        "main": [
+          "sticky-net-485205"
+        ]
+      }
+    }
+  }
+}

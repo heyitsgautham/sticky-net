@@ -52,3 +52,5 @@ htmlcov/
 
 # Firestore emulator
 firestore-data/
+
+.firebase/

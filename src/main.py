@@ -82,6 +82,10 @@ def create_app() -> FastAPI:
         "http://localhost:3000",
         "http://localhost:8080",
         "https://sticky-net-frontend-140367184766.asia-south1.run.app",
+        "https://stickynet-ai.web.app",  # Firebase Hosting
+        "https://stickynet-ai.firebaseapp.com",  # Firebase Hosting alt
+        "https://sticky-net-485205.web.app",  # Firebase Hosting (default)
+        "https://sticky-net-485205.firebaseapp.com",  # Firebase Hosting alt
         "https://hackathon.guvi.in",  # Hackathon testing framework
         "https://www.hackathon.guvi.in",  # Alternative URL
     ]
