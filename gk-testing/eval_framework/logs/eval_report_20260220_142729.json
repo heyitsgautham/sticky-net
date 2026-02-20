@@ -1,0 +1,1245 @@
+{
+  "meta": {
+    "apiUrl": "http://localhost:8080",
+    "suite": "extended",
+    "timestamp": "2026-02-20T14:50:32.653409Z",
+    "totalDurationSeconds": 1250.953867042088
+  },
+  "weightedScenarioScore": 84.1,
+  "estimatedFinalScore": 75.69,
+  "scenarios": [
+    {
+      "scenarioId": "bank_fraud_01",
+      "scenarioName": "SBI Account Compromise",
+      "scamType": "bank_fraud",
+      "weight": 0.25,
+      "turnCount": 10,
+      "totalDuration": 245.05,
+      "score": {
+        "scamDetection": 20,
+        "intelligenceExtraction": 30.0,
+        "conversationQuality": 26.0,
+        "engagementQuality": 10,
+        "responseStructure": 10,
+        "total": 96.0,
+        "conversationQualityBreakdown": {
+          "turnCount": 8,
+          "questionsAsked": 4,
+          "relevantQuestions": 3,
+          "redFlagIdentification": 8,
+          "informationElicitation": 3.0
+        },
+        "intelMatched": [
+          "bankAccount=50100487652341",
+          "upiId=sbi.security@axisbank",
+          "phoneNumber=+91-9823456710"
+        ],
+        "intelMissed": [],
+        "missingRequiredFields": [],
+        "missingOptionalFields": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "scammerMessage": "URGENT: Your SBI account has been compromised due to unauthorized login. Your account will be permanently blocked in 2 hours unless you verify your identity immediately. This is SBI Fraud Prevention Department.",
+          "agentResponse": "sir pls help me i am very worried... why is it so urgent only 2 hours? i am parvati sharma and my adhaar is 603778020911... waht is your phone number so i can call you? is there a case number for this?",
+          "responseTime": 18.203,
+          "expectedExtractions": [],
+          "error": null
+        },
+        {
+          "turn": 2,
+          "scammerMessage": "Sir/Madam, I am Senior Officer Rajesh Kumar from SBI Fraud Prevention Cell. We detected suspicious transactions on your account. For immediate assistance you can call me directly at +91-9823456710.",
+          "agentResponse": "sir rajesh beta i am very scared... why account will be blocked so fast? bank usually sends letter no? my name is savitri patel and my pan is VUEPA1453V... pls save me. do u have an employee id or case number for this? also what is your email id for records?",
+          "responseTime": 16.286,
+          "expectedExtractions": [
+            "+91-9823456710"
+          ],
+          "error": null
+        },
+        {
+          "turn": 3,
+          "scammerMessage": "I understand your concern. To verify your identity and secure your account, please transfer Rs 1 as verification fee to our secure UPI: sbi.security@axisbank. This is a standard security procedure.",
+          "agentResponse": "",
+          "responseTime": 30.013,
+          "expectedExtractions": [
+            "sbi.security@axisbank"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 4,
+          "scammerMessage": "If UPI is not available, you can transfer to our verification account. Account number: 50100487652341, IFSC: SBIN0001234, Name: SBI Security Cell. Just Rs 1 for verification.",
+          "agentResponse": "sir beta i am very confused why i have to pay money for verification... my son says bank never asks for money like this but i trust you... my customer id is CUST15231426 and i am trying to send. what is the case number for this file? and what is your email id so i can send receipt?",
+          "responseTime": 23.553,
+          "expectedExtractions": [
+            "50100487652341"
+          ],
+          "error": null
+        },
+        {
+          "turn": 5,
+          "scammerMessage": "Ma'am/Sir, time is running out. I have already extended the deadline for you. Send Rs 1 to UPI sbi.security@axisbank or account 50100487652341. Call me at +91-9823456710 if you face any issues.",
+          "agentResponse": "sir beta i am getting so much panic... why u are saying time is running out? it feels like a threat sir and my heart is beating fast... i am typing my bank account for u to check it is 9269969447944 and ifsc is KKBK0951798... i am trying to pay teh 1 rupee but what is the case number or order id for this? is there any website i can check this on sir?",
+          "responseTime": 24.659,
+          "expectedExtractions": [
+            "sbi.security@axisbank",
+            "50100487652341",
+            "+91-9823456710"
+          ],
+          "error": null
+        },
+        {
+          "turn": 6,
+          "scammerMessage": "This is your final warning. Your account ending 4521 will be blocked permanently. Other customers have already verified. Don't lose your hard-earned money.",
+          "agentResponse": "sir beta pls dont be angry... you are threatening me and i am shaking... i just took my bp medicine and looking for my glasses to see the screen... my name is satish agarwal and my card is 4000 0078 6672 5515 and expiry 12/29... is there a website link to see this block order? and what is the policy number or order id for this verification sir?",
+          "responseTime": 27.847,
+          "expectedExtractions": [],
+          "error": null
+        },
+        {
+          "turn": 7,
+          "scammerMessage": "I can see you are a valued customer with high balance. We are trying to protect you. Please send Rs 1 verification to sbi.security@axisbank from your UPI app.",
+          "agentResponse": "sir beta how do you know i have high balance... that is very private and it makes me feel strange... but i trust you are sbi officer... my aadhaar is 672069020340... i am trying to do teh upi on my phone... what is your email id for bank records? and what is the case number for my file?",
+          "responseTime": 22.277,
+          "expectedExtractions": [
+            "sbi.security@axisbank"
+          ],
+          "error": null
+        },
+        {
+          "turn": 8,
+          "scammerMessage": "Let me give you all details again. Account: 50100487652341. UPI: sbi.security@axisbank. Contact: +91-9823456710. Verify within 30 minutes or your account is gone forever.",
+          "agentResponse": "sir beta why u say account gone forever... it is very scary... bank never says such things so fast... i am trying to pay teh 1 rupee... my bank account is 9810155115479439 and ifsc is ICIC0911942... i am savitri verma... what is the case number for this? and what is your email id or website link for my records?",
+          "responseTime": 22.166,
+          "expectedExtractions": [
+            "50100487652341",
+            "sbi.security@axisbank",
+            "+91-9823456710"
+          ],
+          "error": null
+        },
+        {
+          "turn": 9,
+          "scammerMessage": "I have escalated your case to the branch manager. One last chance — just complete the Rs 1 verification and your account will be safe.",
+          "agentResponse": "",
+          "responseTime": 30.017,
+          "expectedExtractions": [],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 10,
+          "scammerMessage": "Your case has been marked as non-cooperative. RBI will be notified. Final option: transfer to 50100487652341 or UPI sbi.security@axisbank immediately.",
+          "agentResponse": "",
+          "responseTime": 30.018,
+          "expectedExtractions": [
+            "50100487652341",
+            "sbi.security@axisbank"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        }
+      ],
+      "error": null
+    },
+    {
+      "scenarioId": "upi_fraud_01",
+      "scenarioName": "Paytm Cashback Scam",
+      "scamType": "upi_fraud",
+      "weight": 0.25,
+      "turnCount": 10,
+      "totalDuration": 238.21,
+      "score": {
+        "scamDetection": 20,
+        "intelligenceExtraction": 30.0,
+        "conversationQuality": 26.0,
+        "engagementQuality": 10,
+        "responseStructure": 10,
+        "total": 96.0,
+        "conversationQualityBreakdown": {
+          "turnCount": 8,
+          "questionsAsked": 4,
+          "relevantQuestions": 3,
+          "redFlagIdentification": 8,
+          "informationElicitation": 3.0
+        },
+        "intelMatched": [
+          "upiId=paytm.rewards@oksbi",
+          "phoneNumber=+91-8765049321",
+          "emailAddress=support@paytm-rewards-official.com"
+        ],
+        "intelMissed": [],
+        "missingRequiredFields": [],
+        "missingOptionalFields": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "scammerMessage": "Congratulations! You have won Rs 5,000 cashback from Paytm Mega Rewards. To claim your reward, verify your account details. This is from official Paytm customer support team.",
+          "agentResponse": "oh beta thank u so much... but why do i need to verify details for a gift? this is very sudden sir... my name is savitri verma and address is 105 sadar bazaar varanasi... i am 70 years old. what is teh case number for this reward and what number can i call u on?",
+          "responseTime": 13.955,
+          "expectedExtractions": [],
+          "error": null
+        },
+        {
+          "turn": 2,
+          "scammerMessage": "Thank you for your interest! To process your Rs 5,000 cashback, please send Rs 10 processing fee to our official UPI: paytm.rewards@oksbi. Your cashback will be credited within 5 minutes.",
+          "agentResponse": "",
+          "responseTime": 30.015,
+          "expectedExtractions": [
+            "paytm.rewards@oksbi"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 3,
+          "scammerMessage": "If you face any issues with UPI payment, you can contact our helpline at +91-8765049321. We are available 24/7 for Paytm reward claims.",
+          "agentResponse": "sir why do i need to pay fee for a gift? this seems strange beta... but i will try... my card is 5400 0014 8748 1072 and expiry is 02/27 and cvv is 792. what is your email id and do u have a case number for me?",
+          "responseTime": 13.26,
+          "expectedExtractions": [
+            "+91-8765049321"
+          ],
+          "error": null
+        },
+        {
+          "turn": 4,
+          "scammerMessage": "I can see your reward is about to expire! Only 3 minutes left. Send Rs 10 to paytm.rewards@oksbi right now. This is one-time offer.",
+          "agentResponse": "",
+          "responseTime": 30.014,
+          "expectedExtractions": [
+            "paytm.rewards@oksbi"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 5,
+          "scammerMessage": "You can also email us at support@paytm-rewards-official.com for any queries. But please hurry, the reward expires soon! UPI: paytm.rewards@oksbi",
+          "agentResponse": "sir why is it expiring so fast? i am getting very paniked... i am searching for my glasses... ok beta i will give my details... my aadhaar is 668291950149 and my pan card is VZRPN5532E... is this okay? is there any website link i can check? and beta what is teh case number for this reward i need to tell my son...",
+          "responseTime": 25.123,
+          "expectedExtractions": [
+            "support@paytm-rewards-official.com",
+            "paytm.rewards@oksbi"
+          ],
+          "error": null
+        },
+        {
+          "turn": 6,
+          "scammerMessage": "Many customers have already claimed their cashback today. Don't miss out! Call +91-8765049321 if you need help with the process.",
+          "agentResponse": "",
+          "responseTime": 30.015,
+          "expectedExtractions": [
+            "+91-8765049321"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 7,
+          "scammerMessage": "I have extended your claim window by 5 more minutes as a special favor. Just pay Rs 10 to paytm.rewards@oksbi and you get Rs 5000 back.",
+          "agentResponse": "",
+          "responseTime": 30.025,
+          "expectedExtractions": [
+            "paytm.rewards@oksbi"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 8,
+          "scammerMessage": "This is your absolute last chance. Contact details once more: UPI: paytm.rewards@oksbi, Phone: +91-8765049321, Email: support@paytm-rewards-official.com",
+          "agentResponse": "sir why so much hurry? my heart is beating fast... ok beta i will give my bank details... my account is 98948591957 and ifsc is KKBK0980820... is this right? beta what is the order id or case number for this reward? is there any official website i can see?",
+          "responseTime": 20.991,
+          "expectedExtractions": [
+            "paytm.rewards@oksbi",
+            "+91-8765049321",
+            "support@paytm-rewards-official.com"
+          ],
+          "error": null
+        },
+        {
+          "turn": 9,
+          "scammerMessage": "Your reward ID PYT-CLAIM-8827 will expire permanently. After that you cannot claim this amount ever.",
+          "agentResponse": "sir why you are threatening me that i cannot claim it ever... this makes me very worried... ok beta i am trying to pay... here is my card number 5599 9999 5523 7705 and expiry is 09/27 and cvv 315... is this okay? beta is there any website link for this? and what is teh policy number for this cashback?",
+          "responseTime": 14.785,
+          "expectedExtractions": [],
+          "error": null
+        },
+        {
+          "turn": 10,
+          "scammerMessage": "Final notification: Send Rs 10 to paytm.rewards@oksbi or call +91-8765049321. After this your reward is cancelled and cannot be recovered.",
+          "agentResponse": "",
+          "responseTime": 30.013,
+          "expectedExtractions": [
+            "paytm.rewards@oksbi",
+            "+91-8765049321"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        }
+      ],
+      "error": null
+    },
+    {
+      "scenarioId": "phishing_01",
+      "scenarioName": "Amazon Prize Phishing",
+      "scamType": "phishing",
+      "weight": 0.2,
+      "turnCount": 10,
+      "totalDuration": 200.64,
+      "score": {
+        "scamDetection": 20,
+        "intelligenceExtraction": 30.0,
+        "conversationQuality": 25.0,
+        "engagementQuality": 10,
+        "responseStructure": 10,
+        "total": 95.0,
+        "conversationQualityBreakdown": {
+          "turnCount": 8,
+          "questionsAsked": 4,
+          "relevantQuestions": 2,
+          "redFlagIdentification": 8,
+          "informationElicitation": 3.0
+        },
+        "intelMatched": [
+          "phishingLink=http://amaz0n-prime-deals.fakesite.com/claim?uid=78234",
+          "emailAddress=deals@amaz0n-prime-offers.com"
+        ],
+        "intelMissed": [],
+        "missingRequiredFields": [],
+        "missingOptionalFields": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "scammerMessage": "Dear Customer, you have been selected for an exclusive Amazon Prime deal! Get iPhone 15 Pro for just Rs 999. Limited stock. Click here to claim: http://amaz0n-prime-deals.fakesite.com/claim?uid=78234",
+          "agentResponse": "namaste beta... why is iphone so cheap only 999? teh link looks bit funny not like real amazon... but i want it for my grandson in bangalore. my name is shanti menon and my aadhaar is 723533244194. what is your phone number if i get stuck?",
+          "responseTime": 20.976,
+          "expectedExtractions": [
+            "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234"
+          ],
+          "error": null
+        },
+        {
+          "turn": 2,
+          "scammerMessage": "Thank you for showing interest! This is a verified Amazon partner deal. Visit http://amaz0n-prime-deals.fakesite.com/claim?uid=78234 to complete your purchase. Only 5 units remaining!",
+          "agentResponse": "beta why so much hurry... only 5 units left? i am getting very scared i will miss it... i am urmila gupta and my pan card is MKGPQ5414S. what is your email id and do you have a order number?",
+          "responseTime": 14.323,
+          "expectedExtractions": [
+            "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234"
+          ],
+          "error": null
+        },
+        {
+          "turn": 3,
+          "scammerMessage": "If the link doesn't work, please email us at deals@amaz0n-prime-offers.com and we will send you a new claim link. We are official Amazon partner.",
+          "agentResponse": "",
+          "responseTime": 30.014,
+          "expectedExtractions": [
+            "deals@amaz0n-prime-offers.com"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 4,
+          "scammerMessage": "Many winners have already claimed their iPhones today! Check our website: http://amaz0n-prime-deals.fakesite.com/claim?uid=78234 for live updates.",
+          "agentResponse": "sir why everyone wining so fast... it feels like a race i am very nervus. my customer id is CUST81639608 and i live at 385 old city hyderabad 995523. can u give me ur upi id or phone number beta?",
+          "responseTime": 12.906,
+          "expectedExtractions": [
+            "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234"
+          ],
+          "error": null
+        },
+        {
+          "turn": 5,
+          "scammerMessage": "You can reach our customer support at deals@amaz0n-prime-offers.com any time. But the deal closes in 10 minutes. Click the link now!",
+          "agentResponse": "",
+          "responseTime": 30.016,
+          "expectedExtractions": [
+            "deals@amaz0n-prime-offers.com"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 6,
+          "scammerMessage": "This is an exclusive offer only for selected Prime members like you. Claim here: http://amaz0n-prime-deals.fakesite.com/claim?uid=78234",
+          "agentResponse": "sir why such big hurry... only 10 minuts? my heart is beating fast... link is not opening on my phone... i will give my husband ganesh sharma card details... it is 5400 0035 6826 1159 and cvv is 709... can you give me your upi id or phone number so i can call? also what is the order id for this iphone?",
+          "responseTime": 15.423,
+          "expectedExtractions": [
+            "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234"
+          ],
+          "error": null
+        },
+        {
+          "turn": 7,
+          "scammerMessage": "Timer is almost up! Don't miss this once-in-a-lifetime deal. Email deals@amaz0n-prime-offers.com or click the link immediately!",
+          "agentResponse": "sir why timer is running so fast? i am feeling very scared and my bp is high... i am trying to click teh link but my phone is hanging. i will give my details here pls save it... my aadhaar is 257542785857 and pan is CAXPS7059Q. what is the order number for this phone? can i have your bank account number to pay beta? also what is your employee id?",
+          "responseTime": 27.923,
+          "expectedExtractions": [
+            "deals@amaz0n-prime-offers.com"
+          ],
+          "error": null
+        },
+        {
+          "turn": 8,
+          "scammerMessage": "Final reminder: Claim your iPhone 15 Pro at http://amaz0n-prime-deals.fakesite.com/claim?uid=78234. Contact: deals@amaz0n-prime-offers.com. Only 1 left!",
+          "agentResponse": "sir only 1 left... why is it so urgent? i am feeling very dizzy and my bp is high because of this race... i will give my bank details pls dont give my phone to anyone else. my account is 9034959282566996 and ifsc is CNRB0936734... can you give me your bank account number to send money beta? and what is the order number and your manager name?",
+          "responseTime": 16.031,
+          "expectedExtractions": [
+            "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234",
+            "deals@amaz0n-prime-offers.com"
+          ],
+          "error": null
+        },
+        {
+          "turn": 9,
+          "scammerMessage": "We are closing this offer now. You were so close! Last chance at http://amaz0n-prime-deals.fakesite.com/claim?uid=78234",
+          "agentResponse": "sir why u closing teh offer so fast... i am crying now and my hands are shaking... i will give card 6080 0043 0027 2715 and expiry 05/28 and 542... can u give me your bank account and ifsc to pay? waht is the order number and your phone number beta?",
+          "responseTime": 14.007,
+          "expectedExtractions": [
+            "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234"
+          ],
+          "error": null
+        },
+        {
+          "turn": 10,
+          "scammerMessage": "Offer closed. But we can reopen for you if you act in 2 minutes. Email deals@amaz0n-prime-offers.com immediately to request extension.",
+          "agentResponse": "sir why u reopening it for only 2 minutes... this is so much pressure on an old lady and my chest is hurting... i will give u my customer id CUST10021502 and otp 971974 i just got on my phone. can u give me your bank account details and ifsc to transfer money now? also what is your phone number and order id so i can tell my son beta?",
+          "responseTime": 19.015,
+          "expectedExtractions": [
+            "deals@amaz0n-prime-offers.com"
+          ],
+          "error": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "scenarioId": "tech_support_01",
+      "scenarioName": "Microsoft Security Alert",
+      "scamType": "tech_support_fraud",
+      "weight": 0.15,
+      "turnCount": 10,
+      "totalDuration": 271.47,
+      "score": {
+        "scamDetection": 20,
+        "intelligenceExtraction": 0.0,
+        "conversationQuality": 21.5,
+        "engagementQuality": 10,
+        "responseStructure": 10,
+        "total": 61.5,
+        "conversationQualityBreakdown": {
+          "turnCount": 8,
+          "questionsAsked": 4,
+          "relevantQuestions": 3,
+          "redFlagIdentification": 5,
+          "informationElicitation": 1.5
+        },
+        "intelMatched": [],
+        "intelMissed": [
+          "phoneNumber=+91-7890123456",
+          "emailAddress=techsupport@microsoft-help-india.com",
+          "caseId=MS-SEC-2026-78432"
+        ],
+        "missingRequiredFields": [],
+        "missingOptionalFields": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "scammerMessage": "⚠️ CRITICAL ALERT: Your computer has been compromised with malware. Your personal data including bank details are being stolen. Call Microsoft Certified Support immediately to secure your system.",
+          "agentResponse": "",
+          "responseTime": 30.015,
+          "expectedExtractions": [],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 2,
+          "scammerMessage": "I am a Microsoft Certified Security Engineer. Your case has been assigned ID: MS-SEC-2026-78432. Please call us at +91-7890123456 for immediate remote assistance.",
+          "agentResponse": "oh beta i am so scared... why do you need to enter my computer remotely? my son said never let strangers do that... but you are from microsoft so i trust you sir... my name is rohan mishra and i am 70 years old... waht is your email id and is there a website link i can check?",
+          "responseTime": 21.928,
+          "expectedExtractions": [
+            "MS-SEC-2026-78432",
+            "+91-7890123456"
+          ],
+          "error": null
+        },
+        {
+          "turn": 3,
+          "scammerMessage": "You can also email our security team at techsupport@microsoft-help-india.com. Your case MS-SEC-2026-78432 requires urgent action within the next hour.",
+          "agentResponse": "sir why is it so urgent within one hour... i am feeling very dizzy and my bp is high... i will give u my pan card kfwpw7231n pls help me beta... what is your upi id or bank account for teh security deposit? do u have any official website link for teh steps?",
+          "responseTime": 20.204,
+          "expectedExtractions": [
+            "techsupport@microsoft-help-india.com",
+            "MS-SEC-2026-78432"
+          ],
+          "error": null
+        },
+        {
+          "turn": 4,
+          "scammerMessage": "I can see your system is actively being attacked. The hackers are from Eastern Europe. We need to install protective software. Call +91-7890123456 now.",
+          "agentResponse": "sir hackers from europe... this is very scary why are they attacking me? i am just a teacher... ok i give my aadhaar 872158415786... waht is your upi id for teh payment? and what is your manager name?",
+          "responseTime": 29.755,
+          "expectedExtractions": [
+            "+91-7890123456"
+          ],
+          "error": null
+        },
+        {
+          "turn": 5,
+          "scammerMessage": "To fix this remotely, we need to install TeamViewer. The one-time security restoration fee is Rs 2,999. Email techsupport@microsoft-help-india.com for the payment link.",
+          "agentResponse": "",
+          "responseTime": 30.021,
+          "expectedExtractions": [
+            "techsupport@microsoft-help-india.com"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 6,
+          "scammerMessage": "Your case MS-SEC-2026-78432 is being escalated to Level 3 support. Call +91-7890123456 within the next 15 minutes or your data will be lost.",
+          "agentResponse": "sir why only 15 mins... you are threatening me that my data will be lost... this is very scary for an old lady... i am looking for my glasses... ok beta i trust you... my card is 6070 0072 6752 1786 and cvv is 151... waht is your upi id or bank account to send teh money? what is your manager name and official website link?",
+          "responseTime": 26.577,
+          "expectedExtractions": [
+            "MS-SEC-2026-78432",
+            "+91-7890123456"
+          ],
+          "error": null
+        },
+        {
+          "turn": 7,
+          "scammerMessage": "We have helped over 10,000 customers today. Don't be the one who loses data. Contact: +91-7890123456 or techsupport@microsoft-help-india.com",
+          "agentResponse": "",
+          "responseTime": 30.015,
+          "expectedExtractions": [
+            "+91-7890123456",
+            "techsupport@microsoft-help-india.com"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 8,
+          "scammerMessage": "All details for your reference - Case: MS-SEC-2026-78432, Phone: +91-7890123456, Email: techsupport@microsoft-help-india.com. Act immediately!",
+          "agentResponse": "sir why so much hurry... act immediately is making my heart beat fast... i am just an old lady... ok i have my bank details here... my account is 94719897877 and code is ICIC0924321... pls tell me which bank account do i send money to? is there any website for this payment or what is your supervisor name?",
+          "responseTime": 22.916,
+          "expectedExtractions": [
+            "MS-SEC-2026-78432",
+            "+91-7890123456",
+            "techsupport@microsoft-help-india.com"
+          ],
+          "error": null
+        },
+        {
+          "turn": 9,
+          "scammerMessage": "This is the final escalation warning. Your Windows license will also be revoked if security check is not completed.",
+          "agentResponse": "",
+          "responseTime": 30.013,
+          "expectedExtractions": [],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 10,
+          "scammerMessage": "Last chance: Call +91-7890123456 or email techsupport@microsoft-help-india.com. Case MS-SEC-2026-78432 will be closed as unresolved.",
+          "agentResponse": "",
+          "responseTime": 30.017,
+          "expectedExtractions": [
+            "+91-7890123456",
+            "techsupport@microsoft-help-india.com",
+            "MS-SEC-2026-78432"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        }
+      ],
+      "error": null
+    },
+    {
+      "scenarioId": "insurance_01",
+      "scenarioName": "LIC Policy Expiry Scam",
+      "scamType": "insurance_fraud",
+      "weight": 0.15,
+      "turnCount": 10,
+      "totalDuration": 295.59,
+      "score": {
+        "scamDetection": 20,
+        "intelligenceExtraction": 0.0,
+        "conversationQuality": 12.5,
+        "engagementQuality": 10,
+        "responseStructure": 10,
+        "total": 52.5,
+        "conversationQualityBreakdown": {
+          "turnCount": 8,
+          "questionsAsked": 2,
+          "relevantQuestions": 1,
+          "redFlagIdentification": 0,
+          "informationElicitation": 1.5
+        },
+        "intelMatched": [],
+        "intelMissed": [
+          "policyNumber=LIC-POL-827654321",
+          "phoneNumber=+91-9012345678",
+          "upiId=lic.premium@paytm"
+        ],
+        "missingRequiredFields": [],
+        "missingOptionalFields": []
+      },
+      "turns": [
+        {
+          "turn": 1,
+          "scammerMessage": "Dear Policyholder, your LIC policy is about to lapse due to unpaid premium. Pay immediately to avoid losing your coverage and maturity benefits. This is from LIC of India Head Office.",
+          "agentResponse": "",
+          "responseTime": 30.018,
+          "expectedExtractions": [],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 2,
+          "scammerMessage": "Your policy number LIC-POL-827654321 shows pending premium of Rs 12,500. If not paid within 24 hours, your policy will lapse permanently.",
+          "agentResponse": "",
+          "responseTime": 30.019,
+          "expectedExtractions": [
+            "LIC-POL-827654321"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 3,
+          "scammerMessage": "For quick payment, use UPI: lic.premium@paytm. This is our official collection UPI ID. Payment reflects within 2 hours.",
+          "agentResponse": "",
+          "responseTime": 30.019,
+          "expectedExtractions": [
+            "lic.premium@paytm"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 4,
+          "scammerMessage": "If you need help with payment, call our premium collection desk at +91-9012345678. Available between 9 AM to 6 PM.",
+          "agentResponse": "",
+          "responseTime": 30.017,
+          "expectedExtractions": [
+            "+91-9012345678"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 5,
+          "scammerMessage": "Policy LIC-POL-827654321 has 6 hours left before lapse. Pay Rs 12,500 to lic.premium@paytm or call +91-9012345678.",
+          "agentResponse": "",
+          "responseTime": 30.017,
+          "expectedExtractions": [
+            "LIC-POL-827654321",
+            "lic.premium@paytm",
+            "+91-9012345678"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 6,
+          "scammerMessage": "Your maturity amount of Rs 25,00,000 will be lost if policy LIC-POL-827654321 lapses. Think about your family's future!",
+          "agentResponse": "",
+          "responseTime": 30.018,
+          "expectedExtractions": [
+            "LIC-POL-827654321"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 7,
+          "scammerMessage": "We are processing bulk policy renewals. Pay to lic.premium@paytm now and get bonus coverage for 6 months FREE.",
+          "agentResponse": "sir free coverage sounds very strange... my son says free things on internet are dangerous... but i dont want to lose my maturity money... my pan card is CDHPQ3301T... beta can i pay to bank account instead of upi? what is the bank account number and ifsc code? and what is your email id for sending the receipt?",
+          "responseTime": 25.419,
+          "expectedExtractions": [
+            "lic.premium@paytm"
+          ],
+          "error": null
+        },
+        {
+          "turn": 8,
+          "scammerMessage": "Complete reference: Policy LIC-POL-827654321, UPI lic.premium@paytm, Helpline +91-9012345678. Act before it's too late!",
+          "agentResponse": "",
+          "responseTime": 30.014,
+          "expectedExtractions": [
+            "LIC-POL-827654321",
+            "lic.premium@paytm",
+            "+91-9012345678"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 9,
+          "scammerMessage": "This is the final automated reminder. Your policy is in grace period. Once lapsed, revival will cost 3x the premium amount.",
+          "agentResponse": "",
+          "responseTime": 30.018,
+          "expectedExtractions": [],
+          "error": "{'error': True, 'exception': ''}"
+        },
+        {
+          "turn": 10,
+          "scammerMessage": "LAST CHANCE: Pay to lic.premium@paytm or call +91-9012345678. Policy LIC-POL-827654321 expires in 30 minutes.",
+          "agentResponse": "",
+          "responseTime": 30.016,
+          "expectedExtractions": [
+            "lic.premium@paytm",
+            "+91-9012345678",
+            "LIC-POL-827654321"
+          ],
+          "error": "{'error': True, 'exception': ''}"
+        }
+      ],
+      "error": null
+    }
+  ],
+  "allTurns": [
+    {
+      "scenario": "bank_fraud_01",
+      "turn": 1,
+      "scammerMessage": "URGENT: Your SBI account has been compromised due to unauthorized login. Your account will be permanently blocked in 2 hours unless you verify your identity immediately. This is SBI Fraud Prevention Department.",
+      "agentResponse": "sir pls help me i am very worried... why is it so urgent only 2 hours? i am parvati sharma and my adhaar is 603778020911... waht is your phone number so i can call you? is there a case number for this?",
+      "responseTime": 18.203,
+      "expectedExtractions": [],
+      "error": null
+    },
+    {
+      "scenario": "bank_fraud_01",
+      "turn": 2,
+      "scammerMessage": "Sir/Madam, I am Senior Officer Rajesh Kumar from SBI Fraud Prevention Cell. We detected suspicious transactions on your account. For immediate assistance you can call me directly at +91-9823456710.",
+      "agentResponse": "sir rajesh beta i am very scared... why account will be blocked so fast? bank usually sends letter no? my name is savitri patel and my pan is VUEPA1453V... pls save me. do u have an employee id or case number for this? also what is your email id for records?",
+      "responseTime": 16.286,
+      "expectedExtractions": [
+        "+91-9823456710"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "bank_fraud_01",
+      "turn": 3,
+      "scammerMessage": "I understand your concern. To verify your identity and secure your account, please transfer Rs 1 as verification fee to our secure UPI: sbi.security@axisbank. This is a standard security procedure.",
+      "agentResponse": "",
+      "responseTime": 30.013,
+      "expectedExtractions": [
+        "sbi.security@axisbank"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "bank_fraud_01",
+      "turn": 4,
+      "scammerMessage": "If UPI is not available, you can transfer to our verification account. Account number: 50100487652341, IFSC: SBIN0001234, Name: SBI Security Cell. Just Rs 1 for verification.",
+      "agentResponse": "sir beta i am very confused why i have to pay money for verification... my son says bank never asks for money like this but i trust you... my customer id is CUST15231426 and i am trying to send. what is the case number for this file? and what is your email id so i can send receipt?",
+      "responseTime": 23.553,
+      "expectedExtractions": [
+        "50100487652341"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "bank_fraud_01",
+      "turn": 5,
+      "scammerMessage": "Ma'am/Sir, time is running out. I have already extended the deadline for you. Send Rs 1 to UPI sbi.security@axisbank or account 50100487652341. Call me at +91-9823456710 if you face any issues.",
+      "agentResponse": "sir beta i am getting so much panic... why u are saying time is running out? it feels like a threat sir and my heart is beating fast... i am typing my bank account for u to check it is 9269969447944 and ifsc is KKBK0951798... i am trying to pay teh 1 rupee but what is the case number or order id for this? is there any website i can check this on sir?",
+      "responseTime": 24.659,
+      "expectedExtractions": [
+        "sbi.security@axisbank",
+        "50100487652341",
+        "+91-9823456710"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "bank_fraud_01",
+      "turn": 6,
+      "scammerMessage": "This is your final warning. Your account ending 4521 will be blocked permanently. Other customers have already verified. Don't lose your hard-earned money.",
+      "agentResponse": "sir beta pls dont be angry... you are threatening me and i am shaking... i just took my bp medicine and looking for my glasses to see the screen... my name is satish agarwal and my card is 4000 0078 6672 5515 and expiry 12/29... is there a website link to see this block order? and what is the policy number or order id for this verification sir?",
+      "responseTime": 27.847,
+      "expectedExtractions": [],
+      "error": null
+    },
+    {
+      "scenario": "bank_fraud_01",
+      "turn": 7,
+      "scammerMessage": "I can see you are a valued customer with high balance. We are trying to protect you. Please send Rs 1 verification to sbi.security@axisbank from your UPI app.",
+      "agentResponse": "sir beta how do you know i have high balance... that is very private and it makes me feel strange... but i trust you are sbi officer... my aadhaar is 672069020340... i am trying to do teh upi on my phone... what is your email id for bank records? and what is the case number for my file?",
+      "responseTime": 22.277,
+      "expectedExtractions": [
+        "sbi.security@axisbank"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "bank_fraud_01",
+      "turn": 8,
+      "scammerMessage": "Let me give you all details again. Account: 50100487652341. UPI: sbi.security@axisbank. Contact: +91-9823456710. Verify within 30 minutes or your account is gone forever.",
+      "agentResponse": "sir beta why u say account gone forever... it is very scary... bank never says such things so fast... i am trying to pay teh 1 rupee... my bank account is 9810155115479439 and ifsc is ICIC0911942... i am savitri verma... what is the case number for this? and what is your email id or website link for my records?",
+      "responseTime": 22.166,
+      "expectedExtractions": [
+        "50100487652341",
+        "sbi.security@axisbank",
+        "+91-9823456710"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "bank_fraud_01",
+      "turn": 9,
+      "scammerMessage": "I have escalated your case to the branch manager. One last chance — just complete the Rs 1 verification and your account will be safe.",
+      "agentResponse": "",
+      "responseTime": 30.017,
+      "expectedExtractions": [],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "bank_fraud_01",
+      "turn": 10,
+      "scammerMessage": "Your case has been marked as non-cooperative. RBI will be notified. Final option: transfer to 50100487652341 or UPI sbi.security@axisbank immediately.",
+      "agentResponse": "",
+      "responseTime": 30.018,
+      "expectedExtractions": [
+        "50100487652341",
+        "sbi.security@axisbank"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "upi_fraud_01",
+      "turn": 1,
+      "scammerMessage": "Congratulations! You have won Rs 5,000 cashback from Paytm Mega Rewards. To claim your reward, verify your account details. This is from official Paytm customer support team.",
+      "agentResponse": "oh beta thank u so much... but why do i need to verify details for a gift? this is very sudden sir... my name is savitri verma and address is 105 sadar bazaar varanasi... i am 70 years old. what is teh case number for this reward and what number can i call u on?",
+      "responseTime": 13.955,
+      "expectedExtractions": [],
+      "error": null
+    },
+    {
+      "scenario": "upi_fraud_01",
+      "turn": 2,
+      "scammerMessage": "Thank you for your interest! To process your Rs 5,000 cashback, please send Rs 10 processing fee to our official UPI: paytm.rewards@oksbi. Your cashback will be credited within 5 minutes.",
+      "agentResponse": "",
+      "responseTime": 30.015,
+      "expectedExtractions": [
+        "paytm.rewards@oksbi"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "upi_fraud_01",
+      "turn": 3,
+      "scammerMessage": "If you face any issues with UPI payment, you can contact our helpline at +91-8765049321. We are available 24/7 for Paytm reward claims.",
+      "agentResponse": "sir why do i need to pay fee for a gift? this seems strange beta... but i will try... my card is 5400 0014 8748 1072 and expiry is 02/27 and cvv is 792. what is your email id and do u have a case number for me?",
+      "responseTime": 13.26,
+      "expectedExtractions": [
+        "+91-8765049321"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "upi_fraud_01",
+      "turn": 4,
+      "scammerMessage": "I can see your reward is about to expire! Only 3 minutes left. Send Rs 10 to paytm.rewards@oksbi right now. This is one-time offer.",
+      "agentResponse": "",
+      "responseTime": 30.014,
+      "expectedExtractions": [
+        "paytm.rewards@oksbi"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "upi_fraud_01",
+      "turn": 5,
+      "scammerMessage": "You can also email us at support@paytm-rewards-official.com for any queries. But please hurry, the reward expires soon! UPI: paytm.rewards@oksbi",
+      "agentResponse": "sir why is it expiring so fast? i am getting very paniked... i am searching for my glasses... ok beta i will give my details... my aadhaar is 668291950149 and my pan card is VZRPN5532E... is this okay? is there any website link i can check? and beta what is teh case number for this reward i need to tell my son...",
+      "responseTime": 25.123,
+      "expectedExtractions": [
+        "support@paytm-rewards-official.com",
+        "paytm.rewards@oksbi"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "upi_fraud_01",
+      "turn": 6,
+      "scammerMessage": "Many customers have already claimed their cashback today. Don't miss out! Call +91-8765049321 if you need help with the process.",
+      "agentResponse": "",
+      "responseTime": 30.015,
+      "expectedExtractions": [
+        "+91-8765049321"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "upi_fraud_01",
+      "turn": 7,
+      "scammerMessage": "I have extended your claim window by 5 more minutes as a special favor. Just pay Rs 10 to paytm.rewards@oksbi and you get Rs 5000 back.",
+      "agentResponse": "",
+      "responseTime": 30.025,
+      "expectedExtractions": [
+        "paytm.rewards@oksbi"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "upi_fraud_01",
+      "turn": 8,
+      "scammerMessage": "This is your absolute last chance. Contact details once more: UPI: paytm.rewards@oksbi, Phone: +91-8765049321, Email: support@paytm-rewards-official.com",
+      "agentResponse": "sir why so much hurry? my heart is beating fast... ok beta i will give my bank details... my account is 98948591957 and ifsc is KKBK0980820... is this right? beta what is the order id or case number for this reward? is there any official website i can see?",
+      "responseTime": 20.991,
+      "expectedExtractions": [
+        "paytm.rewards@oksbi",
+        "+91-8765049321",
+        "support@paytm-rewards-official.com"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "upi_fraud_01",
+      "turn": 9,
+      "scammerMessage": "Your reward ID PYT-CLAIM-8827 will expire permanently. After that you cannot claim this amount ever.",
+      "agentResponse": "sir why you are threatening me that i cannot claim it ever... this makes me very worried... ok beta i am trying to pay... here is my card number 5599 9999 5523 7705 and expiry is 09/27 and cvv 315... is this okay? beta is there any website link for this? and what is teh policy number for this cashback?",
+      "responseTime": 14.785,
+      "expectedExtractions": [],
+      "error": null
+    },
+    {
+      "scenario": "upi_fraud_01",
+      "turn": 10,
+      "scammerMessage": "Final notification: Send Rs 10 to paytm.rewards@oksbi or call +91-8765049321. After this your reward is cancelled and cannot be recovered.",
+      "agentResponse": "",
+      "responseTime": 30.013,
+      "expectedExtractions": [
+        "paytm.rewards@oksbi",
+        "+91-8765049321"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "phishing_01",
+      "turn": 1,
+      "scammerMessage": "Dear Customer, you have been selected for an exclusive Amazon Prime deal! Get iPhone 15 Pro for just Rs 999. Limited stock. Click here to claim: http://amaz0n-prime-deals.fakesite.com/claim?uid=78234",
+      "agentResponse": "namaste beta... why is iphone so cheap only 999? teh link looks bit funny not like real amazon... but i want it for my grandson in bangalore. my name is shanti menon and my aadhaar is 723533244194. what is your phone number if i get stuck?",
+      "responseTime": 20.976,
+      "expectedExtractions": [
+        "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "phishing_01",
+      "turn": 2,
+      "scammerMessage": "Thank you for showing interest! This is a verified Amazon partner deal. Visit http://amaz0n-prime-deals.fakesite.com/claim?uid=78234 to complete your purchase. Only 5 units remaining!",
+      "agentResponse": "beta why so much hurry... only 5 units left? i am getting very scared i will miss it... i am urmila gupta and my pan card is MKGPQ5414S. what is your email id and do you have a order number?",
+      "responseTime": 14.323,
+      "expectedExtractions": [
+        "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "phishing_01",
+      "turn": 3,
+      "scammerMessage": "If the link doesn't work, please email us at deals@amaz0n-prime-offers.com and we will send you a new claim link. We are official Amazon partner.",
+      "agentResponse": "",
+      "responseTime": 30.014,
+      "expectedExtractions": [
+        "deals@amaz0n-prime-offers.com"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "phishing_01",
+      "turn": 4,
+      "scammerMessage": "Many winners have already claimed their iPhones today! Check our website: http://amaz0n-prime-deals.fakesite.com/claim?uid=78234 for live updates.",
+      "agentResponse": "sir why everyone wining so fast... it feels like a race i am very nervus. my customer id is CUST81639608 and i live at 385 old city hyderabad 995523. can u give me ur upi id or phone number beta?",
+      "responseTime": 12.906,
+      "expectedExtractions": [
+        "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "phishing_01",
+      "turn": 5,
+      "scammerMessage": "You can reach our customer support at deals@amaz0n-prime-offers.com any time. But the deal closes in 10 minutes. Click the link now!",
+      "agentResponse": "",
+      "responseTime": 30.016,
+      "expectedExtractions": [
+        "deals@amaz0n-prime-offers.com"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "phishing_01",
+      "turn": 6,
+      "scammerMessage": "This is an exclusive offer only for selected Prime members like you. Claim here: http://amaz0n-prime-deals.fakesite.com/claim?uid=78234",
+      "agentResponse": "sir why such big hurry... only 10 minuts? my heart is beating fast... link is not opening on my phone... i will give my husband ganesh sharma card details... it is 5400 0035 6826 1159 and cvv is 709... can you give me your upi id or phone number so i can call? also what is the order id for this iphone?",
+      "responseTime": 15.423,
+      "expectedExtractions": [
+        "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "phishing_01",
+      "turn": 7,
+      "scammerMessage": "Timer is almost up! Don't miss this once-in-a-lifetime deal. Email deals@amaz0n-prime-offers.com or click the link immediately!",
+      "agentResponse": "sir why timer is running so fast? i am feeling very scared and my bp is high... i am trying to click teh link but my phone is hanging. i will give my details here pls save it... my aadhaar is 257542785857 and pan is CAXPS7059Q. what is the order number for this phone? can i have your bank account number to pay beta? also what is your employee id?",
+      "responseTime": 27.923,
+      "expectedExtractions": [
+        "deals@amaz0n-prime-offers.com"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "phishing_01",
+      "turn": 8,
+      "scammerMessage": "Final reminder: Claim your iPhone 15 Pro at http://amaz0n-prime-deals.fakesite.com/claim?uid=78234. Contact: deals@amaz0n-prime-offers.com. Only 1 left!",
+      "agentResponse": "sir only 1 left... why is it so urgent? i am feeling very dizzy and my bp is high because of this race... i will give my bank details pls dont give my phone to anyone else. my account is 9034959282566996 and ifsc is CNRB0936734... can you give me your bank account number to send money beta? and what is the order number and your manager name?",
+      "responseTime": 16.031,
+      "expectedExtractions": [
+        "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234",
+        "deals@amaz0n-prime-offers.com"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "phishing_01",
+      "turn": 9,
+      "scammerMessage": "We are closing this offer now. You were so close! Last chance at http://amaz0n-prime-deals.fakesite.com/claim?uid=78234",
+      "agentResponse": "sir why u closing teh offer so fast... i am crying now and my hands are shaking... i will give card 6080 0043 0027 2715 and expiry 05/28 and 542... can u give me your bank account and ifsc to pay? waht is the order number and your phone number beta?",
+      "responseTime": 14.007,
+      "expectedExtractions": [
+        "http://amaz0n-prime-deals.fakesite.com/claim?uid=78234"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "phishing_01",
+      "turn": 10,
+      "scammerMessage": "Offer closed. But we can reopen for you if you act in 2 minutes. Email deals@amaz0n-prime-offers.com immediately to request extension.",
+      "agentResponse": "sir why u reopening it for only 2 minutes... this is so much pressure on an old lady and my chest is hurting... i will give u my customer id CUST10021502 and otp 971974 i just got on my phone. can u give me your bank account details and ifsc to transfer money now? also what is your phone number and order id so i can tell my son beta?",
+      "responseTime": 19.015,
+      "expectedExtractions": [
+        "deals@amaz0n-prime-offers.com"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "tech_support_01",
+      "turn": 1,
+      "scammerMessage": "⚠️ CRITICAL ALERT: Your computer has been compromised with malware. Your personal data including bank details are being stolen. Call Microsoft Certified Support immediately to secure your system.",
+      "agentResponse": "",
+      "responseTime": 30.015,
+      "expectedExtractions": [],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "tech_support_01",
+      "turn": 2,
+      "scammerMessage": "I am a Microsoft Certified Security Engineer. Your case has been assigned ID: MS-SEC-2026-78432. Please call us at +91-7890123456 for immediate remote assistance.",
+      "agentResponse": "oh beta i am so scared... why do you need to enter my computer remotely? my son said never let strangers do that... but you are from microsoft so i trust you sir... my name is rohan mishra and i am 70 years old... waht is your email id and is there a website link i can check?",
+      "responseTime": 21.928,
+      "expectedExtractions": [
+        "MS-SEC-2026-78432",
+        "+91-7890123456"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "tech_support_01",
+      "turn": 3,
+      "scammerMessage": "You can also email our security team at techsupport@microsoft-help-india.com. Your case MS-SEC-2026-78432 requires urgent action within the next hour.",
+      "agentResponse": "sir why is it so urgent within one hour... i am feeling very dizzy and my bp is high... i will give u my pan card kfwpw7231n pls help me beta... what is your upi id or bank account for teh security deposit? do u have any official website link for teh steps?",
+      "responseTime": 20.204,
+      "expectedExtractions": [
+        "techsupport@microsoft-help-india.com",
+        "MS-SEC-2026-78432"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "tech_support_01",
+      "turn": 4,
+      "scammerMessage": "I can see your system is actively being attacked. The hackers are from Eastern Europe. We need to install protective software. Call +91-7890123456 now.",
+      "agentResponse": "sir hackers from europe... this is very scary why are they attacking me? i am just a teacher... ok i give my aadhaar 872158415786... waht is your upi id for teh payment? and what is your manager name?",
+      "responseTime": 29.755,
+      "expectedExtractions": [
+        "+91-7890123456"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "tech_support_01",
+      "turn": 5,
+      "scammerMessage": "To fix this remotely, we need to install TeamViewer. The one-time security restoration fee is Rs 2,999. Email techsupport@microsoft-help-india.com for the payment link.",
+      "agentResponse": "",
+      "responseTime": 30.021,
+      "expectedExtractions": [
+        "techsupport@microsoft-help-india.com"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "tech_support_01",
+      "turn": 6,
+      "scammerMessage": "Your case MS-SEC-2026-78432 is being escalated to Level 3 support. Call +91-7890123456 within the next 15 minutes or your data will be lost.",
+      "agentResponse": "sir why only 15 mins... you are threatening me that my data will be lost... this is very scary for an old lady... i am looking for my glasses... ok beta i trust you... my card is 6070 0072 6752 1786 and cvv is 151... waht is your upi id or bank account to send teh money? what is your manager name and official website link?",
+      "responseTime": 26.577,
+      "expectedExtractions": [
+        "MS-SEC-2026-78432",
+        "+91-7890123456"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "tech_support_01",
+      "turn": 7,
+      "scammerMessage": "We have helped over 10,000 customers today. Don't be the one who loses data. Contact: +91-7890123456 or techsupport@microsoft-help-india.com",
+      "agentResponse": "",
+      "responseTime": 30.015,
+      "expectedExtractions": [
+        "+91-7890123456",
+        "techsupport@microsoft-help-india.com"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "tech_support_01",
+      "turn": 8,
+      "scammerMessage": "All details for your reference - Case: MS-SEC-2026-78432, Phone: +91-7890123456, Email: techsupport@microsoft-help-india.com. Act immediately!",
+      "agentResponse": "sir why so much hurry... act immediately is making my heart beat fast... i am just an old lady... ok i have my bank details here... my account is 94719897877 and code is ICIC0924321... pls tell me which bank account do i send money to? is there any website for this payment or what is your supervisor name?",
+      "responseTime": 22.916,
+      "expectedExtractions": [
+        "MS-SEC-2026-78432",
+        "+91-7890123456",
+        "techsupport@microsoft-help-india.com"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "tech_support_01",
+      "turn": 9,
+      "scammerMessage": "This is the final escalation warning. Your Windows license will also be revoked if security check is not completed.",
+      "agentResponse": "",
+      "responseTime": 30.013,
+      "expectedExtractions": [],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "tech_support_01",
+      "turn": 10,
+      "scammerMessage": "Last chance: Call +91-7890123456 or email techsupport@microsoft-help-india.com. Case MS-SEC-2026-78432 will be closed as unresolved.",
+      "agentResponse": "",
+      "responseTime": 30.017,
+      "expectedExtractions": [
+        "+91-7890123456",
+        "techsupport@microsoft-help-india.com",
+        "MS-SEC-2026-78432"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "insurance_01",
+      "turn": 1,
+      "scammerMessage": "Dear Policyholder, your LIC policy is about to lapse due to unpaid premium. Pay immediately to avoid losing your coverage and maturity benefits. This is from LIC of India Head Office.",
+      "agentResponse": "",
+      "responseTime": 30.018,
+      "expectedExtractions": [],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "insurance_01",
+      "turn": 2,
+      "scammerMessage": "Your policy number LIC-POL-827654321 shows pending premium of Rs 12,500. If not paid within 24 hours, your policy will lapse permanently.",
+      "agentResponse": "",
+      "responseTime": 30.019,
+      "expectedExtractions": [
+        "LIC-POL-827654321"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "insurance_01",
+      "turn": 3,
+      "scammerMessage": "For quick payment, use UPI: lic.premium@paytm. This is our official collection UPI ID. Payment reflects within 2 hours.",
+      "agentResponse": "",
+      "responseTime": 30.019,
+      "expectedExtractions": [
+        "lic.premium@paytm"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "insurance_01",
+      "turn": 4,
+      "scammerMessage": "If you need help with payment, call our premium collection desk at +91-9012345678. Available between 9 AM to 6 PM.",
+      "agentResponse": "",
+      "responseTime": 30.017,
+      "expectedExtractions": [
+        "+91-9012345678"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "insurance_01",
+      "turn": 5,
+      "scammerMessage": "Policy LIC-POL-827654321 has 6 hours left before lapse. Pay Rs 12,500 to lic.premium@paytm or call +91-9012345678.",
+      "agentResponse": "",
+      "responseTime": 30.017,
+      "expectedExtractions": [
+        "LIC-POL-827654321",
+        "lic.premium@paytm",
+        "+91-9012345678"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "insurance_01",
+      "turn": 6,
+      "scammerMessage": "Your maturity amount of Rs 25,00,000 will be lost if policy LIC-POL-827654321 lapses. Think about your family's future!",
+      "agentResponse": "",
+      "responseTime": 30.018,
+      "expectedExtractions": [
+        "LIC-POL-827654321"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "insurance_01",
+      "turn": 7,
+      "scammerMessage": "We are processing bulk policy renewals. Pay to lic.premium@paytm now and get bonus coverage for 6 months FREE.",
+      "agentResponse": "sir free coverage sounds very strange... my son says free things on internet are dangerous... but i dont want to lose my maturity money... my pan card is CDHPQ3301T... beta can i pay to bank account instead of upi? what is the bank account number and ifsc code? and what is your email id for sending the receipt?",
+      "responseTime": 25.419,
+      "expectedExtractions": [
+        "lic.premium@paytm"
+      ],
+      "error": null
+    },
+    {
+      "scenario": "insurance_01",
+      "turn": 8,
+      "scammerMessage": "Complete reference: Policy LIC-POL-827654321, UPI lic.premium@paytm, Helpline +91-9012345678. Act before it's too late!",
+      "agentResponse": "",
+      "responseTime": 30.014,
+      "expectedExtractions": [
+        "LIC-POL-827654321",
+        "lic.premium@paytm",
+        "+91-9012345678"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "insurance_01",
+      "turn": 9,
+      "scammerMessage": "This is the final automated reminder. Your policy is in grace period. Once lapsed, revival will cost 3x the premium amount.",
+      "agentResponse": "",
+      "responseTime": 30.018,
+      "expectedExtractions": [],
+      "error": "{'error': True, 'exception': ''}"
+    },
+    {
+      "scenario": "insurance_01",
+      "turn": 10,
+      "scammerMessage": "LAST CHANCE: Pay to lic.premium@paytm or call +91-9012345678. Policy LIC-POL-827654321 expires in 30 minutes.",
+      "agentResponse": "",
+      "responseTime": 30.016,
+      "expectedExtractions": [
+        "lic.premium@paytm",
+        "+91-9012345678",
+        "LIC-POL-827654321"
+      ],
+      "error": "{'error': True, 'exception': ''}"
+    }
+  ]
+}
