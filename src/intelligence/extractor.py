@@ -326,54 +326,6 @@ class IntelligenceExtractor:
             source=ExtractionSource.AI,
         )
 
-    def merge_extractions(
-        self,
-        regex_result: ExtractionResult,
-        ai_result: ExtractionResult,
-    ) -> ExtractionResult:
-        """
-        Merge regex and AI results, taking union of both.
-
-        Returns ai_result with any additional items from regex_result added.
-        """
-        merged = ExtractionResult(
-            bank_accounts=list(set(ai_result.bank_accounts + regex_result.bank_accounts)),
-            upi_ids=list(set(ai_result.upi_ids + regex_result.upi_ids)),
-            phone_numbers=list(set(ai_result.phone_numbers + regex_result.phone_numbers)),
-            phishing_links=list(set(ai_result.phishing_links + regex_result.phishing_links)),
-            emails=list(
-                set(ai_result.emails + regex_result.emails)
-            ),  # ExtractionResult uses 'emails'
-            beneficiary_names=ai_result.beneficiary_names,
-            bank_names=ai_result.bank_names,
-            ifsc_codes=ai_result.ifsc_codes,
-            whatsapp_numbers=ai_result.whatsapp_numbers,
-            suspicious_keywords=ai_result.suspicious_keywords,
-            source=ExtractionSource.AI,
-        )
-        return merged
-
-    def merge_intelligence(
-        self,
-        regex_intel: ExtractionResult,
-        llm_intel: ExtractedIntelligence | None,
-    ) -> ExtractedIntelligence:
-        """
-        Returns validated LLM intelligence only (regex extraction disabled).
-
-        Args:
-            regex_intel: Ignored (regex extraction is disabled)
-            llm_intel: LLM extraction to validate and return
-
-        Returns:
-            Validated ExtractedIntelligence from LLM
-        """
-        if llm_intel is None:
-            return ExtractedIntelligence()
-
-        # Validate and return LLM extraction only
-        return self.validate_llm_extraction(llm_intel)
-
     def validate_llm_extraction(self, llm_intel: ExtractedIntelligence) -> ExtractedIntelligence:
         """
         Validate LLM-extracted intelligence using format checks.
