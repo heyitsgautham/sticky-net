@@ -16,98 +16,23 @@ Supports both:
 
 from __future__ import annotations
 
-import asyncio
-import json
 import logging
 import time
 import uuid
-from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Any
 
 import httpx
 
+from eval_framework.report import print_summary
+from eval_framework.results import EvalResult, ScenarioResult, TurnResult
+from eval_framework.scammer_simulator import ScammerSimulator
 from eval_framework.scoring import (
-    ScoreBreakdown,
     score_scenario,
     weighted_final_score,
 )
-from eval_framework.scammer_simulator import ScammerSimulator
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class TurnResult:
-    """Result of a single conversation turn."""
-    turn_number: int
-    scammer_message: str
-    agent_response: str
-    response_time_seconds: float
-    api_response_raw: dict
-    expected_extractions: list[str] = field(default_factory=list)
-    error: str | None = None
-
-
-@dataclass
-class ScenarioResult:
-    """Complete result of running one scenario."""
-    scenario_id: str
-    scenario_name: str
-    scam_type: str
-    weight: float
-    turns: list[TurnResult] = field(default_factory=list)
-    final_output: dict = field(default_factory=dict)
-    score: ScoreBreakdown | None = None
-    agent_responses: list[str] = field(default_factory=list)
-    total_duration_seconds: float = 0.0
-    error: str | None = None
-
-    def to_dict(self) -> dict:
-        return {
-            "scenarioId": self.scenario_id,
-            "scenarioName": self.scenario_name,
-            "scamType": self.scam_type,
-            "weight": self.weight,
-            "turnCount": len(self.turns),
-            "totalDuration": round(self.total_duration_seconds, 2),
-            "score": self.score.to_dict() if self.score else None,
-            "turns": [
-                {
-                    "turn": t.turn_number,
-                    "scammerMessage": t.scammer_message,
-                    "agentResponse": t.agent_response,
-                    "responseTime": t.response_time_seconds,
-                    "expectedExtractions": t.expected_extractions,
-                    "error": t.error,
-                }
-                for t in self.turns
-            ],
-            "error": self.error,
-        }
-
-
-@dataclass
-class EvalResult:
-    """Complete evaluation result across all scenarios."""
-    scenarios: list[ScenarioResult] = field(default_factory=list)
-    weighted_score: float = 0.0
-    code_quality_score: float = 0.0
-    final_score: float = 0.0
-    started_at: str = ""
-    ended_at: str = ""
-
-    def to_dict(self) -> dict:
-        return {
-            "weightedScenarioScore": round(self.weighted_score, 2),
-            "codeQualityScore": self.code_quality_score,
-            "finalScore": round(self.final_score, 2),
-            "startedAt": self.started_at,
-            "endedAt": self.ended_at,
-            "scenarios": [s.to_dict() for s in self.scenarios],
-            "scoreFormula": "finalScore = (weightedScenarioScore * 0.9) + codeQualityScore",
-        }
 
 
 class EvalRunner:
@@ -505,94 +430,8 @@ class EvalRunner:
 
         return eval_result
 
-    def _print_summary(self, result: EvalResult):
-        """Print a formatted evaluation summary."""
-        print("\n" + "█" * 70)
-        print("  EVALUATION RESULTS")
-        print("█" * 70)
-
-        # Per-scenario table
-        header = f"  {'Scenario':<30} {'Weight':>7} {'Score':>7} {'Det':>5} {'Intel':>7} {'Conv':>6} {'Eng':>5} {'Str':>5}"
-        print(header)
-        print("  " + "─" * 68)
-
-        for sr in result.scenarios:
-            if sr.score:
-                d = sr.score.to_dict()
-                row = (
-                    f"  {sr.scenario_name[:28]:<30} "
-                    f"{sr.weight*100:>5.0f}% "
-                    f"{sr.score.total:>6.1f} "
-                    f"{d['scamDetection']:>5} "
-                    f"{d['intelligenceExtraction']:>6.1f} "
-                    f"{d['conversationQuality']:>5.1f} "
-                    f"{d['engagementQuality']:>5} "
-                    f"{d['responseStructure']:>5}"
-                )
-                print(row)
-            elif sr.error:
-                print(f"  {sr.scenario_name[:28]:<30} {sr.weight*100:>5.0f}%   ERROR: {sr.error[:30]}")
-
-        print("  " + "─" * 68)
-        print(f"\n  Weighted Scenario Score: {result.weighted_score:.1f} / 100")
-        print(f"  Code Quality Score:     {result.code_quality_score:.0f} / 10")
-        print(f"  ────────────────────────────")
-        print(f"  FINAL SCORE:            {result.final_score:.1f} / 100")
-        print()
-
-        # Improvement hints
-        self._print_improvement_hints(result)
-
-    def _print_improvement_hints(self, result: EvalResult):
-        """Print actionable improvement suggestions."""
-        hints = []
-
-        for sr in result.scenarios:
-            if not sr.score:
-                continue
-            d = sr.score.to_dict()
-
-            if d["scamDetection"] < 20:
-                hints.append(f"⚠ {sr.scenario_name}: Scam NOT detected — check classifier")
-
-            if sr.score.intel_missed:
-                hints.append(
-                    f"⚠ {sr.scenario_name}: Missed intel — {sr.score.intel_missed}"
-                )
-
-            cq = d["conversationQualityBreakdown"]
-            if cq["turnCount"] < 8:
-                hints.append(
-                    f"💡 {sr.scenario_name}: Only {len(sr.turns)} turns — aim for 8+ for max points"
-                )
-            if cq["questionsAsked"] < 4:
-                hints.append(
-                    f"💡 {sr.scenario_name}: Ask more questions (need ≥5 for max 4pts)"
-                )
-            if cq["redFlagIdentification"] < 8:
-                hints.append(
-                    f"💡 {sr.scenario_name}: Identify more red flags in responses"
-                )
-            if cq["informationElicitation"] < 7:
-                hints.append(
-                    f"💡 {sr.scenario_name}: Probe for more scammer details"
-                )
-
-            if d["engagementQuality"] < 10:
-                hints.append(
-                    f"💡 {sr.scenario_name}: Engagement quality {d['engagementQuality']}/10 — check duration/message count"
-                )
-
-            if sr.score.missing_required_fields:
-                hints.append(
-                    f"🔴 {sr.scenario_name}: Missing required fields: {sr.score.missing_required_fields}"
-                )
-
-        if hints:
-            print("  IMPROVEMENT HINTS:")
-            for h in hints:
-                print(f"    {h}")
-            print()
+    def _print_summary(self, result: EvalResult) -> None:
+        print_summary(result)
 
 
 async def run_quick_eval(
