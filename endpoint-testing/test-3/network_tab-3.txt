@@ -15,7 +15,7 @@ curl 'https://hackathon.guvi.in/api/testHoneyPotMaterial' \
   -H 'sec-fetch-site: same-origin' \
   -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36' \
   -H 'x-requested-with: XMLHttpRequest' \
-  --data-raw '{"hackathonId":"a90c3b95-4406-46b9-870d-b52d0e430a6f","apiUrl":"https://b854fcf8b148.ngrok-free.app/api/v1/analyze","apiKey":"test-api-key","authToken":"8309430cc922f2d2f3390359e888a0625e67b965bc123cd8917e1f86022a55aa8a4e3bc88a6c91c69779addb549cf1c0773b248b881c0d5f012236bd25e1a880","originUrl":"www.hackathon.guvi.in","requestedFrom":"https://hackathon.guvi.in"}'
+  --data-raw '{"hackathonId":"a90c3b95-4406-46b9-870d-b52d0e430a6f","apiUrl":"https://b854fcf8b148.ngrok-free.app/api/v1/analyze","apiKey":"test-api-key","authToken":"<redacted-guvi-auth-token>","originUrl":"www.hackathon.guvi.in","requestedFrom":"https://hackathon.guvi.in"}'
 
 2. testHoneyPotMaterialProgress
 curl 'https://hackathon.guvi.in/api/testHoneyPotMaterialProgress' \
@@ -34,4 +34,4 @@ curl 'https://hackathon.guvi.in/api/testHoneyPotMaterialProgress' \
   -H 'sec-fetch-site: same-origin' \
   -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36' \
   -H 'x-requested-with: XMLHttpRequest' \
-  --data-raw '{"processId":"808579d4-ed0f-49ec-b628-7023d7614276","authToken":"8309430cc922f2d2f3390359e888a0625e67b965bc123cd8917e1f86022a55aa8a4e3bc88a6c91c69779addb549cf1c0773b248b881c0d5f012236bd25e1a880","originUrl":"www.hackathon.guvi.in","requestedFrom":"https://hackathon.guvi.in"}'
+  --data-raw '{"processId":"808579d4-ed0f-49ec-b628-7023d7614276","authToken":"<redacted-guvi-auth-token>","originUrl":"www.hackathon.guvi.in","requestedFrom":"https://hackathon.guvi.in"}'
