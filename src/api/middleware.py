@@ -1,11 +1,10 @@
 """API middleware for authentication and request processing."""
 
 import time
-from collections.abc import Callable
 
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
 from config.settings import get_settings
 
@@ -15,7 +14,7 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
 
     EXEMPT_PATHS = {"/health", "/docs", "/openapi.json", "/redoc", "/", "/static", "/favicon.ico"}
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         """Validate API key for protected endpoints."""
         # Allow CORS preflight requests through without authentication
         if request.method == "OPTIONS":
@@ -62,7 +61,7 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
 class RequestTimingMiddleware(BaseHTTPMiddleware):
     """Middleware to track request timing."""
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         """Add timing information to response headers."""
         start_time = time.perf_counter()
         response = await call_next(request)

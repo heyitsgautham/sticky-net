@@ -10,6 +10,7 @@ import time
 from typing import Any
 
 from config.settings import get_settings
+from src.api.schemas import ExtractedIntelligence
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,7 @@ _firestore_client = None
 _firestore_available: bool | None = None  # None = not yet checked
 
 
-def _get_firestore_client():
+def _get_firestore_client() -> Any:
     """Lazily initialise Firestore client. Returns None on failure."""
     global _firestore_client, _firestore_available
 
@@ -47,7 +48,7 @@ def _get_firestore_client():
 # In-memory caches (primary – always used)
 # ---------------------------------------------------------------------------
 _START_TIMES: dict[str, float] = {}
-_INTEL: dict[str, dict[str, set]] = {}
+_INTEL: dict[str, dict[str, set[str]]] = {}
 _CLASSIFICATIONS: dict[str, Any] = {}
 
 FIRESTORE_COLLECTION = "session_state"
@@ -72,6 +73,7 @@ def get_session_start_time(session_id: str) -> float | None:
                 data = doc.to_dict()
                 start = data.get("start_time")
                 if start is not None:
+                    start = float(start)
                     _START_TIMES[session_id] = start
                     # Restore intel too while we have the doc
                     _restore_intel_from_doc(session_id, data)
@@ -94,7 +96,7 @@ def init_session_start_time(session_id: str) -> float:
     return now
 
 
-def get_or_init_session_intel(session_id: str) -> dict[str, set]:
+def get_or_init_session_intel(session_id: str) -> dict[str, set[str]]:
     """Get or initialise the per-session intelligence accumulation store."""
     if session_id not in _INTEL:
         _INTEL[session_id] = {
@@ -121,7 +123,7 @@ def get_or_init_session_intel(session_id: str) -> dict[str, set]:
     return _INTEL[session_id]
 
 
-def accumulate_intel(session_id: str, new_intel) -> dict:
+def accumulate_intel(session_id: str, new_intel: ExtractedIntelligence) -> dict[str, list[str]]:
     """Merge new intel into session store and return callback-ready dict.
 
     ``new_intel`` is expected to be an ``ExtractedIntelligence`` instance.
@@ -239,7 +241,7 @@ def _persist_session(session_id: str) -> None:
         logger.debug("Firestore write failed for session %s: %s", session_id, exc)
 
 
-def _restore_intel_from_doc(session_id: str, data: dict) -> None:
+def _restore_intel_from_doc(session_id: str, data: dict[str, Any]) -> None:
     """Restore intel sets from a Firestore document dict."""
     stored_intel = data.get("intel", {})
     if not stored_intel:

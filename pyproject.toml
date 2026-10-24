@@ -70,3 +70,5 @@ addopts = "-m 'not integration'"
 [tool.mypy]
 python_version = "3.11"
 strict = true
+plugins = ["pydantic.mypy"]
+files = ["src", "config"]

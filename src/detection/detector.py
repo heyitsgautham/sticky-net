@@ -29,7 +29,7 @@ class DetectionResult:
 
 # ── Regex scam patterns (Stage 0 fast path) ──────────────────────────────────
 # These catch the vast majority of scam messages in < 10ms.
-INSTANT_SCAM_PATTERNS: list[tuple[re.Pattern, str, str]] = [
+INSTANT_SCAM_PATTERNS: list[tuple[re.Pattern[str], str, str]] = [
     # (compiled pattern, scam_type, description)
     # Credential theft
     (
@@ -130,7 +130,7 @@ INSTANT_SCAM_PATTERNS: list[tuple[re.Pattern, str, str]] = [
 ]
 
 # Patterns that indicate safe / legitimate messages (not scams)
-SAFE_PATTERNS: list[re.Pattern] = [
+SAFE_PATTERNS: list[re.Pattern[str]] = [
     re.compile(r"your\s+otp\s+is\s+\d{4,6}", re.I),
     re.compile(r"transaction\s+of\s+rs\.?\s*\d+.*debited", re.I),
     re.compile(r"your\s+order\s+#?\d+\s+has\s+been", re.I),
@@ -267,7 +267,7 @@ class ScamDetector:
             self.logger.info("Both regex and LLM say not scam — engaging cautiously as safety net")
             is_scam = True
             final_confidence = max(final_confidence, 0.65)
-            scam_type = ai_result.scam_type or "others"
+            scam_type: str | None = ai_result.scam_type or "others"
             reasoning = (
                 f"Safety net: regex inconclusive + LLM confidence {ai_result.confidence:.2f}. "
                 "Engaging cautiously to gather signal."

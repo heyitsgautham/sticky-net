@@ -35,7 +35,7 @@ class CallbackPayload(BaseModel):
     totalMessagesExchanged: int
     engagementDurationSeconds: int = 0
     extractedIntelligence: CallbackIntelligence
-    engagementMetrics: dict = {}
+    engagementMetrics: dict[str, int] = {}
     agentNotes: str
 
 
@@ -43,7 +43,7 @@ async def send_guvi_callback(
     session_id: str,
     scam_detected: bool,
     total_messages: int,
-    intelligence: dict,
+    intelligence: dict[str, list[str]],
     agent_notes: str,
     engagement_duration: int = 0,
     scam_type: str | None = None,
@@ -138,7 +138,7 @@ def send_guvi_callback_sync(
     session_id: str,
     scam_detected: bool,
     total_messages: int,
-    intelligence: dict,
+    intelligence: dict[str, list[str]],
     agent_notes: str,
     engagement_duration: int = 0,
     scam_type: str | None = None,

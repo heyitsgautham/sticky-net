@@ -10,6 +10,7 @@ import random
 import time
 import uuid
 from dataclasses import dataclass
+from typing import Any
 
 import structlog
 from google import genai
@@ -55,7 +56,7 @@ HONEYPOT_SAFETY_SETTINGS = [
 logger = structlog.get_logger()
 
 
-def _extract_text_from_response(response) -> str:
+def _extract_text_from_response(response: types.GenerateContentResponse) -> str:
     """Extract text from Gemini response without triggering thought_signature warning.
 
     Gemini 3 models return 'thought_signature' parts alongside text parts.
@@ -130,7 +131,7 @@ class HoneypotAgent:
         self._last_model_used: str | None = None  # Track which model was used
 
         # Fake data generators per conversation (seeded by conversation_id)
-        self._fake_data_cache: dict[str, dict] = {}
+        self._fake_data_cache: dict[str, dict[str, Any]] = {}
 
     async def engage(
         self,
@@ -141,7 +142,7 @@ class HoneypotAgent:
         conversation_id: str | None = None,
         turn_number: int | None = None,
         missing_intel: list[str] | None = None,
-        extracted_intel: dict | None = None,
+        extracted_intel: dict[str, list[str]] | None = None,
     ) -> EngagementResult:
         """
         Engage with the scammer and generate a response.
@@ -254,7 +255,7 @@ class HoneypotAgent:
             extracted_intelligence=llm_extracted_intel,
         )
 
-    def _get_fake_data(self, conversation_id: str) -> dict:
+    def _get_fake_data(self, conversation_id: str) -> dict[str, Any]:
         """
         Get or generate fake data for a conversation.
 
@@ -312,7 +313,7 @@ class HoneypotAgent:
 
         return fake_data
 
-    def _format_fake_data_section(self, fake_data: dict) -> str:
+    def _format_fake_data_section(self, fake_data: dict[str, Any]) -> str:
         """
         Format fake data into a readable section for the prompt.
 
@@ -428,8 +429,8 @@ class HoneypotAgent:
         detection: DetectionResult,
         persona: Persona,
         missing_intel: list[str] | None = None,
-        extracted_intel: dict | None = None,
-        fake_data: dict | None = None,
+        extracted_intel: dict[str, list[str]] | None = None,
+        fake_data: dict[str, Any] | None = None,
     ) -> str:
         """Build conversation prompt for Gemini - simplified for agentic prompts."""
         # Limit context to last N turns to reduce latency on deep conversations
@@ -504,7 +505,7 @@ Generate your response as Pushpa Verma:"""
         prompt: str,
         persona: Persona,
         fake_data_section: str = "",
-        extracted_intel: dict | None = None,
+        extracted_intel: dict[str, list[str]] | None = None,
         missing_intel: list[str] | None = None,
     ) -> tuple[str, ExtractedIntelligence | None]:
         """Generate response using Gemini Pro with fallback to Gemini 2.5.
@@ -637,7 +638,7 @@ Generate your response as Pushpa Verma:"""
         # Handle None response - use fallback response
         if not response_text:
             self._last_model_used = "fallback"
-            return self._get_fallback_response(None), None
+            return self._get_fallback_response(), None
 
         # Try to parse as JSON (One-Pass JSON architecture)
         parsed = self._parse_agent_json_response(response_text)
@@ -676,7 +677,7 @@ Generate your response as Pushpa Verma:"""
         self.logger.debug("Using raw response (JSON parsing failed)")
         return response_text, None
 
-    def _get_fallback_response(self, detection: DetectionResult) -> str:
+    def _get_fallback_response(self, detection: DetectionResult | None = None) -> str:
         """Get a fallback response if LLM fails."""
         fallback_responses = [
             "I'm sorry, I'm a bit confused. Can you explain that again?",

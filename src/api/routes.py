@@ -4,6 +4,7 @@ import asyncio
 import random
 import time
 import uuid
+from typing import Any
 
 import structlog
 from fastapi import APIRouter
@@ -42,7 +43,7 @@ router = APIRouter(prefix="/api/v1", tags=["analyze"])
 # Session state is managed by src.api.session_store (Firestore-backed)
 
 
-async def _fire_callback(**kwargs) -> None:
+async def _fire_callback(**kwargs: Any) -> None:
     """Fire-and-forget GUVI callback. Exceptions are silently logged."""
     try:
         success = await send_guvi_callback(scam_detected=True, **kwargs)
@@ -257,7 +258,8 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
                 elapsed=time.time() - request_start_time,
                 budget=agent_budget,
             )
-            from src.agents.honeypot_agent import EngagementMode, EngagementResult
+            from src.agents.honeypot_agent import EngagementResult
+            from src.agents.policy import EngagementMode
 
             fallback_replies = [
                 "hello... sorry i got disconnected for a moment... what were you saying?",

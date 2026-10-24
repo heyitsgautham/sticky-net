@@ -70,7 +70,7 @@ class Persona:
 
         # Get emotions for this scam type, default to neutral/calm for unknown types
         high_emotion, low_emotion = scam_type_emotions.get(
-            scam_type, (EmotionalState.NEUTRAL, EmotionalState.CALM)
+            scam_type or "others", (EmotionalState.NEUTRAL, EmotionalState.CALM)
         )
 
         # Use intensity to determine which emotion variant

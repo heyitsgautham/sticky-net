@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from enum import Enum
-from typing import Annotated
+from typing import Annotated, Any
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -151,7 +151,7 @@ class AgentJsonResponse(BaseModel):
     reply_text: str  # The message to send back to the scammer
     emotional_tone: str  # The emotion expressed (e.g., "panicked", "confused")
     extracted_intelligence: ExtractedIntelligence  # Intelligence found in this turn
-    scam_analysis: dict = Field(default_factory=dict)  # Optional analysis metadata
+    scam_analysis: dict[str, Any] = Field(default_factory=dict)  # Optional analysis metadata
 
 
 class StatusType(str, Enum):
@@ -240,5 +240,5 @@ class HoneyPotResponse(BaseModel):
     confidenceLevel: float | None = None
     totalMessagesExchanged: int | None = None
     engagementDurationSeconds: int | None = None
-    extractedIntelligence: dict | None = None
+    extractedIntelligence: dict[str, Any] | None = None
     agentNotes: str | None = None

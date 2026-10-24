@@ -837,7 +837,7 @@ def validate_extraction_result(data: dict[str, Any]) -> dict[str, Any]:
     Returns:
         Dictionary with validated and cleaned intelligence
     """
-    validated = {
+    validated: dict[str, list[Any]] = {
         "bank_accounts": [],
         "upi_ids": [],
         "phone_numbers": [],

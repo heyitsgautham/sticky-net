@@ -28,7 +28,7 @@ class ScamType(str, Enum):
 logger = structlog.get_logger()
 
 
-def _extract_text_from_response(response) -> str:
+def _extract_text_from_response(response: types.GenerateContentResponse) -> str:
     """Extract text from Gemini response without triggering thought_signature warning.
 
     Gemini 3 models return 'thought_signature' parts alongside text parts.

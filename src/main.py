@@ -124,7 +124,9 @@ def create_app() -> FastAPI:
     # Global exception handler: always return HTTP 200 for validation errors (Fix 8C)
     # Prevents 422 responses that would cause the evaluator to get 0 pts for the turn.
     @app.exception_handler(RequestValidationError)
-    async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    async def validation_exception_handler(
+        request: Request, exc: RequestValidationError
+    ) -> JSONResponse:
         """Catch Pydantic validation errors and return 200 with a fallback reply."""
         logger.warning("Validation error caught", error=str(exc)[:200], path=request.url.path)
         return JSONResponse(
