@@ -2,7 +2,6 @@
 
 import asyncio
 import functools
-import hashlib
 import json
 import os
 import random
@@ -17,7 +16,12 @@ from google.genai import types
 
 from config.settings import get_settings
 from src import llm
-from src.agents.fake_data import FakeDataGenerator
+from src.agents.conversation import (
+    build_turn_prompt,
+    engagement_notes,
+    summarize_earlier_turns,
+)
+from src.agents.fake_profile import build_fake_profile, format_fake_profile
 from src.agents.persona import Persona, PersonaManager
 from src.agents.policy import EngagementMode, EngagementPolicy, EngagementState
 from src.agents.prompts import HONEYPOT_SYSTEM_PROMPT
@@ -27,7 +31,6 @@ from src.api.schemas import (
     ExtractedIntelligence,
     Message,
     Metadata,
-    SenderType,
 )
 from src.detection.detector import DetectionResult
 
@@ -229,171 +232,19 @@ class HoneypotAgent:
         )
 
     def _get_fake_data(self, conversation_id: str) -> dict[str, Any]:
-        """
-        Get or generate fake data for a conversation.
-
-        Uses conversation_id as seed to ensure consistent fake data
-        across multiple turns of the same conversation.
-
-        Args:
-            conversation_id: Unique conversation identifier
-
-        Returns:
-            Dictionary with all fake data for this conversation
-        """
-        if conversation_id in self._fake_data_cache:
-            return self._fake_data_cache[conversation_id]
-
-        # Create deterministic seed from conversation_id
-        seed = int(hashlib.md5(conversation_id.encode()).hexdigest()[:8], 16)
-        generator = FakeDataGenerator(seed=seed)
-
-        # Generate all fake data upfront for consistency
-        credit_card = generator.generate_credit_card()
-        card = credit_card.number
-        bank_account = generator.generate_bank_account()
-        persona_details = generator.generate_persona_details()
-
-        fake_data = {
-            "credit_card": credit_card,
-            "bank_account": bank_account,
-            "persona": persona_details,
-            "otp": generator.generate_otp(),
-            "aadhaar": generator.generate_aadhaar(),
-            "pan": generator.generate_pan(),
-            # Pre-formatted strings for easy use in prompts
-            "card_number_formatted": f"{card[:4]} {card[4:8]} {card[8:12]} {card[12:]}",
-            "card_number_raw": credit_card.number,
-            "card_expiry": credit_card.expiry,
-            "card_cvv": credit_card.cvv,
-            "account_number": bank_account.number,
-            "ifsc_code": bank_account.ifsc,
-            "bank_name": bank_account.bank_name,
-            "persona_name": persona_details.name,
-            "persona_age": persona_details.age,
-            "persona_address": persona_details.address,
-            "customer_id": persona_details.customer_id,
-        }
-
-        self._fake_data_cache[conversation_id] = fake_data
-        self.logger.debug(
-            "Generated fake data for conversation",
-            conversation_id=conversation_id,
-            card_type=credit_card.card_type,
-            bank=bank_account.bank_name,
-            persona=persona_details.name,
-        )
-
-        return fake_data
+        """Return this conversation's fake profile, generating it on first use."""
+        if conversation_id not in self._fake_data_cache:
+            self._fake_data_cache[conversation_id] = build_fake_profile(conversation_id)
+            self.logger.debug("Generated fake data", conversation_id=conversation_id)
+        return self._fake_data_cache[conversation_id]
 
     def _format_fake_data_section(self, fake_data: dict[str, Any]) -> str:
-        """
-        Format fake data into a readable section for the prompt.
-
-        Args:
-            fake_data: Dictionary of fake data from _get_fake_data
-
-        Returns:
-            Formatted string for inclusion in system prompt
-        """
-        card_type = fake_data["credit_card"].card_type
-        return f"""- Credit Card: {fake_data["card_number_formatted"]} (type: {card_type})
-- Card Expiry: {fake_data["card_expiry"]}
-- Card CVV: {fake_data["card_cvv"]}
-- Bank Account: {fake_data["account_number"]}
-- IFSC Code: {fake_data["ifsc_code"]} ({fake_data["bank_name"]})
-- OTP/Verification Code: {fake_data["otp"]}
-- Aadhaar Number: {fake_data["aadhaar"]}
-- PAN Card: {fake_data["pan"]}
-- Your Name: {fake_data["persona_name"]}
-- Your Age: {fake_data["persona_age"]}
-- Your Address: {fake_data["persona_address"]}
-- Customer ID: {fake_data["customer_id"]}"""
+        """Render the fake profile for the system prompt."""
+        return format_fake_profile(fake_data)
 
     def _generate_conversation_summary(self, truncated_turns: list[ConversationMessage]) -> str:
-        """Generate a concise summary of earlier conversation turns that were
-        dropped due to context window limits.
-
-        This preserves key intelligence and context so the agent doesn't
-        repeat itself or lose track of what was discussed.
-
-        Args:
-            truncated_turns: The older turns that will NOT be included in
-                             the full conversation history.
-
-        Returns:
-            A short natural-language summary (< 200 words).
-        """
-        if not truncated_turns:
-            return ""
-
-        import re as _re
-
-        # Patterns to detect key intel in older messages
-        PHONE_RE = _re.compile(r"\+?91[-\s]?\d{10}|\b\d{10}\b")
-        UPI_RE = _re.compile(r"[\w.-]+@[a-zA-Z]{2,}")
-        URL_RE = _re.compile(r"https?://[^\s]+", _re.IGNORECASE)
-        EMAIL_RE = _re.compile(r"[\w.-]+@[\w.-]+\.\w{2,}")
-
-        scammer_claims: list[str] = []
-        agent_actions: list[str] = []
-        intel_found: list[str] = []
-
-        for msg in truncated_turns:
-            text = msg.text
-            sender = msg.sender
-
-            is_scammer = (
-                sender == SenderType.SCAMMER
-                or (hasattr(sender, "value") and sender.value == "scammer")
-                or str(sender).lower() == "scammer"
-            )
-
-            if is_scammer:
-                phones = PHONE_RE.findall(text)
-                upis = UPI_RE.findall(text)
-                urls = URL_RE.findall(text)
-                emails = EMAIL_RE.findall(text)
-
-                if phones:
-                    intel_found.append(f"phone: {', '.join(phones)}")
-                if upis:
-                    intel_found.append(f"UPI: {', '.join(upis)}")
-                if urls:
-                    intel_found.append(f"link: {', '.join(urls)}")
-                if emails:
-                    intel_found.append(f"email: {', '.join(emails)}")
-
-                gist = text[:80].strip()
-                if len(text) > 80:
-                    gist += "..."
-                scammer_claims.append(gist)
-            else:
-                gist = text[:60].strip()
-                if len(text) > 60:
-                    gist += "..."
-                agent_actions.append(gist)
-
-        parts: list[str] = []
-        parts.append(f"[SUMMARY OF EARLIER {len(truncated_turns)} MESSAGES]")
-
-        if scammer_claims:
-            parts.append("Scammer said: " + " | ".join(scammer_claims[:4]))
-
-        if agent_actions:
-            parts.append("You replied: " + " | ".join(agent_actions[:3]))
-
-        if intel_found:
-            parts.append("Intel found in earlier turns: " + "; ".join(set(intel_found)))
-
-        summary = "\n".join(parts)
-
-        # Enforce word budget
-        words = summary.split()
-        if len(words) > 200:
-            summary = " ".join(words[:200]) + "..."
-
-        return summary
+        """Summarise turns that fell out of the context window."""
+        return summarize_earlier_turns(truncated_turns)
 
     def _build_prompt(
         self,
@@ -405,46 +256,8 @@ class HoneypotAgent:
         extracted_intel: dict[str, list[str]] | None = None,
         fake_data: dict[str, Any] | None = None,
     ) -> str:
-        """Build conversation prompt for Gemini - simplified for agentic prompts."""
-        # Limit context to last N turns to reduce latency on deep conversations
-        max_turns = self.settings.context_window_turns
-
-        # If history exceeds context window, generate summary of older turns
-        summary_text = ""
-        if len(history) > max_turns:
-            older_turns = history[:-max_turns]
-            summary_text = self._generate_conversation_summary(older_turns)
-            truncated_history = history[-max_turns:]
-        else:
-            truncated_history = history
-
-        # Format conversation history
-        history_text = ""
-        for msg in truncated_history:
-            sender = "SCAMMER" if msg.sender == SenderType.SCAMMER else "YOU"
-            history_text += f"[{sender}]: {msg.text}\n"
-
-        # Build prompt with optional summary
-        if summary_text:
-            prompt = f"""{summary_text}
-
-RECENT CONVERSATION HISTORY:
-{history_text}
-
-SCAMMER'S NEW MESSAGE:
-"{message.text}"
-
-Generate your response as Pushpa Verma:"""
-        else:
-            prompt = f"""CONVERSATION HISTORY:
-{history_text if history_text else "No previous messages"}
-
-SCAMMER'S NEW MESSAGE:
-"{message.text}"
-
-Generate your response as Pushpa Verma:"""
-
-        return prompt
+        """Build the turn prompt from the last context_window_turns messages."""
+        return build_turn_prompt(message, history, self.settings.context_window_turns)
 
     async def _generate_response(
         self,
@@ -607,55 +420,8 @@ Generate your response as Pushpa Verma:"""
         turn_number: int,
         extracted_intel: ExtractedIntelligence | None = None,
     ) -> str:
-        """Generate agent notes summarizing the engagement."""
-        notes_parts = []
-
-        # Engagement mode
-        notes_parts.append(f"Mode: {mode.value}")
-
-        # Scam type if detected
-        if detection.scam_type:
-            notes_parts.append(f"Type: {detection.scam_type}")
-
-        # Confidence
-        notes_parts.append(f"Confidence: {detection.confidence:.0%}")
-
-        # Engagement progress - use the actual turn number passed in
-        notes_parts.append(f"Turn: {turn_number}")
-
-        # Emotional state
-        notes_parts.append(f"Persona: {persona.emotional_state.value}")
-
-        # Add intelligence extraction counts (only from scammer messages)
-        if extracted_intel:
-            intel_counts = []
-            if extracted_intel.bankAccounts:
-                intel_counts.append(f"{len(extracted_intel.bankAccounts)} Bank Account(s)")
-            if extracted_intel.upiIds:
-                intel_counts.append(f"{len(extracted_intel.upiIds)} UPI ID(s)")
-            if extracted_intel.phoneNumbers:
-                intel_counts.append(f"{len(extracted_intel.phoneNumbers)} Phone(s)")
-            if extracted_intel.phishingLinks:
-                intel_counts.append(f"{len(extracted_intel.phishingLinks)} URL(s)")
-            if extracted_intel.emailAddresses:
-                intel_counts.append(f"{len(extracted_intel.emailAddresses)} Email(s)")
-            if extracted_intel.ifscCodes:
-                intel_counts.append(f"{len(extracted_intel.ifscCodes)} IFSC Code(s)")
-            if extracted_intel.whatsappNumbers:
-                intel_counts.append(f"{len(extracted_intel.whatsappNumbers)} WhatsApp(s)")
-            if extracted_intel.beneficiaryNames:
-                intel_counts.append(f"{len(extracted_intel.beneficiaryNames)} Name(s)")
-            if extracted_intel.caseIds:
-                intel_counts.append(f"{len(extracted_intel.caseIds)} Case ID(s)")
-            if extracted_intel.policyNumbers:
-                intel_counts.append(f"{len(extracted_intel.policyNumbers)} Policy Number(s)")
-            if extracted_intel.orderNumbers:
-                intel_counts.append(f"{len(extracted_intel.orderNumbers)} Order Number(s)")
-
-            if intel_counts:
-                notes_parts.append(f"Extracted: {', '.join(intel_counts)}")
-
-        return " | ".join(notes_parts)
+        """One-line summary of the engagement for the callback and dashboard."""
+        return engagement_notes(detection, persona, mode, turn_number, extracted_intel)
 
     def _has_unextracted_urls(self, message_text: str, extracted_urls: list[str]) -> bool:
         """
