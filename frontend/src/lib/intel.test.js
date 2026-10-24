@@ -1,4 +1,4 @@
-import { emptyIntel, extractionOrderFrom, hasAnyIntel, mergeIntel } from "./intel";
+import { emptyIntel, extractionOrderFrom, mergeIntel } from "./intel";
 
 describe("mergeIntel", () => {
   it("adds new items and reports them in feed order", () => {
@@ -66,12 +66,5 @@ describe("extractionOrderFrom", () => {
       { type: "ifsc", value: "SBIN0001234" },
       { type: "email", value: "x@fake.com" },
     ]);
-  });
-});
-
-describe("hasAnyIntel", () => {
-  it("is false for an empty conversation and true once anything lands", () => {
-    expect(hasAnyIntel(emptyIntel())).toBe(false);
-    expect(hasAnyIntel({ ...emptyIntel(), bankNames: ["SBI"] })).toBe(true);
   });
 });

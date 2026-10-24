@@ -58,6 +58,3 @@ export function extractionOrderFrom(intel) {
     (intel[field] || []).map((value) => ({ type, value })),
   );
 }
-
-export const hasAnyIntel = (intel) =>
-  INTEL_FIELDS.some(([field]) => (intel[field]?.length || 0) > 0);
