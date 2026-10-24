@@ -50,7 +50,7 @@ INSTANT_SCAM_PATTERNS: list[tuple[re.Pattern[str], str, str]] = [
     # Account threats
     (
         re.compile(
-            r"account\s+(will\s+be\s+|is\s+being\s+|has\s+been\s+)?(blocked|suspended|locked|compromised|frozen|deactivated)",
+            r"account\s+(will\s+be\s+|is\s+being\s+|has\s+been\s+|is\s+(?:now\s+)?)?(blocked|suspended|locked|compromised|frozen|deactivated)",
             re.I,
         ),
         "banking_fraud",
