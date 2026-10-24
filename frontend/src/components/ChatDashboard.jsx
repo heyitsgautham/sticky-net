@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { emptyIntel, extractionOrderFrom, hasAnyIntel, mergeIntel } from "@/lib/intel";
 
 // ============ LOCALSTORAGE HELPERS ============
 const STORAGE_KEY = 'sticky-net-conversations';
@@ -379,17 +380,7 @@ const ChatDashboard = () => {
         confidence: null,
         messagesExchanged: 0,
     });
-    const [extractedIntel, setExtractedIntel] = useState({
-        upiIds: [],
-        phishingLinks: [],
-        bankAccounts: [],
-        phoneNumbers: [],
-        emails: [],
-        beneficiaryNames: [],
-        ifscCodes: [],
-        whatsappNumbers: [],
-        bankNames: [],
-    });
+    const [extractedIntel, setExtractedIntel] = useState(emptyIntel());
     const [extractionOrder, setExtractionOrder] = useState([]);
     const [agentNotes, setAgentNotes] = useState("");
     const [connectionStatus, setConnectionStatus] = useState('unknown'); // 'connected', 'disconnected', 'unknown'
@@ -482,32 +473,12 @@ const ChatDashboard = () => {
             confidence: null,
             messagesExchanged: conversation.messages?.length || 0,
         });
-        setExtractedIntel(conversation.extractedIntel || {
-            upiIds: [],
-            phishingLinks: [],
-            bankAccounts: [],
-            phoneNumbers: [],
-            emails: [],
-            beneficiaryNames: [],
-            ifscCodes: [],
-            whatsappNumbers: [],
-            bankNames: [],
-        });
+        setExtractedIntel(conversation.extractedIntel || emptyIntel());
         
         // Rebuild extractionOrder if it's missing but extractedIntel exists
         let order = conversation.extractionOrder || [];
         if (order.length === 0 && conversation.extractedIntel) {
-            const intel = conversation.extractedIntel;
-            order = [];
-            (intel.bankAccounts || []).forEach(item => order.push({ type: 'bank', value: item }));
-            (intel.ifscCodes || []).forEach(item => order.push({ type: 'ifsc', value: item }));
-            (intel.bankNames || []).forEach(item => order.push({ type: 'bankName', value: item }));
-            (intel.beneficiaryNames || []).forEach(item => order.push({ type: 'name', value: item }));
-            (intel.upiIds || []).forEach(item => order.push({ type: 'upi', value: item }));
-            (intel.phoneNumbers || []).forEach(item => order.push({ type: 'phone', value: item }));
-            (intel.whatsappNumbers || []).forEach(item => order.push({ type: 'whatsapp', value: item }));
-            (intel.phishingLinks || []).forEach(item => order.push({ type: 'link', value: item }));
-            (intel.emails || []).forEach(item => order.push({ type: 'email', value: item }));
+            order = extractionOrderFrom(conversation.extractedIntel);
         }
         setExtractionOrder(order);
         setAgentNotes(conversation.agentNotes || "");
@@ -533,19 +504,9 @@ const ChatDashboard = () => {
             confidence: null,
             messagesExchanged: 0,
         });
-        const emptyIntel = {
-            upiIds: [],
-            phishingLinks: [],
-            bankAccounts: [],
-            phoneNumbers: [],
-            emails: [],
-            beneficiaryNames: [],
-            ifscCodes: [],
-            whatsappNumbers: [],
-            bankNames: [],
-        };
-        setExtractedIntel(emptyIntel);
-        extractedIntelRef.current = emptyIntel; // Sync ref immediately
+        const cleared = emptyIntel();
+        setExtractedIntel(cleared);
+        extractedIntelRef.current = cleared; // Sync ref immediately
         setExtractionOrder([]);
         setAgentNotes("");
         inputRef.current?.focus();
@@ -569,19 +530,9 @@ const ChatDashboard = () => {
                 confidence: null,
                 messagesExchanged: 0,
             });
-            const emptyIntel = {
-                upiIds: [],
-                phishingLinks: [],
-                bankAccounts: [],
-                phoneNumbers: [],
-                emails: [],
-                beneficiaryNames: [],
-                ifscCodes: [],
-                whatsappNumbers: [],
-                bankNames: [],
-            };
-            setExtractedIntel(emptyIntel);
-            extractedIntelRef.current = emptyIntel; // Sync ref immediately
+            const cleared = emptyIntel();
+            setExtractedIntel(cleared);
+            extractedIntelRef.current = cleared; // Sync ref immediately
             setExtractionOrder([]);
             setAgentNotes("");
         }
@@ -672,83 +623,7 @@ const ChatDashboard = () => {
                         const intel = data.extractedIntelligence;
                         
                         // Use the ref to get current state synchronously for comparison
-                        const prev = extractedIntelRef.current;
-                        const newExtractions = [];
-                        const updated = {
-                            upiIds: [...prev.upiIds],
-                            phishingLinks: [...prev.phishingLinks],
-                            bankAccounts: [...prev.bankAccounts],
-                            phoneNumbers: [...prev.phoneNumbers],
-                            emails: [...prev.emails],
-                            beneficiaryNames: [...prev.beneficiaryNames],
-                            ifscCodes: [...prev.ifscCodes],
-                            whatsappNumbers: [...prev.whatsappNumbers],
-                            bankNames: [...(prev.bankNames || [])],
-                        };
-
-                        // Track new items and their order
-                        (intel.bankAccounts || []).forEach(item => {
-                            if (!updated.bankAccounts.includes(item)) {
-                                updated.bankAccounts.push(item);
-                                newExtractions.push({ type: 'bank', value: item });
-                            }
-                        });
-                        (intel.ifscCodes || []).forEach(item => {
-                            if (!updated.ifscCodes.includes(item)) {
-                                updated.ifscCodes.push(item);
-                                newExtractions.push({ type: 'ifsc', value: item });
-                            }
-                        });
-                        (intel.bankNames || []).forEach(item => {
-                            if (!updated.bankNames.includes(item)) {
-                                updated.bankNames.push(item);
-                                newExtractions.push({ type: 'bankName', value: item });
-                            }
-                        });
-                        (intel.beneficiaryNames || []).forEach(item => {
-                            if (!updated.beneficiaryNames.includes(item)) {
-                                updated.beneficiaryNames.push(item);
-                                newExtractions.push({ type: 'name', value: item });
-                            }
-                        });
-                        (intel.upiIds || []).forEach(item => {
-                            if (!updated.upiIds.includes(item)) {
-                                updated.upiIds.push(item);
-                                newExtractions.push({ type: 'upi', value: item });
-                            }
-                        });
-                        (intel.phoneNumbers || []).forEach(item => {
-                            if (!updated.phoneNumbers.includes(item)) {
-                                updated.phoneNumbers.push(item);
-                                newExtractions.push({ type: 'phone', value: item });
-                            }
-                        });
-                        (intel.whatsappNumbers || []).forEach(item => {
-                            if (!updated.whatsappNumbers.includes(item)) {
-                                updated.whatsappNumbers.push(item);
-                                newExtractions.push({ type: 'whatsapp', value: item });
-                            }
-                        });
-                        (intel.phishingLinks || []).forEach(item => {
-                            if (!updated.phishingLinks.includes(item)) {
-                                updated.phishingLinks.push(item);
-                                newExtractions.push({ type: 'link', value: item });
-                            }
-                        });
-                        (intel.emails || []).forEach(item => {
-                            if (!updated.emails.includes(item)) {
-                                updated.emails.push(item);
-                                newExtractions.push({ type: 'email', value: item });
-                            }
-                        });
-                        // Handle other_critical_info - each item has label and value
-                        (intel.other_critical_info || []).forEach(item => {
-                            const displayValue = `${item.label}: ${item.value}`;
-                            // Use a simple dedup based on value
-                            if (!newExtractions.some(e => e.type === 'other' && e.value === displayValue)) {
-                                newExtractions.push({ type: 'other', value: displayValue });
-                            }
-                        });
+                        const { updated, newExtractions } = mergeIntel(extractedIntelRef.current, intel);
 
                         // Update both states together - React will batch these
                         setExtractedIntel(updated);
@@ -786,23 +661,7 @@ const ChatDashboard = () => {
                             // Update intelligence if provided (may not be present in simplified API)
                             if (data.extractedIntelligence) {
                                 const intel = data.extractedIntelligence;
-                                const currentIntel = conv.extractedIntel || {
-                                    upiIds: [], phishingLinks: [], bankAccounts: [], 
-                                    phoneNumbers: [], emails: [], beneficiaryNames: [],
-                                    ifscCodes: [], whatsappNumbers: [], bankNames: []
-                                };
-                                
-                                updated[convIndex].extractedIntel = {
-                                    upiIds: [...new Set([...currentIntel.upiIds, ...(intel.upiIds || [])])],
-                                    phishingLinks: [...new Set([...currentIntel.phishingLinks, ...(intel.phishingLinks || [])])],
-                                    bankAccounts: [...new Set([...currentIntel.bankAccounts, ...(intel.bankAccounts || [])])],
-                                    phoneNumbers: [...new Set([...currentIntel.phoneNumbers, ...(intel.phoneNumbers || [])])],
-                                    emails: [...new Set([...currentIntel.emails, ...(intel.emails || [])])],
-                                    beneficiaryNames: [...new Set([...currentIntel.beneficiaryNames, ...(intel.beneficiaryNames || [])])],
-                                    ifscCodes: [...new Set([...currentIntel.ifscCodes, ...(intel.ifscCodes || [])])],
-                                    whatsappNumbers: [...new Set([...currentIntel.whatsappNumbers, ...(intel.whatsappNumbers || [])])],
-                                    bankNames: [...new Set([...currentIntel.bankNames, ...(intel.bankNames || [])])],
-                                };
+                                updated[convIndex].extractedIntel = mergeIntel(conv.extractedIntel, intel).updated;
                             }
                             
                             if (data.agentNotes) {
@@ -832,15 +691,7 @@ const ChatDashboard = () => {
         handleNewConversation();
     };
 
-    const hasIntel = extractedIntel.upiIds.length > 0 ||
-        extractedIntel.phishingLinks.length > 0 ||
-        extractedIntel.bankAccounts.length > 0 ||
-        extractedIntel.phoneNumbers?.length > 0 ||
-        extractedIntel.emails?.length > 0 ||
-        extractedIntel.beneficiaryNames?.length > 0 ||
-        extractedIntel.ifscCodes?.length > 0 ||
-        extractedIntel.whatsappNumbers?.length > 0 ||
-        extractedIntel.bankNames?.length > 0;
+    const hasIntel = hasAnyIntel(extractedIntel);
 
     // Combine samples and saved conversations
     const allConversations = [...sampleConversations, ...savedConversations];
