@@ -34,11 +34,13 @@ class EmotionalState(str, Enum):
 class Persona:
     """Represents the honeypot's human persona."""
 
-    traits: list[PersonaTrait] = field(default_factory=lambda: [
-        PersonaTrait.TRUSTING,
-        PersonaTrait.WORRIED,
-        PersonaTrait.TECH_NAIVE,
-    ])
+    traits: list[PersonaTrait] = field(
+        default_factory=lambda: [
+            PersonaTrait.TRUSTING,
+            PersonaTrait.WORRIED,
+            PersonaTrait.TECH_NAIVE,
+        ]
+    )
     emotional_state: EmotionalState = EmotionalState.CALM
     engagement_turn: int = 0
 
@@ -49,7 +51,7 @@ class Persona:
     def update_emotional_state(self, scam_intensity: float, scam_type: str | None = None) -> None:
         """
         Update emotional state based on scam type and intensity.
-        
+
         Different scam types evoke different emotional responses:
         - job_offer: Interest/curiosity (excited about opportunity)
         - banking_fraud: Panic/anxiety (scared about account)
@@ -65,12 +67,12 @@ class Persona:
             "impersonation": (EmotionalState.CAUTIOUS, EmotionalState.CAUTIOUS),
             "others": (EmotionalState.NEUTRAL, EmotionalState.CALM),
         }
-        
+
         # Get emotions for this scam type, default to neutral/calm for unknown types
         high_emotion, low_emotion = scam_type_emotions.get(
             scam_type, (EmotionalState.NEUTRAL, EmotionalState.CALM)
         )
-        
+
         # Use intensity to determine which emotion variant
         if scam_intensity > 0.6:
             self.emotional_state = high_emotion

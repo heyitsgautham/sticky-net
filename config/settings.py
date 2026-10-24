@@ -31,9 +31,9 @@ class Settings(BaseSettings):
 
     # AI Models (Gemini 3 with Gemini 2.5 fallback)
     flash_model: str = "gemini-3-flash-preview"  # Fast classification
-    pro_model: str = "gemini-3-flash-preview"      # Engagement responses (primary)
+    pro_model: str = "gemini-3-flash-preview"  # Engagement responses (primary)
     fallback_flash_model: str = "gemini-2.5-flash"  # Fallback classification
-    fallback_pro_model: str = "gemini-2.5-pro"      # Fallback engagement
+    fallback_pro_model: str = "gemini-2.5-pro"  # Fallback engagement
     llm_temperature: float = 0.7
 
     # API Timeout and Retry
@@ -80,6 +80,7 @@ class Settings(BaseSettings):
     def is_development(self) -> bool:
         """Check if running in development."""
         return self.environment == "development"
+
 
 @lru_cache
 def get_settings() -> Settings:

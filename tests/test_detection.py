@@ -27,15 +27,15 @@ class TestScamDetector:
     @pytest.mark.asyncio
     async def test_detects_scam_above_threshold(self, detector: ScamDetector):
         """Messages with confidence >= 0.6 should be classified as scam."""
-        with patch.object(detector.classifier, 'classify') as mock_classify:
+        with patch.object(detector.classifier, "classify") as mock_classify:
             mock_classify.return_value = ClassificationResult(
                 is_scam=True,
                 confidence=0.75,
                 scam_type="banking_fraud",
                 reasoning="Bank impersonation detected",
-                threat_indicators=["urgency", "account_threat"]
+                threat_indicators=["urgency", "account_threat"],
             )
-            
+
             message = "Your account is blocked. Send OTP immediately!"
             result = await detector.analyze(message)
 
@@ -47,13 +47,11 @@ class TestScamDetector:
     @pytest.mark.asyncio
     async def test_not_scam_below_threshold(self, detector: ScamDetector):
         """Non-scam messages get safety-net engagement (cautious mode)."""
-        with patch.object(detector.classifier, 'classify') as mock_classify:
+        with patch.object(detector.classifier, "classify") as mock_classify:
             mock_classify.return_value = ClassificationResult(
-                is_scam=False,
-                confidence=0.25,
-                reasoning="Normal greeting"
+                is_scam=False, confidence=0.25, reasoning="Normal greeting"
             )
-            
+
             message = "Hello, how are you?"
             result = await detector.analyze(message)
 
@@ -69,18 +67,13 @@ class TestScamDetector:
             confidence=0.8,
             reasoning="Previous scam detection",
         )
-        
-        with patch.object(detector.classifier, 'classify') as mock_classify:
+
+        with patch.object(detector.classifier, "classify") as mock_classify:
             mock_classify.return_value = ClassificationResult(
-                is_scam=False,
-                confidence=0.3,
-                reasoning="Seems benign"
+                is_scam=False, confidence=0.3, reasoning="Seems benign"
             )
-            
-            result = await detector.analyze(
-                "Okay, I understand",
-                previous_result=previous_result
-            )
+
+            result = await detector.analyze("Okay, I understand", previous_result=previous_result)
 
         # Confidence should stay at 0.8, not drop to 0.3
         assert result.confidence >= 0.8
@@ -89,15 +82,15 @@ class TestScamDetector:
     async def test_uses_conversation_history(self, detector: ScamDetector):
         """Detector should pass conversation history to classifier."""
         from src.api.schemas import ConversationMessage, SenderType
-        
-        with patch.object(detector.classifier, 'classify') as mock_classify:
+
+        with patch.object(detector.classifier, "classify") as mock_classify:
             mock_classify.return_value = ClassificationResult(
                 is_scam=True,
                 confidence=0.85,
                 scam_type="support_scam",
-                reasoning="Multi-turn scam pattern"
+                reasoning="Multi-turn scam pattern",
             )
-            
+
             history = [
                 ConversationMessage(
                     sender=SenderType.SCAMMER,
@@ -105,7 +98,7 @@ class TestScamDetector:
                     timestamp=datetime.now(),
                 ),
             ]
-            
+
             result = await detector.analyze(
                 message="There's a problem with your account",
                 history=history,
@@ -113,22 +106,20 @@ class TestScamDetector:
 
             # Verify classifier was called with history
             call_args = mock_classify.call_args
-            assert call_args.kwargs.get('history') == history
+            assert call_args.kwargs.get("history") == history
 
     @pytest.mark.asyncio
     async def test_uses_metadata(self, detector: ScamDetector):
         """Detector should pass metadata to classifier."""
         from src.api.schemas import Metadata
-        
-        with patch.object(detector.classifier, 'classify') as mock_classify:
+
+        with patch.object(detector.classifier, "classify") as mock_classify:
             mock_classify.return_value = ClassificationResult(
-                is_scam=False,
-                confidence=0.3,
-                reasoning="Normal message"
+                is_scam=False, confidence=0.3, reasoning="Normal message"
             )
-            
+
             metadata = Metadata(channel="SMS", language="English", locale="IN")
-            
+
             result = await detector.analyze(
                 message="Hello there",
                 metadata=metadata,
@@ -136,7 +127,7 @@ class TestScamDetector:
 
             # Verify classifier was called with metadata
             call_args = mock_classify.call_args
-            assert call_args.kwargs.get('metadata') == metadata
+            assert call_args.kwargs.get("metadata") == metadata
 
 
 class TestScamClassifier:
@@ -178,7 +169,7 @@ class TestScamClassifier:
     def test_parse_valid_response(self, classifier: ScamClassifier):
         """Should parse valid JSON response."""
         response = '{"is_scam": true, "confidence": 0.85, "scam_type": "banking", "threat_indicators": ["urgency"], "reasoning": "Test"}'
-        
+
         result = classifier._parse_response(response)
 
         assert result.is_scam is True
@@ -188,7 +179,7 @@ class TestScamClassifier:
     def test_parse_response_with_markdown(self, classifier: ScamClassifier):
         """Should handle JSON wrapped in markdown code blocks."""
         response = '```json\n{"is_scam": true, "confidence": 0.9, "scam_type": null, "reasoning": "Test"}\n```'
-        
+
         result = classifier._parse_response(response)
 
         assert result.is_scam is True
@@ -197,7 +188,7 @@ class TestScamClassifier:
     def test_parse_invalid_response(self, classifier: ScamClassifier):
         """Should handle invalid JSON gracefully."""
         response = "This is not valid JSON"
-        
+
         result = classifier._parse_response(response)
 
         assert result.is_scam is False

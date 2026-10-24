@@ -19,6 +19,7 @@ logger = structlog.get_logger()
 @dataclass
 class DetectionResult:
     """Result of scam detection."""
+
     is_scam: bool
     confidence: float  # 0.0 to 1.0
     scam_type: str | None = None
@@ -31,31 +32,95 @@ class DetectionResult:
 INSTANT_SCAM_PATTERNS: list[tuple[re.Pattern, str, str]] = [
     # (compiled pattern, scam_type, description)
     # Credential theft
-    (re.compile(r"send\s+(your\s+)?(otp|password|pin|cvv)", re.I), "banking_fraud", "credential_request"),
-    (re.compile(r"share\s+(your\s+)?(otp|cvv|pin)\s+(to|for|with)", re.I), "banking_fraud", "credential_request"),
-    (re.compile(r"(otp|password|pin|cvv).*immediately", re.I), "banking_fraud", "credential_urgency"),
+    (
+        re.compile(r"send\s+(your\s+)?(otp|password|pin|cvv)", re.I),
+        "banking_fraud",
+        "credential_request",
+    ),
+    (
+        re.compile(r"share\s+(your\s+)?(otp|cvv|pin)\s+(to|for|with)", re.I),
+        "banking_fraud",
+        "credential_request",
+    ),
+    (
+        re.compile(r"(otp|password|pin|cvv).*immediately", re.I),
+        "banking_fraud",
+        "credential_urgency",
+    ),
     # Account threats
-    (re.compile(r"account\s+(will\s+be\s+|is\s+being\s+|has\s+been\s+)?(blocked|suspended|locked|compromised|frozen|deactivated)", re.I), "banking_fraud", "account_threat"),
-    (re.compile(r"(block|suspend|freeze|deactivate).*account", re.I), "banking_fraud", "account_threat"),
+    (
+        re.compile(
+            r"account\s+(will\s+be\s+|is\s+being\s+|has\s+been\s+)?(blocked|suspended|locked|compromised|frozen|deactivated)",
+            re.I,
+        ),
+        "banking_fraud",
+        "account_threat",
+    ),
+    (
+        re.compile(r"(block|suspend|freeze|deactivate).*account", re.I),
+        "banking_fraud",
+        "account_threat",
+    ),
     # Urgency + verification
-    (re.compile(r"verify\s+within\s+\d+\s+(hours?|minutes?)", re.I), "banking_fraud", "urgency_verification"),
-    (re.compile(r"(urgent|immediately|right\s+now).*verify", re.I), "banking_fraud", "urgency_verification"),
+    (
+        re.compile(r"verify\s+within\s+\d+\s+(hours?|minutes?)", re.I),
+        "banking_fraud",
+        "urgency_verification",
+    ),
+    (
+        re.compile(r"(urgent|immediately|right\s+now).*verify", re.I),
+        "banking_fraud",
+        "urgency_verification",
+    ),
     (re.compile(r"verify.*immediately", re.I), "banking_fraud", "urgency_verification"),
     # Phishing links
     (re.compile(r"click\s+(here|link|below).*verify", re.I), "others", "phishing_click"),
     (re.compile(r"click\s+(here|link|below).*claim", re.I), "others", "phishing_click"),
-    (re.compile(r"https?://[^\s]*(?:fake|phish|amaz0n|g00gle|free-?gift|claim|verify-?account)", re.I), "others", "phishing_url"),
+    (
+        re.compile(
+            r"https?://[^\s]*(?:fake|phish|amaz0n|g00gle|free-?gift|claim|verify-?account)", re.I
+        ),
+        "others",
+        "phishing_url",
+    ),
     # Lottery / reward
-    (re.compile(r"(lottery|jackpot|won|winner|prize)\s+[₹$£]?\s*\d+", re.I), "lottery_reward", "lottery_prize"),
+    (
+        re.compile(r"(lottery|jackpot|won|winner|prize)\s+[₹$£]?\s*\d+", re.I),
+        "lottery_reward",
+        "lottery_prize",
+    ),
     (re.compile(r"(congratulations|congrats).*won", re.I), "lottery_reward", "lottery_prize"),
     (re.compile(r"(cashback|reward|prize).*claim", re.I), "lottery_reward", "reward_claim"),
-    (re.compile(r"claim\s+(your|the)\s+(reward|prize|cashback|offer)", re.I), "lottery_reward", "reward_claim"),
+    (
+        re.compile(r"claim\s+(your|the)\s+(reward|prize|cashback|offer)", re.I),
+        "lottery_reward",
+        "reward_claim",
+    ),
     # Legal threats
-    (re.compile(r"(arrest|legal\s+action|fir|warrant).*immediately", re.I), "impersonation", "legal_threat"),
-    (re.compile(r"(police|cbi|ed|cyber\s+cell).*action", re.I), "impersonation", "authority_threat"),
+    (
+        re.compile(r"(arrest|legal\s+action|fir|warrant).*immediately", re.I),
+        "impersonation",
+        "legal_threat",
+    ),
+    (
+        re.compile(r"(police|cbi|ed|cyber\s+cell).*action", re.I),
+        "impersonation",
+        "authority_threat",
+    ),
     # KYC / bank impersonation
-    (re.compile(r"(kyc|pan|aadhaar)\s+(update|verify|link|expire)", re.I), "banking_fraud", "kyc_scam"),
-    (re.compile(r"(sbi|hdfc|icici|axis|rbi|sebi)\s+(customer|support|official|department|helpdesk)", re.I), "impersonation", "bank_impersonation"),
+    (
+        re.compile(r"(kyc|pan|aadhaar)\s+(update|verify|link|expire)", re.I),
+        "banking_fraud",
+        "kyc_scam",
+    ),
+    (
+        re.compile(
+            r"(sbi|hdfc|icici|axis|rbi|sebi)\s+(customer|support|official|department|helpdesk)",
+            re.I,
+        ),
+        "impersonation",
+        "bank_impersonation",
+    ),
     # Job / investment scams
     (re.compile(r"(part\s*-?\s*time|work\s+from\s+home).*earn", re.I), "job_offer", "job_scam"),
     (re.compile(r"earn\s+[₹$]?\s*\d+.*daily", re.I), "job_offer", "job_scam"),
@@ -199,9 +264,7 @@ class ScamDetector:
 
         # ── Step 3: Safety net — engage cautiously even if both miss ─────────
         if not is_scam:
-            self.logger.info(
-                "Both regex and LLM say not scam — engaging cautiously as safety net"
-            )
+            self.logger.info("Both regex and LLM say not scam — engaging cautiously as safety net")
             is_scam = True
             final_confidence = max(final_confidence, 0.65)
             scam_type = ai_result.scam_type or "others"

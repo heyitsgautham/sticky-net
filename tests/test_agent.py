@@ -9,24 +9,26 @@ from src.agents.honeypot_agent import HoneypotAgent, EngagementResult
 
 def create_mock_gemini_response(text: str) -> MagicMock:
     """Create a mock Gemini response with proper candidates structure.
-    
+
     Gemini 3 models return responses with candidates containing content parts.
     This helper creates a properly structured mock for testing.
     """
     mock_part = MagicMock()
     mock_part.text = text
-    
+
     mock_content = MagicMock()
     mock_content.parts = [mock_part]
-    
+
     mock_candidate = MagicMock()
     mock_candidate.content = mock_content
-    
+
     mock_response = MagicMock()
     mock_response.candidates = [mock_candidate]
     mock_response.text = text  # Keep for backward compatibility
-    
+
     return mock_response
+
+
 from src.agents.persona import Persona, PersonaManager, EmotionalState, PersonaTrait
 from src.agents.policy import EngagementPolicy, EngagementMode, EngagementState
 from src.agents.prompts import (
@@ -66,7 +68,7 @@ class TestPersona:
         # Unknown/None scam type -> NEUTRAL/CALM
         persona.update_emotional_state(0.9, scam_type=None)
         assert persona.emotional_state == EmotionalState.NEUTRAL
-        
+
         persona.update_emotional_state(0.3, scam_type=None)
         assert persona.emotional_state == EmotionalState.CALM
 
@@ -119,32 +121,24 @@ class TestPersonaManager:
     def test_update_persona(self):
         """Should update persona state with scam type awareness."""
         manager = PersonaManager()
-        
+
         # Banking fraud should cause panic
-        persona = manager.update_persona(
-            "conv-123", 
-            scam_intensity=0.9,
-            scam_type="banking_fraud"
-        )
-        
+        persona = manager.update_persona("conv-123", scam_intensity=0.9, scam_type="banking_fraud")
+
         assert persona.engagement_turn == 1
         assert persona.emotional_state == EmotionalState.PANICKED
-        
+
         # Job offer should cause interest, not panic
-        persona2 = manager.update_persona(
-            "conv-456",
-            scam_intensity=0.9,
-            scam_type="job_offer"
-        )
+        persona2 = manager.update_persona("conv-456", scam_intensity=0.9, scam_type="job_offer")
         assert persona2.emotional_state == EmotionalState.INTERESTED
 
     def test_get_persona_context(self):
         """Should return context dict with emotional_state and engagement_turn only."""
         manager = PersonaManager()
         manager.get_or_create_persona("conv-123")
-        
+
         context = manager.get_persona_context("conv-123")
-        
+
         assert "emotional_state" in context
         assert "engagement_turn" in context
         # These should NOT be in the context (removed hardcoded strings)
@@ -471,14 +465,14 @@ class TestHoneypotAgent:
     def test_end_conversation(self, mock_client_class):
         """Should clean up persona on end."""
         mock_client_class.return_value = MagicMock()
-        
+
         agent = HoneypotAgent()
         # Create a persona first
         agent.persona_manager.get_or_create_persona("conv-123")
-        
+
         # End conversation
         agent.end_conversation("conv-123")
-        
+
         # Persona should be cleared (new one created on access)
         new_persona = agent.persona_manager.get_or_create_persona("conv-123")
         assert new_persona.engagement_turn == 0
@@ -497,7 +491,7 @@ class TestConversationSummary:
         history = []
         for i in range(12):
             sender = SenderType.SCAMMER if i % 2 == 0 else SenderType.USER
-            text = f"Turn {i+1} message text here"
+            text = f"Turn {i + 1} message text here"
             if i == 2:
                 text = "Call me at +91-9876543210 for verification"
             history.append(
@@ -509,8 +503,10 @@ class TestConversationSummary:
             )
 
         detection = DetectionResult(
-            is_scam=True, confidence=0.9,
-            scam_type="banking_fraud", reasoning="test",
+            is_scam=True,
+            confidence=0.9,
+            scam_type="banking_fraud",
+            reasoning="test",
         )
         message = Message(
             sender=SenderType.SCAMMER,
@@ -550,8 +546,10 @@ class TestConversationSummary:
         ]
 
         detection = DetectionResult(
-            is_scam=True, confidence=0.9,
-            scam_type="banking_fraud", reasoning="test",
+            is_scam=True,
+            confidence=0.9,
+            scam_type="banking_fraud",
+            reasoning="test",
         )
         message = Message(
             sender=SenderType.SCAMMER,
@@ -596,14 +594,16 @@ class TestConversationSummary:
             history.append(
                 ConversationMessage(
                     sender=sender,
-                    text=f"Follow up message {i+3}",
+                    text=f"Follow up message {i + 3}",
                     timestamp=datetime.now(),
                 )
             )
 
         detection = DetectionResult(
-            is_scam=True, confidence=0.9,
-            scam_type="upi_fraud", reasoning="test",
+            is_scam=True,
+            confidence=0.9,
+            scam_type="upi_fraud",
+            reasoning="test",
         )
         message = Message(
             sender=SenderType.SCAMMER,
@@ -640,14 +640,16 @@ class TestConversationSummary:
             history.append(
                 ConversationMessage(
                     sender=sender,
-                    text=f"Message {i+2}",
+                    text=f"Message {i + 2}",
                     timestamp=datetime.now(),
                 )
             )
 
         detection = DetectionResult(
-            is_scam=True, confidence=0.9,
-            scam_type="phishing", reasoning="test",
+            is_scam=True,
+            confidence=0.9,
+            scam_type="phishing",
+            reasoning="test",
         )
         message = Message(
             sender=SenderType.SCAMMER,
@@ -678,7 +680,8 @@ class TestConversationSummary:
             history.append(
                 ConversationMessage(
                     sender=sender,
-                    text=f"This is a very long message number {i+1} with lots of words to test budget " * 5,
+                    text=f"This is a very long message number {i + 1} with lots of words to test budget "
+                    * 5,
                     timestamp=datetime.now(),
                 )
             )

@@ -276,33 +276,37 @@ class TestSuspiciousUrl:
     def test_shortener_is_suspicious(self):
         """Short URL services should be considered suspicious."""
         from src.intelligence.validators import is_suspicious_url
+
         assert is_suspicious_url("http://bit.ly/abc")
         assert is_suspicious_url("https://tinyurl.com/xyz")
 
     def test_phishing_keywords_suspicious(self):
         """URLs with phishing keywords should be suspicious."""
         from src.intelligence.validators import is_suspicious_url
+
         assert is_suspicious_url("http://sbi-login-verify.com")
         assert is_suspicious_url("https://update-kyc-hdfc.in")
 
     def test_free_tld_suspicious(self):
         """Free TLDs should be suspicious."""
         from src.intelligence.validators import is_suspicious_url
+
         assert is_suspicious_url("http://scamsite.tk")
         assert is_suspicious_url("https://phishing.ml")
 
     def test_normal_url_not_suspicious(self):
         """Normal URLs should not be suspicious."""
         from src.intelligence.validators import is_suspicious_url
+
         assert not is_suspicious_url("https://google.com")
         assert not is_suspicious_url("https://github.com/project")
 
 
 class TestAIExtractsOnlyScammerDetails:
     """
-    Tests to verify the AI-first approach correctly handles the 
+    Tests to verify the AI-first approach correctly handles the
     victim vs scammer detail distinction.
-    
+
     These are conceptual tests - the actual distinction is done by the AI,
     and we just validate the format of what the AI returns.
     """
@@ -315,11 +319,11 @@ class TestAIExtractsOnlyScammerDetails:
     def test_ai_should_extract_only_scammer_account(self, extractor: IntelligenceExtractor):
         """
         AI should extract only scammer's account, not victim's.
-        
+
         In this test, we simulate what the AI SHOULD return after
         understanding the context of the scammer's message.
         """
-        # Scammer's message: "Your account 9876543210123 has suspicious activity. 
+        # Scammer's message: "Your account 9876543210123 has suspicious activity.
         # Transfer to recovery account 1234567890987"
         #
         # AI understands:
@@ -332,9 +336,9 @@ class TestAIExtractsOnlyScammerDetails:
             "upi_ids": [],
             "phone_numbers": [],
         }
-        
+
         result = extractor.validate_ai_extraction(ai_extracted)
-        
+
         # Validation should pass the scammer's account
         assert "1234567890987" in result.bankAccounts
         # Victim's account should NOT be in the result (AI didn't extract it)
@@ -345,13 +349,13 @@ class TestAIExtractsOnlyScammerDetails:
         Test a full scam message where AI correctly identifies all scammer details.
         """
         # What the AI SHOULD extract from:
-        # "Hello sir, I am Rajesh Kumar from SBI fraud prevention. 
-        # Your account 9876543210123 has suspicious activity. 
-        # Transfer to recovery account 1234567890987 IFSC SBIN0012345 
-        # or pay via UPI rajesh.sbi.verify@paytm. 
-        # Visit https://sbi-secure-verify.com/confirm immediately. 
+        # "Hello sir, I am Rajesh Kumar from SBI fraud prevention.
+        # Your account 9876543210123 has suspicious activity.
+        # Transfer to recovery account 1234567890987 IFSC SBIN0012345
+        # or pay via UPI rajesh.sbi.verify@paytm.
+        # Visit https://sbi-secure-verify.com/confirm immediately.
         # Call me 9123456789 for help."
-        
+
         ai_extracted = {
             "bank_accounts": ["1234567890987"],  # Only recovery account (scammer's)
             "upi_ids": ["rajesh.sbi.verify@paytm"],  # Scammer's UPI
@@ -360,9 +364,9 @@ class TestAIExtractsOnlyScammerDetails:
             "urls": ["https://sbi-secure-verify.com/confirm"],  # Scammer's phishing URL
             "ifsc_codes": ["SBIN0012345"],  # Scammer's bank IFSC
         }
-        
+
         result = extractor.validate_ai_extraction(ai_extracted)
-        
+
         # All scammer's details should be validated
         assert "1234567890987" in result.bankAccounts
         assert "rajesh.sbi.verify@paytm" in result.upiIds
@@ -370,6 +374,6 @@ class TestAIExtractsOnlyScammerDetails:
         assert "Rajesh Kumar" in result.beneficiaryNames
         assert "https://sbi-secure-verify.com/confirm" in result.phishingLinks
         assert "SBIN0012345" in result.ifscCodes
-        
+
         # Victim's account should NOT appear
         assert "9876543210123" not in result.bankAccounts

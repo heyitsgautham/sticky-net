@@ -150,10 +150,10 @@ RESPONSE_STRATEGIES = {
 
 def get_response_strategy(scam_category: str) -> list[str]:
     """Get response strategies for a scam category.
-    
+
     Args:
         scam_category: The category of scam (urgency, authority, financial, threat)
-        
+
     Returns:
         List of example response strategies for that category
     """
@@ -162,10 +162,10 @@ def get_response_strategy(scam_category: str) -> list[str]:
 
 def format_scam_indicators(indicators: list[str]) -> str:
     """Format scam indicators for the prompt.
-    
+
     Args:
         indicators: List of detected scam indicators
-        
+
     Returns:
         Formatted string of indicators
     """

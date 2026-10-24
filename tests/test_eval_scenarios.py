@@ -140,10 +140,10 @@ SCENARIOS = [
 @dataclass
 class ScoreBreakdown:
     scenario_id: str = ""
-    scam_detection: float = 0.0        # /20
+    scam_detection: float = 0.0  # /20
     intelligence_extraction: float = 0.0  # /40
-    engagement_quality: float = 0.0    # /20
-    response_structure: float = 0.0    # /20
+    engagement_quality: float = 0.0  # /20
+    response_structure: float = 0.0  # /20
     details: dict = field(default_factory=dict)
 
     @property
@@ -325,12 +325,7 @@ def run_multi_turn(
         )
         data = resp.json()
 
-        agent_reply = (
-            data.get("reply")
-            or data.get("message")
-            or data.get("text")
-            or ""
-        )
+        agent_reply = data.get("reply") or data.get("message") or data.get("text") or ""
 
         all_turns.append(
             {
@@ -343,9 +338,7 @@ def run_multi_turn(
         )
 
         # Build history for next turn
-        conversation_history.append(
-            {"sender": "scammer", "text": scammer_msg, "timestamp": ts}
-        )
+        conversation_history.append({"sender": "scammer", "text": scammer_msg, "timestamp": ts})
         conversation_history.append(
             {
                 "sender": "user",
@@ -493,30 +486,23 @@ class TestMultiTurnBankFraud:
         intel = result["response"].get("extractedIntelligence", {})
         upis = intel.get("upiIds", [])
         fake = result["scenario"]["fakeData"]["upiId"]
-        assert any(fake in str(u) for u in upis), (
-            f"Expected UPI ID '{fake}' in {upis}"
-        )
+        assert any(fake in str(u) for u in upis), f"Expected UPI ID '{fake}' in {upis}"
 
     def test_phone_number_extracted(self, result):
         intel = result["response"].get("extractedIntelligence", {})
         phones = intel.get("phoneNumbers", [])
         fake = result["scenario"]["fakeData"]["phoneNumber"]
         fake_normalized = fake.replace("-", "")
-        assert any(
-            fake in str(p) or fake_normalized in str(p).replace("-", "")
-            for p in phones
-        ), f"Expected phone '{fake}' in {phones}"
+        assert any(fake in str(p) or fake_normalized in str(p).replace("-", "") for p in phones), (
+            f"Expected phone '{fake}' in {phones}"
+        )
 
     def test_engagement_multiple_turns(self, result):
-        assert len(result["turns"]) >= 5, (
-            f"Expected >= 5 turns, got {len(result['turns'])}"
-        )
+        assert len(result["turns"]) >= 5, f"Expected >= 5 turns, got {len(result['turns'])}"
 
     def test_all_turns_under_30s(self, result):
         for t in result["turns"]:
-            assert t["elapsed"] < 30, (
-                f"Turn {t['turn']} took {t['elapsed']}s (limit 30s)"
-            )
+            assert t["elapsed"] < 30, f"Turn {t['turn']} took {t['elapsed']}s (limit 30s)"
 
     def test_score_above_60(self, result):
         assert result["score"].total >= 60, (
@@ -551,19 +537,16 @@ class TestMultiTurnUPIFraud:
         intel = result["response"].get("extractedIntelligence", {})
         upis = intel.get("upiIds", [])
         fake = result["scenario"]["fakeData"]["upiId"]
-        assert any(fake in str(u) for u in upis), (
-            f"Expected UPI ID '{fake}' in {upis}"
-        )
+        assert any(fake in str(u) for u in upis), f"Expected UPI ID '{fake}' in {upis}"
 
     def test_phone_number_extracted(self, result):
         intel = result["response"].get("extractedIntelligence", {})
         phones = intel.get("phoneNumbers", [])
         fake = result["scenario"]["fakeData"]["phoneNumber"]
         fake_normalized = fake.replace("-", "")
-        assert any(
-            fake in str(p) or fake_normalized in str(p).replace("-", "")
-            for p in phones
-        ), f"Expected phone '{fake}' in {phones}"
+        assert any(fake in str(p) or fake_normalized in str(p).replace("-", "") for p in phones), (
+            f"Expected phone '{fake}' in {phones}"
+        )
 
     def test_engagement_multiple_turns(self, result):
         assert len(result["turns"]) >= 5
@@ -605,17 +588,13 @@ class TestMultiTurnPhishing:
         intel = result["response"].get("extractedIntelligence", {})
         links = intel.get("phishingLinks", [])
         fake = result["scenario"]["fakeData"]["phishingLink"]
-        assert any(fake in str(lnk) for lnk in links), (
-            f"Expected phishing link '{fake}' in {links}"
-        )
+        assert any(fake in str(lnk) for lnk in links), f"Expected phishing link '{fake}' in {links}"
 
     def test_email_extracted(self, result):
         intel = result["response"].get("extractedIntelligence", {})
         emails = intel.get("emailAddresses", [])
         fake = result["scenario"]["fakeData"]["emailAddress"]
-        assert any(fake in str(e) for e in emails), (
-            f"Expected email '{fake}' in {emails}"
-        )
+        assert any(fake in str(e) for e in emails), f"Expected email '{fake}' in {emails}"
 
     def test_engagement_multiple_turns(self, result):
         assert len(result["turns"]) >= 5
@@ -652,20 +631,15 @@ class TestWeightedFinalScore:
 
     def test_final_weighted_score_above_60(self, all_scores):
         total_weight = sum(s["weight"] for s, _ in all_scores)
-        weighted = sum(
-            bd.total * (s["weight"] / total_weight) for s, bd in all_scores
-        )
+        weighted = sum(bd.total * (s["weight"] / total_weight) for s, bd in all_scores)
 
         report_lines = ["\n========== GUVI EVALUATION REPORT =========="]
         for scenario, bd in all_scores:
             report_lines.append(
-                f"\n  {scenario['scenarioId']} (weight={scenario['weight']}):"
-                f" {bd.total:.1f}/100"
+                f"\n  {scenario['scenarioId']} (weight={scenario['weight']}): {bd.total:.1f}/100"
             )
             report_lines.append(f"    Detection:    {bd.scam_detection:.0f}/20")
-            report_lines.append(
-                f"    Intelligence: {bd.intelligence_extraction:.0f}/40"
-            )
+            report_lines.append(f"    Intelligence: {bd.intelligence_extraction:.0f}/40")
             report_lines.append(f"    Engagement:   {bd.engagement_quality:.0f}/20")
             report_lines.append(f"    Structure:    {bd.response_structure:.0f}/20")
             if bd.details.get("intelligence_matches"):
@@ -682,9 +656,7 @@ class TestWeightedFinalScore:
 
     def test_all_scenarios_detect_scam(self, all_scores):
         for scenario, bd in all_scores:
-            assert bd.scam_detection == 20.0, (
-                f"{scenario['scenarioId']}: scam not detected"
-            )
+            assert bd.scam_detection == 20.0, f"{scenario['scenarioId']}: scam not detected"
 
 
 # ---------------------------------------------------------------------------

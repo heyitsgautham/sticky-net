@@ -46,16 +46,16 @@ class ExtractionResult:
     def has_intelligence(self) -> bool:
         """Check if any intelligence was extracted."""
         return bool(
-            self.bank_accounts or
-            self.upi_ids or
-            self.phone_numbers or
-            self.phishing_links or
-            self.emails or
-            self.beneficiary_names or
-            self.bank_names or
-            self.ifsc_codes or
-            self.whatsapp_numbers or
-            self.suspicious_keywords
+            self.bank_accounts
+            or self.upi_ids
+            or self.phone_numbers
+            or self.phishing_links
+            or self.emails
+            or self.beneficiary_names
+            or self.bank_names
+            or self.ifsc_codes
+            or self.whatsapp_numbers
+            or self.suspicious_keywords
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -82,7 +82,7 @@ class IntelligenceExtractor:
     - AI (LLM) extracts intelligence with semantic understanding
     - AI distinguishes victim's details from scammer's details
     - Regex only VALIDATES format (not extraction)
-    
+
     This approach solves the problem of victim vs scammer details:
     - AI understands "Your account 123" = victim's (don't extract)
     - AI understands "Transfer to 456" = scammer's (extract)
@@ -143,8 +143,16 @@ class IntelligenceExtractor:
 
         # These don't need strict validation - AI understands context better
         validated_urls = [str(url).strip() for url in ai_extracted.get("urls", []) if url]
-        validated_emails = [str(email).strip().lower() for email in ai_extracted.get("emails", ai_extracted.get("emailAddresses", [])) if "@" in str(email)]
-        validated_names = [str(name).strip() for name in ai_extracted.get("beneficiary_names", []) if self._validate_name(str(name))]
+        validated_emails = [
+            str(email).strip().lower()
+            for email in ai_extracted.get("emails", ai_extracted.get("emailAddresses", []))
+            if "@" in str(email)
+        ]
+        validated_names = [
+            str(name).strip()
+            for name in ai_extracted.get("beneficiary_names", [])
+            if self._validate_name(str(name))
+        ]
         validated_banks = [str(bank).strip() for bank in ai_extracted.get("bank_names", []) if bank]
         validated_whatsapp = []
         for wa in ai_extracted.get("whatsapp_numbers", []):
@@ -153,12 +161,26 @@ class IntelligenceExtractor:
                 validated_whatsapp.append(clean)
 
         # Parse caseIds, policyNumbers, orderNumbers (AI-first, no strict validation)
-        case_ids = [str(c).strip() for c in ai_extracted.get("caseIds", ai_extracted.get("case_ids", [])) if c]
-        policy_numbers = [str(p).strip() for p in ai_extracted.get("policyNumbers", ai_extracted.get("policy_numbers", [])) if p]
-        order_numbers = [str(o).strip() for o in ai_extracted.get("orderNumbers", ai_extracted.get("order_numbers", [])) if o]
+        case_ids = [
+            str(c).strip()
+            for c in ai_extracted.get("caseIds", ai_extracted.get("case_ids", []))
+            if c
+        ]
+        policy_numbers = [
+            str(p).strip()
+            for p in ai_extracted.get("policyNumbers", ai_extracted.get("policy_numbers", []))
+            if p
+        ]
+        order_numbers = [
+            str(o).strip()
+            for o in ai_extracted.get("orderNumbers", ai_extracted.get("order_numbers", []))
+            if o
+        ]
 
         # Extract suspicious keywords from AI extraction (if provided) or empty list
-        suspicious_keywords = [str(kw).strip().lower() for kw in ai_extracted.get("suspicious_keywords", []) if kw]
+        suspicious_keywords = [
+            str(kw).strip().lower() for kw in ai_extracted.get("suspicious_keywords", []) if kw
+        ]
 
         result = ExtractedIntelligence(
             bankAccounts=validated_accounts,
@@ -200,47 +222,47 @@ class IntelligenceExtractor:
     def extract(self, text: str) -> ExtractionResult:
         """
         Regex extraction as BACKUP to AI extraction.
-        
+
         Scans text for phone numbers, bank accounts, UPI IDs, URLs, and emails
         using regex patterns. Results are merged with AI extraction to ensure
         no fakeData is missed.
         """
         self.logger.debug("Running regex backup extraction")
-        
+
         phones = []
-        for match in re.finditer(r'(?:\+?91[\s-]?)?([6-9]\d{9})\b', text):
+        for match in re.finditer(r"(?:\+?91[\s-]?)?([6-9]\d{9})\b", text):
             clean = self._clean_number(match.group(0))
             if self._validate_phone(clean):
                 phones.append(clean)
-        
+
         # Bank accounts: 9-18 digit numbers (exclude phone-like)
         accounts = []
-        for match in re.finditer(r'\b(\d{9,18})\b', text):
+        for match in re.finditer(r"\b(\d{9,18})\b", text):
             num = match.group(1)
             if self._validate_bank_account(num) and not self._looks_like_phone(num):
                 accounts.append(num)
-        
+
         # UPI IDs and Emails: split based on dot-in-domain rule
         # Match any user@something pattern
         upi_ids = []
         emails = []
-        for match in re.finditer(r'([\w.+-]+@[\w.-]+)', text):
-            candidate = match.group(1).lower().rstrip('.')
-            parts = candidate.split('@')
+        for match in re.finditer(r"([\w.+-]+@[\w.-]+)", text):
+            candidate = match.group(1).lower().rstrip(".")
+            parts = candidate.split("@")
             if len(parts) != 2 or not parts[0] or not parts[1]:
                 continue
             domain = parts[1]
-            if '.' in domain:
+            if "." in domain:
                 # Email: user@domain.tld (e.g., scam@fake.com, offers@fake-amazon.co.in)
                 emails.append(candidate)
             else:
                 # UPI: user@provider (e.g., scammer@ybl, ravi@paytm, x@okaxis)
                 if self._validate_upi_id(candidate):
                     upi_ids.append(candidate)
-        
+
         # Phishing links: http/https URLs
         urls = re.findall(r'https?://[^\s<>"\')]+', text)
-        
+
         return ExtractionResult(
             bank_accounts=accounts,
             upi_ids=upi_ids,
@@ -256,11 +278,11 @@ class IntelligenceExtractor:
     ) -> ExtractionResult:
         """
         Extract intelligence from all scammer messages in conversation history.
-        
+
         Scans only scammer messages to avoid extracting victim's own data.
         """
         combined = ExtractionResult(source=ExtractionSource.REGEX)
-        
+
         for msg in messages:
             sender = msg.get("sender", "")
             text = msg.get("text", "")
@@ -271,14 +293,14 @@ class IntelligenceExtractor:
                 combined.phone_numbers.extend(result.phone_numbers)
                 combined.phishing_links.extend(result.phishing_links)
                 combined.emails.extend(result.emails)
-        
+
         # Deduplicate
         combined.bank_accounts = list(set(combined.bank_accounts))
         combined.upi_ids = list(set(combined.upi_ids))
         combined.phone_numbers = list(set(combined.phone_numbers))
         combined.phishing_links = list(set(combined.phishing_links))
         combined.emails = list(set(combined.emails))
-        
+
         return combined
 
     def parse_ai_extraction(
@@ -287,7 +309,7 @@ class IntelligenceExtractor:
     ) -> ExtractionResult:
         """
         Parse AI-extracted intelligence into ExtractionResult format.
-        
+
         This is a wrapper for backward compatibility.
         """
         validated = self.validate_ai_extraction(ai_extracted)
@@ -312,7 +334,7 @@ class IntelligenceExtractor:
     ) -> ExtractionResult:
         """
         Merge regex and AI results, taking union of both.
-        
+
         Returns ai_result with any additional items from regex_result added.
         """
         merged = ExtractionResult(
@@ -320,7 +342,9 @@ class IntelligenceExtractor:
             upi_ids=list(set(ai_result.upi_ids + regex_result.upi_ids)),
             phone_numbers=list(set(ai_result.phone_numbers + regex_result.phone_numbers)),
             phishing_links=list(set(ai_result.phishing_links + regex_result.phishing_links)),
-            emails=list(set(ai_result.emails + regex_result.emails)),  # ExtractionResult uses 'emails'
+            emails=list(
+                set(ai_result.emails + regex_result.emails)
+            ),  # ExtractionResult uses 'emails'
             beneficiary_names=ai_result.beneficiary_names,
             bank_names=ai_result.bank_names,
             ifsc_codes=ai_result.ifsc_codes,
@@ -337,7 +361,7 @@ class IntelligenceExtractor:
     ) -> ExtractedIntelligence:
         """
         Returns validated LLM intelligence only (regex extraction disabled).
-        
+
         Args:
             regex_intel: Ignored (regex extraction is disabled)
             llm_intel: LLM extraction to validate and return
@@ -362,15 +386,23 @@ class IntelligenceExtractor:
             Validated ExtractedIntelligence
         """
         validated = ExtractedIntelligence(
-            bankAccounts=[acc for acc in llm_intel.bankAccounts if self._validate_bank_account(self._clean_number(acc))],
+            bankAccounts=[
+                acc
+                for acc in llm_intel.bankAccounts
+                if self._validate_bank_account(self._clean_number(acc))
+            ],
             upiIds=[upi for upi in llm_intel.upiIds if self._validate_upi_id(upi)],
-            phoneNumbers=[p for p in llm_intel.phoneNumbers if self._validate_phone(self._clean_number(p))],
+            phoneNumbers=[
+                p for p in llm_intel.phoneNumbers if self._validate_phone(self._clean_number(p))
+            ],
             phishingLinks=llm_intel.phishingLinks,  # Keep as-is (AI understands context)
             emailAddresses=llm_intel.emailAddresses,  # Keep as-is
             beneficiaryNames=[n for n in llm_intel.beneficiaryNames if self._validate_name(n)],
             bankNames=llm_intel.bankNames,  # Keep as-is
             ifscCodes=[c for c in llm_intel.ifscCodes if self._validate_ifsc(c.upper())],
-            whatsappNumbers=[w for w in llm_intel.whatsappNumbers if self._validate_phone(self._clean_number(w))],
+            whatsappNumbers=[
+                w for w in llm_intel.whatsappNumbers if self._validate_phone(self._clean_number(w))
+            ],
             suspiciousKeywords=llm_intel.suspiciousKeywords,  # Keep as-is
             caseIds=llm_intel.caseIds,  # Keep as-is (AI-first)
             policyNumbers=llm_intel.policyNumbers,  # Keep as-is (AI-first)
@@ -403,7 +435,7 @@ class IntelligenceExtractor:
     def _validate_bank_account(self, account: str) -> bool:
         """
         Validate bank account number format.
-        
+
         Rules:
         - Must be 9-18 digits
         - Must not be all same digit (e.g., 000000000)
@@ -424,7 +456,7 @@ class IntelligenceExtractor:
     def _validate_upi_id(self, upi: str) -> bool:
         """
         Validate UPI ID format.
-        
+
         Rules:
         - Must contain @
         - Must match user@provider pattern
@@ -432,27 +464,27 @@ class IntelligenceExtractor:
         """
         if "@" not in upi:
             return False
-        return bool(re.match(r'^[\w.-]+@[a-zA-Z][a-zA-Z0-9]*$', upi))
+        return bool(re.match(r"^[\w.-]+@[a-zA-Z][a-zA-Z0-9]*$", upi))
 
     def _validate_phone(self, phone: str) -> bool:
         """
         Validate Indian phone number format.
-        
+
         Rules:
         - 10 digits starting with 6-9
         - Or 12 digits starting with 91 followed by 6-9
         """
         if not phone.isdigit():
             return False
-        
+
         # 10 digits starting with 6-9
         if len(phone) == 10 and phone[0] in "6789":
             return True
-        
+
         # 12 digits: 91 + 10 digits starting with 6-9
         if len(phone) == 12 and phone.startswith("91") and phone[2] in "6789":
             return True
-        
+
         # 11 digits: 91 + 9 digits (truncated, still accept)
         if len(phone) == 11 and phone.startswith("91") and phone[2] in "6789":
             return True
@@ -462,7 +494,7 @@ class IntelligenceExtractor:
     def _validate_ifsc(self, ifsc: str) -> bool:
         """
         Validate IFSC code format.
-        
+
         Rules:
         - 11 characters: 4 letters + 0 + 6 alphanumeric
         """
@@ -470,7 +502,7 @@ class IntelligenceExtractor:
             return False
         if not ifsc[:4].isalpha():
             return False
-        if ifsc[4] != '0':
+        if ifsc[4] != "0":
             return False
         if not ifsc[5:].isalnum():
             return False
@@ -483,20 +515,20 @@ class IntelligenceExtractor:
     def _looks_like_phone(self, number: str) -> bool:
         """
         Check if a number looks like a phone number.
-        
+
         Used to exclude phone numbers from bank account extraction.
         """
         if not number.isdigit():
             return False
-        
+
         # 10 digits starting with 6-9 = phone
         if len(number) == 10 and number[0] in "6789":
             return True
-        
+
         # 12 digits: 91 + 10 digits starting with 6-9 = phone
         if len(number) == 12 and number.startswith("91") and number[2] in "6789":
             return True
-        
+
         return False
 
 

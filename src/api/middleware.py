@@ -21,13 +21,13 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
         # Allow CORS preflight requests through without authentication
         if request.method == "OPTIONS":
             return await call_next(request)
-        
+
         # Skip auth for exempt paths
         if request.url.path in self.EXEMPT_PATHS or request.url.path.startswith("/static"):
             return await call_next(request)
 
         settings = get_settings()
-        
+
         # In debug mode, allow requests without API key for easier development/testing
         if settings.debug:
             api_key = request.headers.get("x-api-key")

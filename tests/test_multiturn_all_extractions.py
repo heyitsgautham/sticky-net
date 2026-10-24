@@ -133,6 +133,7 @@ SCENARIO = {
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _divider(char: str = "=", width: int = 90) -> str:
     return char * width
 
@@ -188,6 +189,7 @@ def _check_extraction(intel: dict, fake_data: dict) -> dict:
 # Test
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture(scope="module")
 def _server_health():
     """Skip if server isn't running."""
@@ -238,9 +240,7 @@ class TestMultiTurnAllExtractions:
             }
 
             start_t = time.time()
-            resp = requests.post(
-                ANALYZE_URL, json=body, headers=HEADERS, timeout=REQUEST_TIMEOUT
-            )
+            resp = requests.post(ANALYZE_URL, json=body, headers=HEADERS, timeout=REQUEST_TIMEOUT)
             elapsed = time.time() - start_t
 
             assert resp.status_code == 200, (
@@ -249,13 +249,15 @@ class TestMultiTurnAllExtractions:
             data = resp.json()
             agent_reply = data.get("reply") or data.get("message") or data.get("text") or ""
 
-            all_turns.append({
-                "turn": idx,
-                "scammer": scammer_msg,
-                "agent": agent_reply,
-                "elapsed": round(elapsed, 2),
-                "status": data.get("status", "?"),
-            })
+            all_turns.append(
+                {
+                    "turn": idx,
+                    "scammer": scammer_msg,
+                    "agent": agent_reply,
+                    "elapsed": round(elapsed, 2),
+                    "status": data.get("status", "?"),
+                }
+            )
 
             # Print full messages (not truncated)
             print(f"\n{_divider('-', 90)}")
@@ -267,14 +269,14 @@ class TestMultiTurnAllExtractions:
             print(f"  {agent_reply}")
 
             # Build history for next turn
+            conversation_history.append({"sender": "scammer", "text": scammer_msg, "timestamp": ts})
             conversation_history.append(
-                {"sender": "scammer", "text": scammer_msg, "timestamp": ts}
+                {
+                    "sender": "user",
+                    "text": agent_reply,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }
             )
-            conversation_history.append({
-                "sender": "user",
-                "text": agent_reply,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-            })
 
             time.sleep(0.5)  # Small gap between turns
 
@@ -315,7 +317,9 @@ class TestMultiTurnAllExtractions:
         # 1. Scam Detection (20 pts)
         scam_detected = scoring_data.get("scamDetected", False)
         scam_score = 20.0 if scam_detected else 0.0
-        print(f"\n  1. SCAM DETECTION: {'DETECTED' if scam_detected else 'MISSED'}  →  {scam_score}/20 pts")
+        print(
+            f"\n  1. SCAM DETECTION: {'DETECTED' if scam_detected else 'MISSED'}  →  {scam_score}/20 pts"
+        )
         print(f"     scamDetected = {scam_detected}")
         print(f"     confidence   = {scoring_data.get('confidence', 'N/A')}")
         print(f"     scamType     = {scoring_data.get('scamType', 'N/A')}")
@@ -329,7 +333,7 @@ class TestMultiTurnAllExtractions:
 
         print(f"\n  2. INTELLIGENCE EXTRACTION:  {intel_score}/40 pts")
         print(f"     {'Type':<20} {'Found':<8} {'Expected Value':<50} {'Actual Values'}")
-        print(f"     {'-'*20} {'-'*8} {'-'*50} {'-'*30}")
+        print(f"     {'-' * 20} {'-' * 8} {'-' * 50} {'-' * 30}")
         for key, info in extraction_results.items():
             status = "YES" if info["found"] else "NO"
             marker = "  ✓" if info["found"] else "  ✗"

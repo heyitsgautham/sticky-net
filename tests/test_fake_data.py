@@ -90,9 +90,9 @@ class TestCreditCardGeneration(TestFakeDataGenerator):
     def test_uses_invalid_bins(self, generator: FakeDataGenerator):
         """Should use test/invalid BIN prefixes."""
         invalid_bins = (
-            generator.INVALID_VISA_BINS +
-            generator.INVALID_MASTERCARD_BINS +
-            generator.INVALID_RUPAY_BINS
+            generator.INVALID_VISA_BINS
+            + generator.INVALID_MASTERCARD_BINS
+            + generator.INVALID_RUPAY_BINS
         )
 
         for _ in range(20):
@@ -409,7 +409,4 @@ class TestIntegration:
         persona = gen.generate_persona_details()
         assert persona.age >= 55
         # Name should have Indian format
-        assert any(
-            name in persona.name
-            for name in gen.LAST_NAMES
-        )
+        assert any(name in persona.name for name in gen.LAST_NAMES)

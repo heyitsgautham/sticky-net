@@ -23,32 +23,33 @@ class ScamType(str, Enum):
     IMPERSONATION = "impersonation"  # Police, CBI, bank official impersonation
     OTHERS = "others"  # Any scam that doesn't fit above categories
 
+
 logger = structlog.get_logger()
 
 
 def _extract_text_from_response(response) -> str:
     """Extract text from Gemini response without triggering thought_signature warning.
-    
+
     Gemini 3 models return 'thought_signature' parts alongside text parts.
     Using response.text triggers a warning. This function extracts only text parts.
-    
+
     Args:
         response: The Gemini GenerateContentResponse object
-        
+
     Returns:
         Concatenated text from all text parts
     """
     if not response.candidates:
         return ""
-    
+
     text_parts = []
     for candidate in response.candidates:
         if candidate.content and candidate.content.parts:
             for part in candidate.content.parts:
                 # Only extract text parts, skip thought_signature and other non-text parts
-                if hasattr(part, 'text') and part.text:
+                if hasattr(part, "text") and part.text:
                     text_parts.append(part.text)
-    
+
     return "".join(text_parts)
 
 
@@ -114,18 +115,20 @@ Return ONLY: {{"is_scam": bool, "confidence": float, "scam_type": str|null, "thr
     def __init__(self) -> None:
         """Initialize the classifier with Gemini 3 Flash and fallback to 2.5."""
         self.settings = get_settings()
-        
+
         # Set credentials path in environment if configured
         if self.settings.google_application_credentials:
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.settings.google_application_credentials
-        
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
+                self.settings.google_application_credentials
+            )
+
         # Initialize Gemini client with Vertex AI credentials from settings
         self.client = genai.Client(
             vertexai=self.settings.google_genai_use_vertexai,
             project=self.settings.google_cloud_project,
             location=self.settings.google_cloud_location,
         )
-        
+
         # Primary model (Gemini 3 Flash) and fallback (Gemini 2.5 Flash)
         self.model = self.settings.flash_model  # gemini-3-flash-preview
         self.fallback_model = self.settings.fallback_flash_model  # gemini-2.5-flash
@@ -180,7 +183,7 @@ Return ONLY: {{"is_scam": bool, "confidence": float, "scam_type": str|null, "thr
             timeout_seconds = self.settings.api_timeout_seconds
             max_retries = self.settings.gemini_max_retries
             retry_delay = self.settings.gemini_retry_delay_seconds
-            
+
             for model_name in models_to_try:
                 # Retry loop for timeout handling
                 for attempt in range(max_retries + 1):
@@ -191,7 +194,7 @@ Return ONLY: {{"is_scam": bool, "confidence": float, "scam_type": str|null, "thr
                             max_retries=max_retries,
                             timeout=timeout_seconds,
                         )
-                        
+
                         # Thinking set to MINIMAL for fast classification
                         config = types.GenerateContentConfig(
                             temperature=0.1,  # Low temperature for consistent classification
@@ -201,7 +204,7 @@ Return ONLY: {{"is_scam": bool, "confidence": float, "scam_type": str|null, "thr
                                 thinking_budget=0,
                             ),
                         )
-                        
+
                         # Wrap API call with timeout (async with executor)
                         response = await asyncio.wait_for(
                             asyncio.get_event_loop().run_in_executor(
@@ -210,14 +213,14 @@ Return ONLY: {{"is_scam": bool, "confidence": float, "scam_type": str|null, "thr
                                     model=model_name,
                                     contents=prompt,
                                     config=config,
-                                )
+                                ),
                             ),
                             timeout=timeout_seconds,
                         )
-                        
+
                         # Use helper to avoid thought_signature warning in Gemini 3
                         response_text = _extract_text_from_response(response)
-                        
+
                         # Check if we got a valid response
                         if response_text and len(response_text.strip()) > 0:
                             self._last_model_used = model_name
@@ -230,11 +233,10 @@ Return ONLY: {{"is_scam": bool, "confidence": float, "scam_type": str|null, "thr
                             break
                         else:
                             self.logger.warning(
-                                "Empty response from model, trying fallback",
-                                model=model_name
+                                "Empty response from model, trying fallback", model=model_name
                             )
                             break  # Don't retry on empty response, try fallback model
-                            
+
                     except asyncio.TimeoutError:
                         self.logger.warning(
                             "Gemini API timeout during classification",
@@ -255,19 +257,19 @@ Return ONLY: {{"is_scam": bool, "confidence": float, "scam_type": str|null, "thr
                                 model=model_name,
                             )
                             break  # Try fallback model
-                            
+
                     except Exception as e:
                         self.logger.warning(
                             "Classification model failed, trying fallback",
                             model=model_name,
-                            error=str(e)
+                            error=str(e),
                         )
                         break  # Don't retry on other errors, try fallback model
-                
+
                 # If we got a valid response, break out of model loop
                 if response_text and len(response_text.strip()) > 0:
                     break
-            
+
             if response_text:
                 return self._parse_response(response_text)
             else:
@@ -290,7 +292,7 @@ Return ONLY: {{"is_scam": bool, "confidence": float, "scam_type": str|null, "thr
         lines = []
         for msg in history[-5:]:  # Last 5 messages for context
             # Handle both enum and string sender types
-            sender_str = msg.sender.value if hasattr(msg.sender, 'value') else str(msg.sender)
+            sender_str = msg.sender.value if hasattr(msg.sender, "value") else str(msg.sender)
             sender = "SCAMMER" if sender_str == "scammer" else "USER"
             lines.append(f"[{sender}]: {msg.text}")
 

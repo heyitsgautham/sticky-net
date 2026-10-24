@@ -27,21 +27,38 @@ BANK_ACCOUNT_PATTERN = re.compile(r"^\d{9,18}$")
 # UPI ID Pattern: username@provider
 UPI_PROVIDERS = [
     # Paytm
-    "ptaxis", "ptyes", "ptsbi", "pthdfc", "paytm",
+    "ptaxis",
+    "ptyes",
+    "ptsbi",
+    "pthdfc",
+    "paytm",
     # Google Pay
-    "okhdfcbank", "okicici", "oksbi", "okaxis",
+    "okhdfcbank",
+    "okicici",
+    "oksbi",
+    "okaxis",
     # PhonePe
-    "ybl", "ibl", "axl",
+    "ybl",
+    "ibl",
+    "axl",
     # Slice
-    "sliceaxis", "slicepay", "slc",
+    "sliceaxis",
+    "slicepay",
+    "slc",
     # Kotak
-    "kotak", "kotak811",
+    "kotak",
+    "kotak811",
     # Cred
-    "axisb", "yescred", "yescurie",
+    "axisb",
+    "yescred",
+    "yescurie",
     # Amazon Pay
-    "apl", "yapl", "rapl",
+    "apl",
+    "yapl",
+    "rapl",
     # Fampay
-    "fam", "yesfam",
+    "fam",
+    "yesfam",
     # IND Money
     "inhdfc",
     # Salary Se
@@ -57,7 +74,8 @@ UPI_PROVIDERS = [
     # Jupiter
     "jupiteraxis",
     # Bank of India
-    "boi", "mboi",
+    "boi",
+    "mboi",
     # Payzapp
     "pz",
     # Central Bank
@@ -69,7 +87,8 @@ UPI_PROVIDERS = [
     # Zomato
     "zoicici",
     # IndusInd
-    "indus", "indie",
+    "indus",
+    "indie",
     # JKB
     "jkb",
     # Airtel
@@ -81,7 +100,9 @@ UPI_PROVIDERS = [
     # SBI
     "sbi",
     # Yes Bank
-    "yespop", "yespay", "yes",
+    "yespop",
+    "yespay",
+    "yes",
     # Bank of Baroda
     "barodampay",
     # Shriram
@@ -119,11 +140,13 @@ UPI_PROVIDERS = [
     # OneCard
     "oneyes",
     # Fi
-    "fifederal", "federal",
+    "fifederal",
+    "federal",
     # Canara
     "cnrb",
     # Fincare
-    "fincarebank", "finobank",
+    "fincarebank",
+    "finobank",
     # Mobikwik
     "ikwik",
     # Rio Money
@@ -153,13 +176,17 @@ UPI_PROVIDERS = [
     # BHIM UCO UPI
     "uco",
     # Citi Mobile
-    "citi", "citigold",
+    "citi",
+    "citigold",
     # Groww Pay
     "yesg",
     # Indian Bank (IndOASIS)
-    "indianbank", "allbank",
+    "indianbank",
+    "allbank",
     # Union Bank of India
-    "unionbankofindia", "uboi", "unionbank",
+    "unionbankofindia",
+    "uboi",
+    "unionbank",
     # TataNeu
     "tapicici",
     # Genwise
@@ -216,116 +243,386 @@ SUSPICIOUS_LINK_PATTERN = re.compile(
 # Suspicious URL indicators for phishing detection
 SUSPICIOUS_URL_INDICATORS = [
     # URL shorteners (very common in scams)
-    "bit.ly", "tinyurl", "t.co", "goo.gl", "is.gd", "cutt.ly", "rebrand.ly",
-    "ow.ly", "buff.ly", "adf.ly", "bc.vc", "j.mp", "v.gd", "x.co",
-    "shorturl", "short.io", "rb.gy", "clck.ru", "tinu.be", "tiny.cc",
-    "s.id", "shrtco.de", "1link.in", "linktr.ee", "lnk.to",
+    "bit.ly",
+    "tinyurl",
+    "t.co",
+    "goo.gl",
+    "is.gd",
+    "cutt.ly",
+    "rebrand.ly",
+    "ow.ly",
+    "buff.ly",
+    "adf.ly",
+    "bc.vc",
+    "j.mp",
+    "v.gd",
+    "x.co",
+    "shorturl",
+    "short.io",
+    "rb.gy",
+    "clck.ru",
+    "tinu.be",
+    "tiny.cc",
+    "s.id",
+    "shrtco.de",
+    "1link.in",
+    "linktr.ee",
+    "lnk.to",
     # Phishing keywords
-    "login", "verify", "update", "secure", "account", "signin", "password",
-    "confirm", "authenticate", "validation", "unlock", "suspend", "blocked",
-    "expired", "reactivate", "restore", "recover", "reset", "renew",
+    "login",
+    "verify",
+    "update",
+    "secure",
+    "account",
+    "signin",
+    "password",
+    "confirm",
+    "authenticate",
+    "validation",
+    "unlock",
+    "suspend",
+    "blocked",
+    "expired",
+    "reactivate",
+    "restore",
+    "recover",
+    "reset",
+    "renew",
     # KYC/OTP scam keywords
-    "kyc", "otp", "bank", "sbi", "hdfc", "icici", "axis", "kotak", "pnb",
-    "aadhaar", "aadhar", "pan-", "pancard", "e-kyc", "ekyc",
+    "kyc",
+    "otp",
+    "bank",
+    "sbi",
+    "hdfc",
+    "icici",
+    "axis",
+    "kotak",
+    "pnb",
+    "aadhaar",
+    "aadhar",
+    "pan-",
+    "pancard",
+    "e-kyc",
+    "ekyc",
     # Fake payment/UPI domains
-    ".pay.", "pay.in", "-pay", "pay-", "upi-", "-upi", "payment",
-    "bhim", "rupay", "npci", "imps", "neft", "rtgs",
+    ".pay.",
+    "pay.in",
+    "-pay",
+    "pay-",
+    "upi-",
+    "-upi",
+    "payment",
+    "bhim",
+    "rupay",
+    "npci",
+    "imps",
+    "neft",
+    "rtgs",
     # Brand impersonation (common in Indian scams)
-    "amazon", "flipkart", "paytm", "phonepe", "gpay", "google-pay",
-    "kbc", "jio", "airtel", "vodafone", "bsnl", "netflix", "hotstar",
-    "swiggy", "zomato", "ola", "uber", "myntra", "ajio",
+    "amazon",
+    "flipkart",
+    "paytm",
+    "phonepe",
+    "gpay",
+    "google-pay",
+    "kbc",
+    "jio",
+    "airtel",
+    "vodafone",
+    "bsnl",
+    "netflix",
+    "hotstar",
+    "swiggy",
+    "zomato",
+    "ola",
+    "uber",
+    "myntra",
+    "ajio",
     # Prize/lottery/refund scam keywords
-    "prize", "claim", "refund", "reward", "winner", "lucky", "lottery",
-    "cashback", "bonus", "offer", "gift", "free", "win", "congratulation",
+    "prize",
+    "claim",
+    "refund",
+    "reward",
+    "winner",
+    "lucky",
+    "lottery",
+    "cashback",
+    "bonus",
+    "offer",
+    "gift",
+    "free",
+    "win",
+    "congratulation",
     # Job scam keywords
-    "jobs", "hiring", "vacancy", "career", "recruitment", "salary", "earning",
-    "work-from-home", "part-time", "income", "money-making",
+    "jobs",
+    "hiring",
+    "vacancy",
+    "career",
+    "recruitment",
+    "salary",
+    "earning",
+    "work-from-home",
+    "part-time",
+    "income",
+    "money-making",
     # Free/suspicious TLDs often used in phishing
-    ".tk", ".ml", ".ga", ".cf", ".gq",  # Free domains
-    ".xyz", ".work", ".top", ".site", ".online", ".club", ".icu", ".buzz",
+    ".tk",
+    ".ml",
+    ".ga",
+    ".cf",
+    ".gq",  # Free domains
+    ".xyz",
+    ".work",
+    ".top",
+    ".site",
+    ".online",
+    ".club",
+    ".icu",
+    ".buzz",
     ".co.in",  # Often abused for Indian phishing
-    ".info", ".biz", ".ws", ".cc", ".pw", ".space", ".life", ".live",
-    ".click", ".link", ".download", ".stream", ".in/",
-    ".store", ".shop", ".app", ".me", ".vip", ".pro",
+    ".info",
+    ".biz",
+    ".ws",
+    ".cc",
+    ".pw",
+    ".space",
+    ".life",
+    ".live",
+    ".click",
+    ".link",
+    ".download",
+    ".stream",
+    ".in/",
+    ".store",
+    ".shop",
+    ".app",
+    ".me",
+    ".vip",
+    ".pro",
     # Messaging links
-    "telegram", "wa.me", "whatsapp", "t.me", "chat.whatsapp",
+    "telegram",
+    "wa.me",
+    "whatsapp",
+    "t.me",
+    "chat.whatsapp",
     # Form/survey scams
-    "forms.gle", "docs.google", "survey", "form", "fill",
+    "forms.gle",
+    "docs.google",
+    "survey",
+    "form",
+    "fill",
     # Suspicious subdomains/paths
-    "-secure", "-verify", "-login", "-update", "-bank",
-    "secure-", "verify-", "login-", "update-", "bank-",
+    "-secure",
+    "-verify",
+    "-login",
+    "-update",
+    "-bank",
+    "secure-",
+    "verify-",
+    "login-",
+    "update-",
+    "bank-",
     # Indian bank name impersonation
-    "sbi-", "-sbi", "hdfc-", "-hdfc", "icici-", "-icici",
-    "axis-", "-axis", "kotak-", "-kotak", "pnb-", "-pnb",
-    "bob-", "-bob", "canara-", "-canara", "union-", "-union",
-    "idbi-", "-idbi", "yes-", "-yes", "rbi-", "-rbi",
+    "sbi-",
+    "-sbi",
+    "hdfc-",
+    "-hdfc",
+    "icici-",
+    "-icici",
+    "axis-",
+    "-axis",
+    "kotak-",
+    "-kotak",
+    "pnb-",
+    "-pnb",
+    "bob-",
+    "-bob",
+    "canara-",
+    "-canara",
+    "union-",
+    "-union",
+    "idbi-",
+    "-idbi",
+    "yes-",
+    "-yes",
+    "rbi-",
+    "-rbi",
     # Random alphanumeric paths (common in phishing)
-    "/xY", "/aB", "/Xy", "/Ab", "/kY", "/mN", "/pQ", "/rS",
+    "/xY",
+    "/aB",
+    "/Xy",
+    "/Ab",
+    "/kY",
+    "/mN",
+    "/pQ",
+    "/rS",
 ]
 
 # Indian Bank Names
 INDIAN_BANK_NAMES = [
     # Public Sector Banks
-    "SBI", "State Bank of India", "State Bank",
-    "PNB", "Punjab National Bank",
-    "BOB", "Bank of Baroda", "Baroda Bank",
-    "BOI", "Bank of India",
-    "Canara Bank", "Canara",
-    "Union Bank", "Union Bank of India",
+    "SBI",
+    "State Bank of India",
+    "State Bank",
+    "PNB",
+    "Punjab National Bank",
+    "BOB",
+    "Bank of Baroda",
+    "Baroda Bank",
+    "BOI",
+    "Bank of India",
+    "Canara Bank",
+    "Canara",
+    "Union Bank",
+    "Union Bank of India",
     "Indian Bank",
-    "Central Bank", "Central Bank of India",
-    "UCO Bank", "UCO",
+    "Central Bank",
+    "Central Bank of India",
+    "UCO Bank",
+    "UCO",
     "Bank of Maharashtra",
-    "Punjab & Sind Bank", "PSB",
-    "Indian Overseas Bank", "IOB",
+    "Punjab & Sind Bank",
+    "PSB",
+    "Indian Overseas Bank",
+    "IOB",
     # Private Sector Banks
-    "HDFC", "HDFC Bank",
-    "ICICI", "ICICI Bank",
-    "Axis Bank", "Axis",
-    "Kotak", "Kotak Mahindra", "Kotak Mahindra Bank",
+    "HDFC",
+    "HDFC Bank",
+    "ICICI",
+    "ICICI Bank",
+    "Axis Bank",
+    "Axis",
+    "Kotak",
+    "Kotak Mahindra",
+    "Kotak Mahindra Bank",
     "Yes Bank",
-    "IndusInd", "IndusInd Bank",
-    "IDBI", "IDBI Bank",
-    "Federal Bank", "Federal",
-    "RBL Bank", "RBL",
-    "Bandhan Bank", "Bandhan",
-    "IDFC First", "IDFC First Bank", "IDFC",
-    "AU Small Finance Bank", "AU Bank",
-    "Equitas", "Equitas Bank",
-    "Ujjivan", "Ujjivan Bank",
+    "IndusInd",
+    "IndusInd Bank",
+    "IDBI",
+    "IDBI Bank",
+    "Federal Bank",
+    "Federal",
+    "RBL Bank",
+    "RBL",
+    "Bandhan Bank",
+    "Bandhan",
+    "IDFC First",
+    "IDFC First Bank",
+    "IDFC",
+    "AU Small Finance Bank",
+    "AU Bank",
+    "Equitas",
+    "Equitas Bank",
+    "Ujjivan",
+    "Ujjivan Bank",
     # Payment Banks
-    "Paytm Payments Bank", "Paytm Bank",
-    "Airtel Payments Bank", "Airtel Bank",
-    "Jio Payments Bank", "Jio Bank",
-    "Fino Payments Bank", "Fino Bank",
+    "Paytm Payments Bank",
+    "Paytm Bank",
+    "Airtel Payments Bank",
+    "Airtel Bank",
+    "Jio Payments Bank",
+    "Jio Bank",
+    "Fino Payments Bank",
+    "Fino Bank",
 ]
 
 # Blocklist of common false positive words for beneficiary name extraction
 BENEFICIARY_NAME_BLOCKLIST = {
     # Action words commonly mistaken for names
-    "now", "before", "paying", "name", "sir", "madam", "ji",
-    "please", "urgent", "click", "here", "send", "pay", "fast",
+    "now",
+    "before",
+    "paying",
+    "name",
+    "sir",
+    "madam",
+    "ji",
+    "please",
+    "urgent",
+    "click",
+    "here",
+    "send",
+    "pay",
+    "fast",
     # Financial/banking terms
-    "verification", "account", "bank", "upi", "payment", "money",
-    "transfer", "today", "immediately", "urgent", "asap", "quick",
-    "verify", "update", "link", "otp", "pin", "password", "amount",
-    "rupees", "rs", "inr", "credited", "debited", "pending", "failed",
-    "success", "transaction", "beneficiary", "receiver", "sender",
+    "verification",
+    "account",
+    "bank",
+    "upi",
+    "payment",
+    "money",
+    "transfer",
+    "today",
+    "immediately",
+    "urgent",
+    "asap",
+    "quick",
+    "verify",
+    "update",
+    "link",
+    "otp",
+    "pin",
+    "password",
+    "amount",
+    "rupees",
+    "rs",
+    "inr",
+    "credited",
+    "debited",
+    "pending",
+    "failed",
+    "success",
+    "transaction",
+    "beneficiary",
+    "receiver",
+    "sender",
     # Common false positive phrases
-    "the", "and", "for", "with", "from", "holder", "number",
-    "dear", "customer", "user", "member", "client", "support",
-    "help", "desk", "center", "service", "team", "officer",
+    "the",
+    "and",
+    "for",
+    "with",
+    "from",
+    "holder",
+    "number",
+    "dear",
+    "customer",
+    "user",
+    "member",
+    "client",
+    "support",
+    "help",
+    "desk",
+    "center",
+    "service",
+    "team",
+    "officer",
     # Title/honorific words
-    "mr", "mrs", "ms", "dr", "shri", "smt", "sahab",
+    "mr",
+    "mrs",
+    "ms",
+    "dr",
+    "shri",
+    "smt",
+    "sahab",
     # Common verbs/actions
-    "call", "contact", "message", "reply", "confirm", "complete",
-    "submit", "enter", "provide", "share", "receive", "collect",
+    "call",
+    "contact",
+    "message",
+    "reply",
+    "confirm",
+    "complete",
+    "submit",
+    "enter",
+    "provide",
+    "share",
+    "receive",
+    "collect",
 }
 
 
 # =============================================================================
 # VALIDATION FUNCTIONS
 # =============================================================================
+
 
 def validate_phone_number(phone: str) -> bool:
     """
@@ -436,16 +733,16 @@ def validate_url(url: str) -> bool:
 
     # Clean trailing punctuation
     clean_url = url.rstrip(".,;:!?)")
-    
+
     # Check if it's a valid URL with protocol
     has_protocol = URL_PATTERN.match(clean_url)
-    
+
     # Check if it's a valid URL without protocol (like bit.ly/xyz, sbi-bank.pay.in/xY7834)
     has_no_protocol = URL_WITHOUT_PROTOCOL_PATTERN.match(clean_url)
-    
+
     # Check if it matches suspicious link pattern (bank/pay/verify in domain)
     has_suspicious_pattern = SUSPICIOUS_LINK_PATTERN.search(clean_url)
-    
+
     if not has_protocol and not has_no_protocol and not has_suspicious_pattern:
         return False
 
@@ -534,6 +831,7 @@ def validate_beneficiary_name(name: str) -> bool:
 # EXTRACTION RESULT VALIDATION
 # =============================================================================
 
+
 def validate_extraction_result(data: dict[str, Any]) -> dict[str, Any]:
     """
     Validate and filter AI-extracted intelligence through validators.
@@ -614,6 +912,7 @@ def validate_extraction_result(data: dict[str, Any]) -> dict[str, Any]:
 # HELPER FUNCTIONS
 # =============================================================================
 
+
 def _looks_like_phone(number: str) -> bool:
     """
     Check if a number looks like a phone number.
@@ -668,51 +967,54 @@ AI_EXTRACTION_SCHEMA = {
         "bank_accounts": {
             "type": "array",
             "items": {"type": "string"},
-            "description": "Bank account numbers found (digits only, 9-18 chars)"
+            "description": "Bank account numbers found (digits only, 9-18 chars)",
         },
         "upi_ids": {
             "type": "array",
             "items": {"type": "string"},
-            "description": "UPI IDs in format username@provider"
+            "description": "UPI IDs in format username@provider",
         },
         "phone_numbers": {
             "type": "array",
             "items": {"type": "string"},
-            "description": "Indian phone numbers (10 digits, may have +91)"
+            "description": "Indian phone numbers (10 digits, may have +91)",
         },
         "urls": {
             "type": "array",
             "items": {"type": "string"},
-            "description": "Suspicious URLs shared by scammer"
+            "description": "Suspicious URLs shared by scammer",
         },
-        "emails": {
-            "type": "array",
-            "items": {"type": "string"},
-            "description": "Email addresses"
-        },
+        "emails": {"type": "array", "items": {"type": "string"}, "description": "Email addresses"},
         "beneficiary_names": {
             "type": "array",
             "items": {"type": "string"},
-            "description": "Names of account holders or UPI beneficiaries (e.g., 'Rahul Kumar')"
+            "description": "Names of account holders or UPI beneficiaries (e.g., 'Rahul Kumar')",
         },
         "bank_names": {
             "type": "array",
             "items": {"type": "string"},
-            "description": "Names of banks mentioned (e.g., 'SBI', 'HDFC Bank')"
+            "description": "Names of banks mentioned (e.g., 'SBI', 'HDFC Bank')",
         },
         "ifsc_codes": {
             "type": "array",
             "items": {"type": "string"},
-            "description": "IFSC codes (format: 4 letters + 0 + 6 alphanumeric, e.g., 'SBIN0001234')"
+            "description": "IFSC codes (format: 4 letters + 0 + 6 alphanumeric, e.g., 'SBIN0001234')",
         },
         "whatsapp_numbers": {
             "type": "array",
             "items": {"type": "string"},
-            "description": "WhatsApp phone numbers mentioned for contact"
-        }
+            "description": "WhatsApp phone numbers mentioned for contact",
+        },
     },
     "required": [
-        "bank_accounts", "upi_ids", "phone_numbers", "urls", "emails",
-        "beneficiary_names", "bank_names", "ifsc_codes", "whatsapp_numbers"
-    ]
+        "bank_accounts",
+        "upi_ids",
+        "phone_numbers",
+        "urls",
+        "emails",
+        "beneficiary_names",
+        "bank_names",
+        "ifsc_codes",
+        "whatsapp_numbers",
+    ],
 }

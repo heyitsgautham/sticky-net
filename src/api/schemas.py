@@ -27,7 +27,9 @@ class Message(BaseModel):
     """Incoming message model."""
 
     sender: str  # Accept any sender identifier
-    text: Annotated[str, Field(min_length=1, max_length=10000)]  # Increased limit for long scam messages
+    text: Annotated[
+        str, Field(min_length=1, max_length=10000)
+    ]  # Increased limit for long scam messages
     timestamp: Union[int, str, datetime]  # Accept epoch ms (int), ISO string, or datetime
 
     @field_validator("timestamp", mode="before")
@@ -229,7 +231,7 @@ class HoneyPotResponse(BaseModel):
     """
 
     status: str  # "success" or "error"
-    reply: str   # The agent's response message
+    reply: str  # The agent's response message
 
     # Final-output fields (only set when message == '[CONVERSATION_END]')
     sessionId: str | None = None

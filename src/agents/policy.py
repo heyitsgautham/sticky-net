@@ -8,16 +8,16 @@ from config.settings import get_settings
 
 class EngagementMode(str, Enum):
     """Engagement intensity modes."""
-    
-    NONE = "none"           # Not engaging (monitoring only)
-    CAUTIOUS = "cautious"   # Low confidence scam, limited turns
+
+    NONE = "none"  # Not engaging (monitoring only)
+    CAUTIOUS = "cautious"  # Low confidence scam, limited turns
     AGGRESSIVE = "aggressive"  # High confidence scam, full engagement
 
 
 @dataclass
 class EngagementState:
     """Current state of an engagement."""
-    
+
     mode: EngagementMode
     turn_count: int
     duration_seconds: int
@@ -30,29 +30,29 @@ class EngagementState:
 class EngagementPolicy:
     """
     Determines engagement routing and exit conditions.
-    
+
     Routes scams to appropriate engagement intensity based on confidence,
     and determines when to exit an engagement.
     """
-    
+
     def __init__(self) -> None:
         """Initialize with settings."""
         settings = get_settings()
-        
+
         # Confidence thresholds
         self.cautious_threshold = settings.cautious_confidence_threshold  # 0.60
         self.aggressive_threshold = settings.aggressive_confidence_threshold  # 0.85
-        
+
         # Turn limits
         self.max_turns_cautious = settings.max_engagement_turns_cautious  # 10
         self.max_turns_aggressive = settings.max_engagement_turns_aggressive  # 25
-        
+
         # Time limit
         self.max_duration_seconds = settings.max_engagement_duration_seconds  # 600
-        
+
         # Stale detection
         self.stale_turn_threshold = 5  # Exit if no new info in 5 turns
-    
+
     def get_engagement_mode(self, confidence: float) -> EngagementMode:
         """Determine engagement mode based on confidence."""
         if confidence >= self.aggressive_threshold:
@@ -60,23 +60,23 @@ class EngagementPolicy:
         elif confidence >= self.cautious_threshold:
             return EngagementMode.CAUTIOUS
         return EngagementMode.NONE
-    
+
     def should_continue(self, state: EngagementState) -> bool:
         """Determine if engagement should continue."""
         # Get max turns for current mode
         max_turns = (
-            self.max_turns_aggressive 
-            if state.mode == EngagementMode.AGGRESSIVE 
+            self.max_turns_aggressive
+            if state.mode == EngagementMode.AGGRESSIVE
             else self.max_turns_cautious
         )
-        
+
         # CRITICAL: If scammer just mentioned a URL that wasn't extracted yet,
         # keep engagement going to capture it (even if other conditions suggest exit)
         if state.has_unextracted_urls:
             # Allow 2 more turns to extract the URL before hard limits apply
             if state.turn_count < max_turns and state.duration_seconds < self.max_duration_seconds:
                 return True
-        
+
         # Check all exit conditions
         if state.turn_count >= max_turns:
             return False
@@ -88,17 +88,17 @@ class EngagementPolicy:
             return False
         if state.turns_since_new_info >= self.stale_turn_threshold:
             return False
-        
+
         return True
-    
+
     def get_exit_reason(self, state: EngagementState) -> str | None:
         """Get the reason for exiting engagement, if any."""
         max_turns = (
-            self.max_turns_aggressive 
-            if state.mode == EngagementMode.AGGRESSIVE 
+            self.max_turns_aggressive
+            if state.mode == EngagementMode.AGGRESSIVE
             else self.max_turns_cautious
         )
-        
+
         if state.turn_count >= max_turns:
             return f"Max turns reached ({max_turns})"
         if state.duration_seconds >= self.max_duration_seconds:
@@ -109,7 +109,7 @@ class EngagementPolicy:
             return "Scammer became suspicious"
         if state.turns_since_new_info >= self.stale_turn_threshold:
             return f"No new information in {self.stale_turn_threshold} turns"
-        
+
         return None
 
     @staticmethod
@@ -122,22 +122,22 @@ class EngagementPolicy:
     ) -> bool:
         """
         Check if high-value intelligence has been extracted.
-        
+
         High-value intelligence is considered complete when we have:
         - (At least one bank account number OR at least one UPI ID)
         - AND at least one phone number
         - AND we are past the minimum turn threshold (5 turns)
-        
+
         The minimum turn floor ensures we hit the engagement quality
         scoring threshold (messages >= 5 = 5 pts, duration > 60s = 5 pts).
-        
+
         Args:
             bank_accounts: List of extracted bank account numbers
             phone_numbers: List of extracted phone numbers
             upi_ids: Optional list of extracted UPI IDs
             beneficiary_names: Optional list of extracted beneficiary/account holder names
             current_turn: Current conversation turn number
-            
+
         Returns:
             True if high-value intelligence is complete AND past min turns
         """
@@ -147,11 +147,11 @@ class EngagementPolicy:
         MIN_TURNS_BEFORE_EXIT = 10
         if current_turn < MIN_TURNS_BEFORE_EXIT:
             return False
-        
+
         has_bank_or_upi = bool(bank_accounts) or bool(upi_ids)
         has_phone = bool(phone_numbers)
         return has_bank_or_upi and has_phone
-    
+
     @staticmethod
     def get_missing_intelligence(
         bank_accounts: list[str],
@@ -161,20 +161,20 @@ class EngagementPolicy:
     ) -> list[str]:
         """
         Get list of missing intelligence types for targeted extraction.
-        
+
         This helps the agent know what to ask for next.
-        
+
         Args:
             bank_accounts: List of extracted bank account numbers
             phone_numbers: List of extracted phone numbers
             upi_ids: Optional list of extracted UPI IDs
             beneficiary_names: Optional list of extracted beneficiary names
-            
+
         Returns:
             List of missing intelligence types
         """
         missing = []
-        
+
         if not bank_accounts and not upi_ids:
             missing.append("payment_details")  # Need bank account or UPI
         if not phone_numbers:
@@ -183,5 +183,5 @@ class EngagementPolicy:
             missing.append("beneficiary_name")
         # Email is scored in the hackathon — flag as missing for the agent
         missing.append("email_address")  # Always probe for email
-            
+
         return missing

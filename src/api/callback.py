@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 class CallbackIntelligence(BaseModel):
     """Intelligence payload for GUVI callback."""
+
     bankAccounts: list[str] = []
     upiIds: list[str] = []
     phishingLinks: list[str] = []
@@ -24,6 +25,7 @@ class CallbackIntelligence(BaseModel):
 
 class CallbackPayload(BaseModel):
     """Full payload to send to GUVI callback endpoint."""
+
     sessionId: str
     status: str = "success"
     scamDetected: bool
@@ -48,7 +50,7 @@ async def send_guvi_callback(
 ) -> bool:
     """
     Send extracted intelligence to GUVI evaluation endpoint.
-    
+
     Args:
         session_id: Unique session ID from the platform
         scam_detected: Whether scam intent was confirmed
@@ -58,17 +60,17 @@ async def send_guvi_callback(
         engagement_duration: Duration in seconds since first message in this session
         scam_type: Type of scam detected (e.g., 'phishing', 'vishing')
         confidence: Confidence level of scam detection (0.0-1.0)
-        
+
     Returns:
         True if callback was successful, False otherwise
     """
     settings = get_settings()
-    
+
     # Check if callback is disabled
     if not settings.guvi_callback_enabled:
         logger.info(f"GUVI callback disabled, skipping for session {session_id}")
         return True
-    
+
     # Build the payload
     callback_intel = CallbackIntelligence(
         bankAccounts=intelligence.get("bankAccounts", []),
@@ -81,7 +83,7 @@ async def send_guvi_callback(
         policyNumbers=intelligence.get("policyNumbers", []),
         orderNumbers=intelligence.get("orderNumbers", []),
     )
-    
+
     payload = CallbackPayload(
         sessionId=session_id,
         status="success",
@@ -95,25 +97,29 @@ async def send_guvi_callback(
             "engagementDurationSeconds": engagement_duration,
             "totalMessagesExchanged": total_messages,
         },
-        agentNotes=agent_notes
+        agentNotes=agent_notes,
     )
-    
+
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
                 settings.guvi_callback_url,
                 json=payload.model_dump(),
                 headers={"Content-Type": "application/json"},
-                timeout=settings.guvi_callback_timeout
+                timeout=settings.guvi_callback_timeout,
             )
-            
+
             if response.status_code in (200, 201, 202):
-                logger.info(f"GUVI callback successful for session {session_id}: {response.status_code}")
+                logger.info(
+                    f"GUVI callback successful for session {session_id}: {response.status_code}"
+                )
                 return True
             else:
-                logger.warning(f"GUVI callback returned {response.status_code} for session {session_id}: {response.text}")
+                logger.warning(
+                    f"GUVI callback returned {response.status_code} for session {session_id}: {response.text}"
+                )
                 return False
-                
+
     except httpx.TimeoutException:
         logger.error(f"GUVI callback timed out for session {session_id}")
         return False
@@ -140,12 +146,12 @@ def send_guvi_callback_sync(
     Uses httpx synchronous client.
     """
     settings = get_settings()
-    
+
     # Check if callback is disabled
     if not settings.guvi_callback_enabled:
         logger.info(f"GUVI callback disabled, skipping for session {session_id}")
         return True
-    
+
     callback_intel = CallbackIntelligence(
         bankAccounts=intelligence.get("bankAccounts", []),
         upiIds=intelligence.get("upiIds", []),
@@ -157,7 +163,7 @@ def send_guvi_callback_sync(
         policyNumbers=intelligence.get("policyNumbers", []),
         orderNumbers=intelligence.get("orderNumbers", []),
     )
-    
+
     payload = CallbackPayload(
         sessionId=session_id,
         status="success",
@@ -171,25 +177,27 @@ def send_guvi_callback_sync(
             "engagementDurationSeconds": engagement_duration,
             "totalMessagesExchanged": total_messages,
         },
-        agentNotes=agent_notes
+        agentNotes=agent_notes,
     )
-    
+
     try:
         with httpx.Client() as client:
             response = client.post(
                 settings.guvi_callback_url,
                 json=payload.model_dump(),
                 headers={"Content-Type": "application/json"},
-                timeout=settings.guvi_callback_timeout
+                timeout=settings.guvi_callback_timeout,
             )
-            
+
             if response.status_code in (200, 201, 202):
-                logger.info(f"GUVI callback successful for session {session_id}: {response.status_code}")
+                logger.info(
+                    f"GUVI callback successful for session {session_id}: {response.status_code}"
+                )
                 return True
             else:
                 logger.warning(f"GUVI callback returned {response.status_code}: {response.text}")
                 return False
-                
+
     except Exception as e:
         logger.error(f"GUVI callback failed for session {session_id}: {e}")
         return False

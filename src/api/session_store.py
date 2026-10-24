@@ -57,6 +57,7 @@ FIRESTORE_COLLECTION = "session_state"
 # Public helpers
 # ---------------------------------------------------------------------------
 
+
 def get_session_start_time(session_id: str) -> float | None:
     """Return the epoch timestamp when this session was first seen, or None."""
     if session_id in _START_TIMES:
@@ -131,12 +132,18 @@ def accumulate_intel(session_id: str, new_intel) -> dict:
     store["phoneNumbers"].update(new_intel.phoneNumbers)
     store["phishingLinks"].update(new_intel.phishingLinks)
     store["emailAddresses"].update(
-        new_intel.emailAddresses if hasattr(new_intel, "emailAddresses") and new_intel.emailAddresses else []
+        new_intel.emailAddresses
+        if hasattr(new_intel, "emailAddresses") and new_intel.emailAddresses
+        else []
     )
     store["suspiciousKeywords"].update(new_intel.suspiciousKeywords)
     store["caseIds"].update(new_intel.caseIds if hasattr(new_intel, "caseIds") else [])
-    store["policyNumbers"].update(new_intel.policyNumbers if hasattr(new_intel, "policyNumbers") else [])
-    store["orderNumbers"].update(new_intel.orderNumbers if hasattr(new_intel, "orderNumbers") else [])
+    store["policyNumbers"].update(
+        new_intel.policyNumbers if hasattr(new_intel, "policyNumbers") else []
+    )
+    store["orderNumbers"].update(
+        new_intel.orderNumbers if hasattr(new_intel, "orderNumbers") else []
+    )
 
     # Persist to Firestore
     _persist_session(session_id)
@@ -168,12 +175,15 @@ def store_detection_result(session_id: str, result: Any) -> None:
     client = _get_firestore_client()
     if client and result:
         try:
-            client.collection(FIRESTORE_COLLECTION).document(session_id).set({
-                "detection_is_scam": bool(getattr(result, "is_scam", False)),
-                "detection_scam_type": getattr(result, "scam_type", None) or "",
-                "detection_confidence": float(getattr(result, "confidence", 0.0)),
-                "updated_at": time.time(),
-            }, merge=True)
+            client.collection(FIRESTORE_COLLECTION).document(session_id).set(
+                {
+                    "detection_is_scam": bool(getattr(result, "is_scam", False)),
+                    "detection_scam_type": getattr(result, "scam_type", None) or "",
+                    "detection_confidence": float(getattr(result, "confidence", 0.0)),
+                    "updated_at": time.time(),
+                },
+                merge=True,
+            )
         except Exception as exc:
             logger.debug("Firestore detection write failed for %s: %s", session_id, exc)
 
@@ -196,6 +206,7 @@ def get_previous_detection(session_id: str) -> Any | None:
                         is_scam = bool(data.get("detection_is_scam", False))
                         scam_type = data.get("detection_scam_type") or "banking_fraud"
                         confidence = float(data.get("detection_confidence", 0.85))
+
                     restored = _DetResult()
                     _DETECTIONS[session_id] = restored
                     return restored
@@ -208,6 +219,7 @@ def get_previous_detection(session_id: str) -> Any | None:
 # ---------------------------------------------------------------------------
 # Firestore persistence helpers
 # ---------------------------------------------------------------------------
+
 
 def _persist_session(session_id: str) -> None:
     """Write current session state to Firestore (fire-and-forget)."""
@@ -233,17 +245,20 @@ def _restore_intel_from_doc(session_id: str, data: dict) -> None:
     if not stored_intel:
         return
 
-    store = _INTEL.setdefault(session_id, {
-        "bankAccounts": set(),
-        "upiIds": set(),
-        "phoneNumbers": set(),
-        "phishingLinks": set(),
-        "emailAddresses": set(),
-        "suspiciousKeywords": set(),
-        "caseIds": set(),
-        "policyNumbers": set(),
-        "orderNumbers": set(),
-    })
+    store = _INTEL.setdefault(
+        session_id,
+        {
+            "bankAccounts": set(),
+            "upiIds": set(),
+            "phoneNumbers": set(),
+            "phishingLinks": set(),
+            "emailAddresses": set(),
+            "suspiciousKeywords": set(),
+            "caseIds": set(),
+            "policyNumbers": set(),
+            "orderNumbers": set(),
+        },
+    )
 
     for key in store:
         if key in stored_intel and isinstance(stored_intel[key], list):

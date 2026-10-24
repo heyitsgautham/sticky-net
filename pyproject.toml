@@ -36,6 +36,21 @@ packages = ["src", "config"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+src = ["src", "config", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+ignore = [
+    # `class X(str, Enum)` and StrEnum format differently; the API depends on the former.
+    "UP042",
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src", "config"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

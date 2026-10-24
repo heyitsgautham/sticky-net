@@ -7,6 +7,7 @@ from src.api.middleware import setup_middleware
 def get_router():
     """Lazy import router to avoid circular imports."""
     from src.api.routes import router
+
     return router
 
 

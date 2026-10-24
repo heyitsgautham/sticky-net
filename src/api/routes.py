@@ -72,10 +72,10 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
     """
     # Get or generate session ID
     session_id = request.sessionId or str(uuid.uuid4())
-    
+
     # Track session start time for engagement duration (Firestore-backed)
     init_session_start_time(session_id)
-    
+
     log = logger.bind(
         channel=request.metadata.channel,
         history_length=len(request.conversationHistory),
@@ -94,20 +94,26 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         # This is critical when Cloud Run spawns a fresh instance for this request
         # (in-memory session may be empty) — regex will still find intel from msgs.
         history_messages = [
-            {"sender": m.sender.value if hasattr(m.sender, "value") else str(m.sender), "text": m.text}
+            {
+                "sender": m.sender.value if hasattr(m.sender, "value") else str(m.sender),
+                "text": m.text,
+            }
             for m in request.conversationHistory
         ]
         if history_messages:
             history_extractor = IntelligenceExtractor()
             history_regex = history_extractor.extract_from_conversation(history_messages)
             if history_regex.has_intelligence:
-                _accumulate_intel(session_id, ExtractedIntelligence(
-                    bankAccounts=history_regex.bank_accounts,
-                    upiIds=history_regex.upi_ids,
-                    phoneNumbers=history_regex.phone_numbers,
-                    phishingLinks=history_regex.phishing_links,
-                    emailAddresses=history_regex.emails,
-                ))
+                _accumulate_intel(
+                    session_id,
+                    ExtractedIntelligence(
+                        bankAccounts=history_regex.bank_accounts,
+                        upiIds=history_regex.upi_ids,
+                        phoneNumbers=history_regex.phone_numbers,
+                        phishingLinks=history_regex.phishing_links,
+                        emailAddresses=history_regex.emails,
+                    ),
+                )
 
         accumulated = _accumulate_intel(session_id, ExtractedIntelligence())
         session_start = get_session_start_time(session_id) or request_start_time
@@ -121,7 +127,8 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         # history shows engagement, we know scam was detected (agent only engages
         # after detection). Use a safe fallback rather than returning False.
         user_turns_in_history = sum(
-            1 for m in request.conversationHistory
+            1
+            for m in request.conversationHistory
             if (m.sender.value if hasattr(m.sender, "value") else str(m.sender)) == "user"
         )
         if prev_det and prev_det.is_scam:
@@ -137,14 +144,14 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
             f"Honeypot engaged {total_msgs} messages. "
             f"Scam type: {scam_type_val}. "
             f"Confidence: {confidence_val:.2f}. "
-            f"Intelligence extracted: phones={len(accumulated.get('phoneNumbers',[]))}, "
-            f"accounts={len(accumulated.get('bankAccounts',[]))}, "
-            f"upi={len(accumulated.get('upiIds',[]))}, "
-            f"links={len(accumulated.get('phishingLinks',[]))}, "
-            f"emails={len(accumulated.get('emailAddresses',[]))}, "
-            f"caseIds={len(accumulated.get('caseIds',[]))}, "
-            f"policyNumbers={len(accumulated.get('policyNumbers',[]))}, "
-            f"orderNumbers={len(accumulated.get('orderNumbers',[]))}."
+            f"Intelligence extracted: phones={len(accumulated.get('phoneNumbers', []))}, "
+            f"accounts={len(accumulated.get('bankAccounts', []))}, "
+            f"upi={len(accumulated.get('upiIds', []))}, "
+            f"links={len(accumulated.get('phishingLinks', []))}, "
+            f"emails={len(accumulated.get('emailAddresses', []))}, "
+            f"caseIds={len(accumulated.get('caseIds', []))}, "
+            f"policyNumbers={len(accumulated.get('policyNumbers', []))}, "
+            f"orderNumbers={len(accumulated.get('orderNumbers', []))}."
         )
         return HoneyPotResponse(
             status="success",
@@ -175,7 +182,7 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
 
         if not detection_result.is_scam:
             log.info("Message not detected as scam")
-            
+
             # Generate a simple conversational response for non-scam messages
             normal_responses = [
                 "Hello! How can I help you today?",
@@ -184,7 +191,7 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
                 "Hello! Yes, I'm here. What's up?",
                 "Hi! I'm listening. What did you want to tell me?",
             ]
-            
+
             return HoneyPotResponse(
                 status="success",
                 reply=random.choice(normal_responses),
@@ -197,10 +204,10 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
             1 for m in request.conversationHistory if m.sender == SenderType.SCAMMER
         )
         current_turn = scammer_messages_in_history + 1  # +1 for current scammer message
-        
+
         # Initialize extractor for validation
         extractor = IntelligenceExtractor()
-        
+
         # NOTE: exit_responses removed (Fix 2A) — we NEVER voluntarily exit.
         # The evaluator controls when the conversation ends (up to 10 turns).
         # Staying engaged maximizes turn count (8pts) and message count (1pt).
@@ -248,6 +255,7 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
                 budget=agent_budget,
             )
             from src.agents.honeypot_agent import EngagementResult, EngagementMode
+
             fallback_replies = [
                 "hello... sorry i got disconnected for a moment... what were you saying?",
                 "oh sorry my phone battery low... can you repeat that please?",
@@ -275,7 +283,9 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         # Step 3: Validate AI extraction with regex (AI-first, regex validates)
         if engagement_result.extracted_intelligence:
             # AI extracted intelligence - validate it
-            validated_intel = extractor.validate_llm_extraction(engagement_result.extracted_intelligence)
+            validated_intel = extractor.validate_llm_extraction(
+                engagement_result.extracted_intelligence
+            )
             log.info(
                 "AI extraction validated",
                 bank_accounts=len(validated_intel.bankAccounts),
@@ -296,13 +306,16 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         # Step 3b: Regex backup extraction from scammer messages
         # Scan the current scammer message + all history scammer messages
         all_messages = [
-            {"sender": m.sender.value if hasattr(m.sender, 'value') else str(m.sender), "text": m.text}
+            {
+                "sender": m.sender.value if hasattr(m.sender, "value") else str(m.sender),
+                "text": m.text,
+            }
             for m in request.conversationHistory
         ]
         all_messages.append({"sender": "scammer", "text": request.message.text})
-        
+
         regex_result = extractor.extract_from_conversation(all_messages)
-        
+
         if regex_result.has_intelligence:
             log.info(
                 "Regex backup found additional intel",
@@ -318,7 +331,7 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
             merged_phones = list(set(validated_intel.phoneNumbers + regex_result.phone_numbers))
             merged_links = list(set(validated_intel.phishingLinks + regex_result.phishing_links))
             merged_emails = list(set((validated_intel.emailAddresses or []) + regex_result.emails))
-            
+
             validated_intel = ExtractedIntelligence(
                 bankAccounts=merged_accounts,
                 upiIds=merged_upi,
@@ -353,49 +366,53 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
                 scam_type_enum = ScamType(detection_result.scam_type)
             except ValueError:
                 scam_type_enum = ScamType.OTHERS
-        
+
         # Ensure agentResponse is never None
         agent_response = engagement_result.response
         if not agent_response:
             agent_response = "Sorry, I'm having trouble understanding. Can you repeat that?"
             log.warning("Agent response was None, using fallback")
-        
+
         # Generate agent notes with validated intelligence
         agent_singleton = get_agent()
         final_notes = agent_singleton._generate_notes(
             detection=detection_result,
-            persona=agent_singleton.persona_manager.get_or_create_persona(engagement_result.conversation_id),
+            persona=agent_singleton.persona_manager.get_or_create_persona(
+                engagement_result.conversation_id
+            ),
             mode=engagement_result.engagement_mode,
             turn_number=current_turn,
             extracted_intel=validated_intel,
         )
-        
+
         # Calculate totalMessagesExchanged: history + current message + agent reply
         total_messages_exchanged = len(request.conversationHistory) + 2
-        
+
         # Step 6: Accumulate intelligence across turns
         accumulated_intel = _accumulate_intel(session_id, validated_intel)
-        
+
         # Calculate engagement duration from session start
         # Floor: ~25s per turn ensures >180s for 8+ turns (Fix 3A sanity check)
         session_start = get_session_start_time(session_id) or time.time()
         engagement_duration = max(int(time.time() - session_start), current_turn * 25)
-        
+
         # Step 7: Send intelligence to GUVI callback endpoint
         # Build intelligence dict for callback with accumulated data
         callback_intelligence = accumulated_intel
-        
+
         # Fire callback truly async (fire-and-forget) — don't block the response
-        asyncio.create_task(_fire_callback(
-            session_id=session_id,
-            total_messages=total_messages_exchanged,
-            intelligence=callback_intelligence,
-            agent_notes=final_notes,
-            engagement_duration=engagement_duration,
-            scam_type=detection_result.scam_type,
-            confidence=detection_result.confidence,
-        ))
-        
+        asyncio.create_task(
+            _fire_callback(
+                session_id=session_id,
+                total_messages=total_messages_exchanged,
+                intelligence=callback_intelligence,
+                agent_notes=final_notes,
+                engagement_duration=engagement_duration,
+                scam_type=detection_result.scam_type,
+                confidence=detection_result.confidence,
+            )
+        )
+
         # Return simplified response to hackathon platform
         return HoneyPotResponse(
             status="success",
@@ -428,19 +445,19 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
 async def analyze_message_detailed(request: AnalyzeRequest) -> AnalyzeResponse:
     """
     Analyze incoming message with full response details.
-    
+
     This endpoint provides complete analysis data including:
     - Full extracted intelligence
     - Detection metrics
     - Agent notes
-    
+
     Intended for frontend demo/testing, not for hackathon evaluation.
     """
     session_id = request.sessionId or str(uuid.uuid4())
 
     # Track session start time for engagement duration
     init_session_start_time(session_id)
-    
+
     log = logger.bind(
         channel=request.metadata.channel,
         history_length=len(request.conversationHistory),
@@ -493,7 +510,9 @@ async def analyze_message_detailed(request: AnalyzeRequest) -> AnalyzeResponse:
 
         # Step 3: Validate AI extraction
         if engagement_result.extracted_intelligence:
-            validated_intel = extractor.validate_llm_extraction(engagement_result.extracted_intelligence)
+            validated_intel = extractor.validate_llm_extraction(
+                engagement_result.extracted_intelligence
+            )
         else:
             validated_intel = ExtractedIntelligence()
 
@@ -501,7 +520,10 @@ async def analyze_message_detailed(request: AnalyzeRequest) -> AnalyzeResponse:
         # (Same as /analyze endpoint — ensures fakeData like bank accounts,
         #  phishing links, and emails are captured even when the LLM misses them)
         all_messages = [
-            {"sender": m.sender.value if hasattr(m.sender, 'value') else str(m.sender), "text": m.text}
+            {
+                "sender": m.sender.value if hasattr(m.sender, "value") else str(m.sender),
+                "text": m.text,
+            }
             for m in request.conversationHistory
         ]
         all_messages.append({"sender": "scammer", "text": request.message.text})
@@ -547,12 +569,17 @@ async def analyze_message_detailed(request: AnalyzeRequest) -> AnalyzeResponse:
             except ValueError:
                 scam_type_enum = ScamType.OTHERS
 
-        agent_response = engagement_result.response or "Sorry, I'm having trouble understanding. Can you repeat that?"
-        
+        agent_response = (
+            engagement_result.response
+            or "Sorry, I'm having trouble understanding. Can you repeat that?"
+        )
+
         agent_singleton = get_agent()
         final_notes = agent_singleton._generate_notes(
             detection=detection_result,
-            persona=agent_singleton.persona_manager.get_or_create_persona(engagement_result.conversation_id),
+            persona=agent_singleton.persona_manager.get_or_create_persona(
+                engagement_result.conversation_id
+            ),
             mode=engagement_result.engagement_mode,
             turn_number=current_turn,
             extracted_intel=validated_intel,

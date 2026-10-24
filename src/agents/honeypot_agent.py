@@ -55,27 +55,27 @@ logger = structlog.get_logger()
 
 def _extract_text_from_response(response) -> str:
     """Extract text from Gemini response without triggering thought_signature warning.
-    
+
     Gemini 3 models return 'thought_signature' parts alongside text parts.
     Using response.text triggers a warning. This function extracts only text parts.
-    
+
     Args:
         response: The Gemini GenerateContentResponse object
-        
+
     Returns:
         Concatenated text from all text parts
     """
     if not response.candidates:
         return ""
-    
+
     text_parts = []
     for candidate in response.candidates:
         if candidate.content and candidate.content.parts:
             for part in candidate.content.parts:
                 # Only extract text parts, skip thought_signature and other non-text parts
-                if hasattr(part, 'text') and part.text:
+                if hasattr(part, "text") and part.text:
                     text_parts.append(part.text)
-    
+
     return "".join(text_parts)
 
 
@@ -108,23 +108,25 @@ class HoneypotAgent:
         self.logger = logger.bind(component="HoneypotAgent")
         self.persona_manager = PersonaManager()
         self.policy = EngagementPolicy()
-        
+
         # Set credentials path in environment if configured
         if self.settings.google_application_credentials:
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.settings.google_application_credentials
-        
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
+                self.settings.google_application_credentials
+            )
+
         # Initialize Gemini client with Vertex AI credentials from settings
         self.client = genai.Client(
             vertexai=self.settings.google_genai_use_vertexai,
             project=self.settings.google_cloud_project,
             location=self.settings.google_cloud_location,
         )
-        
+
         # Primary model (Gemini 3 Pro) and fallback (Gemini 2.5 Pro)
         self.model = self.settings.pro_model  # gemini-3-pro-preview
         self.fallback_model = self.settings.fallback_pro_model  # gemini-2.5-pro
         self._last_model_used: str | None = None  # Track which model was used
-        
+
         # Fake data generators per conversation (seeded by conversation_id)
         self._fake_data_cache: dict[str, dict] = {}
 
@@ -157,7 +159,7 @@ class HoneypotAgent:
 
         # Generate or use existing conversation ID
         conv_id = conversation_id or str(uuid.uuid4())
-        
+
         # Calculate the actual turn number
         # If turn_number is provided, use it; otherwise calculate from history
         actual_turn = turn_number if turn_number is not None else len(history) + 1
@@ -216,8 +218,7 @@ class HoneypotAgent:
 
         # Check if scammer's message contains URLs that weren't extracted yet
         has_unextracted_urls = self._has_unextracted_urls(
-            message.text,
-            extracted_intel.get("phishing_links", []) if extracted_intel else []
+            message.text, extracted_intel.get("phishing_links", []) if extracted_intel else []
         )
 
         # Check if engagement should continue
@@ -234,7 +235,9 @@ class HoneypotAgent:
         exit_reason = self.policy.get_exit_reason(state) if not should_continue else None
 
         # Generate notes with actual turn number (intelligence will be added in routes.py after merging)
-        notes = self._generate_notes(detection, persona, engagement_mode, actual_turn, extracted_intel=None)
+        notes = self._generate_notes(
+            detection, persona, engagement_mode, actual_turn, extracted_intel=None
+        )
 
         return EngagementResult(
             response=response,
@@ -251,28 +254,28 @@ class HoneypotAgent:
     def _get_fake_data(self, conversation_id: str) -> dict:
         """
         Get or generate fake data for a conversation.
-        
+
         Uses conversation_id as seed to ensure consistent fake data
         across multiple turns of the same conversation.
-        
+
         Args:
             conversation_id: Unique conversation identifier
-            
+
         Returns:
             Dictionary with all fake data for this conversation
         """
         if conversation_id in self._fake_data_cache:
             return self._fake_data_cache[conversation_id]
-        
+
         # Create deterministic seed from conversation_id
         seed = int(hashlib.md5(conversation_id.encode()).hexdigest()[:8], 16)
         generator = FakeDataGenerator(seed=seed)
-        
+
         # Generate all fake data upfront for consistency
         credit_card = generator.generate_credit_card()
         bank_account = generator.generate_bank_account()
         persona_details = generator.generate_persona_details()
-        
+
         fake_data = {
             "credit_card": credit_card,
             "bank_account": bank_account,
@@ -293,7 +296,7 @@ class HoneypotAgent:
             "persona_address": persona_details.address,
             "customer_id": persona_details.customer_id,
         }
-        
+
         self._fake_data_cache[conversation_id] = fake_data
         self.logger.debug(
             "Generated fake data for conversation",
@@ -302,31 +305,31 @@ class HoneypotAgent:
             bank=bank_account.bank_name,
             persona=persona_details.name,
         )
-        
+
         return fake_data
-    
+
     def _format_fake_data_section(self, fake_data: dict) -> str:
         """
         Format fake data into a readable section for the prompt.
-        
+
         Args:
             fake_data: Dictionary of fake data from _get_fake_data
-            
+
         Returns:
             Formatted string for inclusion in system prompt
         """
-        return f"""- Credit Card: {fake_data['card_number_formatted']} (type: {fake_data['credit_card'].card_type})
-- Card Expiry: {fake_data['card_expiry']}
-- Card CVV: {fake_data['card_cvv']}
-- Bank Account: {fake_data['account_number']}
-- IFSC Code: {fake_data['ifsc_code']} ({fake_data['bank_name']})
-- OTP/Verification Code: {fake_data['otp']}
-- Aadhaar Number: {fake_data['aadhaar']}
-- PAN Card: {fake_data['pan']}
-- Your Name: {fake_data['persona_name']}
-- Your Age: {fake_data['persona_age']}
-- Your Address: {fake_data['persona_address']}
-- Customer ID: {fake_data['customer_id']}"""
+        return f"""- Credit Card: {fake_data["card_number_formatted"]} (type: {fake_data["credit_card"].card_type})
+- Card Expiry: {fake_data["card_expiry"]}
+- Card CVV: {fake_data["card_cvv"]}
+- Bank Account: {fake_data["account_number"]}
+- IFSC Code: {fake_data["ifsc_code"]} ({fake_data["bank_name"]})
+- OTP/Verification Code: {fake_data["otp"]}
+- Aadhaar Number: {fake_data["aadhaar"]}
+- PAN Card: {fake_data["pan"]}
+- Your Name: {fake_data["persona_name"]}
+- Your Age: {fake_data["persona_age"]}
+- Your Address: {fake_data["persona_address"]}
+- Customer ID: {fake_data["customer_id"]}"""
 
     def _generate_conversation_summary(self, truncated_turns: list[ConversationMessage]) -> str:
         """Generate a concise summary of earlier conversation turns that were
@@ -348,10 +351,10 @@ class HoneypotAgent:
         import re as _re
 
         # Patterns to detect key intel in older messages
-        PHONE_RE = _re.compile(r'\+?91[-\s]?\d{10}|\b\d{10}\b')
-        UPI_RE = _re.compile(r'[\w.-]+@[a-zA-Z]{2,}')
-        URL_RE = _re.compile(r'https?://[^\s]+', _re.IGNORECASE)
-        EMAIL_RE = _re.compile(r'[\w.-]+@[\w.-]+\.\w{2,}')
+        PHONE_RE = _re.compile(r"\+?91[-\s]?\d{10}|\b\d{10}\b")
+        UPI_RE = _re.compile(r"[\w.-]+@[a-zA-Z]{2,}")
+        URL_RE = _re.compile(r"https?://[^\s]+", _re.IGNORECASE)
+        EMAIL_RE = _re.compile(r"[\w.-]+@[\w.-]+\.\w{2,}")
 
         scammer_claims: list[str] = []
         agent_actions: list[str] = []
@@ -363,7 +366,7 @@ class HoneypotAgent:
 
             is_scammer = (
                 sender == SenderType.SCAMMER
-                or (hasattr(sender, 'value') and sender.value == "scammer")
+                or (hasattr(sender, "value") and sender.value == "scammer")
                 or str(sender).lower() == "scammer"
             )
 
@@ -500,19 +503,23 @@ Generate your response as Pushpa Verma:"""
         missing_intel: list[str] | None = None,
     ) -> tuple[str, ExtractedIntelligence | None]:
         """Generate response using Gemini Pro with fallback to Gemini 2.5.
-        
+
         Returns:
             Tuple of (response_text, extracted_intelligence)
         """
-        
+
         # Format extracted intelligence as JSON for the prompt
         extracted_intel = extracted_intel or {}
-        extracted_intel_json = json.dumps(extracted_intel, indent=2) if extracted_intel else "None yet"
-        
+        extracted_intel_json = (
+            json.dumps(extracted_intel, indent=2) if extracted_intel else "None yet"
+        )
+
         # Format missing intelligence as a readable list
         missing_intel = missing_intel or []
-        missing_intel_text = ", ".join(missing_intel) if missing_intel else "All intelligence collected!"
-        
+        missing_intel_text = (
+            ", ".join(missing_intel) if missing_intel else "All intelligence collected!"
+        )
+
         # Format system instruction with state injection
         system_instruction = HONEYPOT_SYSTEM_PROMPT.format(
             turn_number=persona.engagement_turn,
@@ -520,14 +527,14 @@ Generate your response as Pushpa Verma:"""
             missing_intelligence=missing_intel_text,
             fake_data_section=fake_data_section or "(No fake data available)",
         )
-        
+
         # Try primary model (Gemini 3 Pro) first, then fallback (Gemini 2.5 Pro)
         models_to_try = [self.model, self.fallback_model]
         response_text = None
         timeout_seconds = self.settings.api_timeout_seconds
         max_retries = self.settings.gemini_max_retries
         retry_delay = self.settings.gemini_retry_delay_seconds
-        
+
         for model_name in models_to_try:
             # Retry loop for timeout handling
             for attempt in range(max_retries + 1):
@@ -538,12 +545,12 @@ Generate your response as Pushpa Verma:"""
                         max_retries=max_retries,
                         timeout=timeout_seconds,
                     )
-                    
+
                     # thinking_budget=0 = disable thinking to minimize latency.
                     # The prompt + missing_intel injection provides clear targeting
                     # without model needing to reason. Keeps responses under 20s.
                     max_tokens = 2048
-                    
+
                     # Build config with model-specific settings
                     config = types.GenerateContentConfig(
                         system_instruction=system_instruction,
@@ -554,7 +561,7 @@ Generate your response as Pushpa Verma:"""
                             thinking_budget=0,
                         ),
                     )
-                    
+
                     # Wrap API call with timeout
                     response = await asyncio.wait_for(
                         asyncio.get_event_loop().run_in_executor(
@@ -563,14 +570,14 @@ Generate your response as Pushpa Verma:"""
                                 model=model_name,
                                 contents=prompt,
                                 config=config,
-                            )
+                            ),
                         ),
                         timeout=timeout_seconds,
                     )
-                    
+
                     # Use helper to avoid thought_signature warning in Gemini 3
                     response_text = _extract_text_from_response(response)
-                    
+
                     # Check if we got a valid response
                     if response_text and len(response_text.strip()) > 0:
                         self._last_model_used = model_name
@@ -587,7 +594,7 @@ Generate your response as Pushpa Verma:"""
                             model=model_name,
                         )
                         break  # Don't retry on empty response, try fallback model
-                        
+
                 except asyncio.TimeoutError:
                     self.logger.warning(
                         "Gemini API timeout",
@@ -608,7 +615,7 @@ Generate your response as Pushpa Verma:"""
                             model=model_name,
                         )
                         break  # Try fallback model
-                        
+
                 except Exception as e:
                     self.logger.warning(
                         "Model failed, trying fallback",
@@ -616,11 +623,11 @@ Generate your response as Pushpa Verma:"""
                         error=str(e),
                     )
                     break  # Don't retry on other errors, try fallback model
-            
+
             # If we got a valid response, break out of model loop
             if response_text and len(response_text.strip()) > 0:
                 break
-        
+
         # Handle None response - use fallback response
         if not response_text:
             self._last_model_used = "fallback"
@@ -633,14 +640,14 @@ Generate your response as Pushpa Verma:"""
                 "Successfully parsed JSON response from agent",
                 emotional_tone=parsed.emotional_tone,
                 intel_found=bool(
-                    parsed.extracted_intelligence.bankAccounts or
-                    parsed.extracted_intelligence.upiIds or
-                    parsed.extracted_intelligence.phoneNumbers or
-                    parsed.extracted_intelligence.phishingLinks
-                )
+                    parsed.extracted_intelligence.bankAccounts
+                    or parsed.extracted_intelligence.upiIds
+                    or parsed.extracted_intelligence.phoneNumbers
+                    or parsed.extracted_intelligence.phishingLinks
+                ),
             )
             return parsed.reply_text, parsed.extracted_intelligence
-        
+
         # Safety net: full Pydantic parse failed, but if the text looks like JSON
         # try to at least extract reply_text so we never return raw JSON as the reply.
         try:
@@ -675,8 +682,8 @@ Generate your response as Pushpa Verma:"""
         return random.choice(fallback_responses)
 
     def _generate_notes(
-        self, 
-        detection: DetectionResult, 
+        self,
+        detection: DetectionResult,
         persona: Persona,
         mode: EngagementMode,
         turn_number: int,
@@ -700,7 +707,7 @@ Generate your response as Pushpa Verma:"""
 
         # Emotional state
         notes_parts.append(f"Persona: {persona.emotional_state.value}")
-        
+
         # Add intelligence extraction counts (only from scammer messages)
         if extracted_intel:
             intel_counts = []
@@ -726,37 +733,37 @@ Generate your response as Pushpa Verma:"""
                 intel_counts.append(f"{len(extracted_intel.policyNumbers)} Policy Number(s)")
             if extracted_intel.orderNumbers:
                 intel_counts.append(f"{len(extracted_intel.orderNumbers)} Order Number(s)")
-            
+
             if intel_counts:
                 notes_parts.append(f"Extracted: {', '.join(intel_counts)}")
 
         return " | ".join(notes_parts)
-    
+
     def _has_unextracted_urls(self, message_text: str, extracted_urls: list[str]) -> bool:
         """
         Check if message contains URLs that haven't been extracted yet.
-        
+
         Args:
             message_text: The scammer's message text
             extracted_urls: List of URLs already extracted
-            
+
         Returns:
             True if message contains unextracted URLs
         """
         import re
-        
+
         # Same pattern as extractor uses
         URL_PATTERN = re.compile(
             r"https?://[\w.-]+(?:\.[a-z]{2,10})+(?:/[^\s<>\"'{}|\\^`\[\]]*)?",
             re.IGNORECASE,
         )
-        
+
         # Find all URLs in the message
         urls_in_message = URL_PATTERN.findall(message_text)
-        
+
         if not urls_in_message:
             return False
-        
+
         # Check if any URLs are new (not in extracted_urls)
         extracted_set = set(url.rstrip(".,;:!?)") for url in extracted_urls)
         for url in urls_in_message:
@@ -765,10 +772,10 @@ Generate your response as Pushpa Verma:"""
                 self.logger.info(
                     "Detected unextracted URL in message",
                     url=clean_url,
-                    message_preview=message_text[:100]
+                    message_preview=message_text[:100],
                 )
                 return True
-        
+
         return False
 
     def end_conversation(self, conversation_id: str) -> None:

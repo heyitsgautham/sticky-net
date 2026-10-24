@@ -41,28 +41,32 @@ class TestAuthentication:
     """Tests for API authentication."""
 
     @patch("src.api.middleware.get_settings")
-    def test_missing_api_key_returns_401(self, mock_settings, client: TestClient, sample_scam_message: dict):
+    def test_missing_api_key_returns_401(
+        self, mock_settings, client: TestClient, sample_scam_message: dict
+    ):
         """Request without API key should return 401."""
         # Mock settings to disable debug mode for this test
         mock_settings_instance = MagicMock()
         mock_settings_instance.debug = False  # Disable debug mode
         mock_settings_instance.api_key = "test-api-key"
         mock_settings.return_value = mock_settings_instance
-        
+
         # Use a valid request body to avoid 422 from FastAPI validation
         response = client.post("/api/v1/analyze", json=sample_scam_message)
         assert response.status_code == 401
         assert response.json()["error"] == "Missing API key"
 
     @patch("src.api.middleware.get_settings")
-    def test_invalid_api_key_returns_403(self, mock_settings, client: TestClient, sample_scam_message: dict):
+    def test_invalid_api_key_returns_403(
+        self, mock_settings, client: TestClient, sample_scam_message: dict
+    ):
         """Request with invalid API key should return 403."""
         # Mock settings for consistent behavior
         mock_settings_instance = MagicMock()
         mock_settings_instance.debug = False
         mock_settings_instance.api_key = "test-api-key"
         mock_settings.return_value = mock_settings_instance
-        
+
         response = client.post(
             "/api/v1/analyze",
             json=sample_scam_message,
@@ -87,9 +91,7 @@ class TestAnalyzeEndpoint:
     ):
         """A scam message reaches the agent and the reply is the agent's reply."""
         mock_get_detector.return_value.analyze = AsyncMock(
-            return_value=DetectionResult(
-                is_scam=True, confidence=0.95, scam_type="banking_fraud"
-            )
+            return_value=DetectionResult(is_scam=True, confidence=0.95, scam_type="banking_fraud")
         )
         agent = mock_get_agent.return_value
         agent.engage = AsyncMock(

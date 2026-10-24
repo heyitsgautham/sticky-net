@@ -119,24 +119,72 @@ class FakeDataGenerator:
 
     # Elderly Indian names (typical of scam targets)
     FEMALE_FIRST_NAMES = [
-        "Kamala", "Lakshmi", "Saraswati", "Parvati", "Sita",
-        "Radha", "Durga", "Ganga", "Savitri", "Shakuntala",
-        "Meena", "Saroj", "Sumitra", "Pushpa", "Shanti",
-        "Kausalya", "Urmila", "Sunita", "Annapurna", "Vimala",
+        "Kamala",
+        "Lakshmi",
+        "Saraswati",
+        "Parvati",
+        "Sita",
+        "Radha",
+        "Durga",
+        "Ganga",
+        "Savitri",
+        "Shakuntala",
+        "Meena",
+        "Saroj",
+        "Sumitra",
+        "Pushpa",
+        "Shanti",
+        "Kausalya",
+        "Urmila",
+        "Sunita",
+        "Annapurna",
+        "Vimala",
     ]
 
     MALE_FIRST_NAMES = [
-        "Ramesh", "Suresh", "Rajesh", "Mahesh", "Ganesh",
-        "Prakash", "Satish", "Girish", "Harish", "Dinesh",
-        "Mohan", "Sohan", "Rohan", "Kishan", "Shyam",
-        "Gopal", "Balram", "Raghunath", "Jagdish", "Devendra",
+        "Ramesh",
+        "Suresh",
+        "Rajesh",
+        "Mahesh",
+        "Ganesh",
+        "Prakash",
+        "Satish",
+        "Girish",
+        "Harish",
+        "Dinesh",
+        "Mohan",
+        "Sohan",
+        "Rohan",
+        "Kishan",
+        "Shyam",
+        "Gopal",
+        "Balram",
+        "Raghunath",
+        "Jagdish",
+        "Devendra",
     ]
 
     LAST_NAMES = [
-        "Sharma", "Verma", "Gupta", "Singh", "Kumar",
-        "Patel", "Devi", "Rao", "Reddy", "Nair",
-        "Pillai", "Menon", "Iyer", "Iyengar", "Agarwal",
-        "Joshi", "Pandey", "Mishra", "Dubey", "Tiwari",
+        "Sharma",
+        "Verma",
+        "Gupta",
+        "Singh",
+        "Kumar",
+        "Patel",
+        "Devi",
+        "Rao",
+        "Reddy",
+        "Nair",
+        "Pillai",
+        "Menon",
+        "Iyer",
+        "Iyengar",
+        "Agarwal",
+        "Joshi",
+        "Pandey",
+        "Mishra",
+        "Dubey",
+        "Tiwari",
     ]
 
     # Indian cities for addresses
@@ -159,10 +207,20 @@ class FakeDataGenerator:
     ]
 
     LOCALITIES = [
-        "Gandhi Nagar", "Nehru Colony", "Rajiv Chowk", "MG Road",
-        "Civil Lines", "Sadar Bazaar", "Station Road", "Bank Colony",
-        "Teachers Colony", "Government Quarters", "Old City",
-        "Cantonment Area", "University Road", "Temple Street",
+        "Gandhi Nagar",
+        "Nehru Colony",
+        "Rajiv Chowk",
+        "MG Road",
+        "Civil Lines",
+        "Sadar Bazaar",
+        "Station Road",
+        "Bank Colony",
+        "Teachers Colony",
+        "Government Quarters",
+        "Old City",
+        "Cantonment Area",
+        "University Road",
+        "Temple Street",
     ]
 
     def __init__(self, seed: int | None = None) -> None:
@@ -254,9 +312,7 @@ class FakeDataGenerator:
 
         # Generate remaining digits (need 15 total for 16-digit card, minus BIN length)
         remaining_length = 15 - len(bin_prefix)
-        middle_digits = "".join(
-            str(self.rng.randint(0, 9)) for _ in range(remaining_length)
-        )
+        middle_digits = "".join(str(self.rng.randint(0, 9)) for _ in range(remaining_length))
 
         partial_number = bin_prefix + middle_digits
         check_digit = self._luhn_checksum(partial_number)

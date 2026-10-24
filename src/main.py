@@ -64,6 +64,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     try:
         from src.agents.honeypot_agent import get_agent
         from src.detection.detector import get_detector
+
         _agent = get_agent()
         _detector = get_detector()
         logger.info(
@@ -108,7 +109,7 @@ def create_app() -> FastAPI:
     ]
     if settings.debug:
         allowed_origins.append("*")
-    
+
     app.add_middleware(
         CORSMiddleware,
         allow_origins=allowed_origins if not settings.debug else ["*"],
@@ -128,7 +129,10 @@ def create_app() -> FastAPI:
         logger.warning("Validation error caught", error=str(exc)[:200], path=request.url.path)
         return JSONResponse(
             status_code=200,
-            content={"status": "success", "reply": "sorry i didnt understand that... can you say again?"},
+            content={
+                "status": "success",
+                "reply": "sorry i didnt understand that... can you say again?",
+            },
         )
 
     @app.get("/health")
