@@ -7,10 +7,8 @@ steps:
       - -c
       - |
         pip install uv
-        uv venv
-        source .venv/bin/activate
-        uv pip install -e ".[dev]"
-        pytest tests/ -v
+        uv sync --frozen --extra dev
+        uv run --frozen pytest tests/ -v
 
   # Build container
   - name: "gcr.io/cloud-builders/docker"

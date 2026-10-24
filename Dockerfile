@@ -12,12 +12,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install --no-cache-dir uv
 
 # Copy dependency files
-COPY pyproject.toml ./
+COPY pyproject.toml uv.lock ./
 
-# Create virtual environment and install dependencies
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-RUN uv pip install --no-cache .
+# Install the locked runtime dependencies into /opt/venv.
+# --frozen fails the build if uv.lock is out of date with pyproject.toml.
+# The app itself runs from /app/src, so the project is not installed.
+ENV UV_PROJECT_ENVIRONMENT=/opt/venv
+RUN uv sync --frozen --no-dev --no-install-project --no-cache
 
 # Stage 2: Runtime
 FROM python:3.11-slim AS runtime
