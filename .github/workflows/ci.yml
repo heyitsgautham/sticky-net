@@ -63,7 +63,7 @@ jobs:
           diff <(grep -v '^#' requirements.txt) <(grep -v '^#' /tmp/requirements.txt)
 
       - name: pip-audit
-        run: uvx pip-audit==2.7.3 -r requirements.txt --no-deps --disable-pip
+        run: uvx --from "pip-audit==2.10.1" pip-audit -r requirements.txt --no-deps --disable-pip
 
   frontend:
     name: Frontend build and audit
@@ -89,8 +89,18 @@ jobs:
           REACT_APP_API_URL: http://localhost:8080
         run: yarn build
 
+      # yarn audit's exit code is a bitmask of every severity it found, even with --level,
+      # so read the summary and fail only on critical advisories.
       - name: yarn audit (critical)
-        run: yarn audit --groups dependencies --level critical
+        run: |
+          yarn audit --groups dependencies --json > audit.jsonl || true
+          node -e '
+            const lines = require("fs").readFileSync("audit.jsonl", "utf8").trim().split("\n");
+            const summary = lines.map(JSON.parse).find((l) => l.type === "auditSummary");
+            const v = summary.data.vulnerabilities;
+            console.log("yarn audit:", JSON.stringify(v));
+            if (v.critical > 0) process.exit(1);
+          '
 
   secrets:
     name: Secret scan
