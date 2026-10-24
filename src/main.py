@@ -61,7 +61,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="Sticky-Net",
         description="AI Agentic Honey-Pot for Scam Detection & Intelligence Extraction",
-        version="0.1.0",
+        version="0.2.0",
         docs_url="/docs" if settings.debug else None,
         redoc_url="/redoc" if settings.debug else None,
         lifespan=lifespan,
