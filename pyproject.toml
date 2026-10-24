@@ -61,7 +61,7 @@ indent-style = "space"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
-testpaths = ["tests"]
+testpaths = ["tests", "final-testing"]
 markers = [
     "integration: needs a live server on localhost:8000 backed by real Gemini credentials",
 ]

@@ -17,6 +17,8 @@ from datetime import datetime
 
 import pytest
 
+from src.api.schemas import ExtractedIntelligence
+
 
 # ============================================================================
 # SESSION START TIME TRACKING
@@ -332,41 +334,36 @@ class TestIntelligenceAccumulationStore:
 # ============================================================================
 
 
-class TestRoutesSessionState:
+class TestSessionStoreState:
     """
-    Verify that routes.py has the required session state dictionaries
-    after Priority 0 and Priority 1 fixes.
+    Session state lives in src.api.session_store as in-memory caches,
+    written through to Firestore when it is available.
     """
 
-    def test_routes_has_session_start_times(self):
-        """routes.py should define SESSION_START_TIMES dict."""
-        try:
-            from src.api import routes
-            assert hasattr(routes, "SESSION_START_TIMES"), (
-                "routes.py must define SESSION_START_TIMES: dict[str, float] = {} "
-                "for tracking session timing."
-            )
-        except ImportError:
-            pytest.fail("Cannot import src.api.routes")
+    def test_start_time_is_set_once_per_session(self):
+        from src.api import session_store
 
-    def test_routes_has_session_intel(self):
-        """routes.py should define SESSION_INTEL dict for accumulation."""
-        try:
-            from src.api import routes
-            assert hasattr(routes, "SESSION_INTEL"), (
-                "routes.py must define SESSION_INTEL: dict[str, dict[str, set]] = {} "
-                "for accumulating intelligence across turns."
-            )
-        except ImportError:
-            pytest.fail("Cannot import src.api.routes")
+        sid = f"final-{uuid.uuid4()}"
+        first = session_store.init_session_start_time(sid)
+        assert session_store.init_session_start_time(sid) == first
+        assert session_store.get_session_start_time(sid) == first
 
-    def test_routes_has_session_classifications(self):
-        """routes.py should define SESSION_CLASSIFICATIONS dict for caching."""
-        try:
-            from src.api import routes
-            assert hasattr(routes, "SESSION_CLASSIFICATIONS"), (
-                "routes.py must define SESSION_CLASSIFICATIONS: dict[str, Any] = {} "
-                "for caching classification results."
-            )
-        except ImportError:
-            pytest.fail("Cannot import src.api.routes")
+    def test_intel_accumulates_across_turns(self):
+        from src.api import session_store
+
+        sid = f"final-{uuid.uuid4()}"
+        session_store.accumulate_intel(sid, ExtractedIntelligence(upiIds=["a@okaxis"]))
+        merged = session_store.accumulate_intel(
+            sid, ExtractedIntelligence(upiIds=["a@okaxis"], phoneNumbers=["+919876543210"])
+        )
+        assert merged["upiIds"] == ["a@okaxis"]
+        assert merged["phoneNumbers"] == ["+919876543210"]
+
+    def test_classification_cache_round_trips(self):
+        from src.api import session_store
+
+        sid = f"final-{uuid.uuid4()}"
+        assert session_store.get_session_classification(sid) is None
+        session_store.set_session_classification(sid, {"is_scam": True})
+        assert session_store.get_session_classification(sid) == {"is_scam": True}
+

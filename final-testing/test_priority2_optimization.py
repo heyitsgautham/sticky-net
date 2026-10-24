@@ -31,17 +31,17 @@ class TestCloudRunTimeout:
     Setting timeout to 300s prevents this.
     """
 
-    def test_api_timeout_setting_is_sufficient(self):
-        """api_timeout_seconds should be >= 90s to handle slow LLM responses."""
-        # Read from settings
-        settings = Settings(
-            api_key="test",
-            google_cloud_project="test",
-        )
-        assert settings.api_timeout_seconds >= 90, (
-            f"api_timeout_seconds={settings.api_timeout_seconds} is too low. "
-            "Should be >= 90s to handle slow Gemini responses."
-        )
+    def test_per_model_timeout_fits_the_evaluator_budget(self):
+        """Primary plus fallback model must answer inside the evaluator's 30s turn limit.
+
+        settings.py cut api_timeout_seconds from 90s to 12s once thinking_budget=0
+        brought Gemini 3 replies down to 3-5s. Two models at 12s each leave room
+        for regex extraction and the response inside 30s.
+        """
+        settings = Settings(api_key="test", google_cloud_project="test")
+        attempts_per_model = settings.gemini_max_retries + 1
+        worst_case = 2 * attempts_per_model * settings.api_timeout_seconds
+        assert worst_case < 30, f"Two models can take {worst_case}s, over the 30s turn limit"
 
     def test_cloudbuild_timeout_setting(self):
         """cloudbuild.yaml should set --timeout >= 300 for Cloud Run service."""
@@ -65,14 +65,12 @@ class TestCloudRunTimeout:
                     "Set --timeout=300 to prevent 504 errors."
                 )
 
-    def test_gemini_retry_settings(self):
-        """Retry settings should allow recovery from transient failures."""
-        settings = Settings(
-            api_key="test",
-            google_cloud_project="test",
-        )
-        assert settings.gemini_max_retries >= 1, "Should have at least 1 retry"
-        assert settings.gemini_retry_delay_seconds >= 0.5, "Retry delay should be >= 0.5s"
+    def test_failed_model_falls_through_without_retrying(self):
+        """A failed model hands over to the fallback model at once, with no retry delay."""
+        settings = Settings(api_key="test", google_cloud_project="test")
+        assert settings.gemini_max_retries == 0
+        assert settings.fallback_flash_model != settings.flash_model
+        assert settings.fallback_pro_model != settings.pro_model
 
     def test_total_worst_case_time_within_timeout(self):
         """
