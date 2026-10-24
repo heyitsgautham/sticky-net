@@ -1,0 +1,21 @@
+# Keep the API build context to what the image copies.
+.git
+.venv
+**/__pycache__
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+.coverage
+coverage.xml
+.env
+secrets/
+frontend/
+india-map/
+tester/
+logs/
+multi-turn-testing/
+simulated-testing/
+final-testing/
+gk-testing/
+endpoint-testing/
+conversation-testing/

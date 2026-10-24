@@ -1,3 +1,16 @@
+# Local stack: the FastAPI honeypot API and the React dashboard.
+#
+#   cp .env.example .env    # then set API_KEY and GOOGLE_CLOUD_PROJECT
+#   docker compose up --build
+#
+# API:       http://localhost:8080  (health: /health)
+# Dashboard: http://localhost:3000
+#
+# Gemini calls go to Vertex AI and need Google credentials.
+# Put a service account key at ./secrets/service-account.json, or the API
+# answers with its regex detector and canned fallback replies.
+# Add `--profile emulator` to also start a local Firestore emulator.
+
 services:
   api:
     build:
@@ -5,39 +18,52 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    environment:
-      - API_KEY=${API_KEY:-dev-api-key}
-      - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
-      - VERTEX_AI_LOCATION=${VERTEX_AI_LOCATION:-global}
-      - FIRESTORE_COLLECTION=${FIRESTORE_COLLECTION:-conversations}
-      - LLM_MODEL=${LLM_MODEL:-gemini-3-flash-preview}
-      - LLM_TEMPERATURE=${LLM_TEMPERATURE:-0.7}
-      - MAX_ENGAGEMENT_TURNS=${MAX_ENGAGEMENT_TURNS:-50}
-      - LOG_LEVEL=${LOG_LEVEL:-INFO}
-      - ENVIRONMENT=development
-    volumes:
-      # Mount code for hot reload in development
-      - ./src:/app/src:ro
-      - ./config:/app/config:ro
-      # Mount service account key
-      - ${GOOGLE_APPLICATION_CREDENTIALS:-./secrets/service-account.json}:/app/secrets/service-account.json:ro
     env_file:
-      - .env
-    command: ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+      - path: .env
+        required: false
+    environment:
+      API_KEY: ${API_KEY:-dev-api-key}
+      GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT:-demo-project}
+      GOOGLE_CLOUD_LOCATION: ${GOOGLE_CLOUD_LOCATION:-global}
+      GOOGLE_APPLICATION_CREDENTIALS: /app/secrets/service-account.json
+      FIRESTORE_COLLECTION: ${FIRESTORE_COLLECTION:-conversations}
+      FLASH_MODEL: ${FLASH_MODEL:-gemini-3-flash-preview}
+      PRO_MODEL: ${PRO_MODEL:-gemini-3-flash-preview}
+      LLM_TEMPERATURE: ${LLM_TEMPERATURE:-0.7}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DEBUG: ${DEBUG:-true}
+      ENVIRONMENT: development
+      # Local runs never post results to the hackathon evaluator.
+      GUVI_CALLBACK_ENABLED: ${GUVI_CALLBACK_ENABLED:-false}
+    volumes:
+      - ./secrets:/app/secrets:ro
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')"
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 10s
 
-  # Optional: Local Firestore emulator for testing
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:8080}
+        REACT_APP_API_KEY: ${REACT_APP_API_KEY:-dev-api-key}
+    ports:
+      - "3000:8080"
+    depends_on:
+      api:
+        condition: service_healthy
+
   firestore-emulator:
     image: gcr.io/google.com/cloudsdktool/cloud-sdk:emulators
     ports:
       - "8085:8085"
-    environment:
-      - FIRESTORE_PROJECT_ID=${GOOGLE_CLOUD_PROJECT:-demo-project}
     command: >
       gcloud emulators firestore start
       --host-port=0.0.0.0:8085
