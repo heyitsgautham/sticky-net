@@ -11,7 +11,7 @@ verifies accumulated intelligence for scoring (mirrors callback data).
   4. Response Structure      — 20 pts (required + optional fields)
 
 Run:
-    .venv/bin/python -m pytest tests/test_eval_scenarios.py -v
+    .venv/bin/python -m pytest tests/test_eval_scenarios.py -m integration -v
 
 Requires:
     Server running on http://localhost:8000
@@ -24,6 +24,10 @@ from datetime import datetime, timezone
 
 import pytest
 import requests
+
+# These tests drive a live server, which calls Gemini for real.
+# They are deselected by default; run them with `pytest -m integration`.
+pytestmark = pytest.mark.integration
 
 # ---------------------------------------------------------------------------
 # Config

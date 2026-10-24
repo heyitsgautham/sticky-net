@@ -12,7 +12,7 @@ Each turn's scammer follow-up is crafted so these items appear naturally
 across the conversation, just like the real GUVI evaluator fakeData.
 
 Run:
-    .venv/bin/python -m pytest tests/test_multiturn_all_extractions.py -v -s
+    .venv/bin/python -m pytest tests/test_multiturn_all_extractions.py -m integration -v -s
 
 Requires:
     Server running on http://localhost:8000   (start with: uvicorn src.main:app --port 8000)
@@ -24,6 +24,10 @@ from datetime import datetime, timezone
 
 import pytest
 import requests
+
+# These tests drive a live server, which calls Gemini for real.
+# They are deselected by default; run them with `pytest -m integration`.
+pytestmark = pytest.mark.integration
 
 # ---------------------------------------------------------------------------
 # Config
