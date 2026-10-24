@@ -28,12 +28,15 @@ import os
 import re
 import sys
 import time
-from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any
 
 import requests
+
+# Scoring and reporting live in sibling modules; run_evaluation re-exports
+# ScoreBreakdown, score_scenario and print_summary_table for existing callers.
+from evaluation_report import print_summary_table, save_results
+from evaluation_scoring import ScoreBreakdown, score_scenario  # noqa: F401
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -43,206 +46,11 @@ SCENARIOS_DIR = SCRIPT_DIR / "scenarios"
 RESULTS_DIR = SCRIPT_DIR / "results"
 RESULTS_DIR.mkdir(exist_ok=True)
 
-# GUVI scoring: fakeData key → extractedIntelligence response key
-FAKE_DATA_KEY_MAPPING = {
-    "bankAccount": "bankAccounts",
-    "upiId": "upiIds",
-    "phoneNumber": "phoneNumbers",
-    "phishingLink": "phishingLinks",
-    "emailAddress": "emailAddresses",
-}
-
 ALL_SCAM_CATEGORIES = [
     "bank_fraud", "upi_fraud", "phishing", "job_scam", "lottery_scam",
     "investment_scam", "government_scam", "delivery_scam", "romance_scam",
     "tech_support_scam", "mixed_language", "edge_cases", "non_scam",
 ]
-
-
-# ---------------------------------------------------------------------------
-# GUVI Scoring (from EVAL_SYS.md — exact replication)
-# ---------------------------------------------------------------------------
-@dataclass
-class ScoreBreakdown:
-    """Per-scenario score breakdown matching GUVI's 4 dimensions."""
-    scenario_id: str = ""
-    scam_detection: float = 0.0       # /20
-    intelligence_extraction: float = 0.0  # /40
-    engagement_quality: float = 0.0   # /20
-    response_structure: float = 0.0   # /20
-    issues: list[str] = field(default_factory=list)
-
-    @property
-    def total(self) -> float:
-        return (self.scam_detection + self.intelligence_extraction +
-                self.engagement_quality + self.response_structure)
-
-    def summary(self) -> str:
-        parts = [
-            f"  {self.scenario_id}: {self.total:.1f}/100",
-            f"    Detection:    {self.scam_detection:.0f}/20",
-            f"    Intelligence: {self.intelligence_extraction:.0f}/40",
-            f"    Engagement:   {self.engagement_quality:.0f}/20",
-            f"    Structure:    {self.response_structure:.0f}/20",
-        ]
-        if self.issues:
-            parts.append("    Issues:")
-            for issue in self.issues:
-                parts.append(f"      - {issue}")
-        return "\n".join(parts)
-
-
-def score_scam_detection(final_output: dict) -> tuple[float, list[str]]:
-    """20 pts if scamDetected == True."""
-    issues = []
-    detected = final_output.get("scamDetected", False)
-    if detected is True or detected == "true" or detected == 1:
-        return 20.0, issues
-    issues.append(f"scamDetected={detected} (expected True)")
-    return 0.0, issues
-
-
-def score_intelligence(final_output: dict, fake_data: dict) -> tuple[float, list[str]]:
-    """10 pts per fakeData item matched (substring), capped at 40."""
-    issues = []
-    if not fake_data:
-        return 0.0, issues
-
-    intel = final_output.get("extractedIntelligence", {})
-    score = 0.0
-
-    for fake_key, fake_value in fake_data.items():
-        response_key = FAKE_DATA_KEY_MAPPING.get(fake_key, fake_key)
-        found = False
-
-        # Check in the mapped response key
-        values = intel.get(response_key, [])
-        if isinstance(values, list):
-            for v in values:
-                if fake_value in str(v):
-                    found = True
-                    break
-        elif isinstance(values, str):
-            if fake_value in values:
-                found = True
-
-        # Also search across ALL intel fields (broader match)
-        if not found:
-            for key, val in intel.items():
-                if isinstance(val, list):
-                    for v in val:
-                        if fake_value in str(v):
-                            found = True
-                            break
-                elif isinstance(val, str):
-                    if fake_value in val:
-                        found = True
-                if found:
-                    break
-
-        if found:
-            score += 10.0
-        else:
-            issues.append(f"Missing {fake_key}={fake_value} (looked in {response_key})")
-
-    return min(score, 40.0), issues
-
-
-def score_engagement(final_output: dict) -> tuple[float, list[str]]:
-    """
-    20 pts total:
-      +5 if engagementDurationSeconds > 0
-      +5 if engagementDurationSeconds > 60
-      +5 if totalMessagesExchanged > 0
-      +5 if totalMessagesExchanged >= 5
-    """
-    issues = []
-    score = 0.0
-    metrics = final_output.get("engagementMetrics", {})
-    duration = metrics.get("engagementDurationSeconds", 0)
-    messages = metrics.get("totalMessagesExchanged", 0)
-
-    if duration > 0:
-        score += 5.0
-    else:
-        issues.append("engagementDurationSeconds == 0")
-    if duration > 60:
-        score += 5.0
-    else:
-        issues.append(f"engagementDurationSeconds={duration} (want >60)")
-    if messages > 0:
-        score += 5.0
-    else:
-        issues.append("totalMessagesExchanged == 0")
-    if messages >= 5:
-        score += 5.0
-    else:
-        issues.append(f"totalMessagesExchanged={messages} (want >=5)")
-
-    return score, issues
-
-
-def score_structure(final_output: dict) -> tuple[float, list[str]]:
-    """
-    20 pts total:
-      +5 if status present
-      +5 if scamDetected present
-      +5 if extractedIntelligence present
-      +2.5 if engagementMetrics present
-      +2.5 if agentNotes present
-    """
-    issues = []
-    score = 0.0
-
-    if "status" in final_output:
-        score += 5.0
-    else:
-        issues.append("Missing 'status'")
-
-    if "scamDetected" in final_output:
-        score += 5.0
-    else:
-        issues.append("Missing 'scamDetected'")
-
-    if "extractedIntelligence" in final_output:
-        score += 5.0
-    else:
-        issues.append("Missing 'extractedIntelligence'")
-
-    if "engagementMetrics" in final_output:
-        score += 2.5
-    else:
-        issues.append("Missing 'engagementMetrics'")
-
-    if final_output.get("agentNotes"):
-        score += 2.5
-    else:
-        issues.append("Missing/empty 'agentNotes'")
-
-    return score, issues
-
-
-def score_scenario(final_output: dict, fake_data: dict, scenario_id: str) -> ScoreBreakdown:
-    """Full 100-point scoring for one scenario."""
-    bd = ScoreBreakdown(scenario_id=scenario_id)
-
-    det, det_issues = score_scam_detection(final_output)
-    bd.scam_detection = det
-    bd.issues.extend(det_issues)
-
-    intel, intel_issues = score_intelligence(final_output, fake_data)
-    bd.intelligence_extraction = intel
-    bd.issues.extend(intel_issues)
-
-    eng, eng_issues = score_engagement(final_output)
-    bd.engagement_quality = eng
-    bd.issues.extend(eng_issues)
-
-    struct, struct_issues = score_structure(final_output)
-    bd.response_structure = struct
-    bd.issues.extend(struct_issues)
-
-    return bd
 
 
 # ---------------------------------------------------------------------------
@@ -553,91 +361,6 @@ class EvaluationRunner:
             "we will take strict action."})
 
         return turns
-
-
-# ---------------------------------------------------------------------------
-# Output helpers
-# ---------------------------------------------------------------------------
-def print_summary_table(all_results: list[dict]):
-    """Print a GUVI-style summary table."""
-    print("\n" + "=" * 100)
-    print("GUVI EVALUATION SUMMARY")
-    print("=" * 100)
-    header = (
-        f"{'Scenario':<38} {'Score':>6} {'Det':>4} {'Intel':>5} "
-        f"{'Eng':>4} {'Str':>4} {'Issues':>6} {'Time':>7}"
-    )
-    print(header)
-    print("-" * 100)
-
-    for r in all_results:
-        s = r["score"]
-        name = r["scenario_id"][:36]
-        row = (
-            f"{name:<38} "
-            f"{s['total']:5.1f} "
-            f"{s['scam_detection']:4.0f} "
-            f"{s['intelligence_extraction']:5.0f} "
-            f"{s['engagement_quality']:4.0f} "
-            f"{s['response_structure']:4.0f} "
-            f"{len(s['issues']):5d} "
-            f"{r['total_duration_seconds']:6.1f}s"
-        )
-        print(row)
-
-    print("-" * 100)
-    n = len(all_results)
-    if n > 0:
-        avg_total = sum(r["score"]["total"] for r in all_results) / n
-        avg_det = sum(r["score"]["scam_detection"] for r in all_results) / n
-        avg_intel = sum(r["score"]["intelligence_extraction"] for r in all_results) / n
-        avg_eng = sum(r["score"]["engagement_quality"] for r in all_results) / n
-        avg_str = sum(r["score"]["response_structure"] for r in all_results) / n
-        total_time = sum(r["total_duration_seconds"] for r in all_results)
-        print(
-            f"{'AVERAGE (' + str(n) + ' scenarios)':<38} "
-            f"{avg_total:5.1f} "
-            f"{avg_det:4.0f} "
-            f"{avg_intel:5.0f} "
-            f"{avg_eng:4.0f} "
-            f"{avg_str:4.0f} "
-            f"{'':>6} "
-            f"{total_time:6.1f}s"
-        )
-
-        # Category breakdown
-        categories: dict[str, list[float]] = {}
-        for r in all_results:
-            cat = r["scam_type"]
-            categories.setdefault(cat, []).append(r["score"]["total"])
-
-        print(f"\nCATEGORY BREAKDOWN:")
-        for cat, scores in sorted(categories.items()):
-            avg = sum(scores) / len(scores)
-            print(f"  {cat:<30} {avg:5.1f}/100  ({len(scores)} scenarios)")
-
-    print("=" * 100)
-
-
-def save_results(all_results: list[dict], results_dir: Path) -> str:
-    """Save results to timestamped JSON file."""
-    results_dir.mkdir(exist_ok=True)
-    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filepath = results_dir / f"eval_{ts}.json"
-
-    summary = {
-        "timestamp": datetime.now().isoformat(),
-        "total_scenarios": len(all_results),
-        "average_score": (
-            sum(r["score"]["total"] for r in all_results) / max(len(all_results), 1)
-        ),
-        "scenarios": all_results,
-    }
-
-    with open(filepath, "w") as f:
-        json.dump(summary, f, indent=2, default=str)
-
-    return str(filepath)
 
 
 # ---------------------------------------------------------------------------
