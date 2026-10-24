@@ -83,6 +83,11 @@ jobs:
       - name: Install locked dependencies
         run: yarn install --frozen-lockfile --non-interactive
 
+      - name: Unit tests
+        env:
+          CI: "true"
+        run: yarn test --watchAll=false
+
       - name: Build
         env:
           CI: "true"
