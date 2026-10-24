@@ -35,9 +35,8 @@ def score_intelligence_extraction(final_output: dict, fake_data: dict) -> int:
         if isinstance(extracted_values, list):
             if any(fake_value in str(v) for v in extracted_values):
                 points += 10
-        elif isinstance(extracted_values, str):
-            if fake_value in extracted_values:
-                points += 10
+        elif isinstance(extracted_values, str) and fake_value in extracted_values:
+            points += 10
 
     return min(points, 40)
 
@@ -111,7 +110,7 @@ def weighted_final_score(scenario_scores: list[dict], weights: list[float]) -> f
     weights: list of floats that sum to 1.0
     """
     assert len(scenario_scores) == len(weights)
-    return sum(s["total"] * w for s, w in zip(scenario_scores, weights))
+    return sum(s["total"] * w for s, w in zip(scenario_scores, weights, strict=True))
 
 
 # ============================================================================
@@ -233,21 +232,25 @@ def build_conversation_history(
         else:
             scammer_text = followups[min(i - 1, len(followups) - 1)]
 
-        history.append({
-            "sender": "scammer",
-            "text": scammer_text,
-            "timestamp": (base_time + timedelta(seconds=30 * (2 * i))).isoformat() + "Z",
-        })
+        history.append(
+            {
+                "sender": "scammer",
+                "text": scammer_text,
+                "timestamp": (base_time + timedelta(seconds=30 * (2 * i))).isoformat() + "Z",
+            }
+        )
 
         reply = (
             agent_replies[i]
             if agent_replies and i < len(agent_replies)
             else "Oh no, what should I do? Please help me!"
         )
-        history.append({
-            "sender": "user",
-            "text": reply,
-            "timestamp": (base_time + timedelta(seconds=30 * (2 * i + 1))).isoformat() + "Z",
-        })
+        history.append(
+            {
+                "sender": "user",
+                "text": reply,
+                "timestamp": (base_time + timedelta(seconds=30 * (2 * i + 1))).isoformat() + "Z",
+            }
+        )
 
     return history

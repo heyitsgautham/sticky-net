@@ -12,9 +12,8 @@ import re
 
 import pytest
 
-from src.intelligence.extractor import IntelligenceExtractor
 from src.api.schemas import ExtractedIntelligence
-
+from src.intelligence.extractor import IntelligenceExtractor
 
 # ============================================================================
 # PHONE NUMBER EXTRACTION & VALIDATION
@@ -171,8 +170,18 @@ class TestUpiExtraction:
 
     def test_validate_known_providers(self, extractor):
         """All common UPI providers should be accepted."""
-        providers = ["paytm", "ybl", "oksbi", "okaxis", "okicici",
-                      "upi", "apl", "fbl", "ibl", "okhdfcbank"]
+        providers = [
+            "paytm",
+            "ybl",
+            "oksbi",
+            "okaxis",
+            "okicici",
+            "upi",
+            "apl",
+            "fbl",
+            "ibl",
+            "okhdfcbank",
+        ]
         for provider in providers:
             upi = f"user@{provider}"
             assert extractor._validate_upi_id(upi), f"Should accept {upi}"
@@ -262,7 +271,7 @@ class TestEmailExtraction:
 
     def test_distinguish_email_from_upi(self):
         """
-        Key difference: emails have dots in domain (gmail.com), 
+        Key difference: emails have dots in domain (gmail.com),
         UPI IDs typically don't have dots after @ (user@paytm).
         """
         # Email

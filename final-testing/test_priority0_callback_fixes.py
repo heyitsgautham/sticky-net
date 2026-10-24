@@ -14,14 +14,10 @@ Run:  .venv/bin/python -m pytest final-testing/test_priority0_callback_fixes.py 
 """
 
 import time
-from datetime import datetime
-from unittest.mock import AsyncMock, patch, MagicMock
 
 import pytest
 
-from src.api.callback import CallbackPayload, CallbackIntelligence
-from src.api.schemas import ExtractedIntelligence, EngagementMetrics
-
+from src.api.callback import CallbackIntelligence, CallbackPayload
 
 # ============================================================================
 # ISSUE 1: engagementDurationSeconds always 0
@@ -163,7 +159,7 @@ class TestStatusFieldInCallback:
     """
     The evaluator scores:
       status present → +5 pts (required field)
-    Our current callback doesn't include 'status'. 
+    Our current callback doesn't include 'status'.
     """
 
     def test_callback_payload_has_status_field(self):
@@ -186,9 +182,7 @@ class TestStatusFieldInCallback:
                 agentNotes="test",
             )
             dumped = payload.model_dump()
-            assert dumped.get("status") == "success", (
-                "status field should default to 'success'"
-            )
+            assert dumped.get("status") == "success", "status field should default to 'success'"
         except Exception:
             pytest.fail("Cannot construct CallbackPayload — status field may be missing")
 
@@ -259,9 +253,9 @@ class TestEmailAddressesInCallback:
         }
         # Evaluator check: any(fake_value in str(v) for v in extracted_values)
         extracted = callback_intel.get("emailAddresses", [])
-        assert any(
-            fake_data["emailAddress"] in str(v) for v in extracted
-        ), "emailAddress from fakeData must be present in callback emailAddresses"
+        assert any(fake_data["emailAddress"] in str(v) for v in extracted), (
+            "emailAddress from fakeData must be present in callback emailAddresses"
+        )
 
     def test_email_regex_basic_validation(self):
         """Emails should pass basic format validation."""
@@ -297,9 +291,7 @@ class TestEmailAddressesInCallback:
             )
             assert callback_intel.emailAddresses == ["test@evil.com"]
         except TypeError:
-            pytest.fail(
-                "CallbackIntelligence or send_guvi_callback doesn't handle emailAddresses"
-            )
+            pytest.fail("CallbackIntelligence or send_guvi_callback doesn't handle emailAddresses")
 
 
 # ============================================================================
@@ -393,7 +385,7 @@ class TestIntelligenceAccumulation:
         Simulate full bank_fraud scenario: fakeData spread across turns.
         After accumulation, final callback should extract all 3 items → 30 pts.
         """
-        from scoring_helpers import score_intelligence_extraction, BANK_FRAUD_SCENARIO
+        from scoring_helpers import BANK_FRAUD_SCENARIO, score_intelligence_extraction
 
         fake_data = BANK_FRAUD_SCENARIO["fakeData"]
         accumulated = {
@@ -481,7 +473,7 @@ class TestFullCallbackStructureAfterP0:
 
     def test_perfect_bank_fraud_callback_scores_100(self):
         """A perfect callback for bank_fraud scenario should score 100/100."""
-        from scoring_helpers import score_scenario, BANK_FRAUD_SCENARIO
+        from scoring_helpers import BANK_FRAUD_SCENARIO, score_scenario
 
         perfect_output = {
             "status": "success",
@@ -510,7 +502,7 @@ class TestFullCallbackStructureAfterP0:
 
     def test_perfect_phishing_callback_scores_100(self):
         """A perfect callback for phishing scenario should score 100/100."""
-        from scoring_helpers import score_scenario, PHISHING_SCENARIO
+        from scoring_helpers import PHISHING_SCENARIO, score_scenario
 
         perfect_output = {
             "status": "success",

@@ -13,12 +13,8 @@ Run:  .venv/bin/python -m pytest final-testing/test_session_state.py -v
 
 import time
 import uuid
-from datetime import datetime
-
-import pytest
 
 from src.api.schemas import ExtractedIntelligence
-
 
 # ============================================================================
 # SESSION START TIME TRACKING
@@ -122,9 +118,7 @@ class TestClassificationCache:
         assert cache[session_id]["is_scam"] is True
 
     def test_cached_result_used_on_turn_2(self):
-        cache = {
-            "s1": {"is_scam": True, "confidence": 0.92, "scam_type": "banking_fraud"}
-        }
+        cache = {"s1": {"is_scam": True, "confidence": 0.92, "scam_type": "banking_fraud"}}
 
         # Simulate Turn 2: check cache first
         session_id = "s1"
@@ -276,7 +270,7 @@ class TestIntelligenceAccumulationStore:
         Turn 5: phone repeated (deduplicated)
         Final callback should have all 3 items.
         """
-        from scoring_helpers import score_intelligence_extraction, BANK_FRAUD_SCENARIO
+        from scoring_helpers import BANK_FRAUD_SCENARIO, score_intelligence_extraction
 
         store = self._new_store()
 
@@ -300,7 +294,7 @@ class TestIntelligenceAccumulationStore:
         Turn 1: phishing link in initial message
         Turn 3: email shared
         """
-        from scoring_helpers import score_intelligence_extraction, PHISHING_SCENARIO
+        from scoring_helpers import PHISHING_SCENARIO, score_intelligence_extraction
 
         store = self._new_store()
 
@@ -366,4 +360,3 @@ class TestSessionStoreState:
         assert session_store.get_session_classification(sid) is None
         session_store.set_session_classification(sid, {"is_scam": True})
         assert session_store.get_session_classification(sid) == {"is_scam": True}
-

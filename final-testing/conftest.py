@@ -7,10 +7,7 @@ so we can verify each priority fix recovers the expected points.
 
 import os
 import sys
-import time
-import uuid
 from datetime import datetime, timedelta
-from typing import Any
 
 # Add this directory to sys.path so scoring_helpers can be imported
 sys.path.insert(0, os.path.dirname(__file__))
@@ -26,18 +23,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 from src.main import app
-from src.api.schemas import (
-    AnalyzeRequest,
-    AnalyzeResponse,
-    ExtractedIntelligence,
-    EngagementMetrics,
-    HoneyPotResponse,
-    Message,
-    Metadata,
-    ConversationMessage,
-)
-from src.api.callback import CallbackPayload, CallbackIntelligence
-
 
 # ============================================================================
 # EVALUATOR SCORING ENGINE — mirrors GUVI hackathon evaluator exactly
@@ -73,9 +58,8 @@ def score_intelligence_extraction(final_output: dict, fake_data: dict) -> int:
         if isinstance(extracted_values, list):
             if any(fake_value in str(v) for v in extracted_values):
                 points += 10
-        elif isinstance(extracted_values, str):
-            if fake_value in extracted_values:
-                points += 10
+        elif isinstance(extracted_values, str) and fake_value in extracted_values:
+            points += 10
 
     return min(points, 40)
 
@@ -149,7 +133,7 @@ def weighted_final_score(scenario_scores: list[dict], weights: list[float]) -> f
     weights: list of floats that sum to 1.0
     """
     assert len(scenario_scores) == len(weights)
-    return sum(s["total"] * w for s, w in zip(scenario_scores, weights))
+    return sum(s["total"] * w for s, w in zip(scenario_scores, weights, strict=True))
 
 
 # ============================================================================
@@ -296,11 +280,13 @@ def build_conversation_history(
         else:
             scammer_text = followups[min(i - 1, len(followups) - 1)]
 
-        history.append({
-            "sender": "scammer",
-            "text": scammer_text,
-            "timestamp": (base_time + timedelta(seconds=30 * (2 * i))).isoformat() + "Z",
-        })
+        history.append(
+            {
+                "sender": "scammer",
+                "text": scammer_text,
+                "timestamp": (base_time + timedelta(seconds=30 * (2 * i))).isoformat() + "Z",
+            }
+        )
 
         # User (agent) reply
         reply = (
@@ -308,11 +294,13 @@ def build_conversation_history(
             if agent_replies and i < len(agent_replies)
             else "Oh no, what should I do? Please help me!"
         )
-        history.append({
-            "sender": "user",
-            "text": reply,
-            "timestamp": (base_time + timedelta(seconds=30 * (2 * i + 1))).isoformat() + "Z",
-        })
+        history.append(
+            {
+                "sender": "user",
+                "text": reply,
+                "timestamp": (base_time + timedelta(seconds=30 * (2 * i + 1))).isoformat() + "Z",
+            }
+        )
 
     return history
 

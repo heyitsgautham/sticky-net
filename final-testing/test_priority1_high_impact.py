@@ -9,14 +9,11 @@ Run:  .venv/bin/python -m pytest final-testing/test_priority1_high_impact.py -v
 """
 
 import re
-import time
-from unittest.mock import patch, MagicMock
 
 import pytest
 
 from src.api.schemas import ExtractedIntelligence
 from src.intelligence.extractor import IntelligenceExtractor
-
 
 # ============================================================================
 # ISSUE 6: Re-enable regex extraction as backup to AI extraction
@@ -28,7 +25,7 @@ class TestRegexBackupExtraction:
     AI-only extraction is unreliable:
     - Sometimes extracts 0 items despite values being in message
     - Sometimes extracts the agent's own fake data instead of scammer's
-    
+
     Regex should scan the scammer's message for known patterns and merge
     with AI results via a union operation.
     """
@@ -79,9 +76,7 @@ class TestRegexBackupExtraction:
         def is_phone(num: str) -> bool:
             if len(num) == 10 and num[0] in "6789":
                 return True
-            if len(num) == 12 and num.startswith("91") and num[2] in "6789":
-                return True
-            return False
+            return bool(len(num) == 12 and num.startswith("91") and num[2] in "6789")
 
         bank_accounts = [m for m in raw_matches if not is_phone(m)]
         assert "1234567890123456" in bank_accounts
@@ -150,7 +145,6 @@ class TestRegexBackupExtraction:
             ("Contact offers@fake-deals.com", "email"),
         ]
         email_pattern = r"[\w.+-]+@[\w-]+\.[\w.]+"
-        upi_pattern = r"[\w.-]+@[a-zA-Z][a-zA-Z0-9]*"
 
         for text, expected_type in texts:
             emails = re.findall(email_pattern, text)
@@ -195,9 +189,7 @@ class TestRegexBackupExtraction:
             "Send Rs 100 to scammer.fraud@fakebank or call +91-9876543210"
         )
 
-        # AI failed — returned empty
-        ai_intel = ExtractedIntelligence()
-
+        # AI failed and returned nothing, so only the regex scan below can find intel.
         # Regex scan
         phone_pattern = r"\+?91[-\s]?[6-9]\d{9}|\b[6-9]\d{9}\b"
         bank_pattern = r"\b\d{9,18}\b"
@@ -253,7 +245,7 @@ class TestClassificationCaching:
     Currently we run 2 LLM calls per request:
       1. Classification (gemini-3-flash, 6-16s)
       2. Engagement (gemini-3-flash, 6-12s)
-    
+
     After Turn 1 confirms scam, Turns 2-10 should skip classification
     and reuse the cached result. This saves 6-16 seconds per request.
     """
@@ -299,10 +291,7 @@ class TestClassificationCaching:
         cache = {}
         session_id = "new-session"
 
-        if session_id in cache:
-            used_cache = True
-        else:
-            used_cache = False
+        used_cache = session_id in cache
 
         assert used_cache is False, "New session must go through LLM classification"
 
@@ -376,9 +365,7 @@ class TestCloudRunMinInstances:
         import os
 
         for script_name in ["deploy-quick.sh", "scripts/deploy-manual.sh"]:
-            script_path = os.path.join(
-                os.path.dirname(os.path.dirname(__file__)), script_name
-            )
+            script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), script_name)
             if os.path.exists(script_path):
                 with open(script_path) as f:
                     content = f.read()
@@ -398,10 +385,8 @@ class TestCloudRunMinInstances:
         time_after_cold_start = total_budget - cold_start_overhead
         # Must fit: classify(8s) + engage(8s) = 16s
         assert time_after_cold_start >= 16.0, (
-            "After cold start, only {:.1f}s left. "
-            "Need at least 16s for LLM calls. min-instances=1 recovers {:.1f}s".format(
-                time_after_cold_start, cold_start_overhead
-            )
+            f"After cold start, only {time_after_cold_start:.1f}s left. "
+            f"Need at least 16s for LLM calls. min-instances=1 recovers {cold_start_overhead:.1f}s"
         )
 
 
@@ -447,9 +432,7 @@ class TestLatencyBudget:
 
         # Without fixes: risky
         total_without_fixes = cold_start + classify + engage + overhead
-        assert total_without_fixes >= 29.0, (
-            "The unfixed latency budget should be tight/risky"
-        )
+        assert total_without_fixes >= 29.0, "The unfixed latency budget should be tight/risky"
 
         # With fixes: min-instances removes cold start, caching removes classify (Turn 2+)
         total_with_fixes_turn2 = engage + overhead  # No cold start, no classify

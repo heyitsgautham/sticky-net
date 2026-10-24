@@ -8,24 +8,20 @@ system produces callback payloads that score correctly across all
 Run:  .venv/bin/python -m pytest final-testing/test_scoring_integration.py -v
 """
 
-import pytest
-
 from scoring_helpers import (
-    ALL_SCENARIOS,
     BANK_FRAUD_SCENARIO,
-    UPI_FRAUD_SCENARIO,
     PHISHING_SCENARIO,
     SCENARIO_WEIGHTS,
-    score_scam_detection,
-    score_intelligence_extraction,
+    UPI_FRAUD_SCENARIO,
+    build_conversation_history,
+    build_scammer_followups,
     score_engagement_quality,
+    score_intelligence_extraction,
     score_response_structure,
+    score_scam_detection,
     score_scenario,
     weighted_final_score,
-    build_scammer_followups,
-    build_conversation_history,
 )
-
 
 # ============================================================================
 # EVALUATOR SCORING ENGINE SELF-TESTS

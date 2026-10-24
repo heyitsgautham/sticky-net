@@ -8,17 +8,15 @@ Run:  .venv/bin/python -m pytest final-testing/test_callback_send.py -v
 """
 
 import json
-from unittest.mock import AsyncMock, patch, MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
 from src.api.callback import (
-    CallbackPayload,
     CallbackIntelligence,
+    CallbackPayload,
     send_guvi_callback,
-    send_guvi_callback_sync,
 )
-
 
 # ============================================================================
 # CALLBACK PAYLOAD MODEL TESTS
@@ -30,8 +28,13 @@ class TestCallbackPayloadModel:
 
     def test_required_fields_present(self):
         """CallbackPayload must have all evaluator-required fields."""
-        required = ["sessionId", "scamDetected", "totalMessagesExchanged",
-                     "extractedIntelligence", "agentNotes"]
+        required = [
+            "sessionId",
+            "scamDetected",
+            "totalMessagesExchanged",
+            "extractedIntelligence",
+            "agentNotes",
+        ]
         for field in required:
             assert field in CallbackPayload.model_fields, f"Missing required field: {field}"
 
@@ -133,8 +136,13 @@ class TestCallbackIntelligenceModel:
         """All fields should default to empty lists."""
         intel = CallbackIntelligence()
         dumped = intel.model_dump()
-        for field in ["bankAccounts", "upiIds", "phoneNumbers",
-                       "phishingLinks", "suspiciousKeywords"]:
+        for field in [
+            "bankAccounts",
+            "upiIds",
+            "phoneNumbers",
+            "phishingLinks",
+            "suspiciousKeywords",
+        ]:
             assert dumped[field] == [], f"{field} should default to []"
 
     def test_email_addresses_default(self):
@@ -235,13 +243,19 @@ class TestSendGuviCallback:
         # This test verifies the function signature has been updated
         # to accept engagement_duration and build engagementMetrics
         import inspect
+
         sig = inspect.signature(send_guvi_callback)
         params = list(sig.parameters.keys())
 
         # After fix, should have engagement_duration parameter
         # If not present yet, this documents the expected signature change
-        expected_params = ["session_id", "scam_detected", "total_messages",
-                          "intelligence", "agent_notes"]
+        expected_params = [
+            "session_id",
+            "scam_detected",
+            "total_messages",
+            "intelligence",
+            "agent_notes",
+        ]
 
         for p in expected_params:
             assert p in params, f"send_guvi_callback missing parameter '{p}'"
@@ -259,9 +273,7 @@ class TestSendGuviCallback:
             )
             with patch("httpx.AsyncClient") as mock_client:
                 mock_instance = AsyncMock()
-                mock_instance.post = AsyncMock(
-                    side_effect=httpx.TimeoutException("timeout")
-                )
+                mock_instance.post = AsyncMock(side_effect=httpx.TimeoutException("timeout"))
                 mock_instance.__aenter__ = AsyncMock(return_value=mock_instance)
                 mock_instance.__aexit__ = AsyncMock(return_value=False)
                 mock_client.return_value = mock_instance
@@ -289,9 +301,7 @@ class TestSendGuviCallback:
             )
             with patch("httpx.AsyncClient") as mock_client:
                 mock_instance = AsyncMock()
-                mock_instance.post = AsyncMock(
-                    side_effect=httpx.ConnectError("connection refused")
-                )
+                mock_instance.post = AsyncMock(side_effect=httpx.ConnectError("connection refused"))
                 mock_instance.__aenter__ = AsyncMock(return_value=mock_instance)
                 mock_instance.__aexit__ = AsyncMock(return_value=False)
                 mock_client.return_value = mock_instance
@@ -320,7 +330,7 @@ class TestCallbackScoringIntegration:
 
     def test_current_payload_scoring(self):
         """Score what our current CallbackPayload produces."""
-        from scoring_helpers import score_scenario, BANK_FRAUD_SCENARIO
+        from scoring_helpers import BANK_FRAUD_SCENARIO, score_scenario
 
         payload = CallbackPayload(
             sessionId="test",
@@ -341,7 +351,7 @@ class TestCallbackScoringIntegration:
 
     def test_fixed_payload_scoring(self):
         """Score what the FIXED CallbackPayload should produce."""
-        from scoring_helpers import score_scenario, BANK_FRAUD_SCENARIO
+        from scoring_helpers import BANK_FRAUD_SCENARIO, score_scenario
 
         try:
             payload = CallbackPayload(

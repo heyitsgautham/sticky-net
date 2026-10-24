@@ -28,10 +28,10 @@ jobs:
         run: uv sync --frozen --extra dev --python 3.11
 
       - name: Ruff lint
-        run: uv run --frozen ruff check src config tests
+        run: uv run --frozen ruff check src config tests final-testing conftest.py
 
       - name: Ruff format check
-        run: uv run --frozen ruff format --check src config tests
+        run: uv run --frozen ruff format --check src config tests final-testing conftest.py
 
       - name: Mypy (strict)
         run: uv run --frozen mypy

@@ -18,7 +18,6 @@ import pytest
 
 from config.settings import Settings
 
-
 # ============================================================================
 # ISSUE 9: Cloud Run timeout to 300s
 # ============================================================================
@@ -57,6 +56,7 @@ class TestCloudRunTimeout:
         # Look for timeout setting
         if "--timeout" in content:
             import re
+
             match = re.search(r"--timeout[=\s]+(\d+)", content)
             if match:
                 timeout_val = int(match.group(1))
@@ -115,15 +115,14 @@ class TestConversationSummary:
         turns 1-4 are lost. If intel was shared in turns 1-4, agent loses context.
         """
         full_history = [
-            {"sender": "scammer", "text": f"Turn {i} message", "turn": i}
-            for i in range(1, 13)
+            {"sender": "scammer", "text": f"Turn {i} message", "turn": i} for i in range(1, 13)
         ]
 
         context_window = 8
         truncated = full_history[-context_window:]
 
         # Turns 1-4 are lost
-        lost_turns = full_history[:len(full_history) - context_window]
+        lost_turns = full_history[: len(full_history) - context_window]
         assert len(lost_turns) == 4
         assert lost_turns[0]["turn"] == 1
 
@@ -132,8 +131,7 @@ class TestConversationSummary:
         truncated = full_history[-context_window:]
         turn2_in_context = any("9876543210" in msg["text"] for msg in truncated)
         assert not turn2_in_context, (
-            "Phone from Turn 2 is lost after truncation — "
-            "need summary to preserve this intel"
+            "Phone from Turn 2 is lost after truncation — need summary to preserve this intel"
         )
 
     def test_agent_build_prompt_includes_summary_for_long_history(self):
@@ -141,11 +139,12 @@ class TestConversationSummary:
         After fix: _build_prompt should include a SUMMARY section when
         history exceeds context_window_turns.
         """
-        from unittest.mock import MagicMock, patch
         from datetime import datetime
+        from unittest.mock import MagicMock, patch
+
         from src.agents.honeypot_agent import HoneypotAgent
         from src.agents.persona import Persona
-        from src.api.schemas import Message, ConversationMessage, SenderType
+        from src.api.schemas import ConversationMessage, Message, SenderType
         from src.detection.detector import DetectionResult
 
         with patch("src.agents.honeypot_agent.genai.Client") as mock_client_class:
@@ -156,7 +155,7 @@ class TestConversationSummary:
             history = []
             for i in range(12):
                 sender = SenderType.SCAMMER if i % 2 == 0 else SenderType.USER
-                text = f"Turn {i+1} message"
+                text = f"Turn {i + 1} message"
                 if i == 2:
                     text = "Call me at +91-9876543210"
                 history.append(
@@ -168,8 +167,10 @@ class TestConversationSummary:
                 )
 
             detection = DetectionResult(
-                is_scam=True, confidence=0.9,
-                scam_type="banking_fraud", reasoning="test",
+                is_scam=True,
+                confidence=0.9,
+                scam_type="banking_fraud",
+                reasoning="test",
             )
             message = Message(
                 sender=SenderType.SCAMMER,
@@ -193,8 +194,9 @@ class TestConversationSummary:
         """
         After fix: a summary of truncated turns should mention key intel.
         """
-        from unittest.mock import MagicMock, patch
         from datetime import datetime
+        from unittest.mock import MagicMock, patch
+
         from src.agents.honeypot_agent import HoneypotAgent
         from src.api.schemas import ConversationMessage, SenderType
 
@@ -232,8 +234,9 @@ class TestConversationSummary:
 
     def test_summary_does_not_exceed_token_budget(self):
         """Summary should be concise — not more than ~200 words."""
-        from unittest.mock import MagicMock, patch
         from datetime import datetime
+        from unittest.mock import MagicMock, patch
+
         from src.agents.honeypot_agent import HoneypotAgent
         from src.api.schemas import ConversationMessage, SenderType
 
@@ -248,16 +251,17 @@ class TestConversationSummary:
                 turns.append(
                     ConversationMessage(
                         sender=sender,
-                        text=f"Long message number {i+1} with many words " * 5,
+                        text=f"Long message number {i + 1} with many words " * 5,
                         timestamp=datetime.now(),
                     )
                 )
 
             summary = agent._generate_conversation_summary(turns)
             word_count = len(summary.split())
-            assert word_count <= 210, (
-            f"Summary has {word_count} words, should be <= {max_summary_words}"
-        )
+            max_summary_words = 210
+            assert word_count <= max_summary_words, (
+                f"Summary has {word_count} words, should be <= {max_summary_words}"
+            )
 
 
 # ============================================================================
@@ -303,9 +307,7 @@ class TestEngagementModelSelection:
         pro_latency = 12.0  # seconds average
 
         improvement = pro_latency - flash_latency
-        assert improvement >= 3.0, (
-            f"Flash saves {improvement:.1f}s over pro — should be >= 3s"
-        )
+        assert improvement >= 3.0, f"Flash saves {improvement:.1f}s over pro — should be >= 3s"
 
 
 # ============================================================================
@@ -322,6 +324,7 @@ class TestSystemPromptOptimization:
     def test_honeypot_system_prompt_exists(self):
         """System prompt should be importable."""
         from src.agents.prompts import HONEYPOT_SYSTEM_PROMPT
+
         assert isinstance(HONEYPOT_SYSTEM_PROMPT, str)
         assert len(HONEYPOT_SYSTEM_PROMPT) > 100
 
@@ -365,9 +368,7 @@ class TestSystemPromptOptimization:
         prompt_lower = HONEYPOT_SYSTEM_PROMPT.lower()
 
         found = sum(1 for ind in json_indicators if ind in prompt_lower)
-        assert found >= 2, (
-            "System prompt must contain JSON output format instructions"
-        )
+        assert found >= 2, "System prompt must contain JSON output format instructions"
 
 
 # ============================================================================
@@ -385,9 +386,7 @@ class TestDeploymentConfiguration:
 
     def test_docker_compose_exists(self):
         """docker-compose.yml should exist for local dev."""
-        path = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)), "docker-compose.yml"
-        )
+        path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "docker-compose.yml")
         assert os.path.exists(path), "docker-compose.yml not found"
 
     def test_guvi_callback_settings(self):

@@ -51,6 +51,7 @@ ignore = [
 "src/detection/classifier.py" = ["E501"]
 # Test fixtures hold long scam messages verbatim.
 "tests/**" = ["E501"]
+"final-testing/**" = ["E501"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["src", "config"]
