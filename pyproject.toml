@@ -72,3 +72,12 @@ python_version = "3.11"
 strict = true
 plugins = ["pydantic.mypy"]
 files = ["src", "config"]
+
+[tool.coverage.run]
+source = ["src", "config"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 65
+show_missing = true
+skip_covered = true

@@ -1,0 +1,36 @@
+# Findings gitleaks reports in history before secret scanning ran in CI.
+# The curl-auth-header hits are docs and scripts with placeholder keys such as test-api-key.
+# The generic-api-key hits are a GUVI session token in endpoint-testing network dumps,
+# redacted from the tree in e2ac22c. Only history still has it.
+16bd9b566b0b391f14caa3e7ddb2b15c3850fea3:docs/CHAT_CONTEXT_SUMMARY.md:curl-auth-header:116
+16bd9b566b0b391f14caa3e7ddb2b15c3850fea3:endpoint-testing/test-1/network_tab.txt:generic-api-key:113
+16bd9b566b0b391f14caa3e7ddb2b15c3850fea3:endpoint-testing/test-1/network_tab.txt:generic-api-key:132
+16bd9b566b0b391f14caa3e7ddb2b15c3850fea3:endpoint-testing/test-1/network_tab.txt:generic-api-key:151
+16bd9b566b0b391f14caa3e7ddb2b15c3850fea3:endpoint-testing/test-1/network_tab.txt:generic-api-key:170
+16bd9b566b0b391f14caa3e7ddb2b15c3850fea3:endpoint-testing/test-1/network_tab.txt:generic-api-key:18
+16bd9b566b0b391f14caa3e7ddb2b15c3850fea3:endpoint-testing/test-1/network_tab.txt:generic-api-key:37
+16bd9b566b0b391f14caa3e7ddb2b15c3850fea3:endpoint-testing/test-1/network_tab.txt:generic-api-key:56
+16bd9b566b0b391f14caa3e7ddb2b15c3850fea3:endpoint-testing/test-1/network_tab.txt:generic-api-key:75
+16bd9b566b0b391f14caa3e7ddb2b15c3850fea3:endpoint-testing/test-1/network_tab.txt:generic-api-key:94
+18bb4af8fa162d8a1d77ea897447c01c60a1ab0b:README.md:curl-auth-header:43
+442359195cafee6c4b36560e08e6380b64a5a11b:deploy-quick.sh:curl-auth-header:26
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-2/network_tab-2.txt:generic-api-key:18
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-2/network_tab-2.txt:generic-api-key:37
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-3/network_tab-3.txt:generic-api-key:18
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-3/network_tab-3.txt:generic-api-key:37
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-4/network_tab-4.txt:generic-api-key:18
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-4/network_tab-4.txt:generic-api-key:37
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-5/network_tab-5.txt:generic-api-key:18
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-5/network_tab-5.txt:generic-api-key:37
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-6/network_tab-6.txt:generic-api-key:18
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-6/network_tab-6.txt:generic-api-key:37
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-7/network_tab-7.txt:generic-api-key:10
+442359195cafee6c4b36560e08e6380b64a5a11b:endpoint-testing/test-7/network_tab-7.txt:generic-api-key:29
+442359195cafee6c4b36560e08e6380b64a5a11b:scripts/deploy-manual.sh:curl-auth-header:48
+442afe29c2101c7ef56fe1f442ce02d70fcfc1fe:.github/instructions/milestone-1-project-setup.instructions.md:curl-auth-header:499
+442afe29c2101c7ef56fe1f442ce02d70fcfc1fe:.github/instructions/milestone-2-api-layer.instructions.md:curl-auth-header:622
+442afe29c2101c7ef56fe1f442ce02d70fcfc1fe:.github/instructions/milestone-6-deployment.instructions.md:curl-auth-header:515
+442afe29c2101c7ef56fe1f442ce02d70fcfc1fe:.github/instructions/milestone-6-deployment.instructions.md:curl-auth-header:611
+68ed00bd154791e0882584fe533463fdc936b961:FIX.md:curl-auth-header:377
+68ed00bd154791e0882584fe533463fdc936b961:final-submission-docs/EVAL_SYS.md:curl-auth-header:692
+8154a75b25b0830ba725f7caa3959d1fcb7e14df:README.md:curl-auth-header:548
