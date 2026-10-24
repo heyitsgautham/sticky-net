@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 import structlog
 
 from src.api.schemas import ConversationMessage, Metadata
-from src.detection.classifier import ScamClassifier, ClassificationResult
+from src.detection.classifier import ClassificationResult, ScamClassifier
 
 logger = structlog.get_logger()
 

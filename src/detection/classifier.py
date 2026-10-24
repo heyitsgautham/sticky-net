@@ -1,6 +1,7 @@
 """AI-based scam classification using Gemini 3 Flash."""
 
 import asyncio
+import functools
 import json
 import os
 from dataclasses import dataclass, field
@@ -209,7 +210,8 @@ Return ONLY: {{"is_scam": bool, "confidence": float, "scam_type": str|null, "thr
                         response = await asyncio.wait_for(
                             asyncio.get_event_loop().run_in_executor(
                                 None,
-                                lambda: self.client.models.generate_content(
+                                functools.partial(
+                                    self.client.models.generate_content,
                                     model=model_name,
                                     contents=prompt,
                                     config=config,
@@ -237,7 +239,7 @@ Return ONLY: {{"is_scam": bool, "confidence": float, "scam_type": str|null, "thr
                             )
                             break  # Don't retry on empty response, try fallback model
 
-                    except asyncio.TimeoutError:
+                    except TimeoutError:
                         self.logger.warning(
                             "Gemini API timeout during classification",
                             model=model_name,

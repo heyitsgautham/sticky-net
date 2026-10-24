@@ -72,10 +72,12 @@ class EngagementPolicy:
 
         # CRITICAL: If scammer just mentioned a URL that wasn't extracted yet,
         # keep engagement going to capture it (even if other conditions suggest exit)
-        if state.has_unextracted_urls:
-            # Allow 2 more turns to extract the URL before hard limits apply
-            if state.turn_count < max_turns and state.duration_seconds < self.max_duration_seconds:
-                return True
+        if (
+            state.has_unextracted_urls
+            and state.turn_count < max_turns
+            and state.duration_seconds < self.max_duration_seconds
+        ):
+            return True
 
         # Check all exit conditions
         if state.turn_count >= max_turns:
@@ -86,10 +88,7 @@ class EngagementPolicy:
             return False
         if state.scammer_suspicious:
             return False
-        if state.turns_since_new_info >= self.stale_turn_threshold:
-            return False
-
-        return True
+        return state.turns_since_new_info < self.stale_turn_threshold
 
     def get_exit_reason(self, state: EngagementState) -> str | None:
         """Get the reason for exiting engagement, if any."""

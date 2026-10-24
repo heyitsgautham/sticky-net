@@ -2,9 +2,8 @@
 
 import pytest
 
-from src.intelligence.extractor import IntelligenceExtractor, ExtractionResult
-from src.intelligence.validators import ExtractionSource
 from src.api.schemas import ExtractedIntelligence
+from src.intelligence.extractor import ExtractionResult, IntelligenceExtractor
 
 
 class TestAIExtractionValidation:

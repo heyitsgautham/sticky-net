@@ -1,7 +1,7 @@
 """API module for Sticky-Net."""
 
-from src.api.schemas import AnalyzeRequest, AnalyzeResponse
 from src.api.middleware import setup_middleware
+from src.api.schemas import AnalyzeRequest, AnalyzeResponse
 
 
 def get_router():

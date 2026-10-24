@@ -6,9 +6,6 @@ import pytest
 
 from src.agents.fake_data import (
     FakeDataGenerator,
-    FakeCreditCard,
-    FakeBankAccount,
-    FakePersona,
     get_fake_data_generator,
 )
 

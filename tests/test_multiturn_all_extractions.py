@@ -20,7 +20,7 @@ Requires:
 
 import time
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 import requests
@@ -218,7 +218,7 @@ class TestMultiTurnAllExtractions:
         session_start = time.time()
 
         print(f"\n{_divider()}")
-        print(f"  MULTI-TURN EXTRACTION TEST — ALL 5 TYPES")
+        print("  MULTI-TURN EXTRACTION TEST — ALL 5 TYPES")
         print(f"  Session: {session_id}")
         print(f"  Turns:   {total_turns}")
         print(f"  FakeData: {list(FAKE_DATA.keys())}")
@@ -226,7 +226,7 @@ class TestMultiTurnAllExtractions:
 
         # ── Run all turns on /api/v1/analyze ──
         for idx, scammer_msg in enumerate(messages, start=1):
-            ts = datetime.now(timezone.utc).isoformat()
+            ts = datetime.now(UTC).isoformat()
 
             body = {
                 "sessionId": session_id,
@@ -263,9 +263,9 @@ class TestMultiTurnAllExtractions:
             print(f"\n{_divider('-', 90)}")
             print(f"  TURN {idx}/{total_turns}  |  {elapsed:.2f}s  |  status={data.get('status')}")
             print(f"{_divider('-', 90)}")
-            print(f"\n  [SCAMMER]:")
+            print("\n  [SCAMMER]:")
             print(f"  {scammer_msg}")
-            print(f"\n  [AGENT REPLY]:")
+            print("\n  [AGENT REPLY]:")
             print(f"  {agent_reply}")
 
             # Build history for next turn
@@ -274,7 +274,7 @@ class TestMultiTurnAllExtractions:
                 {
                     "sender": "user",
                     "text": agent_reply,
-                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "timestamp": datetime.now(UTC).isoformat(),
                 }
             )
 
@@ -284,11 +284,11 @@ class TestMultiTurnAllExtractions:
 
         # ── Final /detailed call for scoring ──
         print(f"\n{_divider()}")
-        print(f"  FETCHING FINAL DETAILED RESPONSE FOR SCORING...")
+        print("  FETCHING FINAL DETAILED RESPONSE FOR SCORING...")
         print(f"{_divider()}")
 
         last_scammer_msg = messages[-1]
-        last_ts = datetime.now(timezone.utc).isoformat()
+        last_ts = datetime.now(UTC).isoformat()
 
         scoring_body = {
             "sessionId": session_id,
@@ -311,7 +311,7 @@ class TestMultiTurnAllExtractions:
 
         # ── SCORING ──
         print(f"\n{_divider('=', 90)}")
-        print(f"  SCORING RESULTS")
+        print("  SCORING RESULTS")
         print(f"{_divider('=', 90)}")
 
         # 1. Scam Detection (20 pts)
@@ -341,7 +341,7 @@ class TestMultiTurnAllExtractions:
             print(f"    {marker} {key:<18} {status:<8} {info['fakeValue']:<50} {actual}")
 
         # Full intel dump
-        print(f"\n     Full extractedIntelligence from API:")
+        print("\n     Full extractedIntelligence from API:")
         for k, v in intel.items():
             if v:  # Only print non-empty
                 print(f"       {k}: {v}")
@@ -399,19 +399,19 @@ class TestMultiTurnAllExtractions:
         total_score = scam_score + intel_score + eng_score + struct_score
         print(f"\n{_divider('=', 90)}")
         print(f"  TOTAL SCORE:  {total_score}/100 pts")
-        print(f"")
+        print("")
         print(f"    Scam Detection:       {scam_score:>5}/20")
         print(f"    Intel Extraction:     {intel_score:>5}/40")
         print(f"    Engagement Quality:   {eng_score:>5}/20")
         print(f"    Response Structure:   {struct_score:>5}/20")
-        print(f"    ──────────────────────────────")
+        print("    ──────────────────────────────")
         print(f"    TOTAL:                {total_score:>5}/100")
         print(f"{_divider('=', 90)}")
 
         # ── Agent Notes ──
         notes = scoring_data.get("agentNotes", "")
         if notes:
-            print(f"\n  AGENT NOTES:")
+            print("\n  AGENT NOTES:")
             print(f"  {notes}")
 
         # ── Conversation Summary ──

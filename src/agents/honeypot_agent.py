@@ -1,13 +1,15 @@
 """Main honeypot agent implementation using Gemini 3 Pro."""
 
 import asyncio
+import contextlib
+import functools
 import hashlib
 import json
 import os
 import random
 import time
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 import structlog
 from google import genai
@@ -15,6 +17,10 @@ from google.genai import types
 from pydantic import ValidationError
 
 from config.settings import get_settings
+from src.agents.fake_data import FakeDataGenerator
+from src.agents.persona import Persona, PersonaManager
+from src.agents.policy import EngagementMode, EngagementPolicy, EngagementState
+from src.agents.prompts import HONEYPOT_SYSTEM_PROMPT
 from src.api.schemas import (
     AgentJsonResponse,
     ConversationMessage,
@@ -24,10 +30,6 @@ from src.api.schemas import (
     SenderType,
 )
 from src.detection.detector import DetectionResult
-from src.agents.prompts import HONEYPOT_SYSTEM_PROMPT
-from src.agents.persona import PersonaManager, Persona
-from src.agents.policy import EngagementPolicy, EngagementMode, EngagementState
-from src.agents.fake_data import FakeDataGenerator, FakeCreditCard, FakeBankAccount, FakePersona
 
 # Safety settings for Gemini to allow scam roleplay (for honeypot context)
 # Using BLOCK_NONE for Gemini 3 Preview models which have stricter default filters
@@ -234,7 +236,8 @@ class HoneypotAgent:
         should_continue = self.policy.should_continue(state)
         exit_reason = self.policy.get_exit_reason(state) if not should_continue else None
 
-        # Generate notes with actual turn number (intelligence will be added in routes.py after merging)
+        # Generate notes with the actual turn number.
+        # routes.py adds intelligence after merging the LLM and regex results.
         notes = self._generate_notes(
             detection, persona, engagement_mode, actual_turn, extracted_intel=None
         )
@@ -273,6 +276,7 @@ class HoneypotAgent:
 
         # Generate all fake data upfront for consistency
         credit_card = generator.generate_credit_card()
+        card = credit_card.number
         bank_account = generator.generate_bank_account()
         persona_details = generator.generate_persona_details()
 
@@ -284,7 +288,7 @@ class HoneypotAgent:
             "aadhaar": generator.generate_aadhaar(),
             "pan": generator.generate_pan(),
             # Pre-formatted strings for easy use in prompts
-            "card_number_formatted": f"{credit_card.number[:4]} {credit_card.number[4:8]} {credit_card.number[8:12]} {credit_card.number[12:]}",
+            "card_number_formatted": f"{card[:4]} {card[4:8]} {card[8:12]} {card[12:]}",
             "card_number_raw": credit_card.number,
             "card_expiry": credit_card.expiry,
             "card_cvv": credit_card.cvv,
@@ -318,7 +322,8 @@ class HoneypotAgent:
         Returns:
             Formatted string for inclusion in system prompt
         """
-        return f"""- Credit Card: {fake_data["card_number_formatted"]} (type: {fake_data["credit_card"].card_type})
+        card_type = fake_data["credit_card"].card_type
+        return f"""- Credit Card: {fake_data["card_number_formatted"]} (type: {card_type})
 - Card Expiry: {fake_data["card_expiry"]}
 - Card CVV: {fake_data["card_cvv"]}
 - Bank Account: {fake_data["account_number"]}
@@ -566,7 +571,8 @@ Generate your response as Pushpa Verma:"""
                     response = await asyncio.wait_for(
                         asyncio.get_event_loop().run_in_executor(
                             None,
-                            lambda: self.client.models.generate_content(
+                            functools.partial(
+                                self.client.models.generate_content,
                                 model=model_name,
                                 contents=prompt,
                                 config=config,
@@ -595,7 +601,7 @@ Generate your response as Pushpa Verma:"""
                         )
                         break  # Don't retry on empty response, try fallback model
 
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     self.logger.warning(
                         "Gemini API timeout",
                         model=model_name,
@@ -659,10 +665,9 @@ Generate your response as Pushpa Verma:"""
                 intel_dict = raw_json.get("extracted_intelligence")
                 salvaged_intel = None
                 if isinstance(intel_dict, dict):
-                    try:
+                    # Skip intel that does not parse; the reply alone is still usable.
+                    with contextlib.suppress(Exception):
                         salvaged_intel = ExtractedIntelligence(**intel_dict)
-                    except Exception:
-                        pass  # skip intel if it can't be parsed
                 return reply, salvaged_intel
         except (json.JSONDecodeError, KeyError, TypeError):
             pass

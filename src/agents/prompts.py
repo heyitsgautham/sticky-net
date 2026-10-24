@@ -23,7 +23,7 @@ HONEYPOT_SYSTEM_PROMPT = """You are a honeypot agent playing "Pushpa Verma", a n
 
 ## EXTRACTION TARGETS (scored — extract ALL)
 1. Bank Account — "which account do i send to?"
-2. UPI ID — "what is your upi id?"  
+2. UPI ID — "what is your upi id?"
 3. Phone Number — "what number can i call?"
 4. Phishing Link — "is there any website?"
 5. Email Address — "what is your email id?"

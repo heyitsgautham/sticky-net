@@ -1,10 +1,19 @@
 """Tests for honeypot agent module."""
 
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
 from datetime import datetime
+from unittest.mock import MagicMock, patch
 
-from src.agents.honeypot_agent import HoneypotAgent, EngagementResult
+import pytest
+
+from src.agents.honeypot_agent import EngagementResult, HoneypotAgent
+from src.agents.persona import EmotionalState, Persona, PersonaManager, PersonaTrait
+from src.agents.policy import EngagementMode, EngagementPolicy, EngagementState
+from src.agents.prompts import (
+    format_scam_indicators,
+    get_response_strategy,
+)
+from src.api.schemas import ConversationMessage, Message, Metadata, SenderType
+from src.detection.detector import DetectionResult
 
 
 def create_mock_gemini_response(text: str) -> MagicMock:
@@ -27,16 +36,6 @@ def create_mock_gemini_response(text: str) -> MagicMock:
     mock_response.text = text  # Keep for backward compatibility
 
     return mock_response
-
-
-from src.agents.persona import Persona, PersonaManager, EmotionalState, PersonaTrait
-from src.agents.policy import EngagementPolicy, EngagementMode, EngagementState
-from src.agents.prompts import (
-    get_response_strategy,
-    format_scam_indicators,
-)
-from src.api.schemas import Message, ConversationMessage, Metadata, SenderType
-from src.detection.detector import DetectionResult
 
 
 class TestPersona:

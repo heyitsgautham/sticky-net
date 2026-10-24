@@ -553,7 +553,6 @@ BENEFICIARY_NAME_BLOCKLIST = {
     "transfer",
     "today",
     "immediately",
-    "urgent",
     "asap",
     "quick",
     "verify",
@@ -696,10 +695,7 @@ def validate_bank_account(account: str) -> bool:
         return False
 
     # Exclude phone-like patterns
-    if _looks_like_phone(digits):
-        return False
-
-    return True
+    return not _looks_like_phone(digits)
 
 
 def validate_ifsc(ifsc: str) -> bool:
@@ -821,10 +817,7 @@ def validate_beneficiary_name(name: str) -> bool:
         return False
 
     # Reject single-word names that are too short (likely false positives)
-    if len(words) == 1 and len(clean_name) < 4:
-        return False
-
-    return True
+    return not (len(words) == 1 and len(clean_name) < 4)
 
 
 # =============================================================================
@@ -934,10 +927,7 @@ def _looks_like_phone(number: str) -> bool:
         return True
 
     # 11 digits: 91 + 9 digits (less common)
-    if len(number) == 11 and number.startswith("91") and number[2] in "6789":
-        return True
-
-    return False
+    return bool(len(number) == 11 and number.startswith("91") and number[2] in "6789")
 
 
 def _clean_phone_number(phone: str) -> str:
@@ -998,7 +988,9 @@ AI_EXTRACTION_SCHEMA = {
         "ifsc_codes": {
             "type": "array",
             "items": {"type": "string"},
-            "description": "IFSC codes (format: 4 letters + 0 + 6 alphanumeric, e.g., 'SBIN0001234')",
+            "description": (
+                "IFSC codes (format: 4 letters + 0 + 6 alphanumeric, e.g., 'SBIN0001234')"
+            ),
         },
         "whatsapp_numbers": {
             "type": "array",

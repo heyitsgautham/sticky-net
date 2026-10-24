@@ -1,8 +1,8 @@
 """Agent module for honeypot engagement."""
 
-from src.agents.honeypot_agent import HoneypotAgent, EngagementResult, get_agent
-from src.agents.persona import Persona, PersonaManager, PersonaTrait, EmotionalState
-from src.agents.policy import EngagementPolicy, EngagementMode, EngagementState
+from src.agents.honeypot_agent import EngagementResult, HoneypotAgent, get_agent
+from src.agents.persona import EmotionalState, Persona, PersonaManager, PersonaTrait
+from src.agents.policy import EngagementMode, EngagementPolicy, EngagementState
 from src.agents.prompts import (
     HONEYPOT_SYSTEM_PROMPT,
     get_response_strategy,

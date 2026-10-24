@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from enum import Enum
-from typing import Annotated, Union
+from typing import Annotated
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -30,11 +30,11 @@ class Message(BaseModel):
     text: Annotated[
         str, Field(min_length=1, max_length=10000)
     ]  # Increased limit for long scam messages
-    timestamp: Union[int, str, datetime]  # Accept epoch ms (int), ISO string, or datetime
+    timestamp: int | str | datetime  # Accept epoch ms (int), ISO string, or datetime
 
     @field_validator("timestamp", mode="before")
     @classmethod
-    def normalize_timestamp(cls, v: Union[int, str, datetime]) -> datetime:
+    def normalize_timestamp(cls, v: int | str | datetime) -> datetime:
         """Normalize timestamp to datetime object."""
         if isinstance(v, datetime):
             return v
@@ -57,11 +57,11 @@ class ConversationMessage(BaseModel):
 
     sender: str  # Accept any sender identifier
     text: str
-    timestamp: Union[int, str, datetime]  # Accept epoch ms (int), ISO string, or datetime
+    timestamp: int | str | datetime  # Accept epoch ms (int), ISO string, or datetime
 
     @field_validator("timestamp", mode="before")
     @classmethod
-    def normalize_timestamp(cls, v: Union[int, str, datetime]) -> datetime:
+    def normalize_timestamp(cls, v: int | str | datetime) -> datetime:
         """Normalize timestamp to datetime object (same logic as Message)."""
         if isinstance(v, datetime):
             return v

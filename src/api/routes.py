@@ -4,9 +4,11 @@ import asyncio
 import random
 import time
 import uuid
-import structlog
-from fastapi import APIRouter, HTTPException, Request
 
+import structlog
+from fastapi import APIRouter
+
+from src.agents.honeypot_agent import get_agent
 from src.api.callback import send_guvi_callback
 from src.api.schemas import (
     AnalyzeRequest,
@@ -21,16 +23,17 @@ from src.api.schemas import (
 )
 from src.api.session_store import (
     accumulate_intel as _accumulate_intel,
-    init_session_start_time,
-    get_session_start_time,
-    get_or_init_session_intel,
-    store_detection_result,
-    get_previous_detection,
 )
-from src.detection.detector import ScamDetector, get_detector
-from src.agents.honeypot_agent import HoneypotAgent, get_agent
-from src.intelligence.extractor import IntelligenceExtractor
+from src.api.session_store import (
+    get_or_init_session_intel,
+    get_previous_detection,
+    get_session_start_time,
+    init_session_start_time,
+    store_detection_result,
+)
+from src.detection.detector import get_detector
 from src.exceptions import StickyNetError
+from src.intelligence.extractor import IntelligenceExtractor
 
 logger = structlog.get_logger()
 
@@ -248,13 +251,13 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
                 ),
                 timeout=agent_budget,
             )
-        except asyncio.TimeoutError:
+        except TimeoutError:
             log.warning(
                 "Agent timed out, using fallback",
                 elapsed=time.time() - request_start_time,
                 budget=agent_budget,
             )
-            from src.agents.honeypot_agent import EngagementResult, EngagementMode
+            from src.agents.honeypot_agent import EngagementMode, EngagementResult
 
             fallback_replies = [
                 "hello... sorry i got disconnected for a moment... what were you saying?",
@@ -359,14 +362,6 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         )
 
         # Step 5: Build response
-        # Convert scam_type string to ScamType enum
-        scam_type_enum = None
-        if detection_result.scam_type:
-            try:
-                scam_type_enum = ScamType(detection_result.scam_type)
-            except ValueError:
-                scam_type_enum = ScamType.OTHERS
-
         # Ensure agentResponse is never None
         agent_response = engagement_result.response
         if not agent_response:
@@ -425,7 +420,7 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
             status="error",
             reply="Sorry, I'm having trouble right now. Can we talk later?",
         )
-    except Exception as e:
+    except Exception:
         log.exception("Unexpected error")
         return HoneyPotResponse(
             status="error",

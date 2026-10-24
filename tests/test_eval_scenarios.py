@@ -20,7 +20,7 @@ Requires:
 import time
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 import requests
@@ -308,7 +308,7 @@ def run_multi_turn(
 
     # --- Run all turns on /api/v1/analyze ---
     for idx, scammer_msg in enumerate(messages, start=1):
-        ts = datetime.now(timezone.utc).isoformat()
+        ts = datetime.now(UTC).isoformat()
         body = {
             "sessionId": session_id,
             "message": {"sender": "scammer", "text": scammer_msg, "timestamp": ts},
@@ -343,7 +343,7 @@ def run_multi_turn(
             {
                 "sender": "user",
                 "text": agent_reply,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
             }
         )
 
@@ -389,7 +389,7 @@ class TestSingleTurnAnalyze:
 
     @pytest.mark.parametrize("scenario", SCENARIOS, ids=lambda s: s["scenarioId"])
     def test_returns_200_with_reply(self, _server_health, scenario):
-        ts = datetime.now(timezone.utc).isoformat()
+        ts = datetime.now(UTC).isoformat()
         body = {
             "message": {
                 "sender": "scammer",
@@ -408,7 +408,7 @@ class TestSingleTurnAnalyze:
 
     @pytest.mark.parametrize("scenario", SCENARIOS, ids=lambda s: s["scenarioId"])
     def test_response_time_under_30s(self, _server_health, scenario):
-        ts = datetime.now(timezone.utc).isoformat()
+        ts = datetime.now(UTC).isoformat()
         body = {
             "message": {
                 "sender": "scammer",
@@ -433,7 +433,7 @@ class TestSingleTurnScamDetection:
 
     @pytest.mark.parametrize("scenario", SCENARIOS, ids=lambda s: s["scenarioId"])
     def test_scam_gets_reply(self, _server_health, scenario):
-        ts = datetime.now(timezone.utc).isoformat()
+        ts = datetime.now(UTC).isoformat()
         body = {
             "message": {
                 "sender": "scammer",
@@ -668,7 +668,7 @@ class TestResponseStructure:
     @pytest.mark.parametrize("scenario", SCENARIOS, ids=lambda s: s["scenarioId"])
     def test_analyze_response_has_status_and_reply(self, _server_health, scenario):
         """The /analyze endpoint must return {status, reply}."""
-        ts = datetime.now(timezone.utc).isoformat()
+        ts = datetime.now(UTC).isoformat()
         body = {
             "message": {
                 "sender": "scammer",
@@ -687,7 +687,7 @@ class TestResponseStructure:
     @pytest.mark.parametrize("scenario", SCENARIOS, ids=lambda s: s["scenarioId"])
     def test_reply_is_non_empty_string(self, _server_health, scenario):
         """The /analyze reply must be a non-empty string."""
-        ts = datetime.now(timezone.utc).isoformat()
+        ts = datetime.now(UTC).isoformat()
         body = {
             "message": {
                 "sender": "scammer",
@@ -729,7 +729,7 @@ class TestEdgeCases:
             "message": {
                 "sender": "friend",
                 "text": "Hey, are you coming to the party tonight?",
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
             },
             "conversationHistory": [],
             "metadata": {"channel": "WhatsApp", "language": "English", "locale": "IN"},
@@ -745,7 +745,7 @@ class TestEdgeCases:
         """Sending the same sessionId should maintain context."""
         session_id = str(uuid.uuid4())
         scenario = SCENARIOS[0]  # bank_fraud
-        ts = datetime.now(timezone.utc).isoformat()
+        ts = datetime.now(UTC).isoformat()
 
         # Turn 1
         body1 = {
@@ -768,7 +768,7 @@ class TestEdgeCases:
             "message": {
                 "sender": "scammer",
                 "text": "Please share your account number immediately sir.",
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
             },
             "conversationHistory": [
                 {"sender": "scammer", "text": scenario["initialMessage"], "timestamp": ts},

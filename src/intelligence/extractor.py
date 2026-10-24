@@ -19,7 +19,6 @@ import structlog
 from src.api.schemas import ExtractedIntelligence
 from src.intelligence.validators import (
     ExtractionSource,
-    UPI_PROVIDERS,
     validate_beneficiary_name,
 )
 
@@ -449,9 +448,7 @@ class IntelligenceExtractor:
         if len(set(account)) == 1:
             return False
         # Exclude phone-like patterns
-        if self._looks_like_phone(account):
-            return False
-        return True
+        return not self._looks_like_phone(account)
 
     def _validate_upi_id(self, upi: str) -> bool:
         """
@@ -486,10 +483,7 @@ class IntelligenceExtractor:
             return True
 
         # 11 digits: 91 + 9 digits (truncated, still accept)
-        if len(phone) == 11 and phone.startswith("91") and phone[2] in "6789":
-            return True
-
-        return False
+        return bool(len(phone) == 11 and phone.startswith("91") and phone[2] in "6789")
 
     def _validate_ifsc(self, ifsc: str) -> bool:
         """
@@ -504,9 +498,7 @@ class IntelligenceExtractor:
             return False
         if ifsc[4] != "0":
             return False
-        if not ifsc[5:].isalnum():
-            return False
-        return True
+        return ifsc[5:].isalnum()
 
     def _validate_name(self, name: str) -> bool:
         """Validate beneficiary name."""
@@ -526,10 +518,7 @@ class IntelligenceExtractor:
             return True
 
         # 12 digits: 91 + 10 digits starting with 6-9 = phone
-        if len(number) == 12 and number.startswith("91") and number[2] in "6789":
-            return True
-
-        return False
+        return bool(len(number) == 12 and number.startswith("91") and number[2] in "6789")
 
 
 # Singleton instance

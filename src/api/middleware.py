@@ -2,7 +2,6 @@
 
 import time
 from collections.abc import Callable
-from typing import Any
 
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse

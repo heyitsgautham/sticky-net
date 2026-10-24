@@ -1,11 +1,12 @@
 """Tests for pure AI scam detection module."""
 
-import pytest
-from unittest.mock import AsyncMock, patch, MagicMock
 from datetime import datetime
+from unittest.mock import patch
 
-from src.detection.detector import ScamDetector, DetectionResult
-from src.detection.classifier import ScamClassifier, ClassificationResult
+import pytest
+
+from src.detection.classifier import ClassificationResult, ScamClassifier
+from src.detection.detector import DetectionResult, ScamDetector
 
 
 # Mock genai.Client at module level for all tests that need it
@@ -99,7 +100,7 @@ class TestScamDetector:
                 ),
             ]
 
-            result = await detector.analyze(
+            await detector.analyze(
                 message="There's a problem with your account",
                 history=history,
             )
@@ -120,7 +121,7 @@ class TestScamDetector:
 
             metadata = Metadata(channel="SMS", language="English", locale="IN")
 
-            result = await detector.analyze(
+            await detector.analyze(
                 message="Hello there",
                 metadata=metadata,
             )

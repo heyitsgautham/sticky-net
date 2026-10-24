@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Quick test for beneficiary name blocklist."""
 
-from src.intelligence.validators import validate_beneficiary_name, BENEFICIARY_NAME_BLOCKLIST
+from src.intelligence.validators import BENEFICIARY_NAME_BLOCKLIST, validate_beneficiary_name
 
 # Test false positives that should be rejected
 false_positives = [

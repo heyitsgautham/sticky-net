@@ -2,20 +2,20 @@
 
 import logging
 import sys
-from contextlib import asynccontextmanager
 from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 import structlog
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
-from src.api.routes import router
-from src.api.middleware import setup_middleware
 from config.settings import get_settings
+from src.api.middleware import setup_middleware
+from src.api.routes import router
 
 # Static files directory
 STATIC_DIR = Path(__file__).parent / "static"

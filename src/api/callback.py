@@ -1,6 +1,7 @@
 """GUVI Hackathon callback handler for reporting extracted intelligence."""
 
 import logging
+
 import httpx
 from pydantic import BaseModel
 
@@ -55,7 +56,8 @@ async def send_guvi_callback(
         session_id: Unique session ID from the platform
         scam_detected: Whether scam intent was confirmed
         total_messages: Total messages exchanged in session
-        intelligence: Dict with bankAccounts, upiIds, phishingLinks, phoneNumbers, emailAddresses, suspiciousKeywords
+        intelligence: Dict with bankAccounts, upiIds, phishingLinks, phoneNumbers,
+            emailAddresses, suspiciousKeywords
         agent_notes: Summary of scammer behavior
         engagement_duration: Duration in seconds since first message in this session
         scam_type: Type of scam detected (e.g., 'phishing', 'vishing')
@@ -116,7 +118,8 @@ async def send_guvi_callback(
                 return True
             else:
                 logger.warning(
-                    f"GUVI callback returned {response.status_code} for session {session_id}: {response.text}"
+                    f"GUVI callback returned {response.status_code} "
+                    f"for session {session_id}: {response.text}"
                 )
                 return False
 

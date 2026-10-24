@@ -9,11 +9,10 @@ import asyncio
 import time
 from datetime import datetime
 
-from src.agents.honeypot_agent import HoneypotAgent, EngagementResult
+from src.agents.honeypot_agent import HoneypotAgent
 from src.agents.persona import EmotionalState
-from src.api.schemas import Message, ConversationMessage, Metadata, SenderType
-from src.detection.detector import ScamDetector, DetectionResult
-
+from src.api.schemas import ConversationMessage, Message, Metadata, SenderType
+from src.detection.detector import ScamDetector
 
 # Banking fraud scenario - 5 turn conversation
 SCAM_SCENARIO = [
@@ -59,12 +58,12 @@ async def run_multi_turn_test():
     print("📋 Test Configuration:")
     print(f"   • Primary Model: {agent.model}")
     print(f"   • Fallback Model: {agent.fallback_model}")
-    print(f"   • Thinking Level: HIGH (for Gemini 3)")
-    print(f"   • Scenario: Banking Fraud Scam")
+    print("   • Thinking Level: HIGH (for Gemini 3)")
+    print("   • Scenario: Banking Fraud Scam")
     print(f"   • Expected Turns: {len(SCAM_SCENARIO)}")
     print()
 
-    print(f"✅ Agent initialized")
+    print("✅ Agent initialized")
     print(f"   • Primary: {agent.model}")
     print(f"   • Fallback: {agent.fallback_model}")
     print(f"   • Classifier Primary: {detector.classifier.model}")

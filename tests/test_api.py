@@ -1,8 +1,9 @@
 """Tests for API endpoints."""
 
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import AsyncMock, MagicMock, patch
 
 from src.agents.honeypot_agent import EngagementResult
 from src.agents.policy import EngagementMode
