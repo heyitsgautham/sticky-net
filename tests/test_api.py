@@ -4,6 +4,9 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import AsyncMock, MagicMock, patch
 
+from src.agents.honeypot_agent import EngagementResult
+from src.agents.policy import EngagementMode
+from src.detection.detector import DetectionResult
 from src.main import app
 
 
@@ -73,76 +76,34 @@ class TestAnalyzeEndpoint:
     """Tests for analyze endpoint."""
 
     @patch("src.api.routes.get_agent")
-    @patch("src.api.routes.ScamDetector")
-    @patch("src.api.routes.HoneypotAgent")
-    @patch("src.api.routes.IntelligenceExtractor")
+    @patch("src.api.routes.get_detector")
     def test_scam_detected_returns_engagement(
         self,
-        mock_extractor,
-        mock_agent,
-        mock_detector,
+        mock_get_detector,
         mock_get_agent,
         client: TestClient,
         auth_headers: dict,
         sample_scam_message: dict,
     ):
-        """Scam message should trigger engagement."""
-        # Setup mocks
-        mock_detector_instance = mock_detector.return_value
-        mock_detector_instance.analyze = AsyncMock(
-            return_value=type(
-                "Result", (), 
-                {"is_scam": True, "confidence": 0.95, "scam_type": "banking_fraud"}
-            )()
+        """A scam message reaches the agent and the reply is the agent's reply."""
+        mock_get_detector.return_value.analyze = AsyncMock(
+            return_value=DetectionResult(
+                is_scam=True, confidence=0.95, scam_type="banking_fraud"
+            )
         )
-
-        mock_agent_instance = mock_agent.return_value
-        mock_agent_instance.engage = AsyncMock(
-            return_value=type(
-                "Result",
-                (),
-                {
-                    "duration_seconds": 120,
-                    "notes": "Urgency tactics detected",
-                    "response": "Oh no, what should I do?",
-                    "extracted_intelligence": None,  # Agent may return extracted intel
-                    "conversation_id": "test-conv-123",
-                    "engagement_mode": "CAUTIOUS",
-                    "turn_number": 1,
-                    "should_continue": True,
-                    "exit_reason": None,
-                },
-            )()
+        agent = mock_get_agent.return_value
+        agent.engage = AsyncMock(
+            return_value=EngagementResult(
+                response="Oh no, what should I do?",
+                duration_seconds=120,
+                notes="Urgency tactics detected",
+                conversation_id="test-conv-123",
+                turn_number=1,
+                engagement_mode=EngagementMode.CAUTIOUS,
+                should_continue=True,
+            )
         )
-        # Mock the persona manager for notes generation
-        mock_agent_instance.persona_manager = MagicMock()
-        mock_agent_instance.persona_manager.get_or_create_persona = MagicMock(
-            return_value=MagicMock(name="TestPersona")
-        )
-        mock_agent_instance._generate_notes = MagicMock(return_value="Test agent notes")
-        
-        # Setup get_agent singleton mock to return the same mocked agent
-        mock_get_agent.return_value = mock_agent_instance
-
-        mock_extractor_instance = mock_extractor.return_value
-        # extract is synchronous, not async - use MagicMock
-        mock_extractor_instance.extract = MagicMock(
-            return_value=type(
-                "Result",
-                (),
-                {
-                    "bank_accounts": [],
-                    "upi_ids": [],
-                    "phishing_links": [],
-                    "phone_numbers": [],
-                    "emailAddresses": [],
-                    "beneficiary_names": [],
-                    "bank_names": [],
-                    "ifsc_codes": [],
-                    "whatsapp_numbers": [],
-                },
-            )()
-        )
+        agent._generate_notes = MagicMock(return_value="Test agent notes")
 
         response = client.post(
             "/api/v1/analyze",
@@ -153,25 +114,23 @@ class TestAnalyzeEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "success"
-        # New simplified response format: just status and reply
-        assert "reply" in data
-        assert isinstance(data["reply"], str)
+        assert data["reply"] == "Oh no, what should I do?"
+        agent.engage.assert_awaited_once()
+        assert agent.engage.await_args.kwargs["turn_number"] == 1
 
-    @patch("src.api.routes.ScamDetector")
+    @patch("src.api.routes.get_agent")
+    @patch("src.api.routes.get_detector")
     def test_legitimate_message_returns_no_scam(
         self,
-        mock_detector,
+        mock_get_detector,
+        mock_get_agent,
         client: TestClient,
         auth_headers: dict,
         sample_legitimate_message: dict,
     ):
-        """Legitimate message should not trigger engagement."""
-        mock_detector_instance = mock_detector.return_value
-        mock_detector_instance.analyze = AsyncMock(
-            return_value=type(
-                "Result", (), 
-                {"is_scam": False, "confidence": 0.1, "scam_type": None}
-            )()
+        """A message the detector clears gets a canned greeting and never reaches the agent."""
+        mock_get_detector.return_value.analyze = AsyncMock(
+            return_value=DetectionResult(is_scam=False, confidence=0.1)
         )
 
         response = client.post(
@@ -183,9 +142,8 @@ class TestAnalyzeEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "success"
-        # New simplified response format: just status and reply
-        assert "reply" in data
-        assert isinstance(data["reply"], str)
+        assert data["reply"]
+        mock_get_agent.assert_not_called()
 
     def test_invalid_request_body_returns_200_with_fallback(
         self,
