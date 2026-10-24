@@ -12,6 +12,7 @@ from google import genai
 from google.genai import types
 
 from config.settings import get_settings
+from src import llm
 from src.api.schemas import ConversationMessage, Metadata
 
 
@@ -26,32 +27,6 @@ class ScamType(str, Enum):
 
 
 logger = structlog.get_logger()
-
-
-def _extract_text_from_response(response: types.GenerateContentResponse) -> str:
-    """Extract text from Gemini response without triggering thought_signature warning.
-
-    Gemini 3 models return 'thought_signature' parts alongside text parts.
-    Using response.text triggers a warning. This function extracts only text parts.
-
-    Args:
-        response: The Gemini GenerateContentResponse object
-
-    Returns:
-        Concatenated text from all text parts
-    """
-    if not response.candidates:
-        return ""
-
-    text_parts = []
-    for candidate in response.candidates:
-        if candidate.content and candidate.content.parts:
-            for part in candidate.content.parts:
-                # Only extract text parts, skip thought_signature and other non-text parts
-                if hasattr(part, "text") and part.text:
-                    text_parts.append(part.text)
-
-    return "".join(text_parts)
 
 
 # Safety settings for Gemini to allow scam content analysis (for honeypot context)
@@ -221,7 +196,7 @@ Return ONLY: {{"is_scam": bool, "confidence": float, "scam_type": str|null, "thr
                         )
 
                         # Use helper to avoid thought_signature warning in Gemini 3
-                        response_text = _extract_text_from_response(response)
+                        response_text = llm.response_text(response)
 
                         # Check if we got a valid response
                         if response_text and len(response_text.strip()) > 0:

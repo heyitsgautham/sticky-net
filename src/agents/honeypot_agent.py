@@ -1,7 +1,6 @@
 """Main honeypot agent implementation using Gemini 3 Pro."""
 
 import asyncio
-import contextlib
 import functools
 import hashlib
 import json
@@ -15,15 +14,15 @@ from typing import Any
 import structlog
 from google import genai
 from google.genai import types
-from pydantic import ValidationError
 
 from config.settings import get_settings
+from src import llm
 from src.agents.fake_data import FakeDataGenerator
 from src.agents.persona import Persona, PersonaManager
 from src.agents.policy import EngagementMode, EngagementPolicy, EngagementState
 from src.agents.prompts import HONEYPOT_SYSTEM_PROMPT
+from src.agents.reply_parser import parse_agent_reply
 from src.api.schemas import (
-    AgentJsonResponse,
     ConversationMessage,
     ExtractedIntelligence,
     Message,
@@ -54,32 +53,6 @@ HONEYPOT_SAFETY_SETTINGS = [
 ]
 
 logger = structlog.get_logger()
-
-
-def _extract_text_from_response(response: types.GenerateContentResponse) -> str:
-    """Extract text from Gemini response without triggering thought_signature warning.
-
-    Gemini 3 models return 'thought_signature' parts alongside text parts.
-    Using response.text triggers a warning. This function extracts only text parts.
-
-    Args:
-        response: The Gemini GenerateContentResponse object
-
-    Returns:
-        Concatenated text from all text parts
-    """
-    if not response.candidates:
-        return ""
-
-    text_parts = []
-    for candidate in response.candidates:
-        if candidate.content and candidate.content.parts:
-            for part in candidate.content.parts:
-                # Only extract text parts, skip thought_signature and other non-text parts
-                if hasattr(part, "text") and part.text:
-                    text_parts.append(part.text)
-
-    return "".join(text_parts)
 
 
 @dataclass
@@ -473,33 +446,6 @@ Generate your response as Pushpa Verma:"""
 
         return prompt
 
-    @staticmethod
-    def _extract_json_text(raw: str) -> str:
-        """Strip markdown code fences and return inner text."""
-        text = raw.strip()
-        if text.startswith("```json"):
-            text = text[7:]
-        elif text.startswith("```"):
-            text = text[3:]
-        if text.endswith("```"):
-            text = text[:-3]
-        return text.strip()
-
-    def _parse_agent_json_response(self, response_text: str) -> AgentJsonResponse | None:
-        """Parse the JSON response from the agent. Returns None if parsing fails.
-
-        Handles common LLM quirks:
-        - Markdown code fences around JSON
-        """
-        try:
-            text = self._extract_json_text(response_text)
-            data = json.loads(text)
-
-            return AgentJsonResponse(**data)
-        except (json.JSONDecodeError, ValidationError, KeyError, TypeError) as e:
-            self.logger.warning(f"Failed to parse agent JSON response: {e}")
-            return None
-
     async def _generate_response(
         self,
         prompt: str,
@@ -583,7 +529,7 @@ Generate your response as Pushpa Verma:"""
                     )
 
                     # Use helper to avoid thought_signature warning in Gemini 3
-                    response_text = _extract_text_from_response(response)
+                    response_text = llm.response_text(response)
 
                     # Check if we got a valid response
                     if response_text and len(response_text.strip()) > 0:
@@ -640,42 +586,8 @@ Generate your response as Pushpa Verma:"""
             self._last_model_used = "fallback"
             return self._get_fallback_response(), None
 
-        # Try to parse as JSON (One-Pass JSON architecture)
-        parsed = self._parse_agent_json_response(response_text)
-        if parsed:
-            self.logger.info(
-                "Successfully parsed JSON response from agent",
-                emotional_tone=parsed.emotional_tone,
-                intel_found=bool(
-                    parsed.extracted_intelligence.bankAccounts
-                    or parsed.extracted_intelligence.upiIds
-                    or parsed.extracted_intelligence.phoneNumbers
-                    or parsed.extracted_intelligence.phishingLinks
-                ),
-            )
-            return parsed.reply_text, parsed.extracted_intelligence
-
-        # Safety net: full Pydantic parse failed, but if the text looks like JSON
-        # try to at least extract reply_text so we never return raw JSON as the reply.
-        try:
-            raw_json = json.loads(self._extract_json_text(response_text))
-            if isinstance(raw_json, dict) and "reply_text" in raw_json:
-                reply = raw_json["reply_text"]
-                self.logger.info("Extracted reply_text from partially-valid JSON")
-                # Also try to salvage intelligence even without full validation
-                intel_dict = raw_json.get("extracted_intelligence")
-                salvaged_intel = None
-                if isinstance(intel_dict, dict):
-                    # Skip intel that does not parse; the reply alone is still usable.
-                    with contextlib.suppress(Exception):
-                        salvaged_intel = ExtractedIntelligence(**intel_dict)
-                return reply, salvaged_intel
-        except (json.JSONDecodeError, KeyError, TypeError):
-            pass
-
-        # Fallback: return raw response if JSON parsing fails
-        self.logger.debug("Using raw response (JSON parsing failed)")
-        return response_text, None
+        # One-Pass JSON architecture: the reply and the intel come back together
+        return parse_agent_reply(response_text)
 
     def _get_fallback_response(self, detection: DetectionResult | None = None) -> str:
         """Get a fallback response if LLM fails."""
