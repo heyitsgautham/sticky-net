@@ -22,3 +22,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 audit.jsonl
+
+# Environment files hold per-machine API URLs and keys; frontend/.env.example documents them.
+.env
+.env.*
+!.env.example
