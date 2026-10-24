@@ -1,7 +1,9 @@
 """Application settings using Pydantic Settings."""
 
 from functools import lru_cache
+from typing import Literal
 
+from pydantic import ValidationInfo, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -60,8 +62,8 @@ class Settings(BaseSettings):
     environment: str = "development"  # development, staging, production
 
     # Logging
-    log_level: str = "INFO"
-    log_format: str = "json"  # json or console
+    log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
+    log_format: Literal["json", "console"] = "json"
 
     # Rate Limiting (production)
     rate_limit_requests: int = 100
@@ -71,6 +73,14 @@ class Settings(BaseSettings):
     guvi_callback_url: str = "https://hackathon.guvi.in/api/updateHoneyPotFinalResult"
     guvi_callback_timeout: float = 10.0  # Timeout for callback requests in seconds
     guvi_callback_enabled: bool = True  # Flag to enable/disable callback
+
+    @field_validator("log_level", "log_format", mode="before")
+    @classmethod
+    def _normalise_case(cls, value: object, info: ValidationInfo) -> object:
+        """Accept LOG_LEVEL=info and LOG_FORMAT=JSON as well as the canonical spelling."""
+        if not isinstance(value, str):
+            return value
+        return value.upper() if info.field_name == "log_level" else value.lower()
 
     @property
     def is_production(self) -> bool:
