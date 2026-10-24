@@ -34,3 +34,5 @@
 68ed00bd154791e0882584fe533463fdc936b961:FIX.md:curl-auth-header:377
 68ed00bd154791e0882584fe533463fdc936b961:final-submission-docs/EVAL_SYS.md:curl-auth-header:692
 8154a75b25b0830ba725f7caa3959d1fcb7e14df:README.md:curl-auth-header:548
+# README.md moved to docs/HACKATHON_SUBMISSION.md in c4e82ab; its curl example uses a placeholder key.
+c4e82ab1d0617614188a97c2783aedb4c9cf6d81:docs/HACKATHON_SUBMISSION.md:curl-auth-header:548
