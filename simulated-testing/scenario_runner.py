@@ -183,7 +183,7 @@ class ScenarioRunner:
             "upiIds": extracted.get("upiIds", []),
             "phoneNumbers": extracted.get("phoneNumbers", []),
             "phishingLinks": extracted.get("phishingLinks", []),
-            "emailAddresses": extracted.get("emails", []),
+            "emailAddresses": extracted.get("emailAddresses") or extracted.get("emails", []),
             "suspiciousKeywords": extracted.get("suspiciousKeywords", []),
         }
 
