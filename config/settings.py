@@ -3,7 +3,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import ValidationInfo, field_validator
+from pydantic import ValidationInfo, field_validator, model_validator
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
 
 from config.secret_files import FileSecretsSource
@@ -110,10 +110,20 @@ class Settings(BaseSettings):
             return value
         return value.upper() if info.field_name == "log_level" else value.lower()
 
+    @model_validator(mode="after")
+    def _refuse_debug_in_production(self) -> "Settings":
+        """DEBUG turns off the API key check and opens CORS, so production must not set it."""
+        if self.debug and self.is_production:
+            raise ValueError(
+                "DEBUG=true is not allowed with ENVIRONMENT=production: it disables "
+                "the API key check and allows every CORS origin"
+            )
+        return self
+
     @property
     def is_production(self) -> bool:
         """Check if running in production."""
-        return self.environment == "production"
+        return self.environment.strip().lower() == "production"
 
     @property
     def is_development(self) -> bool:
