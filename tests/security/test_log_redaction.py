@@ -10,7 +10,7 @@ import structlog
 from src.log_redaction import REDACTED, is_secret_name, redact_text, redact_value
 from src.logging_config import configure_logging
 
-KEY = "sk-live-4f9a8c7e2b"
+KEY = "not-a-real-key"
 
 
 @pytest.fixture(autouse=True)

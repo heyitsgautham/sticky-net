@@ -36,3 +36,5 @@
 8154a75b25b0830ba725f7caa3959d1fcb7e14df:README.md:curl-auth-header:548
 # README.md moved to docs/HACKATHON_SUBMISSION.md in c4e82ab; its curl example uses a placeholder key.
 c4e82ab1d0617614188a97c2783aedb4c9cf6d81:docs/HACKATHON_SUBMISSION.md:curl-auth-header:548
+# A made-up key in the log redaction tests, replaced with an obviously fake value.
+6bb9a37f0951daffcb30934be4cf63cb28505b6c:tests/security/test_log_redaction.py:generic-api-key:13
