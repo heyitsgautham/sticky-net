@@ -4,7 +4,9 @@ from functools import lru_cache
 from typing import Literal
 
 from pydantic import ValidationInfo, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
+
+from config.secret_files import FileSecretsSource
 
 # The GUVI hackathon evaluator sends this value as x-api-key on every turn.
 # It is public, printed in the hackathon's own docs, and grants nothing beyond the
@@ -81,6 +83,24 @@ class Settings(BaseSettings):
     guvi_callback_url: str = "https://hackathon.guvi.in/api/updateHoneyPotFinalResult"
     guvi_callback_timeout: float = 10.0  # Timeout for callback requests in seconds
     guvi_callback_enabled: bool = True  # Flag to enable/disable callback
+
+    @classmethod
+    def settings_customise_sources(
+        cls,
+        settings_cls: type[BaseSettings],
+        init_settings: PydanticBaseSettingsSource,
+        env_settings: PydanticBaseSettingsSource,
+        dotenv_settings: PydanticBaseSettingsSource,
+        file_secret_settings: PydanticBaseSettingsSource,
+    ) -> tuple[PydanticBaseSettingsSource, ...]:
+        """Read API_KEY_FILE and EVALUATOR_API_KEY_FILE after env vars, before .env."""
+        return (
+            init_settings,
+            env_settings,
+            FileSecretsSource(settings_cls),
+            dotenv_settings,
+            file_secret_settings,
+        )
 
     @field_validator("log_level", "log_format", mode="before")
     @classmethod

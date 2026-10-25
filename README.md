@@ -169,6 +169,7 @@ The middleware compares keys with `hmac.compare_digest`, so timing does not leak
 |---|---|---|
 | `API_KEY` | required | Shared key clients send as `x-api-key` |
 | `EVALUATOR_API_KEY` | `test-api-key` | Second accepted key for the GUVI evaluator, empty to disable |
+| `API_KEY_FILE`, `EVALUATOR_API_KEY_FILE` | unset | Read the key from a mounted secret file, used when the plain variable is unset |
 | `GOOGLE_CLOUD_PROJECT` | required | Vertex AI and Firestore project |
 | `DEBUG` | `false` | Opens `/docs`, allows keyless requests and any CORS origin |
 | `FLASH_MODEL`, `PRO_MODEL` | `gemini-3-flash-preview` | Classifier and agent models |
