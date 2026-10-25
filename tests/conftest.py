@@ -3,6 +3,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
+from config.settings import get_settings
 from src.main import app
 
 
@@ -14,14 +15,14 @@ def client() -> TestClient:
 
 @pytest.fixture
 def api_key() -> str:
-    """Test API key."""
-    return "test-api-key"
+    """The API_KEY the test settings were built with."""
+    return get_settings().api_key
 
 
 @pytest.fixture
-def auth_headers() -> dict[str, str]:
+def auth_headers(api_key: str) -> dict[str, str]:
     """Authentication headers for API requests."""
-    return {"x-api-key": "test-api-key"}
+    return {"x-api-key": api_key}
 
 
 @pytest.fixture

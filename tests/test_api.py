@@ -2,25 +2,11 @@
 
 from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 from fastapi.testclient import TestClient
 
 from src.agents.honeypot_agent import EngagementResult
 from src.agents.policy import EngagementMode
 from src.detection.detector import DetectionResult
-from src.main import app
-
-
-@pytest.fixture
-def client() -> TestClient:
-    """Create test client."""
-    return TestClient(app)
-
-
-@pytest.fixture
-def auth_headers() -> dict[str, str]:
-    """Authentication headers."""
-    return {"x-api-key": "test-api-key"}
 
 
 class TestHealthEndpoint:

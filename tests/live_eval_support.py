@@ -1,11 +1,14 @@
 """Scenarios, the GUVI rubric and a multi-turn driver for the live evaluation tests in test_eval_scenarios.py."""
 
+import os
 import time
 import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
 import requests
+
+from config.settings import GUVI_EVALUATOR_KEY
 
 # ---------------------------------------------------------------------------
 # Config
@@ -19,7 +22,9 @@ ANALYZE_URL = f"{BASE_URL}/api/v1/analyze"
 DETAILED_URL = f"{BASE_URL}/api/v1/analyze/detailed"
 
 
-API_KEY = "test-api-key"
+# The live server accepts the GUVI evaluator key unless EVALUATOR_API_KEY is empty.
+# Point TEST_API_KEY at the server's API_KEY to test with the real key instead.
+API_KEY = os.environ.get("TEST_API_KEY", GUVI_EVALUATOR_KEY)
 
 
 HEADERS = {"Content-Type": "application/json", "x-api-key": API_KEY}

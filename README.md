@@ -137,6 +137,7 @@ mypy runs in strict mode over `src/` and `config/`.
 
 The tests marked `integration` drive a live server backed by real Gemini credentials, so they cost money and are skipped by default.
 Start the server on port 8000 and run them with `uv run pytest -m integration`.
+They send `TEST_API_KEY` as `x-api-key`, falling back to the evaluator's public key.
 
 ## API
 
