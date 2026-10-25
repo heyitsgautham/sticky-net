@@ -70,7 +70,42 @@ class RequestTimingMiddleware(BaseHTTPMiddleware):
         return response
 
 
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """Add browser hardening headers to every response.
+
+    JSON routes also get ``Cache-Control: no-store``, because replies carry extracted
+    bank and UPI details, and a CSP that forbids loading anything. The static tester
+    page at ``/`` uses inline handlers, so it gets the base headers only.
+    """
+
+    BASE_HEADERS = {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "Referrer-Policy": "no-referrer",
+    }
+    API_HEADERS = {
+        "Cache-Control": "no-store",
+        "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",
+    }
+    API_PREFIXES = ("/api/", "/health")
+
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
+        """Set the headers a route has not already set."""
+        response = await call_next(request)
+        headers = dict(self.BASE_HEADERS)
+        if request.url.path.startswith(self.API_PREFIXES):
+            headers.update(self.API_HEADERS)
+        for name, value in headers.items():
+            response.headers.setdefault(name, value)
+        return response
+
+
 def setup_middleware(app: FastAPI) -> None:
-    """Configure all middleware for the application."""
+    """Configure all middleware for the application.
+
+    Starlette runs the last one added first, so SecurityHeadersMiddleware wraps the
+    401 and 403 replies from APIKeyMiddleware too.
+    """
     app.add_middleware(RequestTimingMiddleware)
     app.add_middleware(APIKeyMiddleware)
+    app.add_middleware(SecurityHeadersMiddleware)
