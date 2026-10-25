@@ -4,6 +4,7 @@ import asyncio
 import random
 import time
 import uuid
+from collections.abc import Coroutine
 from typing import Any
 
 import structlog
@@ -51,6 +52,19 @@ router = APIRouter(prefix="/api/v1", tags=["analyze"])
 DETAILED_ERROR_NOTES = "Analysis failed; see server logs for details."
 
 # Session state is managed by src.api.session_store (Firestore-backed)
+
+
+# The event loop keeps only weak references to tasks, so a fire-and-forget task with
+# no other reference can be garbage collected before it finishes. Each callback task
+# stays in this set until it completes.
+_background_tasks: set[asyncio.Task[None]] = set()
+
+
+def _run_in_background(coro: Coroutine[Any, Any, None]) -> None:
+    """Schedule ``coro`` without awaiting it, holding a reference until it finishes."""
+    task = asyncio.create_task(coro)
+    _background_tasks.add(task)
+    task.add_done_callback(_background_tasks.discard)
 
 
 async def _fire_callback(**kwargs: Any) -> None:
@@ -289,7 +303,7 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         callback_intelligence = accumulated_intel
 
         # Fire callback truly async (fire-and-forget) — don't block the response
-        asyncio.create_task(
+        _run_in_background(
             _fire_callback(
                 session_id=session_id,
                 total_messages=total_messages_exchanged,
