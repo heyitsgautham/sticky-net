@@ -47,6 +47,9 @@ logger = structlog.get_logger()
 
 router = APIRouter(prefix="/api/v1", tags=["analyze"])
 
+# agentNotes for a failed /analyze/detailed call. It never includes the exception text.
+DETAILED_ERROR_NOTES = "Analysis failed; see server logs for details."
+
 # Session state is managed by src.api.session_store (Firestore-backed)
 
 
@@ -455,11 +458,13 @@ async def analyze_message_detailed(request: AnalyzeRequest) -> AnalyzeResponse:
             agentResponse=agent_response,
         )
 
-    except Exception as e:
+    except Exception:
+        # The traceback goes to the logs only; exception text can name paths,
+        # credentials or upstream responses, so the client gets a fixed note.
         log.exception("Unexpected error in detailed endpoint")
         return AnalyzeResponse(
             status=StatusType.ERROR,
             scamDetected=False,
             agentResponse="Sorry, I'm having trouble right now. Can we talk later?",
-            agentNotes=f"Error: {str(e)}",
+            agentNotes=DETAILED_ERROR_NOTES,
         )

@@ -256,4 +256,5 @@ class TestAnalyzeDetailed:
 
         assert data["status"] == "error"
         assert data["scamDetected"] is False
-        assert "boom" in data["agentNotes"]
+        assert data["agentNotes"] == "Analysis failed; see server logs for details."
+        assert "boom" not in data["agentNotes"]
