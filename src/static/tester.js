@@ -90,7 +90,7 @@ function updateMetrics(response) {
     }
 
     // Confidence (estimate based on scam detection)
-    const confidenceValue = response.scamDetected ? 0.85 : 0.15;
+    const confidenceValue = response.confidence ?? (response.scamDetected ? 0.85 : 0.15);
     const confidence = document.getElementById('confidence');
     confidence.textContent = `${Math.round(confidenceValue * 100)}%`;
     confidence.className = `metric-value ${confidenceValue > 0.6 ? 'danger' : 'success'}`;
@@ -121,6 +121,7 @@ function updateIntelligence(intelligence) {
         intelligence.upiIds?.length ||
         intelligence.phishingLinks?.length ||
         intelligence.phoneNumbers?.length ||
+        intelligence.emailAddresses?.length ||
         intelligence.beneficiaryNames?.length ||
         intelligence.whatsappNumbers?.length ||
         intelligence.ifscCodes?.length ||
@@ -155,6 +156,19 @@ function updateIntelligence(intelligence) {
                 <ul class="intel-list">
                     ${intelligence.upiIds.map(upi => 
                         `<li class="intel-item">${escapeHtml(upi)}</li>`
+                    ).join('')}
+                </ul>
+            </div>
+        `;
+    }
+
+    if (intelligence.emailAddresses?.length) {
+        html += `
+            <div class="intel-section">
+                <div class="intel-category">📧 Email Addresses</div>
+                <ul class="intel-list">
+                    ${intelligence.emailAddresses.map(email => 
+                        `<li class="intel-item">${escapeHtml(email)}</li>`
                     ).join('')}
                 </ul>
             </div>
@@ -295,7 +309,7 @@ async function sendMessage() {
 
     try {
         const apiKey = document.getElementById('apiKeyInput').value || 'test-api-key';
-        const response = await fetch('/api/v1/analyze', {
+        const response = await fetch('/api/v1/analyze/detailed', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
