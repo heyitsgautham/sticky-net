@@ -149,6 +149,7 @@ Start the server on port 8000 and run them with `uv run pytest -m integration`.
 
 The request body is `AnalyzeRequest` in `src/api/schemas.py`.
 Malformed bodies get HTTP 200 with a "sorry, say again" reply instead of 422, because the evaluator scores a non-200 turn as zero.
+The same reply goes to oversized bodies, meaning a message over 10,000 characters or more than 100 history entries.
 
 Scam types are `banking_fraud`, `job_offer`, `lottery_reward`, `impersonation` and `others`.
 
