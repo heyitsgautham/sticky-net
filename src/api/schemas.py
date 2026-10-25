@@ -6,6 +6,12 @@ from typing import Annotated, Any
 
 from pydantic import BaseModel, Field, field_validator
 
+# Request size limits. The evaluator sends at most 10 turns (about 20 history
+# messages); anything far past that is abuse and would only inflate prompt cost
+# and regex scan time.
+MAX_MESSAGE_CHARS = 10_000
+MAX_HISTORY_MESSAGES = 100
+
 
 class SenderType(str, Enum):
     """Common sender types (for reference only)."""
@@ -27,9 +33,7 @@ class Message(BaseModel):
     """Incoming message model."""
 
     sender: str  # Accept any sender identifier
-    text: Annotated[
-        str, Field(min_length=1, max_length=10000)
-    ]  # Increased limit for long scam messages
+    text: Annotated[str, Field(min_length=1, max_length=MAX_MESSAGE_CHARS)]
     timestamp: int | str | datetime  # Accept epoch ms (int), ISO string, or datetime
 
     @field_validator("timestamp", mode="before")
@@ -56,7 +60,7 @@ class ConversationMessage(BaseModel):
     """Message in conversation history."""
 
     sender: str  # Accept any sender identifier
-    text: str
+    text: Annotated[str, Field(max_length=MAX_MESSAGE_CHARS)]
     timestamp: int | str | datetime  # Accept epoch ms (int), ISO string, or datetime
 
     @field_validator("timestamp", mode="before")
@@ -95,7 +99,9 @@ class AnalyzeRequest(BaseModel):
     """Main API request model."""
 
     message: Message
-    conversationHistory: list[ConversationMessage] = Field(default_factory=list)
+    conversationHistory: list[ConversationMessage] = Field(
+        default_factory=list, max_length=MAX_HISTORY_MESSAGES
+    )
     metadata: Metadata = Field(default_factory=Metadata)
     sessionId: str | None = None  # Optional session ID for multi-turn tracking
 

@@ -98,6 +98,17 @@ def create_app() -> FastAPI:
 
     # Global exception handler: always return HTTP 200 for validation errors (Fix 8C)
     # Prevents 422 responses that would cause the evaluator to get 0 pts for the turn.
+    @app.exception_handler(Exception)
+    async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+        """Log anything the routes did not catch and answer with a generic 500.
+
+        The body never carries the exception text, so stack details stay in the logs.
+        """
+        logger.exception("Unhandled error", path=request.url.path)
+        return JSONResponse(
+            status_code=500, content={"status": "error", "detail": "internal error"}
+        )
+
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(
         request: Request, exc: RequestValidationError
