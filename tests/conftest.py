@@ -1,10 +1,15 @@
 """Fixtures for the tests/ suite. Repo-wide setup lives in the root conftest.py."""
 
+from collections.abc import Callable, Iterator
+from typing import Any
+from unittest.mock import patch
+
 import pytest
 from fastapi.testclient import TestClient
 
-from config.settings import get_settings
+from config.settings import Settings, get_settings
 from src.main import app
+from tests.helpers import make_settings
 
 
 @pytest.fixture
@@ -59,3 +64,23 @@ def sample_legitimate_message() -> dict:
             "locale": "IN",
         },
     }
+
+
+@pytest.fixture
+def use_settings() -> Iterator[Callable[..., Settings]]:
+    """Run APIKeyMiddleware in production mode with key ``prod-key-for-tests``.
+
+    Call the fixture with overrides, such as ``use_settings(debug=True)``, to change
+    the settings the middleware reads for the rest of the test.
+    """
+    patcher = patch("src.api.middleware.get_settings")
+    mocked = patcher.start()
+
+    def apply(**overrides: Any) -> Settings:
+        settings = make_settings(**overrides)
+        mocked.return_value = settings
+        return settings
+
+    apply()
+    yield apply
+    patcher.stop()

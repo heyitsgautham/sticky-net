@@ -8,13 +8,14 @@ import structlog
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from config.settings import get_settings
 from src.api.middleware import setup_middleware
 from src.api.routes import router
 from src.logging_config import configure_logging
+from src.metrics import record_fallback, render_latest
 
 # Static files directory
 STATIC_DIR = Path(__file__).parent / "static"
@@ -114,7 +115,13 @@ def create_app() -> FastAPI:
         request: Request, exc: RequestValidationError
     ) -> JSONResponse:
         """Catch Pydantic validation errors and return 200 with a fallback reply."""
-        logger.warning("Validation error caught", error=str(exc)[:200], path=request.url.path)
+        logger.warning(
+            "Validation error caught",
+            security_event="malformed_request",
+            error=str(exc)[:200],
+            path=request.url.path,
+        )
+        record_fallback("malformed_request")
         return JSONResponse(
             status_code=200,
             content={
@@ -127,6 +134,12 @@ def create_app() -> FastAPI:
     async def health_check() -> dict[str, str]:
         """Health check endpoint."""
         return {"status": "healthy"}
+
+    @app.get("/metrics", include_in_schema=False)
+    async def metrics() -> Response:
+        """Prometheus metrics. Needs x-api-key like the analyze routes."""
+        body, content_type = render_latest()
+        return Response(content=body, media_type=content_type)
 
     @app.get("/")
     async def serve_ui() -> FileResponse:

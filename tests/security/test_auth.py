@@ -10,7 +10,7 @@ from fastapi.testclient import TestClient
 from config.settings import GUVI_EVALUATOR_KEY, Settings
 from src.api.auth import accepted_api_keys, key_matches
 from src.main import app
-from tests.security.conftest import make_settings
+from tests.helpers import make_settings
 
 # /health is exempt, so a protected route is needed. A body FastAPI rejects still
 # reaches the middleware first, which is all these tests look at, and past the

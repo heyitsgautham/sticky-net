@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from tests.security.conftest import make_settings
+from tests.helpers import make_settings
 
 
 @pytest.mark.parametrize("environment", ["production", "Production", " production "])

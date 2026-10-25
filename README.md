@@ -39,7 +39,8 @@ With no Google credentials, the regex detector still works and the agent answers
 | `src/agents/` | Honeypot agent, personas, engagement policy, prompts, fake data, reply parser |
 | `src/intelligence/` | Regex extractor, validators, patterns and word lists |
 | `src/llm/` | Helpers for reading Gemini responses |
-| `src/logging_config.py` | structlog and stdlib logging setup |
+| `src/logging_config.py`, `src/log_redaction.py` | structlog and stdlib logging setup, and the processor that masks keys and tokens |
+| `src/metrics.py` | Prometheus counters and histograms for `/metrics` |
 | `config/settings.py` | Every setting, loaded from the environment by pydantic-settings |
 | `tests/`, `final-testing/` | The default pytest suites, all offline |
 | `frontend/` | React 19 dashboard (Create React App with craco, Tailwind, shadcn/ui) |
@@ -146,11 +147,28 @@ They send `TEST_API_KEY` as `x-api-key`, falling back to the evaluator's public 
 | `POST /api/v1/analyze` | `x-api-key` | One evaluator turn, returns `status` and `reply`, or the summary on `[CONVERSATION_END]` |
 | `POST /api/v1/analyze/detailed` | `x-api-key` | Full analysis for the dashboard, with verdict, scam type, confidence, intelligence and agent notes |
 | `GET /health` | none | `{"status": "healthy"}` |
+| `GET /metrics` | `x-api-key` | Prometheus metrics, see below |
 | `GET /` | none | Static test UI from `src/static/index.html` |
 
 The request body is `AnalyzeRequest` in `src/api/schemas.py`.
 Malformed bodies get HTTP 200 with a "sorry, say again" reply instead of 422, because the evaluator scores a non-200 turn as zero.
 The same reply goes to oversized bodies, meaning a message over 10,000 characters or more than 100 history entries.
+
+### Metrics
+
+`GET /metrics` serves Prometheus text from `src/metrics.py`, behind the same key check as the analyze routes.
+
+| Metric | Labels | Counts |
+|---|---|---|
+| `sticky_net_http_requests_total` | `method`, `route`, `status` | Every request, including 401 and 403 replies |
+| `sticky_net_http_request_duration_seconds` | `route` | Latency, with buckets up to the 30 second limit |
+| `sticky_net_scam_verdicts_total` | `endpoint`, `scam_detected`, `scam_type` | Detector verdicts |
+| `sticky_net_auth_failures_total` | `reason` | `missing` or `invalid` keys |
+| `sticky_net_fallback_replies_total` | `reason` | Canned replies for malformed bodies, agent timeouts, empty replies and errors |
+| `sticky_net_guvi_callbacks_total` | `outcome` | GUVI callbacks `sent`, `rejected` or `error` |
+
+`route` holds the route template, and requests no route handled share `unrouted`, so odd URLs cannot add series.
+Auth rejections and malformed bodies also log a warning with a `security_event` field.
 
 Scam types are `banking_fraud`, `job_offer`, `lottery_reward`, `impersonation` and `others`.
 

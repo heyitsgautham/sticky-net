@@ -2,12 +2,29 @@
 
 import time
 
+import structlog
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
 from config.settings import get_settings
 from src.api.auth import accepted_api_keys, key_matches
+from src.metrics import AUTH_FAILURES, HTTP_LATENCY, HTTP_REQUESTS, UNROUTED
+
+logger = structlog.get_logger()
+
+
+def _reject(request: Request, status_code: int, reason: str, message: str) -> JSONResponse:
+    """Count and log an auth rejection, then build its reply. The key is never logged."""
+    AUTH_FAILURES.labels(reason=reason).inc()
+    logger.warning(
+        "API key rejected",
+        security_event="auth_failure",
+        reason=reason,
+        path=request.url.path,
+        client=request.client.host if request.client else None,
+    )
+    return JSONResponse(status_code=status_code, content={"status": "error", "error": message})
 
 
 class APIKeyMiddleware(BaseHTTPMiddleware):
@@ -32,10 +49,7 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
             api_key = request.headers.get("x-api-key")
             # If API key is provided, validate it
             if api_key and not key_matches(api_key, [settings.api_key]):
-                return JSONResponse(
-                    status_code=403,
-                    content={"status": "error", "error": "Invalid API key"},
-                )
+                return _reject(request, 403, "invalid", "Invalid API key")
             # If no API key, allow through in debug mode
             return await call_next(request)
 
@@ -43,17 +57,11 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
         api_key = request.headers.get("x-api-key")
 
         if not api_key:
-            return JSONResponse(
-                status_code=401,
-                content={"status": "error", "error": "Missing API key"},
-            )
+            return _reject(request, 401, "missing", "Missing API key")
 
         # Accept the production key and the GUVI evaluator's shared key.
         if not key_matches(api_key, accepted_api_keys(settings)):
-            return JSONResponse(
-                status_code=403,
-                content={"status": "error", "error": "Invalid API key"},
-            )
+            return _reject(request, 403, "invalid", "Invalid API key")
 
         return await call_next(request)
 
@@ -68,6 +76,35 @@ class RequestTimingMiddleware(BaseHTTPMiddleware):
         process_time = time.perf_counter() - start_time
         response.headers["X-Process-Time"] = f"{process_time:.4f}"
         return response
+
+
+def _route_label(request: Request) -> str:
+    """Route template the router matched, or UNROUTED for requests it never handled."""
+    path = getattr(request.scope.get("route"), "path", None)
+    return path if isinstance(path, str) and path else UNROUTED
+
+
+class MetricsMiddleware(BaseHTTPMiddleware):
+    """Count every request and time it, labelled by route template.
+
+    It is the outermost middleware, so auth rejections are counted too. Routed
+    requests are labelled by template (``/api/v1/analyze``). Requests the router never
+    handled, a 404 or a 401 from APIKeyMiddleware, share one ``unrouted`` label, so
+    probing random URLs cannot add new series.
+    """
+
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
+        """Record the status and duration of one request."""
+        start = time.perf_counter()
+        status = 500
+        try:
+            response = await call_next(request)
+            status = response.status_code
+            return response
+        finally:
+            label = _route_label(request)
+            HTTP_REQUESTS.labels(method=request.method, route=label, status=str(status)).inc()
+            HTTP_LATENCY.labels(route=label).observe(time.perf_counter() - start)
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -103,9 +140,10 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 def setup_middleware(app: FastAPI) -> None:
     """Configure all middleware for the application.
 
-    Starlette runs the last one added first, so SecurityHeadersMiddleware wraps the
-    401 and 403 replies from APIKeyMiddleware too.
+    Starlette runs the last one added first, so MetricsMiddleware and
+    SecurityHeadersMiddleware both see the 401 and 403 replies from APIKeyMiddleware.
     """
     app.add_middleware(RequestTimingMiddleware)
     app.add_middleware(APIKeyMiddleware)
     app.add_middleware(SecurityHeadersMiddleware)
+    app.add_middleware(MetricsMiddleware)

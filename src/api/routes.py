@@ -43,6 +43,7 @@ from src.api.session_store import (
 from src.detection.detector import get_detector
 from src.exceptions import StickyNetError
 from src.intelligence.extractor import IntelligenceExtractor
+from src.metrics import GUVI_CALLBACKS, record_fallback, record_verdict
 
 logger = structlog.get_logger()
 
@@ -71,8 +72,10 @@ async def _fire_callback(**kwargs: Any) -> None:
     """Fire-and-forget GUVI callback. Exceptions are silently logged."""
     try:
         success = await send_guvi_callback(scam_detected=True, **kwargs)
+        GUVI_CALLBACKS.labels(outcome="sent" if success else "rejected").inc()
         logger.info("GUVI callback sent", success=success, session_id=kwargs.get("session_id"))
     except Exception as e:
+        GUVI_CALLBACKS.labels(outcome="error").inc()
         logger.warning("GUVI callback failed", error=str(e))
 
 
@@ -131,6 +134,7 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         )
         # Store for next turn — "once scam, always scam"
         store_detection_result(session_id, detection_result)
+        record_verdict("analyze", detection_result.is_scam, detection_result.scam_type)
 
         if not detection_result.is_scam:
             log.info("Message not detected as scam")
@@ -189,6 +193,7 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
                 timeout=agent_budget,
             )
         except TimeoutError:
+            record_fallback("agent_timeout")
             log.warning(
                 "Agent timed out, using fallback",
                 elapsed=time.time() - request_start_time,
@@ -274,6 +279,7 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         agent_response = engagement_result.response
         if not agent_response:
             agent_response = "Sorry, I'm having trouble understanding. Can you repeat that?"
+            record_fallback("empty_reply")
             log.warning("Agent response was None, using fallback")
 
         # Generate agent notes with validated intelligence
@@ -322,12 +328,14 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
         )
 
     except StickyNetError as e:
+        record_fallback("error")
         log.error("Application error", error=str(e))
         return HoneyPotResponse(
             status="error",
             reply="Sorry, I'm having trouble right now. Can we talk later?",
         )
     except Exception:
+        record_fallback("error")
         log.exception("Unexpected error")
         return HoneyPotResponse(
             status="error",
@@ -379,6 +387,7 @@ async def analyze_message_detailed(request: AnalyzeRequest) -> AnalyzeResponse:
         )
         # Store for next turn — "once scam, always scam"
         store_detection_result(session_id, detection_result)
+        record_verdict("analyze_detailed", detection_result.is_scam, detection_result.scam_type)
 
         if not detection_result.is_scam:
             log.info("Message not detected as scam")
@@ -475,6 +484,7 @@ async def analyze_message_detailed(request: AnalyzeRequest) -> AnalyzeResponse:
     except Exception:
         # The traceback goes to the logs only; exception text can name paths,
         # credentials or upstream responses, so the client gets a fixed note.
+        record_fallback("error")
         log.exception("Unexpected error in detailed endpoint")
         return AnalyzeResponse(
             status=StatusType.ERROR,
