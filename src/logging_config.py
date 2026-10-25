@@ -12,6 +12,8 @@ from typing import Literal
 import structlog
 from structlog.typing import Processor
 
+from src.log_redaction import redact_secrets
+
 LogFormat = Literal["json", "console"]
 
 # Processors applied to every record, whether it came from structlog or stdlib logging.
@@ -23,6 +25,8 @@ _SHARED_PROCESSORS: list[Processor] = [
     structlog.processors.TimeStamper(fmt="iso"),
     structlog.processors.StackInfoRenderer(),
     structlog.processors.UnicodeDecoder(),
+    # Last, so it also sees messages PositionalArgumentsFormatter has filled in.
+    redact_secrets,
 ]
 
 
