@@ -14,6 +14,7 @@ dependencies = [
     "structlog>=24.1.0",
     "httpx>=0.26.0",
     "prometheus-client>=0.21.0",
+    "sentry-sdk>=2.20.0",
 ]
 
 [project.optional-dependencies]

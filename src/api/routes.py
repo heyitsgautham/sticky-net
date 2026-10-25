@@ -41,6 +41,7 @@ from src.api.session_store import (
     store_detection_result,
 )
 from src.detection.detector import get_detector
+from src.error_tracking import capture_exception
 from src.exceptions import StickyNetError
 from src.intelligence.extractor import IntelligenceExtractor
 from src.metrics import GUVI_CALLBACKS, record_fallback, record_verdict
@@ -77,6 +78,7 @@ async def _fire_callback(**kwargs: Any) -> None:
     except Exception as e:
         GUVI_CALLBACKS.labels(outcome="error").inc()
         logger.warning("GUVI callback failed", error=str(e))
+        capture_exception(e, component="guvi_callback", session_id=kwargs.get("session_id"))
 
 
 @router.post(
@@ -330,13 +332,15 @@ async def analyze_message(request: AnalyzeRequest) -> HoneyPotResponse:
     except StickyNetError as e:
         record_fallback("error")
         log.error("Application error", error=str(e))
+        capture_exception(e, route="/api/v1/analyze", session_id=session_id)
         return HoneyPotResponse(
             status="error",
             reply="Sorry, I'm having trouble right now. Can we talk later?",
         )
-    except Exception:
+    except Exception as e:
         record_fallback("error")
         log.exception("Unexpected error")
+        capture_exception(e, route="/api/v1/analyze", session_id=session_id)
         return HoneyPotResponse(
             status="error",
             reply="Sorry, I'm having trouble right now. Can we talk later?",
@@ -481,11 +485,12 @@ async def analyze_message_detailed(request: AnalyzeRequest) -> AnalyzeResponse:
             agentResponse=agent_response,
         )
 
-    except Exception:
-        # The traceback goes to the logs only; exception text can name paths,
+    except Exception as e:
+        # The traceback goes to the logs and error tracking only; exception text can name paths,
         # credentials or upstream responses, so the client gets a fixed note.
         record_fallback("error")
         log.exception("Unexpected error in detailed endpoint")
+        capture_exception(e, route="/api/v1/analyze/detailed", session_id=session_id)
         return AnalyzeResponse(
             status=StatusType.ERROR,
             scamDetected=False,

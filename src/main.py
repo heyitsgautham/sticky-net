@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from config.settings import get_settings
 from src.api.middleware import setup_middleware
 from src.api.routes import router
+from src.error_tracking import capture_exception, init_error_tracking
 from src.logging_config import configure_logging
 from src.metrics import record_fallback, render_latest
 
@@ -21,6 +22,7 @@ from src.metrics import record_fallback, render_latest
 STATIC_DIR = Path(__file__).parent / "static"
 
 configure_logging(get_settings().log_level, get_settings().log_format)
+init_error_tracking(get_settings())
 
 logger = structlog.get_logger()
 
@@ -106,6 +108,7 @@ def create_app() -> FastAPI:
         The body never carries the exception text, so stack details stay in the logs.
         """
         logger.exception("Unhandled error", path=request.url.path)
+        capture_exception(exc, path=request.url.path)
         return JSONResponse(
             status_code=500, content={"status": "error", "detail": "internal error"}
         )

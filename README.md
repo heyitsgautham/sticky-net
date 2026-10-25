@@ -170,6 +170,12 @@ The same reply goes to oversized bodies, meaning a message over 10,000 character
 `route` holds the route template, and requests no route handled share `unrouted`, so odd URLs cannot add series.
 Auth rejections and malformed bodies also log a warning with a `security_event` field.
 
+### Error tracking
+
+Set `ERROR_TRACKING_DSN` to a Sentry DSN to report errors from `src/error_tracking.py`.
+The routes answer most failures with a canned 200 reply, so they report the exception themselves before replying.
+Events go through the same credential masking as the logs, and without a DSN nothing is sent.
+
 Scam types are `banking_fraud`, `job_offer`, `lottery_reward`, `impersonation` and `others`.
 
 With `DEBUG=true`, requests without a key pass and CORS allows every origin.
@@ -195,6 +201,7 @@ The middleware compares keys with `hmac.compare_digest`, so timing does not leak
 | `API_TIMEOUT_SECONDS` | `12` | Per-model Gemini timeout |
 | `LOG_LEVEL`, `LOG_FORMAT` | `INFO`, `json` | `console` gives coloured local output |
 | `GUVI_CALLBACK_ENABLED` | `true` | Set `false` locally so runs never post to the evaluator |
+| `ERROR_TRACKING_DSN` | unset | Sentry DSN; caught route and callback errors are reported with route and session tags |
 
 ## Deployment
 

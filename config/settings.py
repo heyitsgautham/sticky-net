@@ -71,6 +71,9 @@ class Settings(BaseSettings):
     # Environment
     environment: str = "development"  # development, staging, production
 
+    # Error tracking: a Sentry DSN. Unset means no events leave the process.
+    error_tracking_dsn: str | None = None
+
     # Logging
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
     log_format: Literal["json", "console"] = "json"
