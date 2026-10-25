@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
 from config.settings import get_settings
+from src.api.auth import accepted_api_keys, key_matches
 
 
 class APIKeyMiddleware(BaseHTTPMiddleware):
@@ -30,7 +31,7 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
         if settings.debug:
             api_key = request.headers.get("x-api-key")
             # If API key is provided, validate it
-            if api_key and api_key != settings.api_key:
+            if api_key and not key_matches(api_key, [settings.api_key]):
                 return JSONResponse(
                     status_code=403,
                     content={"status": "error", "error": "Invalid API key"},
@@ -47,9 +48,8 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
                 content={"status": "error", "error": "Missing API key"},
             )
 
-        # Accept both production key and hackathon test key
-        valid_keys = {settings.api_key, "test-api-key"}
-        if api_key not in valid_keys:
+        # Accept the production key and the GUVI evaluator's shared key.
+        if not key_matches(api_key, accepted_api_keys(settings)):
             return JSONResponse(
                 status_code=403,
                 content={"status": "error", "error": "Invalid API key"},

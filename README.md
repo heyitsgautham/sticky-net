@@ -154,7 +154,9 @@ The same reply goes to oversized bodies, meaning a message over 10,000 character
 Scam types are `banking_fraud`, `job_offer`, `lottery_reward`, `impersonation` and `others`.
 
 With `DEBUG=true`, requests without a key pass and CORS allows every origin.
-With `DEBUG=false`, the API requires `x-api-key` to match `API_KEY` or the evaluator's shared `test-api-key`.
+With `DEBUG=false`, the API requires `x-api-key` to match `API_KEY` or `EVALUATOR_API_KEY`.
+`EVALUATOR_API_KEY` defaults to `test-api-key`, the public key the GUVI evaluator sends, and an empty value turns it off.
+The middleware compares keys with `hmac.compare_digest`, so timing does not leak how much of a guess was right.
 
 ## Configuration
 
@@ -165,6 +167,7 @@ With `DEBUG=false`, the API requires `x-api-key` to match `API_KEY` or the evalu
 | Variable | Default | Notes |
 |---|---|---|
 | `API_KEY` | required | Shared key clients send as `x-api-key` |
+| `EVALUATOR_API_KEY` | `test-api-key` | Second accepted key for the GUVI evaluator, empty to disable |
 | `GOOGLE_CLOUD_PROJECT` | required | Vertex AI and Firestore project |
 | `DEBUG` | `false` | Opens `/docs`, allows keyless requests and any CORS origin |
 | `FLASH_MODEL`, `PRO_MODEL` | `gemini-3-flash-preview` | Classifier and agent models |

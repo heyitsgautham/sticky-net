@@ -50,6 +50,7 @@ class TestAuthentication:
         mock_settings_instance = MagicMock()
         mock_settings_instance.debug = False  # Disable debug mode
         mock_settings_instance.api_key = "test-api-key"
+        mock_settings_instance.evaluator_api_key = ""
         mock_settings.return_value = mock_settings_instance
 
         # Use a valid request body to avoid 422 from FastAPI validation
@@ -66,6 +67,7 @@ class TestAuthentication:
         mock_settings_instance = MagicMock()
         mock_settings_instance.debug = False
         mock_settings_instance.api_key = "test-api-key"
+        mock_settings_instance.evaluator_api_key = ""
         mock_settings.return_value = mock_settings_instance
 
         response = client.post(
