@@ -12,6 +12,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from config.settings import get_settings
+from src import __version__
 from src.api.middleware import setup_middleware
 from src.api.routes import router
 from src.error_tracking import capture_exception, init_error_tracking
@@ -64,7 +65,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="Sticky-Net",
         description="AI Agentic Honey-Pot for Scam Detection & Intelligence Extraction",
-        version="0.2.0",
+        version=__version__,
         docs_url="/docs" if settings.debug else None,
         redoc_url="/redoc" if settings.debug else None,
         lifespan=lifespan,
