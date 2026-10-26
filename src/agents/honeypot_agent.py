@@ -423,6 +423,23 @@ class HoneypotAgent:
         """One-line summary of the engagement for the callback and dashboard."""
         return engagement_notes(detection, persona, mode, turn_number, extracted_intel)
 
+    def notes_for(
+        self,
+        engagement: EngagementResult,
+        detection: DetectionResult,
+        turn_number: int,
+        extracted_intel: ExtractedIntelligence,
+    ) -> str:
+        """Agent notes for a finished turn, using the intel validated after the reply."""
+        persona = self.persona_manager.get_or_create_persona(engagement.conversation_id)
+        return self._generate_notes(
+            detection=detection,
+            persona=persona,
+            mode=engagement.engagement_mode,
+            turn_number=turn_number,
+            extracted_intel=extracted_intel,
+        )
+
     def _has_unextracted_urls(self, message_text: str, extracted_urls: list[str]) -> bool:
         """
         Check if message contains URLs that haven't been extracted yet.

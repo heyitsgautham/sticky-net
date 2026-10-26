@@ -34,7 +34,7 @@ def scam_turn() -> Iterator[None]:
             extracted_intelligence=None,
         )
     )
-    agent._generate_notes = MagicMock(return_value="notes")
+    agent.notes_for = MagicMock(return_value="notes")
     with (
         patch("src.api.routes.get_detector", return_value=detector),
         patch("src.api.routes.get_agent", return_value=agent),

@@ -68,7 +68,7 @@ def detector() -> Iterator[MagicMock]:
 def agent() -> Iterator[MagicMock]:
     fake = MagicMock()
     fake.engage = AsyncMock(return_value=_engagement("which account sir?"))
-    fake._generate_notes = MagicMock(return_value="notes")
+    fake.notes_for = MagicMock(return_value="notes")
     with patch("src.api.routes.get_agent", return_value=fake):
         yield fake
 

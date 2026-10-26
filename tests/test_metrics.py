@@ -50,7 +50,7 @@ def _scam_agent(reply: str = "which account?") -> tuple[MagicMock, MagicMock]:
             extracted_intelligence=None,
         )
     )
-    agent._generate_notes = MagicMock(return_value="notes")
+    agent.notes_for = MagicMock(return_value="notes")
     return detector, agent
 
 

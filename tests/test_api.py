@@ -94,7 +94,7 @@ class TestAnalyzeEndpoint:
                 should_continue=True,
             )
         )
-        agent._generate_notes = MagicMock(return_value="Test agent notes")
+        agent.notes_for = MagicMock(return_value="Test agent notes")
 
         response = client.post(
             "/api/v1/analyze",
