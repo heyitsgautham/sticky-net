@@ -11,6 +11,9 @@ os.environ.setdefault("API_KEY", "test-api-key")
 os.environ.setdefault("GOOGLE_CLOUD_PROJECT", "test-project")
 os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
 os.environ.setdefault("DEBUG", "true")
+# The suite sends hundreds of requests from one client; tests/security/test_rate_limit.py
+# turns limiting back on with its own small limits.
+os.environ["RATE_LIMIT_ENABLED"] = "false"
 # Never POST to the real GUVI evaluation endpoint from a test run.
 os.environ["GUVI_CALLBACK_ENABLED"] = "false"
 

@@ -1,18 +1,22 @@
-"""The response contract the GUVI evaluator and the dashboard depend on.
+"""The response contract clients of the analyze API depend on.
 
-The evaluator scores any non-200 turn as zero and reads fixed field names, so these
-tests pin the status code, the exact key set and the value types of every reply,
-across the success, fallback and error paths. They run the real detector, agent and
-extractor; only Gemini is faked (to fail, so the agent uses its canned replies).
+These tests pin the status code, the exact key set and the value types of every
+reply, across the success, fallback, error and rate-limit paths. They run the real
+detector, agent and extractor; only Gemini is faked (to fail, so the agent uses its
+canned replies). The shapes were fixed for the GUVI evaluator, which read these
+field names; the only status added since is 429 for clients over the rate limit.
 """
 
 import uuid
+from collections.abc import Callable, Iterator
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
 
+from config.settings import Settings
+from src.api.rate_limit import limiter
 from src.api.schemas import MAX_MESSAGE_CHARS
 from src.detection.detector import DetectionResult
 from src.main import app
@@ -253,6 +257,34 @@ class TestDetailed:
         assert body["status"] == "error"
         assert body["scamDetected"] is False
         assert body["agentResponse"] == ERROR_REPLY
+
+
+class TestRateLimit:
+    @pytest.fixture
+    def limit_of_two(self, use_settings: Callable[..., Settings]) -> Iterator[None]:
+        limiter.clear()
+        use_settings(debug=True, rate_limit_enabled=True, rate_limit_requests=2)
+        yield
+        limiter.clear()
+
+    @pytest.mark.parametrize("path", ["/api/v1/analyze", "/api/v1/analyze/detailed"])
+    def test_turns_past_the_limit_get_429_and_the_rest_are_unchanged(
+        self, client: TestClient, session_id: str, limit_of_two: None, path: str
+    ) -> None:
+        allowed = [client.post(path, json=_body(SCAM, session_id)) for _ in range(2)]
+        refused = client.post(path, json=_body(SCAM, session_id))
+
+        assert [r.status_code for r in allowed] == [200, 200]
+        expected_keys = HONEYPOT_KEYS if path == "/api/v1/analyze" else DETAILED_KEYS
+        assert all(set(r.json()) == expected_keys for r in allowed)
+
+        assert refused.status_code == 429
+        assert refused.headers["content-type"] == "application/json"
+        assert refused.json() == {"status": "error", "error": "Rate limit exceeded"}
+        assert int(refused.headers["retry-after"]) >= 1
+
+    def test_health_is_never_limited(self, client: TestClient, limit_of_two: None) -> None:
+        assert [client.get("/health").status_code for _ in range(4)] == [200] * 4
 
 
 def test_health(client: TestClient) -> None:

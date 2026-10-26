@@ -9,7 +9,8 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 
 from config.settings import get_settings
 from src.api.auth import key_matches
-from src.metrics import AUTH_FAILURES, HTTP_LATENCY, HTTP_REQUESTS, UNROUTED
+from src.api.rate_limit import client_key, limiter
+from src.metrics import AUTH_FAILURES, HTTP_LATENCY, HTTP_REQUESTS, RATE_LIMITED, UNROUTED
 
 logger = structlog.get_logger()
 
@@ -63,6 +64,60 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
             return _reject(request, 403, "invalid", "Invalid API key")
 
         return await call_next(request)
+
+
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    """Refuse a client's requests with 429 once it passes RATE_LIMIT_REQUESTS per window.
+
+    Clients are keyed by API key when the key is valid and by address otherwise. It
+    runs before APIKeyMiddleware, so failed key guesses count against the address.
+    ``/health`` and CORS preflights are never limited, so platform health checks pass.
+    """
+
+    EXEMPT_PATHS = {"/health"}
+
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
+        """Count the request and refuse it when the client is over its limit."""
+        settings = get_settings()
+        if (
+            not settings.rate_limit_enabled
+            or request.method == "OPTIONS"
+            or request.url.path in self.EXEMPT_PATHS
+        ):
+            return await call_next(request)
+
+        api_key = request.headers.get("x-api-key")
+        valid = bool(api_key) and key_matches(api_key or "", [settings.api_key])
+        key = client_key(api_key, request.client.host if request.client else None, valid)
+        decision = limiter.hit(
+            key, settings.rate_limit_requests, settings.rate_limit_window_seconds
+        )
+        limit_headers = {
+            "X-RateLimit-Limit": str(decision.limit),
+            "X-RateLimit-Remaining": str(decision.remaining),
+        }
+
+        if not decision.allowed:
+            scope = key.split(":", 1)[0]
+            RATE_LIMITED.labels(scope=scope).inc()
+            logger.warning(
+                "Rate limit exceeded",
+                security_event="rate_limited",
+                scope=scope,
+                path=request.url.path,
+                client=request.client.host if request.client else None,
+                retry_after=decision.retry_after,
+            )
+            return JSONResponse(
+                status_code=429,
+                content={"status": "error", "error": "Rate limit exceeded"},
+                headers={**limit_headers, "Retry-After": str(decision.retry_after)},
+            )
+
+        response = await call_next(request)
+        for name, value in limit_headers.items():
+            response.headers.setdefault(name, value)
+        return response
 
 
 class RequestTimingMiddleware(BaseHTTPMiddleware):
@@ -139,10 +194,12 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 def setup_middleware(app: FastAPI) -> None:
     """Configure all middleware for the application.
 
-    Starlette runs the last one added first, so MetricsMiddleware and
-    SecurityHeadersMiddleware both see the 401 and 403 replies from APIKeyMiddleware.
+    Starlette runs the last one added first, so the order on a request is Metrics,
+    SecurityHeaders, RateLimit, APIKey, then RequestTiming. Metrics and security
+    headers see every 401, 403 and 429 reply.
     """
     app.add_middleware(RequestTimingMiddleware)
     app.add_middleware(APIKeyMiddleware)
+    app.add_middleware(RateLimitMiddleware)
     app.add_middleware(SecurityHeadersMiddleware)
     app.add_middleware(MetricsMiddleware)

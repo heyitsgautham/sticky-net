@@ -54,6 +54,13 @@ GUVI_CALLBACKS = Counter(
     registry=REGISTRY,
 )
 
+RATE_LIMITED = Counter(
+    "sticky_net_rate_limited_total",
+    "Requests refused with 429, by whether the client was keyed by API key or address.",
+    ["scope"],
+    registry=REGISTRY,
+)
+
 # Every reason FALLBACK_REPLIES uses, so callers cannot invent new label values.
 FALLBACK_REASONS = frozenset({"malformed_request", "agent_timeout", "empty_reply", "error"})
 

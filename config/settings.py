@@ -73,9 +73,10 @@ class Settings(BaseSettings):
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
     log_format: Literal["json", "console"] = "json"
 
-    # Rate Limiting (production)
-    rate_limit_requests: int = 100
-    rate_limit_window_seconds: int = 60
+    # Rate limiting, per API key, or per client address for requests without a valid key
+    rate_limit_enabled: bool = True
+    rate_limit_requests: int = Field(default=100, ge=1)
+    rate_limit_window_seconds: int = Field(default=60, ge=1)
 
     # GUVI Callback Settings
     guvi_callback_url: str = "https://hackathon.guvi.in/api/updateHoneyPotFinalResult"

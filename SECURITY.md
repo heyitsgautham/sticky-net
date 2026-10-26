@@ -44,6 +44,7 @@ Rotate `API_KEY` if it was ever shared with the evaluator.
 | `nosniff`, `DENY` framing, `no-referrer`, and `no-store` plus a deny-all CSP on JSON routes | `SecurityHeadersMiddleware` in `src/api/middleware.py` | `tests/security/test_security_headers.py` |
 | Keys, tokens and `Authorization` values masked in logs and error reports | `src/log_redaction.py`, `src/error_tracking.py` | `tests/security/test_log_redaction.py`, `tests/test_error_tracking.py` |
 | Extraction regexes run in linear time on hostile input | `src/intelligence/extractor.py` | `tests/security/test_regex_performance.py` |
+| Per-client rate limit with 429 and `Retry-After`, keyed by valid API key or address | `RateLimitMiddleware` in `src/api/middleware.py`, `src/api/rate_limit.py` | `tests/security/test_rate_limit.py` |
 | Session caches capped with LRU eviction | `src/api/bounded_cache.py` | `tests/security/test_session_memory.py` |
 | LLM output parsed into a pydantic model and each value re-checked by regex validators | `src/agents/reply_parser.py`, `src/intelligence/` | `tests/test_reply_parser.py`, `tests/test_validators.py` |
 | Auth failures and malformed bodies counted and logged with a `security_event` field | `src/metrics.py`, `src/api/middleware.py`, `src/main.py` | `tests/test_metrics.py` |
@@ -53,13 +54,10 @@ Dependabot opens weekly updates for uv, Yarn, GitHub Actions and the Docker base
 
 ## Deliberate trade-offs
 
-The GUVI evaluator scores any non-200 reply as zero.
-These choices follow from that and are not bugs.
+The GUVI evaluator scored any non-200 reply as zero.
+These choices date from the hackathon and are not bugs.
 
 - Malformed and oversized bodies get HTTP 200 with a "say again" reply instead of 422.
   The `sticky_net_fallback_replies_total{reason="malformed_request"}` counter and a `security_event=malformed_request` log line keep them visible.
-- Rate limiting is not enforced.
-  `RATE_LIMIT_REQUESTS` and `RATE_LIMIT_WINDOW_SECONDS` exist in settings, but a throttled evaluator turn would score zero.
-  Cost is bounded by `--max-instances 10` in the deploy scripts, the 26 second request budget and the 12 second Gemini timeout instead.
 - Gemini safety filters are set to `BLOCK_NONE` in `src/agents/honeypot_agent.py`, because the persona must keep talking to someone describing fraud.
   The agent has no tools and can only return text, so a prompt injection can change what the persona says but cannot reach any other system.

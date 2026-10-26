@@ -164,8 +164,18 @@ They send `TEST_API_KEY` as `x-api-key`, falling back to the evaluator's public 
 | `GET /` | none | Static test UI from `src/static/index.html` |
 
 The request body is `AnalyzeRequest` in `src/api/schemas.py`.
-Malformed bodies get HTTP 200 with a "sorry, say again" reply instead of 422, because the evaluator scores a non-200 turn as zero.
+Malformed bodies get HTTP 200 with a "sorry, say again" reply instead of 422, because the GUVI evaluator scored a non-200 turn as zero.
 The same reply goes to oversized bodies, meaning a message over 10,000 characters or more than 100 history entries.
+
+### Rate limiting
+
+`RateLimitMiddleware` in `src/api/middleware.py` allows each client `RATE_LIMIT_REQUESTS` requests per sliding `RATE_LIMIT_WINDOW_SECONDS`, 100 per 60 seconds by default.
+A client is its API key when the key is valid, and its address otherwise, so made-up keys share one allowance.
+Past the limit the API answers 429 with `{"status": "error", "error": "Rate limit exceeded"}` and a `Retry-After` header in seconds.
+Every limited reply also carries `X-RateLimit-Limit` and `X-RateLimit-Remaining`.
+`/health` and CORS preflights are never limited.
+Counts live in process memory, so each Cloud Run instance keeps its own.
+Behind a proxy, uvicorn sees the proxy's address unless `--forwarded-allow-ips` trusts it, and keyless clients then share one allowance.
 
 ### Metrics
 
@@ -179,6 +189,7 @@ The same reply goes to oversized bodies, meaning a message over 10,000 character
 | `sticky_net_auth_failures_total` | `reason` | `missing` or `invalid` keys |
 | `sticky_net_fallback_replies_total` | `reason` | Canned replies for malformed bodies, agent timeouts, empty replies and errors |
 | `sticky_net_guvi_callbacks_total` | `outcome` | GUVI callbacks `sent`, `rejected` or `error` |
+| `sticky_net_rate_limited_total` | `scope` | 429 replies, keyed by API `key` or by `ip` |
 
 `route` holds the route template, and requests no route handled share `unrouted`, so odd URLs cannot add series.
 Auth rejections and malformed bodies also log a warning with a `security_event` field.
@@ -213,6 +224,8 @@ The middleware compares keys with `hmac.compare_digest`, so timing does not leak
 | `API_TIMEOUT_SECONDS` | `12` | Per-model Gemini timeout |
 | `LOG_LEVEL`, `LOG_FORMAT` | `INFO`, `json` | `console` gives coloured local output |
 | `GUVI_CALLBACK_ENABLED` | `true` | Set `false` locally so runs never post to the evaluator |
+| `RATE_LIMIT_ENABLED` | `true` | Turns the per-client limit on or off |
+| `RATE_LIMIT_REQUESTS`, `RATE_LIMIT_WINDOW_SECONDS` | `100`, `60` | Requests each client may send per sliding window |
 | `SESSION_CACHE_MAX_ENTRIES` | `10000` | Sessions kept in memory before the least recently used is dropped |
 | `ERROR_TRACKING_DSN` | unset | Sentry DSN; caught route and callback errors are reported with route and session tags |
 
