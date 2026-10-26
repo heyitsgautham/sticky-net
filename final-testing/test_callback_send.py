@@ -147,12 +147,8 @@ class TestCallbackIntelligenceModel:
 
     def test_email_addresses_default(self):
         """emailAddresses should default to empty list."""
-        try:
-            intel = CallbackIntelligence()
-            dumped = intel.model_dump()
-            assert dumped.get("emailAddresses") == [] or "emailAddresses" not in dumped
-        except Exception:
-            pass  # Will fail if field doesn't exist (pre-fix)
+        # The old body wrapped this assert in try/except/pass, so it could never fail.
+        assert CallbackIntelligence().model_dump()["emailAddresses"] == []
 
     def test_intel_with_data(self):
         """Intel with populated fields should serialize correctly."""

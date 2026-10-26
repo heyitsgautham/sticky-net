@@ -41,19 +41,24 @@ target-version = "py311"
 src = ["src", "config", "tests"]
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+# S is flake8-bandit, the security linter.
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "S"]
 ignore = [
     # `class X(str, Enum)` and StrEnum format differently; the API depends on the former.
     "UP042",
+    # `random` only picks persona replies and fake profile data, never keys or tokens.
+    "S311",
 ]
 
 [tool.ruff.lint.per-file-ignores]
 # Prompt templates are LLM input; rewrapping their lines would change the prompt text.
 "src/agents/prompts.py" = ["E501"]
 "src/detection/classifier.py" = ["E501"]
-# Test fixtures hold long scam messages verbatim.
-"tests/**" = ["E501"]
-"final-testing/**" = ["E501"]
+# Test fixtures hold long scam messages verbatim, and pytest asserts with `assert`.
+# S105/S106 flag the fake keys tests pass to Settings; S108 the temp paths they build.
+"tests/**" = ["E501", "S101", "S105", "S106", "S108"]
+"final-testing/**" = ["E501", "S101", "S105", "S106", "S108"]
+"conftest.py" = ["S105"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["src", "config"]

@@ -121,8 +121,8 @@ def get_or_init_session_intel(session_id: str) -> dict[str, set[str]]:
                 doc = client.collection(FIRESTORE_COLLECTION).document(session_id).get()
                 if doc.exists:
                     _restore_intel_from_doc(session_id, doc.to_dict())
-            except Exception:
-                pass
+            except Exception as exc:
+                logger.debug("Firestore intel read failed for %s: %s", session_id, exc)
 
     return _INTEL[session_id]
 

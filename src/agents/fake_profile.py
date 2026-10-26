@@ -12,7 +12,8 @@ from src.agents.fake_data import FakeDataGenerator
 
 def build_fake_profile(conversation_id: str) -> dict[str, Any]:
     """Generate the full fake profile for one conversation."""
-    seed = int(hashlib.md5(conversation_id.encode()).hexdigest()[:8], 16)
+    # md5 only spreads conversation IDs into a stable seed; nothing relies on it for security.
+    seed = int(hashlib.md5(conversation_id.encode(), usedforsecurity=False).hexdigest()[:8], 16)
     generator = FakeDataGenerator(seed=seed)
 
     credit_card = generator.generate_credit_card()
