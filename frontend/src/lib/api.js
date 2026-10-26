@@ -1,5 +1,6 @@
 // Client for the Sticky-Net API. REACT_APP_* values are baked in at build time.
 import { MAX_HISTORY_MESSAGES, MAX_MESSAGE_CHARS } from "./limits";
+import { parseAnalyzeDetailed } from "./schemas";
 
 export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
@@ -25,8 +26,9 @@ export const toConversationHistory = (messages) =>
         timestamp: m.isoTimestamp || new Date().toISOString(),
     }));
 
-// POST one scammer message to /api/v1/analyze/detailed and return the parsed body.
-// Throws on a non-2xx status so the caller can mark the API offline.
+// POST one scammer message to /api/v1/analyze/detailed and return the validated body.
+// Throws on a non-2xx status, so the caller can mark the API offline, and throws
+// ApiResponseError when the body does not match the API's response schema.
 export async function analyzeDetailed(
     { text, timestamp, history, channel, locale },
     fetchImpl = fetch,
@@ -47,5 +49,5 @@ export async function analyzeDetailed(
     if (!response.ok) {
         throw new Error(`API returned ${response.status}`);
     }
-    return response.json();
+    return parseAnalyzeDetailed(await response.json());
 }
