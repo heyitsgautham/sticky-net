@@ -63,7 +63,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:coverage": "craco test --watchAll=false --coverage"
   },
   "browserslist": {
     "production": [
@@ -81,6 +82,10 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^7.1.0",
     "@eslint/js": "9.23.0",
+    "@testing-library/dom": "10.4.0",
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "16.3.0",
+    "@testing-library/user-event": "14.6.1",
     "autoprefixer": "^10.4.20",
     "eslint": "9.23.0",
     "eslint-plugin-import": "2.31.0",
@@ -96,5 +101,25 @@
     "proxy-addr": "^2.0.8",
     "shell-quote": "^1.8.4",
     "websocket-driver": "^0.7.5"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/lib/**/*.js",
+      "src/components/ChatDashboard.jsx",
+      "src/components/chat/**/*.jsx",
+      "!src/**/*.test.{js,jsx}"
+    ],
+    "coverageReporters": [
+      "text",
+      "lcov"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 85,
+        "branches": 70,
+        "functions": 85,
+        "lines": 85
+      }
+    }
   }
 }

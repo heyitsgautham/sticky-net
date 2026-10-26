@@ -28,6 +28,18 @@ const webpackConfig = {
       },
     },
   },
+  jest: {
+    configure: {
+      // Same "@/" alias as webpack, so tests can import components the way the app does.
+      // react-router-dom 7's "main" names a file it does not ship, and CRA's Jest 27
+      // cannot read package "exports", so point both entry points at the CommonJS builds.
+      moduleNameMapper: {
+        "^@/(.*)$": "<rootDir>/src/$1",
+        "^react-router-dom$": "<rootDir>/node_modules/react-router-dom/dist/index.js",
+        "^react-router/dom$": "<rootDir>/node_modules/react-router/dist/development/dom-export.js",
+      },
+    },
+  },
   webpack: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

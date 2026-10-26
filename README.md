@@ -139,6 +139,16 @@ uv run mypy
 `--cov` fails below 85 percent branch coverage.
 mypy runs in strict mode over `src/` and `config/`.
 
+The dashboard has its own lint and Jest suite, which CI also runs.
+
+```bash
+cd frontend
+yarn lint
+yarn test:coverage
+```
+
+`yarn test:coverage` renders the dashboard components with Testing Library against a mocked `fetch`, and fails below 85 percent line coverage of `src/lib/` and the chat components.
+
 The tests marked `integration` drive a live server backed by real Gemini credentials, so they cost money and are skipped by default.
 Start the server on port 8000 and run them with `uv run pytest -m integration`.
 They send `TEST_API_KEY` as `x-api-key`, falling back to the evaluator's public key.

@@ -41,6 +41,10 @@ module.exports = [
     },
   },
   {
+    files: ["src/**/*.test.{js,jsx}", "src/setupTests.js"],
+    languageOptions: { globals: { ...globals.node } },
+  },
+  {
     files: ["*.config.js", "plugins/**/*.js"],
     languageOptions: { sourceType: "commonjs", globals: { ...globals.node } },
   },

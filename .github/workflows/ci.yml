@@ -86,10 +86,11 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      - name: Unit tests
+      # Fails below the coverage thresholds in frontend/package.json.
+      - name: Test
         env:
           CI: "true"
-        run: yarn test --watchAll=false
+        run: yarn test:coverage
 
       - name: Build
         env:
