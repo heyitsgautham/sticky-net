@@ -35,7 +35,8 @@ With no Google credentials, the regex detector still works and the agent answers
 | Path | What it holds |
 |---|---|
 | `src/main.py` | FastAPI app, CORS, `/health`, the static test UI at `/` |
-| `src/api/` | Routes, request and response schemas, API key middleware, session store, GUVI callback |
+| `src/api/` | Routes, request and response schemas, API key and security header middleware, session store, GUVI callback |
+| `src/services/` | `TurnPipeline`, the detect, engage and extract steps both analyze routes share |
 | `src/detection/` | Regex pre-filter and Gemini classifier |
 | `src/agents/` | Honeypot agent, personas, engagement policy, prompts, fake data, reply parser |
 | `src/intelligence/` | Regex extractor, validators, patterns and word lists |
@@ -43,6 +44,7 @@ With no Google credentials, the regex detector still works and the agent answers
 | `src/logging_config.py`, `src/log_redaction.py` | structlog and stdlib logging setup, and the processor that masks keys and tokens |
 | `src/metrics.py` | Prometheus counters and histograms for `/metrics` |
 | `config/settings.py` | Every setting, loaded from the environment by pydantic-settings |
+| `config/secret_files.py` | Reads `API_KEY_FILE` and `EVALUATOR_API_KEY_FILE` secret mounts |
 | `tests/`, `final-testing/` | The default pytest suites, all offline |
 | `frontend/` | React 19 dashboard (Create React App with craco, Tailwind, shadcn/ui) |
 | `gk-testing/eval_framework/` | Scoring engine and scammer simulator for multi-model evaluation runs |
@@ -211,6 +213,12 @@ The middleware compares keys with `hmac.compare_digest`, so timing does not leak
 `deploy-quick.sh` and `scripts/deploy-manual.sh` deploy an already-built image.
 The dashboard deploys to Firebase Hosting from `frontend/build` per `firebase.json`.
 Set `REACT_APP_API_URL` to the Cloud Run URL in `frontend/.env.production.local` before `yarn build`.
+
+## Security
+
+[SECURITY.md](SECURITY.md) covers how to report a vulnerability, where each secret lives and which controls the code has.
+[docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) maps the trust boundaries, threats and residual risks.
+The security tests live in `tests/security/`.
 
 ## Contributing
 
