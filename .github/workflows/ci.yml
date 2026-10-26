@@ -27,16 +27,17 @@ jobs:
       - name: Install locked dependencies
         run: uv sync --frozen --extra dev --python 3.11
 
-      - name: Ruff lint
+      - name: Lint
         run: uv run --frozen ruff check src config tests final-testing conftest.py
 
-      - name: Ruff format check
+      - name: Format
         run: uv run --frozen ruff format --check src config tests final-testing conftest.py
 
-      - name: Mypy (strict)
+      - name: Typecheck
         run: uv run --frozen mypy
 
-      - name: Pytest with coverage
+      # Fails below the 85 percent branch coverage gate in pyproject.toml.
+      - name: Test
         run: uv run --frozen pytest --cov --cov-report=term-missing --cov-report=xml
 
       - name: Upload coverage report
@@ -62,7 +63,7 @@ jobs:
           uv export --frozen --no-hashes --no-emit-project --extra dev -o /tmp/requirements.txt -q
           diff <(grep -v '^#' requirements.txt) <(grep -v '^#' /tmp/requirements.txt)
 
-      - name: pip-audit
+      - name: Audit
         run: uvx --from "pip-audit==2.10.1" pip-audit -r requirements.txt --no-deps --disable-pip
 
   frontend:
@@ -103,7 +104,7 @@ jobs:
 
       # yarn audit's exit code is a bitmask of every severity it found, even with --level,
       # so read the summary and fail only on critical advisories.
-      - name: yarn audit (critical)
+      - name: Audit
         run: |
           yarn audit --groups dependencies --json > audit.jsonl || true
           node -e '
@@ -138,6 +139,9 @@ jobs:
 
       - name: Build API image
         run: docker build -t sticky-net:ci .
+
+      - name: Build dashboard image
+        run: docker build -t sticky-net-frontend:ci frontend
 
       - name: Validate compose file
         run: docker compose config --quiet
