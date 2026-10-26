@@ -10,7 +10,7 @@ COPY . .
 
 # CRA bakes REACT_APP_* values into the bundle at build time.
 ARG REACT_APP_API_URL=http://localhost:8080
-ARG REACT_APP_API_KEY=test-api-key
+ARG REACT_APP_API_KEY=
 ENV REACT_APP_API_URL=$REACT_APP_API_URL \
     REACT_APP_API_KEY=$REACT_APP_API_KEY
 RUN yarn build

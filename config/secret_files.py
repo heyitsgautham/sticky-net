@@ -17,7 +17,7 @@ from pydantic.fields import FieldInfo
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource
 
 # Settings fields that hold credentials and may be supplied through <FIELD>_FILE.
-SECRET_FIELDS: tuple[str, ...] = ("api_key", "evaluator_api_key")
+SECRET_FIELDS: tuple[str, ...] = ("api_key",)
 
 
 class SecretFileError(ValueError):

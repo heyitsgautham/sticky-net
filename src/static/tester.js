@@ -308,13 +308,13 @@ async function sendMessage() {
     };
 
     try {
-        const apiKey = document.getElementById('apiKeyInput').value || 'test-api-key';
+        // Send a key only when one is typed; a DEBUG=true server accepts none.
+        const apiKey = document.getElementById('apiKeyInput').value.trim();
+        const headers = { 'Content-Type': 'application/json' };
+        if (apiKey) headers['X-API-Key'] = apiKey;
         const response = await fetch('/api/v1/analyze/detailed', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-API-Key': apiKey
-            },
+            headers,
             body: JSON.stringify(request)
         });
 

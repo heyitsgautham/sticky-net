@@ -44,7 +44,7 @@ With no Google credentials, the regex detector still works and the agent answers
 | `src/logging_config.py`, `src/log_redaction.py` | structlog and stdlib logging setup, and the processor that masks keys and tokens |
 | `src/metrics.py` | Prometheus counters and histograms for `/metrics` |
 | `config/settings.py` | Every setting, loaded from the environment by pydantic-settings |
-| `config/secret_files.py` | Reads `API_KEY_FILE` and `EVALUATOR_API_KEY_FILE` secret mounts |
+| `config/secret_files.py` | Reads the `API_KEY_FILE` secret mount |
 | `tests/`, `final-testing/` | The default pytest suites, all offline |
 | `frontend/` | React 19 dashboard (Create React App with craco, Tailwind, shadcn/ui) |
 | `gk-testing/eval_framework/` | Scoring engine and scammer simulator for multi-model evaluation runs |
@@ -193,8 +193,8 @@ Scam types are `banking_fraud`, `job_offer`, `lottery_reward`, `impersonation` a
 
 With `DEBUG=true`, requests without a key pass and CORS allows every origin.
 The app refuses to start with `DEBUG=true` and `ENVIRONMENT=production`, so a stray flag cannot open a production deploy.
-With `DEBUG=false`, the API requires `x-api-key` to match `API_KEY` or `EVALUATOR_API_KEY`.
-`EVALUATOR_API_KEY` defaults to `test-api-key`, the public key the GUVI evaluator sends, and an empty value turns it off.
+With `DEBUG=false`, the API requires `x-api-key` to match `API_KEY`.
+The shared `test-api-key` the GUVI evaluator used is no longer accepted, since the hackathon has ended.
 The middleware compares keys with `hmac.compare_digest`, so timing does not leak how much of a guess was right.
 
 ## Configuration
@@ -206,8 +206,7 @@ The middleware compares keys with `hmac.compare_digest`, so timing does not leak
 | Variable | Default | Notes |
 |---|---|---|
 | `API_KEY` | required | Shared key clients send as `x-api-key` |
-| `EVALUATOR_API_KEY` | `test-api-key` | Second accepted key for the GUVI evaluator, empty to disable |
-| `API_KEY_FILE`, `EVALUATOR_API_KEY_FILE` | unset | Read the key from a mounted secret file, used when the plain variable is unset |
+| `API_KEY_FILE` | unset | Read the key from a mounted secret file, used when the plain variable is unset |
 | `GOOGLE_CLOUD_PROJECT` | required | Vertex AI and Firestore project |
 | `DEBUG` | `false` | Opens `/docs`, allows keyless requests and any CORS origin |
 | `FLASH_MODEL`, `PRO_MODEL` | `gemini-3-flash-preview` | Classifier and agent models |

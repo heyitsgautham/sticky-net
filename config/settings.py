@@ -8,11 +8,6 @@ from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, Settings
 
 from config.secret_files import FileSecretsSource
 
-# The GUVI hackathon evaluator sends this value as x-api-key on every turn.
-# It is public, printed in the hackathon's own docs, and grants nothing beyond the
-# evaluator's access, so it lives here as a named constant rather than a secret.
-GUVI_EVALUATOR_KEY = "test-api-key"
-
 
 class Settings(BaseSettings):
     """Application configuration."""
@@ -26,9 +21,6 @@ class Settings(BaseSettings):
 
     # API
     api_key: str
-    # A second key accepted when DEBUG=false, for the GUVI evaluator.
-    # Set EVALUATOR_API_KEY to an empty string to accept only API_KEY.
-    evaluator_api_key: str = GUVI_EVALUATOR_KEY
     port: int = 8080
     debug: bool = False
 
@@ -99,7 +91,7 @@ class Settings(BaseSettings):
         dotenv_settings: PydanticBaseSettingsSource,
         file_secret_settings: PydanticBaseSettingsSource,
     ) -> tuple[PydanticBaseSettingsSource, ...]:
-        """Read API_KEY_FILE and EVALUATOR_API_KEY_FILE after env vars, before .env."""
+        """Read API_KEY_FILE after env vars, before .env."""
         return (
             init_settings,
             env_settings,

@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
 from config.settings import get_settings
-from src.api.auth import accepted_api_keys, key_matches
+from src.api.auth import key_matches
 from src.metrics import AUTH_FAILURES, HTTP_LATENCY, HTTP_REQUESTS, UNROUTED
 
 logger = structlog.get_logger()
@@ -59,8 +59,7 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
         if not api_key:
             return _reject(request, 401, "missing", "Missing API key")
 
-        # Accept the production key and the GUVI evaluator's shared key.
-        if not key_matches(api_key, accepted_api_keys(settings)):
+        if not key_matches(api_key, [settings.api_key]):
             return _reject(request, 403, "invalid", "Invalid API key")
 
         return await call_next(request)

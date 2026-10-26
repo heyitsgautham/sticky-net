@@ -1,4 +1,4 @@
-"""API_KEY_FILE and EVALUATOR_API_KEY_FILE, read by config.secret_files."""
+"""API_KEY_FILE, read by config.secret_files."""
 
 from pathlib import Path
 
@@ -18,7 +18,6 @@ from config.settings import Settings
 def clean_env(monkeypatch: pytest.MonkeyPatch) -> pytest.MonkeyPatch:
     """Drop the suite-wide API_KEY so each test decides where the key comes from."""
     monkeypatch.delenv("API_KEY", raising=False)
-    monkeypatch.delenv("EVALUATOR_API_KEY", raising=False)
     monkeypatch.setenv("GOOGLE_CLOUD_PROJECT", "test-project")
     return monkeypatch
 
@@ -37,13 +36,6 @@ def test_api_key_comes_from_the_file(tmp_path: Path, clean_env: pytest.MonkeyPat
 def test_lowercase_variable_name_works(tmp_path: Path, clean_env: pytest.MonkeyPatch) -> None:
     clean_env.setenv("api_key_file", _secret(tmp_path, "api-key", "lower"))
     assert Settings(_env_file=None).api_key == "lower"  # type: ignore[call-arg]
-
-
-def test_evaluator_key_comes_from_its_file(tmp_path: Path, clean_env: pytest.MonkeyPatch) -> None:
-    clean_env.setenv("API_KEY", "env-key")
-    clean_env.setenv("EVALUATOR_API_KEY_FILE", _secret(tmp_path, "eval", "eval-from-file"))
-    settings = Settings(_env_file=None)  # type: ignore[call-arg]
-    assert settings.evaluator_api_key == "eval-from-file"
 
 
 def test_environment_variable_wins_over_the_file(
@@ -93,9 +85,9 @@ def test_source_only_reads_secret_fields(tmp_path: Path) -> None:
 
 def test_source_skips_fields_the_settings_class_lacks(tmp_path: Path) -> None:
     class Minimal(BaseSettings):
-        api_key: str = "default"
+        port: int = 8080
 
-    environ = {"EVALUATOR_API_KEY_FILE": _secret(tmp_path, "e", "unused")}
+    environ = {"API_KEY_FILE": _secret(tmp_path, "a", "unused")}
     assert FileSecretsSource(Minimal, environ=environ)() == {}
 
 

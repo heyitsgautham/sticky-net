@@ -7,10 +7,13 @@ from unittest.mock import patch
 import pytest
 from fastapi.testclient import TestClient
 
-from config.settings import GUVI_EVALUATOR_KEY, Settings
-from src.api.auth import accepted_api_keys, key_matches
+from config.settings import Settings
+from src.api.auth import key_matches
 from src.main import app
-from tests.helpers import make_settings
+
+# The key the GUVI hackathon evaluator used to send. The hackathon is over, so it
+# must no longer open the API.
+RETIRED_EVALUATOR_KEY = "test-api-key"
 
 # /health is exempt, so a protected route is needed. A body FastAPI rejects still
 # reaches the middleware first, which is all these tests look at, and past the
@@ -54,17 +57,10 @@ class TestProductionMode:
     ) -> None:
         assert _post(client, "prod-key-for-tests").status_code == 200
 
-    def test_evaluator_key_passes_by_default(
+    def test_retired_evaluator_key_is_rejected(
         self, client: TestClient, use_settings: Callable[..., Settings]
     ) -> None:
-        assert _post(client, GUVI_EVALUATOR_KEY).status_code == 200
-
-    def test_evaluator_key_can_be_turned_off(
-        self, client: TestClient, use_settings: Callable[..., Settings]
-    ) -> None:
-        use_settings(evaluator_api_key="")
-        assert _post(client, GUVI_EVALUATOR_KEY).status_code == 403
-        assert _post(client, "prod-key-for-tests").status_code == 200
+        assert _post(client, RETIRED_EVALUATOR_KEY).status_code == 403
 
     def test_non_ascii_key_is_rejected_not_crashing(
         self, client: TestClient, use_settings: Callable[..., Settings]
@@ -86,19 +82,14 @@ class TestDebugMode:
         use_settings(debug=True)
         assert _post(client, "nope").status_code == 403
 
-    def test_evaluator_key_is_not_a_debug_key(
+    def test_retired_evaluator_key_is_not_a_debug_key(
         self, client: TestClient, use_settings: Callable[..., Settings]
     ) -> None:
-        # Debug mode checks a supplied key against API_KEY only, as it always has.
         use_settings(debug=True)
-        assert _post(client, GUVI_EVALUATOR_KEY).status_code == 403
+        assert _post(client, RETIRED_EVALUATOR_KEY).status_code == 403
 
 
 class TestKeyMatching:
-    def test_accepted_keys_skip_empty_values(self) -> None:
-        assert accepted_api_keys(make_settings(evaluator_api_key="")) == ["prod-key-for-tests"]
-        assert accepted_api_keys(make_settings()) == ["prod-key-for-tests", GUVI_EVALUATOR_KEY]
-
     def test_key_matches_compares_every_key_in_constant_time(self) -> None:
         with patch("src.api.auth.hmac.compare_digest", return_value=False) as compare:
             assert key_matches("guess", ["a", "b", "c"]) is False

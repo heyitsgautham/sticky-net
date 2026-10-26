@@ -4,7 +4,13 @@ import { parseAnalyzeDetailed } from "./schemas";
 
 export const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
-export const API_KEY = process.env.REACT_APP_API_KEY || "test-api-key";
+// Sent as x-api-key when set. Leave it unset against an API running with DEBUG=true.
+export const API_KEY = process.env.REACT_APP_API_KEY || "";
+
+const jsonHeaders = () => ({
+  "Content-Type": "application/json",
+  ...(API_KEY ? { "x-api-key": API_KEY } : {}),
+});
 
 // True when GET /health answers 2xx.
 export async function checkHealth(fetchImpl = fetch) {
@@ -35,10 +41,7 @@ export async function analyzeDetailed(
 ) {
   const response = await fetchImpl(`${API_BASE_URL}/api/v1/analyze/detailed`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": API_KEY,
-    },
+    headers: jsonHeaders(),
     body: JSON.stringify({
       message: { sender: "scammer", text, timestamp },
       conversationHistory: toConversationHistory(history),

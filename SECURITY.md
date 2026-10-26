@@ -24,13 +24,12 @@ The deployed API runs from `main`.
 | Google credentials | The Cloud Run service account, through application default credentials | `gcloud auth application-default login`, or a key file under `secrets/`, which git ignores |
 | `ERROR_TRACKING_DSN` | A Cloud Run environment variable | `.env` |
 
-`API_KEY_FILE` and `EVALUATOR_API_KEY_FILE` read a key from a mounted file instead of an environment variable.
+`API_KEY_FILE` reads the key from a mounted file instead of an environment variable.
 `config/secret_files.py` implements this, and a missing or empty file stops startup with an error that names the path but not the contents.
 
-`EVALUATOR_API_KEY` defaults to `test-api-key`.
-That value is not a secret.
-The GUVI evaluator sends it, the hackathon documents it, and the dashboard bundle carries it.
-Treat it as public, and set `EVALUATOR_API_KEY=` to turn it off when the evaluator no longer needs access.
+The API used to accept a second, public key, `test-api-key`, for the GUVI evaluator.
+The hackathon has ended, so the API accepts only `API_KEY`, and the dashboard sends a key only when its build sets `REACT_APP_API_KEY`.
+Rotate `API_KEY` if it was ever shared with the evaluator.
 
 `REACT_APP_*` values are compiled into the dashboard's JavaScript, so anything placed there is public.
 
