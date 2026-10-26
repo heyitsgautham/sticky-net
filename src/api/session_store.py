@@ -5,15 +5,17 @@ by persisting to Firestore as a write-through cache. Falls back to
 in-memory-only if Firestore is unavailable.
 """
 
-import logging
 import time
 from typing import Any
+
+import structlog
 
 from config.settings import get_settings
 from src.api.bounded_cache import BoundedCache
 from src.api.schemas import ExtractedIntelligence
 
-logger = logging.getLogger(__name__)
+# Session IDs come from the caller, so they are logged as fields, never in the message.
+logger = structlog.get_logger(__name__)
 
 # ---------------------------------------------------------------------------
 # Firestore client (lazy singleton)
@@ -41,7 +43,7 @@ def _get_firestore_client() -> Any:
         return _firestore_client
     except Exception as exc:
         _firestore_available = False
-        logger.warning("Firestore unavailable – using in-memory session store only: %s", exc)
+        logger.warning("Firestore unavailable, using in-memory session store only", error=str(exc))
         return None
 
 
@@ -83,7 +85,7 @@ def get_session_start_time(session_id: str) -> float | None:
                     _restore_intel_from_doc(session_id, data)
                     return start
         except Exception as exc:
-            logger.debug("Firestore read failed for session %s: %s", session_id, exc)
+            logger.debug("Firestore read failed", session_id=session_id, error=str(exc))
 
     return None
 
@@ -122,7 +124,7 @@ def get_or_init_session_intel(session_id: str) -> dict[str, set[str]]:
                 if doc.exists:
                     _restore_intel_from_doc(session_id, doc.to_dict())
             except Exception as exc:
-                logger.debug("Firestore intel read failed for %s: %s", session_id, exc)
+                logger.debug("Firestore intel read failed", session_id=session_id, error=str(exc))
 
     return _INTEL[session_id]
 
@@ -191,7 +193,7 @@ def store_detection_result(session_id: str, result: Any) -> None:
                 merge=True,
             )
         except Exception as exc:
-            logger.debug("Firestore detection write failed for %s: %s", session_id, exc)
+            logger.debug("Firestore detection write failed", session_id=session_id, error=str(exc))
 
 
 def get_previous_detection(session_id: str) -> Any | None:
@@ -217,7 +219,7 @@ def get_previous_detection(session_id: str) -> Any | None:
                     _DETECTIONS[session_id] = restored
                     return restored
         except Exception as exc:
-            logger.debug("Firestore detection read failed for %s: %s", session_id, exc)
+            logger.debug("Firestore detection read failed", session_id=session_id, error=str(exc))
 
     return None
 
@@ -242,7 +244,7 @@ def _persist_session(session_id: str) -> None:
         }
         client.collection(FIRESTORE_COLLECTION).document(session_id).set(doc_data, merge=True)
     except Exception as exc:
-        logger.debug("Firestore write failed for session %s: %s", session_id, exc)
+        logger.debug("Firestore write failed", session_id=session_id, error=str(exc))
 
 
 def _restore_intel_from_doc(session_id: str, data: dict[str, Any]) -> None:

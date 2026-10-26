@@ -1,13 +1,17 @@
 """GUVI Hackathon callback handler for reporting extracted intelligence."""
 
-import logging
-
 import httpx
+import structlog
 from pydantic import BaseModel
 
 from config.settings import get_settings
 
-logger = logging.getLogger(__name__)
+# Session IDs come from the caller, so they go into fields, never into the message,
+# where a newline in one could forge a log line in console output.
+logger = structlog.get_logger(__name__)
+
+# How much of an unexpected GUVI response body to keep in the log.
+RESPONSE_SNIPPET_CHARS = 200
 
 
 class CallbackIntelligence(BaseModel):
@@ -70,7 +74,7 @@ async def send_guvi_callback(
 
     # Check if callback is disabled
     if not settings.guvi_callback_enabled:
-        logger.info(f"GUVI callback disabled, skipping for session {session_id}")
+        logger.info("GUVI callback disabled, skipping", session_id=session_id)
         return True
 
     # Build the payload
@@ -113,22 +117,26 @@ async def send_guvi_callback(
 
             if response.status_code in (200, 201, 202):
                 logger.info(
-                    f"GUVI callback successful for session {session_id}: {response.status_code}"
+                    "GUVI callback successful",
+                    session_id=session_id,
+                    status_code=response.status_code,
                 )
                 return True
             else:
                 logger.warning(
-                    f"GUVI callback returned {response.status_code} "
-                    f"for session {session_id}: {response.text}"
+                    "GUVI callback rejected",
+                    session_id=session_id,
+                    status_code=response.status_code,
+                    body=response.text[:RESPONSE_SNIPPET_CHARS],
                 )
                 return False
 
     except httpx.TimeoutException:
-        logger.error(f"GUVI callback timed out for session {session_id}")
+        logger.error("GUVI callback timed out", session_id=session_id)
         return False
     except httpx.RequestError as e:
-        logger.error(f"GUVI callback request failed for session {session_id}: {e}")
+        logger.error("GUVI callback request failed", session_id=session_id, error=str(e))
         return False
     except Exception as e:
-        logger.error(f"Unexpected error in GUVI callback for session {session_id}: {e}")
+        logger.error("Unexpected error in GUVI callback", session_id=session_id, error=str(e))
         return False
