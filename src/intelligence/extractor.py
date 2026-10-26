@@ -24,6 +24,12 @@ from src.intelligence.validators import (
 
 logger = structlog.get_logger()
 
+# user@domain, for UPI IDs and emails. The lookbehind lets a match start only at the
+# beginning of a run of handle characters. Without it, a long run with no "@", such
+# as 10,000 "+" signs, is rescanned from every position, which is quadratic: 14 s of
+# blocking CPU for one request carrying a full 100-message history.
+_HANDLE_AT_DOMAIN = re.compile(r"(?<![\w.+-])([\w.+-]+@[\w.-]+)")
+
 
 @dataclass
 class ExtractionResult:
@@ -245,7 +251,7 @@ class IntelligenceExtractor:
         # Match any user@something pattern
         upi_ids = []
         emails = []
-        for match in re.finditer(r"([\w.+-]+@[\w.-]+)", text):
+        for match in _HANDLE_AT_DOMAIN.finditer(text):
             candidate = match.group(1).lower().rstrip(".")
             parts = candidate.split("@")
             if len(parts) != 2 or not parts[0] or not parts[1]:

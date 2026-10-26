@@ -44,6 +44,7 @@ Treat it as public, and set `EVALUATOR_API_KEY=` to turn it off when the evaluat
 | No exception text in any response body | `src/main.py`, `src/api/routes.py` | `tests/security/test_error_disclosure.py` |
 | `nosniff`, `DENY` framing, `no-referrer`, and `no-store` plus a deny-all CSP on JSON routes | `SecurityHeadersMiddleware` in `src/api/middleware.py` | `tests/security/test_security_headers.py` |
 | Keys, tokens and `Authorization` values masked in logs and error reports | `src/log_redaction.py`, `src/error_tracking.py` | `tests/security/test_log_redaction.py`, `tests/test_error_tracking.py` |
+| Extraction regexes run in linear time on hostile input | `src/intelligence/extractor.py` | `tests/security/test_regex_performance.py` |
 | Session caches capped with LRU eviction | `src/api/bounded_cache.py` | `tests/security/test_session_memory.py` |
 | LLM output parsed into a pydantic model and each value re-checked by regex validators | `src/agents/reply_parser.py`, `src/intelligence/` | `tests/test_reply_parser.py`, `tests/test_validators.py` |
 | Auth failures and malformed bodies counted and logged with a `security_event` field | `src/metrics.py`, `src/api/middleware.py`, `src/main.py` | `tests/test_metrics.py` |
