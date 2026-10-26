@@ -45,7 +45,7 @@ describe("IntelTag", () => {
     Object.assign(navigator, { clipboard: { writeText } });
     render(<IntelTag type="upi" value="fraud@okaxis" />);
 
-    fireEvent.click(screen.getByRole("button"));
+    fireEvent.click(screen.getByRole("button", { name: "Copy UPI ID fraud@okaxis" }));
 
     expect(writeText).toHaveBeenCalledWith("fraud@okaxis");
   });
@@ -73,8 +73,8 @@ describe("ConversationCard", () => {
     const onDelete = jest.fn();
     render(<ConversationCard conversation={saved} onClick={onClick} onDelete={onDelete} />);
 
-    const [select, remove] = screen.getAllByRole("button");
-    fireEvent.click(remove);
+    const select = screen.getByRole("button", { name: /^SBI blocked/ });
+    fireEvent.click(screen.getByRole("button", { name: "Delete conversation SBI blocked..." }));
     expect(onDelete).toHaveBeenCalledWith("conv-1");
     expect(onClick).not.toHaveBeenCalled();
 
@@ -87,5 +87,6 @@ describe("ConversationCard", () => {
       <ConversationCard conversation={{ ...saved, isSample: true }} onClick={jest.fn()} onDelete={jest.fn()} />,
     );
     expect(screen.getAllByRole("button")).toHaveLength(1);
+    expect(screen.queryByRole("button", { name: /Delete conversation/ })).not.toBeInTheDocument();
   });
 });

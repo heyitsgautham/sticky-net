@@ -162,7 +162,13 @@ export const IntelTag = React.memo(({ type, value }) => {
             <IconComponent className="w-4 h-4 flex-shrink-0" />
             <span className="font-semibold flex-shrink-0">{config.label}:</span>
             <span className="truncate flex-1">{value}</span>
-            <button onClick={handleCopy} className="ml-auto hover:opacity-70 transition-opacity flex-shrink-0">
+            <button
+                type="button"
+                onClick={handleCopy}
+                aria-label={`Copy ${config.label} ${value}`}
+                title="Copy"
+                className="ml-auto hover:opacity-70 transition-opacity flex-shrink-0"
+            >
                 <Copy className="w-3 h-3" />
             </button>
         </div>
@@ -205,6 +211,9 @@ export const ConversationCard = React.memo(({ conversation, onClick, isActive, o
         </button>
         {!conversation.isSample && onDelete && (
             <button
+                type="button"
+                aria-label={`Delete conversation ${conversation.title}`}
+                title="Delete"
                 onClick={(e) => { e.stopPropagation(); onDelete(conversation.id); }}
                 className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-500/20 rounded"
             >

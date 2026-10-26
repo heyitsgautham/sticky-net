@@ -22,6 +22,8 @@ export const ConversationSidebar = ({
                         size="sm"
                         variant="ghost"
                         onClick={onNew}
+                        aria-label="New conversation"
+                        title="New conversation"
                         className="h-8 w-8 p-0 text-cyber-cyan hover:bg-cyber-cyan/10"
                     >
                         <Plus className="w-4 h-4" />

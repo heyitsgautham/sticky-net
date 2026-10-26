@@ -131,9 +131,7 @@ describe("ChatDashboard", () => {
     expect(screen.getByText("saved@okaxis")).toBeInTheDocument();
     expect(screen.getByText("saved notes")).toBeInTheDocument();
 
-    const card = screen.getByText("earlier scam...").closest("div.group");
-    const [, remove] = card.querySelectorAll("button");
-    fireEvent.click(remove);
+    fireEvent.click(screen.getByRole("button", { name: "Delete conversation earlier scam..." }));
 
     expect(screen.queryByText("earlier scam...")).not.toBeInTheDocument();
     expect(screen.queryByText("earlier reply")).not.toBeInTheDocument();
@@ -150,6 +148,18 @@ describe("ChatDashboard", () => {
 
     expect(screen.queryByText("oh no which account sir?")).not.toBeInTheDocument();
     expect(screen.getByText(/Start a conversation/)).toBeInTheDocument();
+  });
+
+  it("starts an empty chat from the New conversation button", async () => {
+    mockApi(async () => respond(detailed));
+    await renderDashboard();
+    send("hello");
+    await screen.findByText("oh no which account sir?");
+
+    fireEvent.click(screen.getByRole("button", { name: "New conversation" }));
+
+    expect(screen.getByText(/Start a conversation/)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Type scammer message/)).toHaveFocus();
   });
 
   it("opens a sample conversation read-only", async () => {
