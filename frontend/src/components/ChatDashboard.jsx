@@ -6,6 +6,7 @@ import { emptyIntel, extractionOrderFrom, mergeIntel } from "@/lib/intel";
 import { loadConversations, saveConversations, generateId } from "@/lib/conversationStorage";
 import { API_BASE_URL, analyzeDetailed, checkHealth } from "@/lib/api";
 import { MAX_MESSAGE_CHARS, cleanMessageText } from "@/lib/limits";
+import { logger } from "@/lib/logger";
 import { sampleConversations } from "@/data/sampleConversations";
 import { WebPattern, GlassPanel, ChatMessage } from "@/components/chat/ChatWidgets";
 import { AnalysisSidebar } from "@/components/chat/AnalysisSidebar";
@@ -290,7 +291,7 @@ const ChatDashboard = () => {
                 }
             }
         } catch (error) {
-            console.error("API Error:", error);
+            logger.error("analyze request failed", { apiUrl: API_BASE_URL, conversationId: activeConvId, error });
             setConnectionStatus('disconnected');
 
             // Show error in agent notes
