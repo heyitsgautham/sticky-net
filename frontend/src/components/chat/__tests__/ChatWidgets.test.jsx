@@ -84,7 +84,11 @@ describe("ConversationCard", () => {
 
   it("offers no delete button for a sample", () => {
     render(
-      <ConversationCard conversation={{ ...saved, isSample: true }} onClick={jest.fn()} onDelete={jest.fn()} />,
+      <ConversationCard
+        conversation={{ ...saved, isSample: true }}
+        onClick={jest.fn()}
+        onDelete={jest.fn()}
+      />,
     );
     expect(screen.getAllByRole("button")).toHaveLength(1);
     expect(screen.queryByRole("button", { name: /Delete conversation/ })).not.toBeInTheDocument();

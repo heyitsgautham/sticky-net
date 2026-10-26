@@ -17,8 +17,8 @@ export const SpiderWeb = () => {
     const createDot = () => {
       const angle = Math.random() * 2 * Math.PI;
       const distance = 400 + Math.random() * 200;
-      const startX = 50 + Math.cos(angle) * distance / 10;
-      const startY = 50 + Math.sin(angle) * distance / 10;
+      const startX = 50 + (Math.cos(angle) * distance) / 10;
+      const startY = 50 + (Math.sin(angle) * distance) / 10;
 
       return {
         id: Date.now() + Math.random(),
@@ -29,7 +29,7 @@ export const SpiderWeb = () => {
     };
 
     const interval = setInterval(() => {
-      setScammerDots(prev => [...prev.slice(-8), createDot()]);
+      setScammerDots((prev) => [...prev.slice(-8), createDot()]);
     }, 800);
 
     return () => clearInterval(interval);
@@ -68,7 +68,7 @@ export const SpiderWeb = () => {
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <div className="hero-glow" />
       <svg
-        className={`absolute inset-0 w-full h-full ${isWebExpanded ? 'web-expanded' : 'web-collapsed'}`}
+        className={`absolute inset-0 w-full h-full ${isWebExpanded ? "web-expanded" : "web-collapsed"}`}
         viewBox="0 0 100 100"
         preserveAspectRatio="xMidYMid slice"
       >
@@ -95,7 +95,7 @@ export const SpiderWeb = () => {
         {/* Center node */}
         <circle cx={centerX} cy={centerY} r="1.5" className="spider-web-node" />
         {/* Intersection nodes */}
-        {[1, 2, 3, 4, 5].map(ring =>
+        {[1, 2, 3, 4, 5].map((ring) =>
           Array.from({ length: spokes }).map((_, spoke) => {
             const radius = (ring / rings) * 45;
             const angle = (spoke / spokes) * 2 * Math.PI;
@@ -109,7 +109,7 @@ export const SpiderWeb = () => {
                 style={{ opacity: 0.4 }}
               />
             );
-          })
+          }),
         )}
       </svg>
 
@@ -122,17 +122,17 @@ export const SpiderWeb = () => {
             left: `${dot.startX}%`,
             top: `${dot.startY}%`,
             opacity: 0,
-            scale: 1
+            scale: 1,
           }}
           animate={{
             left: "50%",
             top: "50%",
             opacity: [0, 1, 1, 0],
-            scale: [1, 1, 0.5, 0]
+            scale: [1, 1, 0.5, 0],
           }}
           transition={{
             duration: dot.duration,
-            ease: "easeIn"
+            ease: "easeIn",
           }}
         />
       ))}

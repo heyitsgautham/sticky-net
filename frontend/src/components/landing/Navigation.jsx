@@ -5,11 +5,11 @@ import { Bug, Github, Menu, X } from "lucide-react";
 
 // ============ SECTION IDS FOR NAVIGATION ============
 export const SECTIONS = [
-  { id: 'hero', label: 'Home' },
-  { id: 'problem', label: 'The Problem' },
-  { id: 'solution', label: 'Solution' },
-  { id: 'architecture', label: 'Architecture' },
-  { id: 'live-demo', label: 'Live Demo' },
+  { id: "hero", label: "Home" },
+  { id: "problem", label: "The Problem" },
+  { id: "solution", label: "Solution" },
+  { id: "architecture", label: "Architecture" },
+  { id: "live-demo", label: "Live Demo" },
 ];
 
 // ============ NAVIGATION DOTS ============
@@ -20,7 +20,7 @@ export const NavigationDots = ({ activeSection, onDotClick }) => {
         <button
           key={section.id}
           onClick={() => onDotClick(section.id)}
-          className={`nav-dot ${activeSection === section.id ? 'active' : ''}`}
+          className={`nav-dot ${activeSection === section.id ? "active" : ""}`}
           aria-label={`Go to ${section.label}`}
         >
           <span className="nav-dot-tooltip">{section.label}</span>
@@ -49,8 +49,9 @@ export const Navigation = ({ onNavClick, onLiveDemo }) => {
   return (
     <nav
       data-testid="navigation"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "glass py-3" : "py-6"
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled ? "glass py-3" : "py-6"
+      }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <a href="/" className="flex items-center gap-2" data-testid="logo">
@@ -60,16 +61,32 @@ export const Navigation = ({ onNavClick, onLiveDemo }) => {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          <button onClick={() => scrollTo("problem")} className="nav-link text-gray-400 hover:text-white transition-colors" data-testid="nav-problem">
+          <button
+            onClick={() => scrollTo("problem")}
+            className="nav-link text-gray-400 hover:text-white transition-colors"
+            data-testid="nav-problem"
+          >
             The Problem
           </button>
-          <button onClick={() => scrollTo("solution")} className="nav-link text-gray-400 hover:text-white transition-colors" data-testid="nav-solution">
+          <button
+            onClick={() => scrollTo("solution")}
+            className="nav-link text-gray-400 hover:text-white transition-colors"
+            data-testid="nav-solution"
+          >
             Solution
           </button>
-          <button onClick={() => scrollTo("architecture")} className="nav-link text-gray-400 hover:text-white transition-colors" data-testid="nav-architecture">
+          <button
+            onClick={() => scrollTo("architecture")}
+            className="nav-link text-gray-400 hover:text-white transition-colors"
+            data-testid="nav-architecture"
+          >
             Architecture
           </button>
-          <button onClick={onLiveDemo} className="nav-link text-cyber-cyan hover:text-white transition-colors font-semibold" data-testid="nav-demo">
+          <button
+            onClick={onLiveDemo}
+            className="nav-link text-cyber-cyan hover:text-white transition-colors font-semibold"
+            data-testid="nav-demo"
+          >
             Live Demo
           </button>
           <a
@@ -103,10 +120,33 @@ export const Navigation = ({ onNavClick, onLiveDemo }) => {
             className="md:hidden glass mt-2 mx-4 rounded-lg overflow-hidden"
           >
             <div className="flex flex-col p-4 gap-4">
-              <button onClick={() => scrollTo("problem")} className="text-left text-gray-400 hover:text-white py-2">The Problem</button>
-              <button onClick={() => scrollTo("solution")} className="text-left text-gray-400 hover:text-white py-2">Solution</button>
-              <button onClick={() => scrollTo("architecture")} className="text-left text-gray-400 hover:text-white py-2">Architecture</button>
-              <button onClick={() => { setIsMobileMenuOpen(false); onLiveDemo?.(); }} className="text-left text-cyber-cyan hover:text-white py-2 font-semibold">Live Demo</button>
+              <button
+                onClick={() => scrollTo("problem")}
+                className="text-left text-gray-400 hover:text-white py-2"
+              >
+                The Problem
+              </button>
+              <button
+                onClick={() => scrollTo("solution")}
+                className="text-left text-gray-400 hover:text-white py-2"
+              >
+                Solution
+              </button>
+              <button
+                onClick={() => scrollTo("architecture")}
+                className="text-left text-gray-400 hover:text-white py-2"
+              >
+                Architecture
+              </button>
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onLiveDemo?.();
+                }}
+                className="text-left text-cyber-cyan hover:text-white py-2 font-semibold"
+              >
+                Live Demo
+              </button>
             </div>
           </motion.div>
         )}

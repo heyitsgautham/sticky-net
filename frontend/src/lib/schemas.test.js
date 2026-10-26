@@ -33,12 +33,17 @@ describe("parseAnalyzeDetailed", () => {
   });
 
   it("accepts the two-key fallback the API sends for a body it cannot parse", () => {
-    const fallback = { status: "success", reply: "sorry i didnt understand that... can you say again?" };
+    const fallback = {
+      status: "success",
+      reply: "sorry i didnt understand that... can you say again?",
+    };
     expect(parseAnalyzeDetailed(fallback)).toEqual(fallback);
   });
 
   it("accepts a harmless verdict with no scam type", () => {
-    expect(parseAnalyzeDetailed({ ...detailed, scamDetected: false, scamType: null }).scamType).toBeNull();
+    expect(
+      parseAnalyzeDetailed({ ...detailed, scamDetected: false, scamType: null }).scamType,
+    ).toBeNull();
   });
 
   it("keeps fields it does not know about", () => {
@@ -74,7 +79,13 @@ describe("analyzeDetailed validation", () => {
   });
 
   it("throws when a 200 carries the wrong shape", async () => {
-    const fetchImpl = jest.fn(async () => ({ ok: true, status: 200, json: async () => ({ ok: 1 }) }));
-    await expect(analyzeDetailed(args, fetchImpl)).rejects.toThrow("API returned an unexpected response");
+    const fetchImpl = jest.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ ok: 1 }),
+    }));
+    await expect(analyzeDetailed(args, fetchImpl)).rejects.toThrow(
+      "API returned an unexpected response",
+    );
   });
 });

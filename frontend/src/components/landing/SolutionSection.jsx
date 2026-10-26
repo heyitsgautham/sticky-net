@@ -8,16 +8,43 @@ import { fadeInUp, fadeInScale } from "@/components/landing/motion";
 // ============ SOLUTION SECTION (Split Screen) ============
 export const WhatsAppMock = () => {
   const messages = [
-    { type: "incoming", text: "Dear Customer, Your SBI account will be BLOCKED within 24 hours due to incomplete KYC verification. Update immediately to avoid account suspension.", time: "10:31 AM" },
-    { type: "outgoing", text: "oh god sir pls dont block my account. my pension comes in sbi only. i am old lady i dont understand what is kyc. what i have to do? pls tell me", time: "10:32 AM" },
-    { type: "incoming", text: "This is urgent matter. I am calling from SBI head office Mumbai. Your account ending 4521 is showing KYC pending.", time: "10:33 AM" },
-    { type: "outgoing", text: "hello beta i am very worried. i cannot come to mumbai i live in pune. my knees are bad i cannot walk much. how can i do this verification from home?", time: "10:34 AM" },
-    { type: "incoming", text: "Please share your registered mobile number. Or you can directly update by paying Rs.10 verification fee to UPI ID: sbi.kyc.update@ybl", time: "10:35 AM" },
-    { type: "outgoing", text: "ok beta i will pay 10 rs right now. i am opening my phone pay app... what name should show on screen? i want to be sure it is going to bank only.", time: "10:37 AM" },
+    {
+      type: "incoming",
+      text: "Dear Customer, Your SBI account will be BLOCKED within 24 hours due to incomplete KYC verification. Update immediately to avoid account suspension.",
+      time: "10:31 AM",
+    },
+    {
+      type: "outgoing",
+      text: "oh god sir pls dont block my account. my pension comes in sbi only. i am old lady i dont understand what is kyc. what i have to do? pls tell me",
+      time: "10:32 AM",
+    },
+    {
+      type: "incoming",
+      text: "This is urgent matter. I am calling from SBI head office Mumbai. Your account ending 4521 is showing KYC pending.",
+      time: "10:33 AM",
+    },
+    {
+      type: "outgoing",
+      text: "hello beta i am very worried. i cannot come to mumbai i live in pune. my knees are bad i cannot walk much. how can i do this verification from home?",
+      time: "10:34 AM",
+    },
+    {
+      type: "incoming",
+      text: "Please share your registered mobile number. Or you can directly update by paying Rs.10 verification fee to UPI ID: sbi.kyc.update@ybl",
+      time: "10:35 AM",
+    },
+    {
+      type: "outgoing",
+      text: "ok beta i will pay 10 rs right now. i am opening my phone pay app... what name should show on screen? i want to be sure it is going to bank only.",
+      time: "10:37 AM",
+    },
   ];
 
   return (
-    <div className="bg-[#0B141A] rounded-xl overflow-hidden border border-white/10 max-w-sm mx-auto" data-testid="whatsapp-mock">
+    <div
+      className="bg-[#0B141A] rounded-xl overflow-hidden border border-white/10 max-w-sm mx-auto"
+      data-testid="whatsapp-mock"
+    >
       {/* Header */}
       <div className="bg-[#1F2C34] px-4 py-3 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyber-cyan/30 to-cyber-cyan/10 flex items-center justify-center">
@@ -80,10 +107,13 @@ export const TerminalAnalysis = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: i * 0.4 }}
-            className={`mb-2 ${log.type === "ai" ? "text-cyber-cyan" :
-              log.type === "extract" ? "text-yellow-400" :
-                "text-gray-500"
-              }`}
+            className={`mb-2 ${
+              log.type === "ai"
+                ? "text-cyber-cyan"
+                : log.type === "extract"
+                  ? "text-yellow-400"
+                  : "text-gray-500"
+            }`}
           >
             {log.text}
           </motion.div>
@@ -111,7 +141,10 @@ export const SolutionSection = () => {
           animate={isInView ? "visible" : "hidden"}
           className="text-center mb-12"
         >
-          <Badge className="mb-4 border-cyber-cyan text-cyber-cyan bg-cyber-cyan/10 font-mono" data-testid="solution-badge">
+          <Badge
+            className="mb-4 border-cyber-cyan text-cyber-cyan bg-cyber-cyan/10 font-mono"
+            data-testid="solution-badge"
+          >
             THE SOLUTION
           </Badge>
           <h2 className="font-heading text-3xl md:text-5xl font-bold text-white mb-4">
@@ -143,7 +176,9 @@ export const SolutionSection = () => {
           >
             <div className="flex items-center gap-2 mb-4">
               <Terminal className="w-5 h-5 text-cyber-cyan" />
-              <span className="text-sm text-gray-400 font-mono uppercase">What&apos;s Really Happening</span>
+              <span className="text-sm text-gray-400 font-mono uppercase">
+                What&apos;s Really Happening
+              </span>
             </div>
             <TerminalAnalysis />
           </motion.div>

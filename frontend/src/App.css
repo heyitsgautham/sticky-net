@@ -26,7 +26,7 @@
 }
 
 .spider-web-line {
-  stroke: #00F5D4;
+  stroke: #00f5d4;
   stroke-width: 0.5;
   fill: none;
   opacity: 0.3;
@@ -34,7 +34,7 @@
 }
 
 .spider-web-node {
-  fill: #00F5D4;
+  fill: #00f5d4;
   opacity: 0.6;
 }
 
@@ -48,33 +48,33 @@
 }
 
 .whatsapp-bubble.incoming {
-  background: #1F2C34;
+  background: #1f2c34;
   border-bottom-left-radius: 0;
-  color: #E9EDEF;
+  color: #e9edef;
 }
 
 .whatsapp-bubble.outgoing {
-  background: #005C4B;
+  background: #005c4b;
   border-bottom-right-radius: 0;
-  color: #E9EDEF;
+  color: #e9edef;
   margin-left: auto;
 }
 
 /* Terminal Styles */
 .terminal-window {
-  background: #0D0D0D;
-  border: 1px solid #27272A;
+  background: #0d0d0d;
+  border: 1px solid #27272a;
   border-radius: 8px;
   overflow: hidden;
 }
 
 .terminal-header {
-  background: #1A1A1D;
+  background: #1a1a1d;
   padding: 10px 16px;
   display: flex;
   align-items: center;
   gap: 8px;
-  border-bottom: 1px solid #27272A;
+  border-bottom: 1px solid #27272a;
 }
 
 .terminal-dot {
@@ -83,13 +83,19 @@
   border-radius: 50%;
 }
 
-.terminal-dot.red { background: #FF5F56; }
-.terminal-dot.yellow { background: #FFBD2E; }
-.terminal-dot.green { background: #27C93F; }
+.terminal-dot.red {
+  background: #ff5f56;
+}
+.terminal-dot.yellow {
+  background: #ffbd2e;
+}
+.terminal-dot.green {
+  background: #27c93f;
+}
 
 .terminal-body {
   padding: 16px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 13px;
   line-height: 1.6;
   min-height: 300px;
@@ -115,7 +121,7 @@
 }
 
 .bento-card::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border: 1px solid transparent;
@@ -138,13 +144,13 @@
 }
 
 .nav-link::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -2px;
   left: 0;
   width: 0;
   height: 2px;
-  background: #00F5D4;
+  background: #00f5d4;
   transition: width 0.3s ease;
 }
 
@@ -157,7 +163,11 @@
   position: absolute;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle at center, rgba(0, 245, 212, 0.15) 0%, rgba(10, 10, 11, 0) 70%);
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 245, 212, 0.15) 0%,
+    rgba(10, 10, 11, 0) 70%
+  );
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -166,12 +176,14 @@
 
 /* Hero Text Enhancement */
 .hero-text-wrapper {
-  text-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
+  text-shadow:
+    0 0 40px rgba(0, 0, 0, 0.8),
+    0 2px 8px rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(0.5px);
 }
 
 .hero-text-wrapper h1 {
-  text-shadow: 
+  text-shadow:
     0 0 60px rgba(0, 0, 0, 0.9),
     0 0 30px rgba(0, 0, 0, 0.8),
     0 2px 10px rgba(0, 0, 0, 0.7),
@@ -179,8 +191,10 @@
 }
 
 .hero-text-wrapper p {
-  text-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.7);
-  color: #E5E5E5 !important;
+  text-shadow:
+    0 0 40px rgba(0, 0, 0, 0.9),
+    0 2px 8px rgba(0, 0, 0, 0.7);
+  color: #e5e5e5 !important;
 }
 
 .hero-description-blur {
@@ -204,7 +218,7 @@
 /* Section Divider */
 .section-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, #27272A, transparent);
+  background: linear-gradient(90deg, transparent, #27272a, transparent);
 }
 
 /* ============ SMOOTH SECTION BLENDING ============ */
@@ -215,13 +229,13 @@
 }
 
 .section-fade-top::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 150px;
-  background: linear-gradient(to bottom, #0A0A0B 0%, transparent 100%);
+  background: linear-gradient(to bottom, #0a0a0b 0%, transparent 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -231,13 +245,13 @@
 }
 
 .section-fade-bottom::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 150px;
-  background: linear-gradient(to top, #0A0A0B 0%, transparent 100%);
+  background: linear-gradient(to top, #0a0a0b 0%, transparent 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -248,25 +262,25 @@
 }
 
 .section-fade::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 120px;
-  background: linear-gradient(to bottom, #0A0A0B 0%, transparent 100%);
+  background: linear-gradient(to bottom, #0a0a0b 0%, transparent 100%);
   pointer-events: none;
   z-index: 1;
 }
 
 .section-fade::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 120px;
-  background: linear-gradient(to top, #0A0A0B 0%, transparent 100%);
+  background: linear-gradient(to top, #0a0a0b 0%, transparent 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -286,7 +300,7 @@
 }
 
 .section-blend::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 10%;
@@ -301,25 +315,25 @@
 }
 
 .grid-bg::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 80px;
-  background: linear-gradient(to bottom, #0A0A0B, transparent);
+  background: linear-gradient(to bottom, #0a0a0b, transparent);
   pointer-events: none;
   z-index: 1;
 }
 
 .grid-bg::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 80px;
-  background: linear-gradient(to top, #0A0A0B, transparent);
+  background: linear-gradient(to top, #0a0a0b, transparent);
   pointer-events: none;
   z-index: 1;
 }
@@ -373,12 +387,24 @@
   transform: translateY(20px);
 }
 
-.stagger-children.in-view > *:nth-child(1) { animation: slideUp 0.6s ease forwards 0.1s; }
-.stagger-children.in-view > *:nth-child(2) { animation: slideUp 0.6s ease forwards 0.2s; }
-.stagger-children.in-view > *:nth-child(3) { animation: slideUp 0.6s ease forwards 0.3s; }
-.stagger-children.in-view > *:nth-child(4) { animation: slideUp 0.6s ease forwards 0.4s; }
-.stagger-children.in-view > *:nth-child(5) { animation: slideUp 0.6s ease forwards 0.5s; }
-.stagger-children.in-view > *:nth-child(6) { animation: slideUp 0.6s ease forwards 0.6s; }
+.stagger-children.in-view > *:nth-child(1) {
+  animation: slideUp 0.6s ease forwards 0.1s;
+}
+.stagger-children.in-view > *:nth-child(2) {
+  animation: slideUp 0.6s ease forwards 0.2s;
+}
+.stagger-children.in-view > *:nth-child(3) {
+  animation: slideUp 0.6s ease forwards 0.3s;
+}
+.stagger-children.in-view > *:nth-child(4) {
+  animation: slideUp 0.6s ease forwards 0.4s;
+}
+.stagger-children.in-view > *:nth-child(5) {
+  animation: slideUp 0.6s ease forwards 0.5s;
+}
+.stagger-children.in-view > *:nth-child(6) {
+  animation: slideUp 0.6s ease forwards 0.6s;
+}
 
 @keyframes slideUp {
   from {
@@ -421,7 +447,7 @@
 /* Default state styling */
 .india-map-location {
   fill: rgba(255, 51, 102, 0.1);
-  stroke: #FF3366;
+  stroke: #ff3366;
   stroke-width: 0.5;
   opacity: 0.6;
   transition: all 0.3s ease;
@@ -447,7 +473,8 @@
 }
 
 @keyframes pulse-hotspot {
-  0%, 100% {
+  0%,
+  100% {
     fill: rgba(255, 51, 102, 0.2);
   }
   50% {

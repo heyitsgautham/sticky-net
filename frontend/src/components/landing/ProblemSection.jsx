@@ -15,7 +15,7 @@ export const RupeeRain = () => {
       delay: Math.random() * 10,
       duration: 8 + Math.random() * 6,
       size: 12 + Math.random() * 8,
-    }))
+    })),
   );
 
   return (
@@ -42,15 +42,11 @@ export const IndiaMap = () => {
   const [hoveredState, setHoveredState] = useState(null);
 
   // Scam hotspot states (higher fraud rates)
-  const hotspotStates = ['dl', 'mh', 'wb', 'ka', 'tg', 'tn', 'up', 'rj', 'gj'];
+  const hotspotStates = ["dl", "mh", "wb", "ka", "tg", "tn", "up", "rj", "gj"];
 
   return (
     <div className="relative w-full max-w-md">
-      <svg
-        viewBox={India.viewBox}
-        className="w-full h-auto"
-        aria-label={India.label}
-      >
+      <svg viewBox={India.viewBox} className="w-full h-auto" aria-label={India.label}>
         {/* Render each state */}
         {India.locations.map((location) => {
           const isHotspot = hotspotStates.includes(location.id);
@@ -61,12 +57,18 @@ export const IndiaMap = () => {
               key={location.id}
               id={location.id}
               d={location.path}
-              fill={isHovered ? 'rgba(255, 51, 102, 0.5)' : isHotspot ? 'rgba(255, 51, 102, 0.25)' : 'rgba(255, 51, 102, 0.1)'}
+              fill={
+                isHovered
+                  ? "rgba(255, 51, 102, 0.5)"
+                  : isHotspot
+                    ? "rgba(255, 51, 102, 0.25)"
+                    : "rgba(255, 51, 102, 0.1)"
+              }
               stroke="#FF3366"
               strokeWidth={isHovered ? "1.5" : "0.5"}
               style={{
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
+                cursor: "pointer",
+                transition: "all 0.2s ease",
                 opacity: isHovered ? 1 : isHotspot ? 0.9 : 0.7,
               }}
               onMouseEnter={() => setHoveredState(location.id)}
@@ -79,7 +81,7 @@ export const IndiaMap = () => {
       {/* State name tooltip */}
       {hoveredState && (
         <div className="absolute top-2 left-2 bg-black/90 text-cyber-red text-xs px-2 py-1 rounded border border-cyber-red/50 font-mono">
-          {India.locations.find(l => l.id === hoveredState)?.name || hoveredState.toUpperCase()}
+          {India.locations.find((l) => l.id === hoveredState)?.name || hoveredState.toUpperCase()}
         </div>
       )}
     </div>
@@ -105,7 +107,10 @@ export const ProblemSection = () => {
           animate={isInView ? "visible" : "hidden"}
           className="text-center mb-12"
         >
-          <Badge className="mb-4 border-cyber-red text-cyber-red bg-cyber-red/10 font-mono" data-testid="problem-badge">
+          <Badge
+            className="mb-4 border-cyber-red text-cyber-red bg-cyber-red/10 font-mono"
+            data-testid="problem-badge"
+          >
             THE PROBLEM
           </Badge>
           <h2 className="font-heading text-3xl md:text-5xl font-bold text-white">
@@ -131,7 +136,8 @@ export const ProblemSection = () => {
           >
             <motion.div variants={staggerItem} data-testid="stat-fraud-loss">
               <div className="text-4xl md:text-5xl font-heading font-bold text-cyber-red mb-2">
-                ₹<AnimatedCounter end={60000} duration={2.5} />Cr+
+                ₹<AnimatedCounter end={60000} duration={2.5} />
+                Cr+
               </div>
               <p className="text-gray-400 text-base md:text-lg">Lost to digital fraud annually</p>
             </motion.div>
@@ -145,8 +151,9 @@ export const ProblemSection = () => {
 
             <motion.div variants={staggerItem} className="pt-2">
               <p className="text-gray-500 leading-relaxed text-sm md:text-base">
-                While victims lose their life savings in minutes, scammers operate with impunity from
-                underground call centers. Traditional defenses are reactive. We flip the script.
+                While victims lose their life savings in minutes, scammers operate with impunity
+                from underground call centers. Traditional defenses are reactive. We flip the
+                script.
               </p>
             </motion.div>
           </motion.div>

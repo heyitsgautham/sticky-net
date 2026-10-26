@@ -17,8 +17,7 @@ export const INTEL_FIELDS = [
   ["emails", "email"],
 ];
 
-export const emptyIntel = () =>
-  Object.fromEntries(INTEL_FIELDS.map(([field]) => [field, []]));
+export const emptyIntel = () => Object.fromEntries(INTEL_FIELDS.map(([field]) => [field, []]));
 
 const incomingValues = (intel, field) =>
   field === "emails"

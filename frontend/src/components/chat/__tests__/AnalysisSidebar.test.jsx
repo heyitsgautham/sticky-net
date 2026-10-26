@@ -41,7 +41,11 @@ describe("AnalysisSidebar", () => {
   });
 
   it("says NO for a harmless verdict", () => {
-    render(<AnalysisSidebar {...props({ metrics: { scamDetected: false, confidence: 0.1, messagesExchanged: 2 } })} />);
+    render(
+      <AnalysisSidebar
+        {...props({ metrics: { scamDetected: false, confidence: 0.1, messagesExchanged: 2 } })}
+      />,
+    );
     expect(screen.getByText("NO")).toBeInTheDocument();
     expect(screen.getByText("10%")).toBeInTheDocument();
   });

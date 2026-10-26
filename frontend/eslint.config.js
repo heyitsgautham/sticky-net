@@ -9,7 +9,13 @@ const importPlugin = require("eslint-plugin-import");
 
 module.exports = [
   {
-    ignores: ["build/**", "coverage/**", "node_modules/**", "src/components/ui/**", "src/hooks/use-toast.js"],
+    ignores: [
+      "build/**",
+      "coverage/**",
+      "node_modules/**",
+      "src/components/ui/**",
+      "src/hooks/use-toast.js",
+    ],
   },
   js.configs.recommended,
   {

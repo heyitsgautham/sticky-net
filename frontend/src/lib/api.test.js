@@ -33,7 +33,10 @@ describe("analyzeDetailed", () => {
   it("throws on a non-2xx status", async () => {
     const fetchImpl = jest.fn(async () => ({ ok: false, status: 503 }));
     await expect(
-      analyzeDetailed({ text: "x", timestamp: "t", history: [], channel: "SMS", locale: "IN" }, fetchImpl),
+      analyzeDetailed(
+        { text: "x", timestamp: "t", history: [], channel: "SMS", locale: "IN" },
+        fetchImpl,
+      ),
     ).rejects.toThrow("API returned 503");
   });
 });

@@ -23,7 +23,9 @@ export const AnimatedCounter = ({ end, duration = 2, prefix = "", suffix = "" })
 
   return (
     <span ref={ref} className="font-mono">
-      {prefix}{count.toLocaleString()}{suffix}
+      {prefix}
+      {count.toLocaleString()}
+      {suffix}
     </span>
   );
 };
@@ -42,5 +44,9 @@ export const FluctuatingCounter = ({ base, range = 5 }) => {
     return () => clearInterval(interval);
   }, [isInView, base, range]);
 
-  return <span ref={ref} className="font-mono">{value.toLocaleString()}</span>;
+  return (
+    <span ref={ref} className="font-mono">
+      {value.toLocaleString()}
+    </span>
+  );
 };

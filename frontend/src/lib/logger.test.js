@@ -50,7 +50,9 @@ describe("createLogger", () => {
   it("falls back to log when the sink lacks a level method", () => {
     const sink = { log: jest.fn() };
     createLogger({ sink, minLevel: "debug" }).warn("fallback");
-    expect(sink.log).toHaveBeenCalledWith(expect.objectContaining({ level: "warn", event: "fallback" }));
+    expect(sink.log).toHaveBeenCalledWith(
+      expect.objectContaining({ level: "warn", event: "fallback" }),
+    );
   });
 
   it("is silent by default under jest", () => {

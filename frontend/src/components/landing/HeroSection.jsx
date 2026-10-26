@@ -32,7 +32,10 @@ export const HeroSection = ({ onNavClick, onLiveDemo }) => {
         animate={isInView ? "visible" : "hidden"}
         className="relative z-10 text-center max-w-4xl hero-text-wrapper"
       >
-        <Badge className="mb-6 border-cyber-cyan text-cyber-cyan bg-cyber-cyan/10 font-mono" data-testid="hero-badge">
+        <Badge
+          className="mb-6 border-cyber-cyan text-cyber-cyan bg-cyber-cyan/10 font-mono"
+          data-testid="hero-badge"
+        >
           AGENTIC AI HONEYPOT
         </Badge>
 
@@ -40,8 +43,7 @@ export const HeroSection = ({ onNavClick, onLiveDemo }) => {
           variants={fadeInUp}
           className="font-heading text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-tight"
         >
-          The Honeypot That Wastes{" "}
-          <span className="text-cyber-cyan">Their</span> Time,{" "}
+          The Honeypot That Wastes <span className="text-cyber-cyan">Their</span> Time,{" "}
           <br className="hidden sm:block" />
           Not <span className="text-cyber-red">Yours</span>.
         </motion.h1>
@@ -105,7 +107,10 @@ export const HeroSection = ({ onNavClick, onLiveDemo }) => {
           { label: "Active Threats", value: 47, isFluctuating: true },
         ].map((stat, i) => (
           <motion.div key={stat.label} variants={staggerItem}>
-            <Card className="stat-card glass border-white/10 hover:border-cyber-cyan/30" data-testid={`stat-card-${i}`}>
+            <Card
+              className="stat-card glass border-white/10 hover:border-cyber-cyan/30"
+              data-testid={`stat-card-${i}`}
+            >
               <CardContent className="p-4 md:p-6 text-center">
                 <div className="text-2xl md:text-3xl font-bold text-white mb-1">
                   {stat.isFluctuating ? (
@@ -114,7 +119,9 @@ export const HeroSection = ({ onNavClick, onLiveDemo }) => {
                     <AnimatedCounter end={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
                   )}
                 </div>
-                <div className="text-xs md:text-sm text-gray-500 uppercase tracking-wide">{stat.label}</div>
+                <div className="text-xs md:text-sm text-gray-500 uppercase tracking-wide">
+                  {stat.label}
+                </div>
               </CardContent>
             </Card>
           </motion.div>

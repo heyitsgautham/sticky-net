@@ -20,6 +20,17 @@ uv run mypy
 uv run pytest --cov
 ```
 
+For the dashboard, run these inside `frontend/`.
+
+```bash
+yarn lint
+yarn format:check
+yarn test:coverage
+```
+
+`yarn format` rewrites files with Prettier.
+ESLint and Prettier skip `src/components/ui/` and `src/hooks/use-toast.js`, which the shadcn/ui CLI generates.
+
 CI also builds the frontend, runs `pip-audit` and `yarn audit`, scans history with gitleaks and builds the Docker image.
 The workflow is `.github/workflows/ci.yml`.
 

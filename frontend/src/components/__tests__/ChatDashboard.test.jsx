@@ -34,7 +34,9 @@ async function renderDashboard() {
 }
 
 const send = (text) => {
-  fireEvent.change(screen.getByPlaceholderText(/Type scammer message/), { target: { value: text } });
+  fireEvent.change(screen.getByPlaceholderText(/Type scammer message/), {
+    target: { value: text },
+  });
   fireEvent.click(screen.getByRole("button", { name: /Send/ }));
 };
 
@@ -49,7 +51,9 @@ describe("ChatDashboard", () => {
     send("Your SBI account is blocked. Pay to fraud.help@okaxis");
 
     expect(await screen.findByText("oh no which account sir?")).toBeInTheDocument();
-    expect(screen.getByText("Your SBI account is blocked. Pay to fraud.help@okaxis")).toBeInTheDocument();
+    expect(
+      screen.getByText("Your SBI account is blocked. Pay to fraud.help@okaxis"),
+    ).toBeInTheDocument();
     expect(screen.getByText("YES")).toBeInTheDocument();
     expect(screen.getByText("92%")).toBeInTheDocument();
     expect(screen.getByText("fraud.help@okaxis")).toBeInTheDocument();
@@ -74,7 +78,10 @@ describe("ChatDashboard", () => {
     const [, init] = global.fetch.mock.calls[2];
     const body = JSON.parse(init.body);
     expect(body.message.text).toBe("second");
-    expect(body.conversationHistory.map((m) => m.text)).toEqual(["first", "oh no which account sir?"]);
+    expect(body.conversationHistory.map((m) => m.text)).toEqual([
+      "first",
+      "oh no which account sir?",
+    ]);
     expect(body.metadata).toEqual({ channel: "SMS", language: "English", locale: "IN" });
   });
 

@@ -14,19 +14,25 @@ const defaultLevel = () => {
 const serialise = (value) =>
   value instanceof Error ? { name: value.name, message: value.message } : value;
 
-export function createLogger({ sink = console, minLevel = defaultLevel(), now = () => new Date() } = {}) {
+export function createLogger({
+  sink = console,
+  minLevel = defaultLevel(),
+  now = () => new Date(),
+} = {}) {
   const threshold = LEVELS[minLevel] ?? LEVELS.debug;
 
-  const write = (level) => (event, context = {}) => {
-    if (LEVELS[level] < threshold) return null;
-    const entry = { level, event, time: now().toISOString() };
-    for (const [key, value] of Object.entries(context)) {
-      entry[key] = serialise(value);
-    }
-    const method = typeof sink[level] === "function" ? sink[level] : sink.log;
-    method.call(sink, entry);
-    return entry;
-  };
+  const write =
+    (level) =>
+    (event, context = {}) => {
+      if (LEVELS[level] < threshold) return null;
+      const entry = { level, event, time: now().toISOString() };
+      for (const [key, value] of Object.entries(context)) {
+        entry[key] = serialise(value);
+      }
+      const method = typeof sink[level] === "function" ? sink[level] : sink.log;
+      method.call(sink, entry);
+      return entry;
+    };
 
   return {
     debug: write("debug"),
