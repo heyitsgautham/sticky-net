@@ -1,4 +1,6 @@
 // Client for the Sticky-Net API. REACT_APP_* values are baked in at build time.
+import { MAX_HISTORY_MESSAGES, MAX_MESSAGE_CHARS } from "./limits";
+
 export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 export const API_KEY = process.env.REACT_APP_API_KEY || 'test-api-key';
@@ -14,10 +16,12 @@ export async function checkHealth(fetchImpl = fetch) {
 }
 
 // Turn dashboard messages into the API's conversationHistory entries.
+// Only the most recent MAX_HISTORY_MESSAGES go, each cut to MAX_MESSAGE_CHARS, so a
+// long chat keeps getting real analyses instead of the API's fallback reply.
 export const toConversationHistory = (messages) =>
-    messages.map((m) => ({
+    messages.slice(-MAX_HISTORY_MESSAGES).map((m) => ({
         sender: m.sender,
-        text: m.text,
+        text: (m.text || "").slice(0, MAX_MESSAGE_CHARS),
         timestamp: m.isoTimestamp || new Date().toISOString(),
     }));
 

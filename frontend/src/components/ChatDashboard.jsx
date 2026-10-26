@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { emptyIntel, extractionOrderFrom, mergeIntel } from "@/lib/intel";
 import { loadConversations, saveConversations, generateId } from "@/lib/conversationStorage";
 import { API_BASE_URL, analyzeDetailed, checkHealth } from "@/lib/api";
+import { MAX_MESSAGE_CHARS, cleanMessageText } from "@/lib/limits";
 import { sampleConversations } from "@/data/sampleConversations";
 import { WebPattern, GlassPanel, ChatMessage } from "@/components/chat/ChatWidgets";
 import { AnalysisSidebar } from "@/components/chat/AnalysisSidebar";
@@ -151,7 +152,8 @@ const ChatDashboard = () => {
     };
 
     const handleSend = async () => {
-        if (!inputValue.trim() || isLoading) return;
+        const text = cleanMessageText(inputValue);
+        if (!text || isLoading) return;
 
         // Store the active conversation ID before sending
         let activeConvId = currentConversationId;
@@ -180,7 +182,7 @@ const ChatDashboard = () => {
 
         const newMessage = {
             sender: "scammer",
-            text: inputValue.trim(),
+            text,
             timestamp: displayTime,
             isoTimestamp: timestamp,
         };
@@ -435,6 +437,7 @@ const ChatDashboard = () => {
                                                     handleSend();
                                                 }
                                             }}
+                                            maxLength={MAX_MESSAGE_CHARS}
                                             placeholder="Type scammer message... (Shift+Enter for new line)"
                                             rows={3}
                                             className="
