@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { fadeInUp, fadeInScale, staggerContainer, staggerItem } from "@/components/landing/motion";
 import { AnimatedCounter } from "@/components/landing/Counters";
+import India from "@svg-maps/india";
 
 // ============ PROBLEM SECTION (India Heatmap) ============
 export const RupeeRain = () => {
@@ -39,9 +40,6 @@ export const RupeeRain = () => {
 
 export const IndiaMap = () => {
   const [hoveredState, setHoveredState] = useState(null);
-
-  // Import India map data directly
-  const India = require('@svg-maps/india').default;
 
   // Scam hotspot states (higher fraud rates)
   const hotspotStates = ['dl', 'mh', 'wb', 'ka', 'tg', 'tn', 'up', 'rj', 'gj'];
@@ -111,7 +109,7 @@ export const ProblemSection = () => {
             THE PROBLEM
           </Badge>
           <h2 className="font-heading text-3xl md:text-5xl font-bold text-white">
-            India's Silent Financial Epidemic
+            India&apos;s Silent Financial Epidemic
           </h2>
         </motion.div>
 

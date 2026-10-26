@@ -1,6 +1,5 @@
 // Architecture and tech stack cards.
-import React from "react";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Shield, Brain, Zap, Database, Drama, Terminal, Settings, MessageSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";

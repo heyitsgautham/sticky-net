@@ -213,3 +213,8 @@ export const ConversationCard = React.memo(({ conversation, onClick, isActive, o
         )}
     </div>
 ));
+
+ChatMessage.displayName = "ChatMessage";
+MetricCard.displayName = "MetricCard";
+IntelTag.displayName = "IntelTag";
+ConversationCard.displayName = "ConversationCard";

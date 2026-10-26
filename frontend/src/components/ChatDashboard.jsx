@@ -375,7 +375,7 @@ const ChatDashboard = () => {
                                             Start a conversation by typing a scam message below.
                                         </p>
                                         <p className="text-center text-xs mt-2 text-gray-600">
-                                            Example: "Your bank account has been compromised. Send OTP to verify."
+                                            Example: &quot;Your bank account has been compromised. Send OTP to verify.&quot;
                                         </p>
                                         {connectionStatus === 'disconnected' && (
                                             <p className="text-center text-xs mt-4 text-red-400">
@@ -413,7 +413,7 @@ const ChatDashboard = () => {
                                 {isViewingSample ? (
                                     <div className="text-center py-4">
                                         <p className="text-gray-500 text-sm font-mono">
-                                            📖 This is a demo example. Click "New" to start your own conversation.
+                                            📖 This is a demo example. Click &quot;New&quot; to start your own conversation.
                                         </p>
                                     </div>
                                 ) : (

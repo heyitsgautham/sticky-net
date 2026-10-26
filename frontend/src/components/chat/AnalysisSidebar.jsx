@@ -21,8 +21,9 @@ export const AnalysisSidebar = ({
                 </h3>
                 <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label className="text-gray-500 text-xs mb-1 block">CHANNEL</label>
+                        <label htmlFor="channel-select" className="text-gray-500 text-xs mb-1 block">CHANNEL</label>
                         <select
+                            id="channel-select"
                             value={channel}
                             onChange={(e) => setChannel(e.target.value)}
                             className="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-white text-sm font-mono focus:outline-none focus:border-cyber-cyan"
@@ -33,8 +34,9 @@ export const AnalysisSidebar = ({
                         </select>
                     </div>
                     <div>
-                        <label className="text-gray-500 text-xs mb-1 block">LOCALE</label>
+                        <label htmlFor="locale-select" className="text-gray-500 text-xs mb-1 block">LOCALE</label>
                         <select
+                            id="locale-select"
                             value={locale}
                             onChange={(e) => setLocale(e.target.value)}
                             className="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-white text-sm font-mono focus:outline-none focus:border-cyber-cyan"
