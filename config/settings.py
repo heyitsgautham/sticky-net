@@ -3,7 +3,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import ValidationInfo, field_validator, model_validator
+from pydantic import Field, ValidationInfo, field_validator, model_validator
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
 
 from config.secret_files import FileSecretsSource
@@ -37,6 +37,9 @@ class Settings(BaseSettings):
     google_cloud_location: str = "global"
     google_genai_use_vertexai: bool = True
     google_application_credentials: str | None = None
+
+    # Sessions each in-memory cache keeps before evicting the least recently used.
+    session_cache_max_entries: int = Field(default=10_000, ge=1)
 
     # Firestore
     firestore_collection: str = "conversations"

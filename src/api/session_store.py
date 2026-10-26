@@ -10,6 +10,7 @@ import time
 from typing import Any
 
 from config.settings import get_settings
+from src.api.bounded_cache import BoundedCache
 from src.api.schemas import ExtractedIntelligence
 
 logger = logging.getLogger(__name__)
@@ -47,9 +48,12 @@ def _get_firestore_client() -> Any:
 # ---------------------------------------------------------------------------
 # In-memory caches (primary – always used)
 # ---------------------------------------------------------------------------
-_START_TIMES: dict[str, float] = {}
-_INTEL: dict[str, dict[str, set[str]]] = {}
-_CLASSIFICATIONS: dict[str, Any] = {}
+# Each cache holds at most SESSION_CACHE_MAX_ENTRIES sessions, so a flood of new
+# session IDs cannot exhaust the instance's memory.
+_CACHE_SIZE = get_settings().session_cache_max_entries
+_START_TIMES: BoundedCache[float] = BoundedCache(_CACHE_SIZE)
+_INTEL: BoundedCache[dict[str, set[str]]] = BoundedCache(_CACHE_SIZE)
+_CLASSIFICATIONS: BoundedCache[Any] = BoundedCache(_CACHE_SIZE)
 
 FIRESTORE_COLLECTION = "session_state"
 
@@ -166,7 +170,7 @@ def set_session_classification(session_id: str, classification: Any) -> None:
 # ---------------------------------------------------------------------------
 # Detection result persistence — "once scam, always scam" (Fix 4B)
 # ---------------------------------------------------------------------------
-_DETECTIONS: dict[str, Any] = {}
+_DETECTIONS: BoundedCache[Any] = BoundedCache(_CACHE_SIZE)
 
 
 def store_detection_result(session_id: str, result: Any) -> None:

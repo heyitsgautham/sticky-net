@@ -20,6 +20,7 @@ The original submission write-up, with the evaluation results, lives in [docs/HA
    One Gemini call returns the reply and the intelligence it spotted as a single JSON object.
 4. `src/intelligence/` validates that intelligence and runs a regex pass over the whole conversation as a backup.
 5. `src/api/session_store.py` accumulates intelligence per session in memory and writes it through to Firestore when Firestore is reachable.
+   The in-memory caches keep at most `SESSION_CACHE_MAX_ENTRIES` sessions, so a flood of new session IDs cannot exhaust memory.
 6. A background task posts the accumulated intelligence to the GUVI callback URL.
 
 When the evaluator sends `[CONVERSATION_END]`, the API returns the session summary.
@@ -201,6 +202,7 @@ The middleware compares keys with `hmac.compare_digest`, so timing does not leak
 | `API_TIMEOUT_SECONDS` | `12` | Per-model Gemini timeout |
 | `LOG_LEVEL`, `LOG_FORMAT` | `INFO`, `json` | `console` gives coloured local output |
 | `GUVI_CALLBACK_ENABLED` | `true` | Set `false` locally so runs never post to the evaluator |
+| `SESSION_CACHE_MAX_ENTRIES` | `10000` | Sessions kept in memory before the least recently used is dropped |
 | `ERROR_TRACKING_DSN` | unset | Sentry DSN; caught route and callback errors are reported with route and session tags |
 
 ## Deployment
